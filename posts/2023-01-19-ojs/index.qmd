@@ -1,0 +1,77 @@
+---
+title: "Observable.js"
+subtitle: "Interactive chart with ojs"
+description:  ""
+author: 
+  - name: "JYH"
+    orcid: 0000-0001-8090-6555
+    affiliation: HIRC Lab, SNUBH
+date: "2023-01-19"
+format: 
+  html: 
+    toc: true
+    toc-location: left
+    code-fold: true
+    code-tools:
+      source: true
+    reference-location: document
+    theme: cosmo
+    fontsize: 1.1em
+    linestretch: 1.5
+categories: [Visualization, javascript]
+---
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| echo: false
+#| warning: false
+library(data.table)
+penguins <- fread('penguins.csv')
+ojs_define(data=penguins)
+
+```
+
+```{ojs}
+
+viewof bill_length_min = Inputs.range([32,50],
+{value: 35, step:1, label: "Bill length (min)"})
+
+viewof islands = Inputs.checkbox(
+  ["Torgersen","Biscoe","Dream"],
+  {value: ["Torgersen","Biscoe"],
+    label: "Islands:"
+  }
+)
+
+filtered = transpose(data).filter(function(penguin){
+  return bill_length_min < penguin.bill_length_mm && islands.includes(penguin.island)
+});
+
+
+Plot.rectY(filtered,
+  Plot.binX(
+    {y: "count"},
+    {x: "body_mass_g", fill: "species", thresholds: 20}
+  ))
+  .plot({
+    facet: {
+      data: filtered,
+      x: "sex",
+      y: "species",
+      marginRight:80
+    },
+    marks: [
+      Plot.frame(),
+    ]
+  })
+
+```
+
+## Data
+
+```{ojs}
+Inputs.table(filtered)
+```
+:::

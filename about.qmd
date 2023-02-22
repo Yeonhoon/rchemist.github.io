@@ -1,0 +1,31 @@
+---
+title: "About"
+about:
+  id: about-rchemist
+  template: jolla
+  image: images/meme.png
+  image-shape: round
+  links: 
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/danjang0123/
+    - icon: envelope
+      text: Email
+      href: mailto:danjang0123@gmail.com
+---
+
+헬스케어 빅데이터를 다루는 데이터사이언티스트입니다. 😃
+
+R, Pyhton, SQL
+
+::: {#id}
+## Education
+
+MPH, Seoul national university graduate school of public health
+
+## Experience
+
+**Comento \|** Mentor \| Sept 2022 - present
+
+**SNUBH** \| Data scientist \| June 2021 - present
+:::

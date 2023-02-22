@@ -1,0 +1,125 @@
+---
+title: "R에서 색상 다루기"
+description:  "데이터 시각화를 진행할 때, 그래프에 적절한 색상을 선택하는 방법을 살펴봅시다."
+date: '2023-01-25'
+categories: [color, R, visualization]
+---
+
+### 0. Intro
+
+색상은 시각화에서 가장 중요한 역할을 한다고 해도 과언이 아닙니다. 그래프의 색상에 따라 전달하고자 하는 의미, 전달되는 방법이 크게 달라질 수 있습니다.
+
+이번 글에서는 R에서 데이터 시각화를 위해 색상을 고르는 방법에 대해 살펴보겠습니다.
+
+### 1. `colors()`
+
+R에는 기본적으로 내장된 색상 이름이 657가지나 됩니다. 어떤 종류의 색상이 있는지 살펴보기 위해서는 `colors()` 를 실행해보면 됩니다.
+
+```{r}
+colors()
+```
+
+657가지의 색상 중 원하는 색의 이름으로 그 색을 사용할 수 있습니다.
+
+우선 R에서 가장 많이 활용되는 시각화 패키지 `ggplot2`에 있는 `diamonds` 데이터로 예시를 들어보겠습니다.
+
+```{r}
+library(ggplot2)
+ggplot(diamonds,
+       aes(x=cut))+
+  geom_bar(fill=colors()[1:5])
+```
+
+```{r}
+colors()[1:5]
+```
+
+`colors()`의 1\~5번째 값을 확인해보니, white, aliceblue, antiquewhite 등이었습니다. 이 색상들을 활용하여 각각의 막대 그래프 색을 지정해줬습니다.
+
+물론 하나의 색상만으로 막대그래프의 색상을 동일하게 지정해줄 수도 있습니다.
+
+```{r}
+library(ggplot2)
+ggplot(diamonds,
+       aes(x=cut))+
+  geom_bar(fill=colors()[657])
+```
+
+각각의 색상들은 모두 자신만의 16자리의 값을 갖고 있습니다. 이 16자리 형태의 값들은 HEX color라고 불리며, 웹페이지에서 색상을 나타내기 위한 규격입니다.
+
+예시로는 `#FFFFFF`를 들 수 있겠습니다. HEX color는 맨 앞에 #이 오고, 숫자나 문자 6자리가 오게됩니다. 첫 두 자리는 적색 계열을, 다음 두 글자는 녹색, 마지막 두 글자는 청색 계열을 나타냅니다. 각각의 색상은 모두 00부터 FF까지의 값을 갖습니다.
+
+이처럼 각각의 색상별로 고유한 HEX 코드가 존재하지만, 우리에게는 색상의 이름으로 선택하는 것이 훨씬 쉽기 때문에, `colors()`를 이용해서 원하는 색상을 선택하여 시각화를 할 수 있습니다.
+
+```{r}
+ggplot(diamonds, aes(x=color)) +
+  geom_bar(fill=c('red','orange','yellow','green','blue','navy', 'purple'))
+```
+
+### 2. `RColorBrewer()`
+
+앞서 `colors()`를 이용해서는 표현하고자 하는 범주만큼 색상을 일일일 입력해줘야 했습니다.
+
+이러한 방법은 원하는 색상을 직접 선택할 수 있다는 장점이 있으나, 아무래도 번거롭다는 단점이 있습니다.
+
+그래서 R에서 저장된 색상모음들을 이용하는 것을 통해 번거로움을 해소할 수 있습니다. 바로 `RColorBrewer()`라는 패키지를 이용하는 방법입니다.
+
+```{r}
+# 패키지 설치
+install.packages('RColorBrewer')
+
+# 패키지 불러오기
+library(RColorBrewer)
+```
+
+패키지를 잘 불러왔다면, `display.brewer.all()`을 이용해 사용 가능한 모든 색상 팔레트를 확인할 수 있습니다.
+
+```{r}
+#| eval: false
+display.brewer.all()
+```
+
+![](palette.png){fig-align="center"}
+
+팔레트에는 크게 세 종류가 있습니다.
+
+-   연속형 팔레트(Sequential palettes): 위 사진에서 첫 번째 그룹에 해당하는 팔레트입니다. 특정 색상이 점점 진해지는 특징을 갖고 있습니다. 순서대로 나열된 데이터를 시각화하기에 적합합니다.
+
+-   정성 팔레트(Qualitative palettes): 위 사진에서 두 번째 그룹에 해당하는 팔레트입니다. 클래스 간의 크기 차이를 의미하지 않으며, 색상은 클래스 간의 주요 시각적 차이를 만드는 데 사용됩니다. 질적 체계는 명목 또는 범주형 데이터를 표현하는 데 가장 적합합니다.
+
+-   다범주 팔레트(Diverging palettes): 위 사진에서 세 번째 그룹에 해당하는 팔레트입니다. 데이터가 갖는 범위의 양 끝\~ 중간 범위의 값과 끝값을 똑같이 강조할 수 있습니다. 양 끝으로 갈수록 색이 진해지고, 중간으로 갈수록 색이 연해지므로, 양 끝의 값을 강조하는 데 사용할 수 있습니다.
+
+`ggplot`을 이용할 때 팔레트를 이용하기 위해서는 `scale_fill_brewer()` 또는 `scale_color_brewer()` 를 이용해야 합니다.
+
+```{r}
+ggplot(diamonds, aes(x=cut, fill=color)) +
+  geom_bar() + 
+  scale_fill_brewer(palette = 'Spectral',direction = -1)
+```
+
+diamonds에서 `color` 변수는 범주별 등급을 나타냅니다. 양 극단의 `color`을 강조시키기 위해 때문에, 다범주 팔레트중 하나인 Spectral을 사용하였습니다.
+
+### 3. 패키지 내장 팔레트
+
+다른 팔레트를 이용하는 방법은 ggplot과 함께 사용할 수 있는 다른 패키지들을 이용하는 것입니다.
+
+```{r}
+library(ggthemes)
+library(ggsci)
+```
+
+대표적으로는 `ggthemes`, `ggsci`와 같은 패키지가 있습니다. `scale_fill_` 또는 `scale_color_`로 시작하는 함수를 이용해 다양한 팔레트를 선택할 수 있습니다.
+
+```{r}
+ggplot(diamonds, aes(x=price, y=carat, color=cut)) +
+  geom_point() + 
+  ggthemes::scale_color_pander()
+```
+
+이 때 각 팔레트마다 가능한 범주의 수가 정해져 있으니, 잘 확인해보고 사용하는 것이 필요합니다.
+
+### 참고자료
+
+-   https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3
+
+-   https://r-graph-gallery.com/38-rcolorbrewers-palettes.html

@@ -1,0 +1,50 @@
+---
+title: "로지스틱 회귀분석 OR forest plot"
+description:  "ggplot으로 로지스틱 회귀분석 결과인 오즈비를 시각화"
+draft: true
+author: 
+  - name: "JYH"
+    orcid: 0000-0001-8090-6555
+    affiliation: HIRC Lab, SNUBH
+date: '2023-01-19'
+format: 
+  html: 
+    toc: true
+    toc-location: left
+    code-fold: true
+    code-tools:
+      source: true
+    reference-location: document
+    theme: cosmo
+    fontsize: 1.1em
+    linestretch: 1.5
+categories: [Logistic Regression, R, Visualization, forestplot]
+---
+
+로지스틱 회귀분석 모델을 만들어줍니다.
+
+```{r}
+
+```
+
+시각화를 진행해줍니다.
+
+```{r eval=FALSE}
+library(ggplot2)
+ggplot(df, aes(x = Outcome, y = OR, ymin = Lower, ymax = Upper,
+               col = group, fill = group)) + 
+  geom_linerange(linewidth = 5, position = position_dodge(width = 0.5)) +
+  geom_hline(yintercept = 1, lty = 2) +
+  geom_point(size = 3, shape = 21, colour = "white", stroke = 0.5,
+             position = position_dodge(width = 0.5)) +
+  geom_text(aes(y = 3.75, group = group, 
+                label = paste0("OR ", round(OR, 2), ", (", round(Lower, 2), 
+                               " - ", round(Upper, 2), ")")), hjust = 0,
+            position = position_dodge(width = 0.5), color = "grey50") +
+  scale_fill_manual(values = barCOLS) +
+  scale_color_manual(values = dotCOLS) +
+  scale_x_discrete(name = "(Post)operative outcomes") +
+  scale_y_continuous(name = "Odds ratio", limits = c(0.5, 5)) +
+  coord_flip() +
+  theme_minimal()
+```

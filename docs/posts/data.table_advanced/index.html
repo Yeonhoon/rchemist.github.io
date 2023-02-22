@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-01-19">
+<meta name="description" content="특수 기호, 조인, 피봇 등 data.table에서 다루는 심화내용을 살펴봅시다.">
+
+<title>Rchemist - data.table 심화</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Rchemist</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../posts.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">data.table 심화</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                  <div>
+        <div class="description">
+          특수 기호, 조인, 피봇 등 data.table에서 다루는 심화내용을 살펴봅시다.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">data.table</div>
+                <div class="quarto-category">R</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 19, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#특수-기호" id="toc-특수-기호" class="nav-link active" data-scroll-target="#특수-기호">1. 특수 기호</a>
+  <ul class="collapse">
+  <li><a href="#lapply-.sd" id="toc-lapply-.sd" class="nav-link" data-scroll-target="#lapply-.sd">1) lapply + .SD</a></li>
+  <li><a href="#n" id="toc-n" class="nav-link" data-scroll-target="#n">2) <code>.N</code></a></li>
+  <li><a href="#i" id="toc-i" class="nav-link" data-scroll-target="#i">3) <code>.I</code></a></li>
+  </ul></li>
+  <li><a href="#데이터-병합" id="toc-데이터-병합" class="nav-link" data-scroll-target="#데이터-병합">2. 데이터 병합</a>
+  <ul class="collapse">
+  <li><a href="#bind" id="toc-bind" class="nav-link" data-scroll-target="#bind">1) bind</a></li>
+  <li><a href="#merge" id="toc-merge" class="nav-link" data-scroll-target="#merge">2) merge</a></li>
+  </ul></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#pivoting" id="toc-pivoting" class="nav-link" data-scroll-target="#pivoting">3. Pivoting</a>
+  <ul class="collapse">
+  <li><a href="#melt" id="toc-melt" class="nav-link" data-scroll-target="#melt">1) melt</a></li>
+  <li><a href="#dcast" id="toc-dcast" class="nav-link" data-scroll-target="#dcast">2) dcast</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><a href="../../posts/data.table_basic/index.html"><u>data.table 기초</u></a> 포스트 에서는 대용량의 데이터를 빠르게 처리할 수 있는 <code>data.table</code> 패키지에 대해 배워봤습니다.</p>
+<p>이번 시간에는 <code>data.table</code> 패키지를 조금 더 효율적으로 사용할 수 있는 방법, 그리고 <code>data.table</code>을 이용하여 데이터를 원하는대로 붙이고 변형하는 방법에 대해 알아보겠습니다.</p>
+<section id="특수-기호" class="level2">
+<h2 class="anchored" data-anchor-id="특수-기호">1. 특수 기호</h2>
+<p>data.table 패키지에는 유용하게 사용할 수 있는 특수 기호들이 있습니다. 이 특수한 기호들은 다른 패키지에서는 사용할 수 없는 것들로, data.table 형태의 데이터를 다룰 때만 사용이 가능합니다.</p>
+<p>이번에 배울 data.table의 특수 기호는 크게 3가지입니다. 바로 .SD, .N, .I 입니다. 이 특수기호들은 모두 data.table의 j(column 부분)에서 쓰입니다.</p>
+<section id="lapply-.sd" class="level3">
+<h3 class="anchored" data-anchor-id="lapply-.sd">1) lapply + .SD</h3>
+<p><code>.SD</code>는 Subset Data의 약자입니다. 말그대로 데이터의 일부분을 선택하기 위한 특수기호(special symbols)입니다.</p>
+<p><code>.SD</code>와 함께 사용되는 것이 있습니다. 바로 <code>.SDcols</code> 입니다. <code>.SDcols</code>를 통해 데이터 중 원하는 column을 선택할 수 있습니다.</p>
+<p>만약 .SDcols 없이 .SD만 사용한다면 데이터의 모든 column을 선택한다는 뜻입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(data.table)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(NHANES)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(NHANES)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>dt[,<span class="fu">head</span>(.SD)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      ID SurveyYr Gender   Age AgeDecade AgeMonths  Race1  Race3    Education
+   &lt;int&gt;   &lt;fctr&gt; &lt;fctr&gt; &lt;int&gt;    &lt;fctr&gt;     &lt;int&gt; &lt;fctr&gt; &lt;fctr&gt;       &lt;fctr&gt;
+1: 51624  2009_10   male    34     30-39       409  White   &lt;NA&gt;  High School
+2: 51624  2009_10   male    34     30-39       409  White   &lt;NA&gt;  High School
+3: 51624  2009_10   male    34     30-39       409  White   &lt;NA&gt;  High School
+4: 51625  2009_10   male     4       0-9        49  Other   &lt;NA&gt;         &lt;NA&gt;
+5: 51630  2009_10 female    49     40-49       596  White   &lt;NA&gt; Some College
+6: 51638  2009_10   male     9       0-9       115  White   &lt;NA&gt;         &lt;NA&gt;
+   MaritalStatus    HHIncome HHIncomeMid Poverty HomeRooms HomeOwn       Work
+          &lt;fctr&gt;      &lt;fctr&gt;       &lt;int&gt;   &lt;num&gt;     &lt;int&gt;  &lt;fctr&gt;     &lt;fctr&gt;
+1:       Married 25000-34999       30000    1.36         6     Own NotWorking
+2:       Married 25000-34999       30000    1.36         6     Own NotWorking
+3:       Married 25000-34999       30000    1.36         6     Own NotWorking
+4:          &lt;NA&gt; 20000-24999       22500    1.07         9     Own       &lt;NA&gt;
+5:   LivePartner 35000-44999       40000    1.91         5    Rent NotWorking
+6:          &lt;NA&gt; 75000-99999       87500    1.84         6    Rent       &lt;NA&gt;
+   Weight Length HeadCirc Height   BMI BMICatUnder20yrs   BMI_WHO Pulse
+    &lt;num&gt;  &lt;num&gt;    &lt;num&gt;  &lt;num&gt; &lt;num&gt;           &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;
+1:   87.4     NA       NA  164.7 32.22             &lt;NA&gt; 30.0_plus    70
+2:   87.4     NA       NA  164.7 32.22             &lt;NA&gt; 30.0_plus    70
+3:   87.4     NA       NA  164.7 32.22             &lt;NA&gt; 30.0_plus    70
+4:   17.0     NA       NA  105.4 15.30             &lt;NA&gt; 12.0_18.5    NA
+5:   86.7     NA       NA  168.4 30.57             &lt;NA&gt; 30.0_plus    86
+6:   29.8     NA       NA  133.1 16.82             &lt;NA&gt; 12.0_18.5    82
+   BPSysAve BPDiaAve BPSys1 BPDia1 BPSys2 BPDia2 BPSys3 BPDia3 Testosterone
+      &lt;int&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;        &lt;num&gt;
+1:      113       85    114     88    114     88    112     82           NA
+2:      113       85    114     88    114     88    112     82           NA
+3:      113       85    114     88    114     88    112     82           NA
+4:       NA       NA     NA     NA     NA     NA     NA     NA           NA
+5:      112       75    118     82    108     74    116     76           NA
+6:       86       47     84     50     84     50     88     44           NA
+   DirectChol TotChol UrineVol1 UrineFlow1 UrineVol2 UrineFlow2 Diabetes
+        &lt;num&gt;   &lt;num&gt;     &lt;int&gt;      &lt;num&gt;     &lt;int&gt;      &lt;num&gt;   &lt;fctr&gt;
+1:       1.29    3.49       352         NA        NA         NA       No
+2:       1.29    3.49       352         NA        NA         NA       No
+3:       1.29    3.49       352         NA        NA         NA       No
+4:         NA      NA        NA         NA        NA         NA       No
+5:       1.16    6.70        77      0.094        NA         NA       No
+6:       1.34    4.86       123      1.538        NA         NA       No
+   DiabetesAge HealthGen DaysPhysHlthBad DaysMentHlthBad LittleInterest
+         &lt;int&gt;    &lt;fctr&gt;           &lt;int&gt;           &lt;int&gt;         &lt;fctr&gt;
+1:          NA      Good               0              15           Most
+2:          NA      Good               0              15           Most
+3:          NA      Good               0              15           Most
+4:          NA      &lt;NA&gt;              NA              NA           &lt;NA&gt;
+5:          NA      Good               0              10        Several
+6:          NA      &lt;NA&gt;              NA              NA           &lt;NA&gt;
+   Depressed nPregnancies nBabies Age1stBaby SleepHrsNight SleepTrouble
+      &lt;fctr&gt;        &lt;int&gt;   &lt;int&gt;      &lt;int&gt;         &lt;int&gt;       &lt;fctr&gt;
+1:   Several           NA      NA         NA             4          Yes
+2:   Several           NA      NA         NA             4          Yes
+3:   Several           NA      NA         NA             4          Yes
+4:      &lt;NA&gt;           NA      NA         NA            NA         &lt;NA&gt;
+5:   Several            2       2         27             8          Yes
+6:      &lt;NA&gt;           NA      NA         NA            NA         &lt;NA&gt;
+   PhysActive PhysActiveDays TVHrsDay CompHrsDay TVHrsDayChild CompHrsDayChild
+       &lt;fctr&gt;          &lt;int&gt;   &lt;fctr&gt;     &lt;fctr&gt;         &lt;int&gt;           &lt;int&gt;
+1:         No             NA     &lt;NA&gt;       &lt;NA&gt;            NA              NA
+2:         No             NA     &lt;NA&gt;       &lt;NA&gt;            NA              NA
+3:         No             NA     &lt;NA&gt;       &lt;NA&gt;            NA              NA
+4:       &lt;NA&gt;             NA     &lt;NA&gt;       &lt;NA&gt;             4               1
+5:         No             NA     &lt;NA&gt;       &lt;NA&gt;            NA              NA
+6:       &lt;NA&gt;             NA     &lt;NA&gt;       &lt;NA&gt;             5               0
+   Alcohol12PlusYr AlcoholDay AlcoholYear SmokeNow Smoke100 Smoke100n SmokeAge
+            &lt;fctr&gt;      &lt;int&gt;       &lt;int&gt;   &lt;fctr&gt;   &lt;fctr&gt;    &lt;fctr&gt;    &lt;int&gt;
+1:             Yes         NA           0       No      Yes    Smoker       18
+2:             Yes         NA           0       No      Yes    Smoker       18
+3:             Yes         NA           0       No      Yes    Smoker       18
+4:            &lt;NA&gt;         NA          NA     &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;       NA
+5:             Yes          2          20      Yes      Yes    Smoker       38
+6:            &lt;NA&gt;         NA          NA     &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;       NA
+   Marijuana AgeFirstMarij RegularMarij AgeRegMarij HardDrugs SexEver SexAge
+      &lt;fctr&gt;         &lt;int&gt;       &lt;fctr&gt;       &lt;int&gt;    &lt;fctr&gt;  &lt;fctr&gt;  &lt;int&gt;
+1:       Yes            17           No          NA       Yes     Yes     16
+2:       Yes            17           No          NA       Yes     Yes     16
+3:       Yes            17           No          NA       Yes     Yes     16
+4:      &lt;NA&gt;            NA         &lt;NA&gt;          NA      &lt;NA&gt;    &lt;NA&gt;     NA
+5:       Yes            18           No          NA       Yes     Yes     12
+6:      &lt;NA&gt;            NA         &lt;NA&gt;          NA      &lt;NA&gt;    &lt;NA&gt;     NA
+   SexNumPartnLife SexNumPartYear SameSex SexOrientation PregnantNow
+             &lt;int&gt;          &lt;int&gt;  &lt;fctr&gt;         &lt;fctr&gt;      &lt;fctr&gt;
+1:               8              1      No   Heterosexual        &lt;NA&gt;
+2:               8              1      No   Heterosexual        &lt;NA&gt;
+3:               8              1      No   Heterosexual        &lt;NA&gt;
+4:              NA             NA    &lt;NA&gt;           &lt;NA&gt;        &lt;NA&gt;
+5:              10              1     Yes   Heterosexual        &lt;NA&gt;
+6:              NA             NA    &lt;NA&gt;           &lt;NA&gt;        &lt;NA&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dt[,<span class="fu">str</span>(.SD)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Classes 'data.table' and 'data.frame':  10000 obs. of  76 variables:
+ $ ID              : int  51624 51624 51624 51625 51630 51638 51646 51647 51647 51647 ...
+ $ SurveyYr        : Factor w/ 2 levels "2009_10","2011_12": 1 1 1 1 1 1 1 1 1 1 ...
+ $ Gender          : Factor w/ 2 levels "female","male": 2 2 2 2 1 2 2 1 1 1 ...
+ $ Age             : int  34 34 34 4 49 9 8 45 45 45 ...
+ $ AgeDecade       : Factor w/ 8 levels " 0-9"," 10-19",..: 4 4 4 1 5 1 1 5 5 5 ...
+ $ AgeMonths       : int  409 409 409 49 596 115 101 541 541 541 ...
+ $ Race1           : Factor w/ 5 levels "Black","Hispanic",..: 4 4 4 5 4 4 4 4 4 4 ...
+ $ Race3           : Factor w/ 6 levels "Asian","Black",..: NA NA NA NA NA NA NA NA NA NA ...
+ $ Education       : Factor w/ 5 levels "8th Grade","9 - 11th Grade",..: 3 3 3 NA 4 NA NA 5 5 5 ...
+ $ MaritalStatus   : Factor w/ 6 levels "Divorced","LivePartner",..: 3 3 3 NA 2 NA NA 3 3 3 ...
+ $ HHIncome        : Factor w/ 12 levels " 0-4999"," 5000-9999",..: 6 6 6 5 7 11 9 11 11 11 ...
+ $ HHIncomeMid     : int  30000 30000 30000 22500 40000 87500 60000 87500 87500 87500 ...
+ $ Poverty         : num  1.36 1.36 1.36 1.07 1.91 1.84 2.33 5 5 5 ...
+ $ HomeRooms       : int  6 6 6 9 5 6 7 6 6 6 ...
+ $ HomeOwn         : Factor w/ 3 levels "Own","Rent","Other": 1 1 1 1 2 2 1 1 1 1 ...
+ $ Work            : Factor w/ 3 levels "Looking","NotWorking",..: 2 2 2 NA 2 NA NA 3 3 3 ...
+ $ Weight          : num  87.4 87.4 87.4 17 86.7 29.8 35.2 75.7 75.7 75.7 ...
+ $ Length          : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ HeadCirc        : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ Height          : num  165 165 165 105 168 ...
+ $ BMI             : num  32.2 32.2 32.2 15.3 30.6 ...
+ $ BMICatUnder20yrs: Factor w/ 4 levels "UnderWeight",..: NA NA NA NA NA NA NA NA NA NA ...
+ $ BMI_WHO         : Factor w/ 4 levels "12.0_18.5","18.5_to_24.9",..: 4 4 4 1 4 1 2 3 3 3 ...
+ $ Pulse           : int  70 70 70 NA 86 82 72 62 62 62 ...
+ $ BPSysAve        : int  113 113 113 NA 112 86 107 118 118 118 ...
+ $ BPDiaAve        : int  85 85 85 NA 75 47 37 64 64 64 ...
+ $ BPSys1          : int  114 114 114 NA 118 84 114 106 106 106 ...
+ $ BPDia1          : int  88 88 88 NA 82 50 46 62 62 62 ...
+ $ BPSys2          : int  114 114 114 NA 108 84 108 118 118 118 ...
+ $ BPDia2          : int  88 88 88 NA 74 50 36 68 68 68 ...
+ $ BPSys3          : int  112 112 112 NA 116 88 106 118 118 118 ...
+ $ BPDia3          : int  82 82 82 NA 76 44 38 60 60 60 ...
+ $ Testosterone    : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ DirectChol      : num  1.29 1.29 1.29 NA 1.16 1.34 1.55 2.12 2.12 2.12 ...
+ $ TotChol         : num  3.49 3.49 3.49 NA 6.7 4.86 4.09 5.82 5.82 5.82 ...
+ $ UrineVol1       : int  352 352 352 NA 77 123 238 106 106 106 ...
+ $ UrineFlow1      : num  NA NA NA NA 0.094 ...
+ $ UrineVol2       : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ UrineFlow2      : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ Diabetes        : Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 1 1 ...
+ $ DiabetesAge     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HealthGen       : Factor w/ 5 levels "Excellent","Vgood",..: 3 3 3 NA 3 NA NA 2 2 2 ...
+ $ DaysPhysHlthBad : int  0 0 0 NA 0 NA NA 0 0 0 ...
+ $ DaysMentHlthBad : int  15 15 15 NA 10 NA NA 3 3 3 ...
+ $ LittleInterest  : Factor w/ 3 levels "None","Several",..: 3 3 3 NA 2 NA NA 1 1 1 ...
+ $ Depressed       : Factor w/ 3 levels "None","Several",..: 2 2 2 NA 2 NA NA 1 1 1 ...
+ $ nPregnancies    : int  NA NA NA NA 2 NA NA 1 1 1 ...
+ $ nBabies         : int  NA NA NA NA 2 NA NA NA NA NA ...
+ $ Age1stBaby      : int  NA NA NA NA 27 NA NA NA NA NA ...
+ $ SleepHrsNight   : int  4 4 4 NA 8 NA NA 8 8 8 ...
+ $ SleepTrouble    : Factor w/ 2 levels "No","Yes": 2 2 2 NA 2 NA NA 1 1 1 ...
+ $ PhysActive      : Factor w/ 2 levels "No","Yes": 1 1 1 NA 1 NA NA 2 2 2 ...
+ $ PhysActiveDays  : int  NA NA NA NA NA NA NA 5 5 5 ...
+ $ TVHrsDay        : Factor w/ 7 levels "0_hrs","0_to_1_hr",..: NA NA NA NA NA NA NA NA NA NA ...
+ $ CompHrsDay      : Factor w/ 7 levels "0_hrs","0_to_1_hr",..: NA NA NA NA NA NA NA NA NA NA ...
+ $ TVHrsDayChild   : int  NA NA NA 4 NA 5 1 NA NA NA ...
+ $ CompHrsDayChild : int  NA NA NA 1 NA 0 6 NA NA NA ...
+ $ Alcohol12PlusYr : Factor w/ 2 levels "No","Yes": 2 2 2 NA 2 NA NA 2 2 2 ...
+ $ AlcoholDay      : int  NA NA NA NA 2 NA NA 3 3 3 ...
+ $ AlcoholYear     : int  0 0 0 NA 20 NA NA 52 52 52 ...
+ $ SmokeNow        : Factor w/ 2 levels "No","Yes": 1 1 1 NA 2 NA NA NA NA NA ...
+ $ Smoke100        : Factor w/ 2 levels "No","Yes": 2 2 2 NA 2 NA NA 1 1 1 ...
+ $ Smoke100n       : Factor w/ 2 levels "Non-Smoker","Smoker": 2 2 2 NA 2 NA NA 1 1 1 ...
+ $ SmokeAge        : int  18 18 18 NA 38 NA NA NA NA NA ...
+ $ Marijuana       : Factor w/ 2 levels "No","Yes": 2 2 2 NA 2 NA NA 2 2 2 ...
+ $ AgeFirstMarij   : int  17 17 17 NA 18 NA NA 13 13 13 ...
+ $ RegularMarij    : Factor w/ 2 levels "No","Yes": 1 1 1 NA 1 NA NA 1 1 1 ...
+ $ AgeRegMarij     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HardDrugs       : Factor w/ 2 levels "No","Yes": 2 2 2 NA 2 NA NA 1 1 1 ...
+ $ SexEver         : Factor w/ 2 levels "No","Yes": 2 2 2 NA 2 NA NA 2 2 2 ...
+ $ SexAge          : int  16 16 16 NA 12 NA NA 13 13 13 ...
+ $ SexNumPartnLife : int  8 8 8 NA 10 NA NA 20 20 20 ...
+ $ SexNumPartYear  : int  1 1 1 NA 1 NA NA 0 0 0 ...
+ $ SameSex         : Factor w/ 2 levels "No","Yes": 1 1 1 NA 2 NA NA 2 2 2 ...
+ $ SexOrientation  : Factor w/ 3 levels "Bisexual","Heterosexual",..: 2 2 2 NA 2 NA NA 1 1 1 ...
+ $ PregnantNow     : Factor w/ 3 levels "Yes","No","Unknown": NA NA NA NA NA NA NA NA NA NA ...
+ - attr(*, ".internal.selfref")=&lt;externalptr&gt; 
+ - attr(*, ".data.table.locked")= logi TRUE</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+</div>
+<p>반면 <code>.SDcols와</code> 함께 <code>.SD</code>를 사용한다면 <code>.SDcols</code>에 입력한 column만 선택합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dt[,<span class="fu">str</span>(.SD),.SDcols<span class="ot">=</span><span class="fu">c</span>(<span class="st">'Gender'</span>,<span class="st">'Age'</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Classes 'data.table' and 'data.frame':  10000 obs. of  2 variables:
+ $ Gender: Factor w/ 2 levels "female","male": 2 2 2 2 1 2 2 1 1 1 ...
+ $ Age   : int  34 34 34 4 49 9 8 45 45 45 ...
+ - attr(*, ".internal.selfref")=&lt;externalptr&gt; 
+ - attr(*, ".data.table.locked")= logi TRUE</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+</div>
+<p><code>.SDcols</code>에 column을 선택하는 방법은 크게 세 가지가 있습니다.</p>
+<ul>
+<li><p>column 이름을 갖는 vector 만들어서 사용</p>
+<p>아래의 예시처럼 찾고자 하는 column 이름 <code>c()</code>로 묶은 vector 형태로 넣어줄 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dt[,.SD,.SDcols<span class="ot">=</span><span class="fu">c</span>(<span class="st">'Gender'</span>,<span class="st">'Age'</span>,<span class="st">'Race1'</span>,<span class="st">'Education'</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Gender   Age   Race1      Education
+       &lt;fctr&gt; &lt;int&gt;  &lt;fctr&gt;         &lt;fctr&gt;
+    1:   male    34   White    High School
+    2:   male    34   White    High School
+    3:   male    34   White    High School
+    4:   male     4   Other           &lt;NA&gt;
+    5: female    49   White   Some College
+   ---                                    
+ 9996:   male    28 Mexican 9 - 11th Grade
+ 9997: female     0   White           &lt;NA&gt;
+ 9998:   male    27 Mexican   College Grad
+ 9999:   male    60   White   College Grad
+10000:   male    60   White   College Grad</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># OR</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'Gender'</span>,<span class="st">'Age'</span>,<span class="st">'Race1'</span>,<span class="st">'Education'</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>dt[,.SD,.SDcols<span class="ot">=</span>target]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Gender   Age   Race1      Education
+       &lt;fctr&gt; &lt;int&gt;  &lt;fctr&gt;         &lt;fctr&gt;
+    1:   male    34   White    High School
+    2:   male    34   White    High School
+    3:   male    34   White    High School
+    4:   male     4   Other           &lt;NA&gt;
+    5: female    49   White   Some College
+   ---                                    
+ 9996:   male    28 Mexican 9 - 11th Grade
+ 9997: female     0   White           &lt;NA&gt;
+ 9998:   male    27 Mexican   College Grad
+ 9999:   male    60   White   College Grad
+10000:   male    60   White   College Grad</code></pre>
+</div>
+</div></li>
+<li><p><code>patterns()</code>를 통한 column 규칙 찾기</p>
+<p><code>patterns()</code> 함수를 이용해 해당 문자열을 갖는 모든 column을 찾을 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dt[,.SD,.SDcols<span class="ot">=</span><span class="fu">patterns</span>(<span class="st">'Alcohol'</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Alcohol12PlusYr AlcoholDay AlcoholYear
+                &lt;fctr&gt;      &lt;int&gt;       &lt;int&gt;
+    1:             Yes         NA           0
+    2:             Yes         NA           0
+    3:             Yes         NA           0
+    4:            &lt;NA&gt;         NA          NA
+    5:             Yes          2          20
+   ---                                       
+ 9996:            &lt;NA&gt;         NA          NA
+ 9997:            &lt;NA&gt;         NA          NA
+ 9998:             Yes          5           4
+ 9999:             Yes         NA           0
+10000:             Yes         NA           0</code></pre>
+</div>
+</div></li>
+<li><p><code>:</code>을 이용해 연속적인 column을 찾기</p>
+<p><code>.SDcols</code>에 적용할 column이 연이어 붙어있는 경우, <code>:</code>을 이용하여 찾을 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dt[,.SD,.SDcols<span class="ot">=</span>Gender<span class="sc">:</span>Age]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Gender   Age
+       &lt;fctr&gt; &lt;int&gt;
+    1:   male    34
+    2:   male    34
+    3:   male    34
+    4:   male     4
+    5: female    49
+   ---             
+ 9996:   male    28
+ 9997: female     0
+ 9998:   male    27
+ 9999:   male    60
+10000:   male    60</code></pre>
+</div>
+</div></li>
+</ul>
+<p>한편 <code>.SD</code> (<code>.SDcols</code>)와 자주 사용되는 함수는 <code>lapply()</code>입니다.</p>
+<p><code>lapply()</code>는 list + apply의 약자로, list에 <u>동일한 함수</u>를 적용할 때 사용되는 함수입니다.</p>
+<p><code>lapply()</code>는 크게 아래의 구조로 이루어져 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  X, <span class="co"># 함수를 적용할 부분</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  FUN, <span class="co"># 선택된 X에 적용할 함수</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  ... <span class="co"># 추가 인자, e.g., na.rm=T</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>X</code> 에는 함수를 적용할 column이름 또는 벡터가 오게 됩니다. 이 챕터에서는 주로 data.table에 <code>lapply()</code>를 적용하기 때문에 column이름이 오게 됩니다.</p>
+<p><code>FUN</code> 에는 X에서 선택된 column들에 동일하게 적용할 함수를 작성합니다. <code>FUN</code> 부분은 각 column이 호출되어야 하는 횟수에 따라 사용하는 방법이 달라집니다.</p>
+<p>보통 <code>function(x)</code> 또는 <code>\(x)</code> 를 이용해 적용시킬 함수를 입력해줍니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="cf">function</span>(x) <span class="fu">ifelse</span>(<span class="fu">is.na</span>(x),<span class="fu">mean</span>(x,<span class="at">na.rm=</span>T),x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+[1] 1
+
+[[2]]
+[1] 2
+
+[[3]]
+[1] 3
+
+[[4]]
+[1] 4
+
+[[5]]
+[1] 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, \(x) <span class="fu">mean</span>(x,<span class="at">na.rm=</span>T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+[1] 1
+
+[[2]]
+[1] 2
+
+[[3]]
+[1] 3
+
+[[4]]
+[1] 4
+
+[[5]]
+[1] 5</code></pre>
+</div>
+</div>
+<p>만약 평균을 구하늖 ㅏㅁ수처럼 <code>mean()</code> 처럼 각 column이 한번만 와도 되는 상황이라면 <code>function()</code>을 생략하고 함수의 이름만 사용할 수 있습니다. 결측치가 있는 경우 <code>…</code> 부분에 추가적으로 <code>na.rm=T</code> 를 사용할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, mean, <span class="at">na.rm=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+[1] 1
+
+[[2]]
+[1] 2
+
+[[3]]
+[1] 3
+
+[[4]]
+[1] 4
+
+[[5]]
+[1] 5</code></pre>
+</div>
+</div>
+<p><code>lapply()</code>와 <code>.SD</code>를 사용할 때는 <code>.SD</code>와 <code>.SDcols</code>를 통해 선택되는 column에 동일한 함수를 적용하게 됩니다. 일일이 column마다 함수를 적용할 필요가 없으니, 입력해야 하는 코드도 줄어들 뿐만 아니라 계산에 필요한 시간도 훨씬 단축됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dt[,<span class="fu">lapply</span>(.SD, <span class="co"># 함수를 적용할 column </span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>           mean, <span class="co"># functcion 부분</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">na.rm=</span>T <span class="co"># 추가 인자 부분</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>           ),</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>   .SDcols<span class="ot">=</span><span class="fu">c</span>(<span class="st">'Age'</span>,<span class="st">'BMI'</span>) <span class="co"># .SD 중 선택되는 column이름</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>   ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Age      BMI
+     &lt;num&gt;    &lt;num&gt;
+1: 36.7421 26.66014</code></pre>
+</div>
+</div>
+<p>또한 <code>lapply()</code>와 <code>.SD</code>는 여러 column들의 평균, 표준편차 등의 요약통계량을 계산하는 경우, 동시에 column들의 유형을 numeric에서 character로 변환하는 경우 등에 자주 사용됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>dt[,<span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), .SDcols<span class="ot">=</span>target]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Gender     Age Race1 Education
+    &lt;num&gt;   &lt;num&gt; &lt;num&gt;     &lt;num&gt;
+1:     NA 36.7421    NA        NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>dt[,<span class="fu">lapply</span>(.SD, as.factor), .SDcols<span class="ot">=</span>target]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Gender    Age   Race1      Education
+       &lt;fctr&gt; &lt;fctr&gt;  &lt;fctr&gt;         &lt;fctr&gt;
+    1:   male     34   White    High School
+    2:   male     34   White    High School
+    3:   male     34   White    High School
+    4:   male      4   Other           &lt;NA&gt;
+    5: female     49   White   Some College
+   ---                                     
+ 9996:   male     28 Mexican 9 - 11th Grade
+ 9997: female      0   White           &lt;NA&gt;
+ 9998:   male     27 Mexican   College Grad
+ 9999:   male     60   White   College Grad
+10000:   male     60   White   College Grad</code></pre>
+</div>
+</div>
+<p><code>lapply()</code>와 <code>.SD</code>를 활용하여 여러 column들을 변경한 후, 데이터에 저장하는 것은 chapter 3에서 배웠던 <code>:=</code> 를 이용합니다.</p>
+<p>여러 column을 동시에 변경하여 저장할 때는 <code>:=</code> 왼쪽 부분에 column 이름이 있는 <code>vector</code>를 <code>()</code>로 감싸주면 됩니다.</p>
+<p>예를 들어 나이와 BMI의 <code>NA</code>를 각 column의 중앙값으로 채워넣고자 하는 경우,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'Age'</span>,<span class="st">'BMI'</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>dt[,(target)<span class="sc">:</span><span class="er">=</span><span class="fu">lapply</span>(.SD, \(x) <span class="fu">ifelse</span>(<span class="fu">is.na</span>(x), <span class="fu">median</span>(x,<span class="at">na.rm=</span>T),x)),.SDcols<span class="ot">=</span>target]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="n" class="level3">
+<h3 class="anchored" data-anchor-id="n">2) <code>.N</code></h3>
+<p><code>.N</code>은 데이터의 수, 다시 말해 row의 개수를 확인하는 특수기호입니다. <code>.N</code>은 주로 <code>by</code>와 함께 됩니다. <code>by</code>를 통해 특정 집단의 분포별로 몇 명이 있는지, 또는 몇 건의 데이터가 있는지 확인합니다.</p>
+<p>예를 들면 인종(<code>race</code>)에 따른 데이터의 수를 확인하고 싶을 때는 아래와 같이 사용합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>dt[,.N, by<span class="ot">=</span>Race1]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Race1     N
+     &lt;fctr&gt; &lt;int&gt;
+1:    White  6372
+2:    Other   806
+3:  Mexican  1015
+4:    Black  1197
+5: Hispanic   610</code></pre>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>사실 그룹별 응답 수는 <code>table()</code> 함수를 이용해도 구할 수 있습니다. 그러나 .N을 이용하게 되면 각 범주별 빈도수를 <u>data.table 문법 내에서</u> 구할 수 있기 때문에 활용성에 있어 <code>table()</code>보다 더 뛰어나다고 할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>dt[,<span class="fu">c</span>(.N, <span class="fu">lapply</span>(.SD,mean)),by<span class="ot">=</span>.(Race1),.SDcols<span class="ot">=</span><span class="st">'Age'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Race1     N      Age
+     &lt;fctr&gt; &lt;int&gt;    &lt;num&gt;
+1:    White  6372 39.80273
+2:    Other   806 32.29032
+3:  Mexican  1015 27.37635
+4:    Black  1197 33.94486
+5: Hispanic   610 31.72623</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="i" class="level3">
+<h3 class="anchored" data-anchor-id="i">3) <code>.I</code></h3>
+<p><code>.I</code>는 j 부분에서 행을 다루기 특수기호입니다.</p>
+<p>보통 <code>.I</code>는 특정 조건을 만족하는 row의 위치를 찾을 때 사용합니다. 특히 by가 있는 경우, 다시 말해 범주별로 row의 위치를 찾을 때 많이 사용합니다.</p>
+<p>집단별 row가 필요하지 않다면, j가 아닌 i 부분에서 행을 선택할 수 있습니다. 그러나 i 부분만 입력하게 될 경우, 집단 별 조건을 확인할 수 없습니다. 왜냐하면 by를 사용하기 위해서는 j가 선행되어야 하기 때문입니다.</p>
+<p>따라서 i 부분에서 바로 row를 filtering 하는 것이 아니라, j 부분에서 집단별로 조건을 만족시키는 행의 번호를 찾아서 사용합니다.</p>
+<p>또한 <code>.I</code>를 사용하는 경우 행의 번호를 확인할 수 있기 때문에, 그 행의 번호에 해당하는 모든 column을 사용할 수 있습니다.</p>
+<p>예를 들어, 인종별 첫 번째 행을 선택하는 경우는 다음과 같이 실행할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>dt[dt[,.I[1L],by<span class="ot">=</span>Race1]<span class="sc">$</span>V1]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      ID SurveyYr Gender   Age AgeDecade AgeMonths    Race1  Race3    Education
+   &lt;int&gt;   &lt;fctr&gt; &lt;fctr&gt; &lt;int&gt;    &lt;fctr&gt;     &lt;int&gt;   &lt;fctr&gt; &lt;fctr&gt;       &lt;fctr&gt;
+1: 51624  2009_10   male    34     30-39       409    White   &lt;NA&gt;  High School
+2: 51625  2009_10   male     4       0-9        49    Other   &lt;NA&gt;         &lt;NA&gt;
+3: 51666  2009_10 female    58     50-59       700  Mexican   &lt;NA&gt;  High School
+4: 51671  2009_10 female     9       0-9       112    Black   &lt;NA&gt;         &lt;NA&gt;
+5: 51692  2009_10   male    54     50-59       655 Hispanic   &lt;NA&gt; College Grad
+   MaritalStatus    HHIncome HHIncomeMid Poverty HomeRooms HomeOwn       Work
+          &lt;fctr&gt;      &lt;fctr&gt;       &lt;int&gt;   &lt;num&gt;     &lt;int&gt;  &lt;fctr&gt;     &lt;fctr&gt;
+1:       Married 25000-34999       30000    1.36         6     Own NotWorking
+2:          &lt;NA&gt; 20000-24999       22500    1.07         9     Own       &lt;NA&gt;
+3:       Married 75000-99999       87500    2.03        10    Rent    Looking
+4:          &lt;NA&gt;        &lt;NA&gt;          NA      NA         3    Rent       &lt;NA&gt;
+5:      Divorced 55000-64999       60000    3.28         3    Rent NotWorking
+   Weight Length HeadCirc Height   BMI BMICatUnder20yrs      BMI_WHO Pulse
+    &lt;num&gt;  &lt;num&gt;    &lt;num&gt;  &lt;num&gt; &lt;num&gt;           &lt;fctr&gt;       &lt;fctr&gt; &lt;int&gt;
+1:   87.4     NA       NA  164.7 32.22             &lt;NA&gt;    30.0_plus    70
+2:   17.0     NA       NA  105.4 15.30             &lt;NA&gt;    12.0_18.5    NA
+3:   57.5     NA       NA  148.1 26.22             &lt;NA&gt; 25.0_to_29.9    94
+4:   53.1     NA       NA  139.2 27.40             &lt;NA&gt; 25.0_to_29.9    92
+5:  113.9     NA       NA  177.1 36.32             &lt;NA&gt;    30.0_plus    64
+   BPSysAve BPDiaAve BPSys1 BPDia1 BPSys2 BPDia2 BPSys3 BPDia3 Testosterone
+      &lt;int&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;        &lt;num&gt;
+1:      113       85    114     88    114     88    112     82           NA
+2:       NA       NA     NA     NA     NA     NA     NA     NA           NA
+3:      127       83     NA     NA    134     82    120     84           NA
+4:       93       63     86     56     90     64     96     62           NA
+5:       90       41     94     48     90     42     90     40           NA
+   DirectChol TotChol UrineVol1 UrineFlow1 UrineVol2 UrineFlow2 Diabetes
+        &lt;num&gt;   &lt;num&gt;     &lt;int&gt;      &lt;num&gt;     &lt;int&gt;      &lt;num&gt;   &lt;fctr&gt;
+1:       1.29    3.49       352         NA        NA         NA       No
+2:         NA      NA        NA         NA        NA         NA       No
+3:       1.14    4.78        29      0.299        NA         NA       No
+4:       1.22    4.86       156      0.975        NA         NA       No
+5:       1.60    4.81       168      0.866        NA         NA       No
+   DiabetesAge HealthGen DaysPhysHlthBad DaysMentHlthBad LittleInterest
+         &lt;int&gt;    &lt;fctr&gt;           &lt;int&gt;           &lt;int&gt;         &lt;fctr&gt;
+1:          NA      Good               0              15           Most
+2:          NA      &lt;NA&gt;              NA              NA           &lt;NA&gt;
+3:          NA      &lt;NA&gt;              NA              NA           &lt;NA&gt;
+4:          NA      &lt;NA&gt;              NA              NA           &lt;NA&gt;
+5:          NA      Good               0               0        Several
+   Depressed nPregnancies nBabies Age1stBaby SleepHrsNight SleepTrouble
+      &lt;fctr&gt;        &lt;int&gt;   &lt;int&gt;      &lt;int&gt;         &lt;int&gt;       &lt;fctr&gt;
+1:   Several           NA      NA         NA             4          Yes
+2:      &lt;NA&gt;           NA      NA         NA            NA         &lt;NA&gt;
+3:      &lt;NA&gt;           NA      NA         NA             5           No
+4:      &lt;NA&gt;           NA      NA         NA            NA         &lt;NA&gt;
+5:      None           NA      NA         NA             6          Yes
+   PhysActive PhysActiveDays TVHrsDay CompHrsDay TVHrsDayChild CompHrsDayChild
+       &lt;fctr&gt;          &lt;int&gt;   &lt;fctr&gt;     &lt;fctr&gt;         &lt;int&gt;           &lt;int&gt;
+1:         No             NA     &lt;NA&gt;       &lt;NA&gt;            NA              NA
+2:       &lt;NA&gt;             NA     &lt;NA&gt;       &lt;NA&gt;             4               1
+3:        Yes              2     &lt;NA&gt;       &lt;NA&gt;            NA              NA
+4:       &lt;NA&gt;             NA     &lt;NA&gt;       &lt;NA&gt;             0               1
+5:        Yes              3     &lt;NA&gt;       &lt;NA&gt;            NA              NA
+   Alcohol12PlusYr AlcoholDay AlcoholYear SmokeNow Smoke100  Smoke100n SmokeAge
+            &lt;fctr&gt;      &lt;int&gt;       &lt;int&gt;   &lt;fctr&gt;   &lt;fctr&gt;     &lt;fctr&gt;    &lt;int&gt;
+1:             Yes         NA           0       No      Yes     Smoker       18
+2:            &lt;NA&gt;         NA          NA     &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;       NA
+3:            &lt;NA&gt;         NA          NA      Yes      Yes     Smoker       17
+4:            &lt;NA&gt;         NA          NA     &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;       NA
+5:             Yes          2         156     &lt;NA&gt;       No Non-Smoker       NA
+   Marijuana AgeFirstMarij RegularMarij AgeRegMarij HardDrugs SexEver SexAge
+      &lt;fctr&gt;         &lt;int&gt;       &lt;fctr&gt;       &lt;int&gt;    &lt;fctr&gt;  &lt;fctr&gt;  &lt;int&gt;
+1:       Yes            17           No          NA       Yes     Yes     16
+2:      &lt;NA&gt;            NA         &lt;NA&gt;          NA      &lt;NA&gt;    &lt;NA&gt;     NA
+3:      &lt;NA&gt;            NA         &lt;NA&gt;          NA      &lt;NA&gt;    &lt;NA&gt;     NA
+4:      &lt;NA&gt;            NA         &lt;NA&gt;          NA      &lt;NA&gt;    &lt;NA&gt;     NA
+5:        No            NA           No          NA        No     Yes     14
+   SexNumPartnLife SexNumPartYear SameSex SexOrientation PregnantNow
+             &lt;int&gt;          &lt;int&gt;  &lt;fctr&gt;         &lt;fctr&gt;      &lt;fctr&gt;
+1:               8              1      No   Heterosexual        &lt;NA&gt;
+2:              NA             NA    &lt;NA&gt;           &lt;NA&gt;        &lt;NA&gt;
+3:              NA             NA    &lt;NA&gt;           &lt;NA&gt;        &lt;NA&gt;
+4:              NA             NA    &lt;NA&gt;           &lt;NA&gt;        &lt;NA&gt;
+5:              20              2      No   Heterosexual        &lt;NA&gt;</code></pre>
+</div>
+</div>
+<p>이번에는 인종 별로 첫 번째 행이 아니라 Height가 최대인 (키가 가장 큰) 데이터를 추출해보겠습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>dt[dt[,.I[<span class="fu">max</span>(Height,<span class="at">na.rm=</span>T)],by<span class="ot">=</span>.(Race1)]<span class="sc">$</span>V1]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      ID SurveyYr Gender   Age AgeDecade AgeMonths    Race1  Race3    Education
+   &lt;int&gt;   &lt;fctr&gt; &lt;fctr&gt; &lt;int&gt;    &lt;fctr&gt;     &lt;int&gt;   &lt;fctr&gt; &lt;fctr&gt;       &lt;fctr&gt;
+1: 52255  2009_10 female    80      &lt;NA&gt;        NA    White   &lt;NA&gt;    8th Grade
+2: 57054  2009_10 female    49     40-49       594    Other   &lt;NA&gt;  High School
+3: 55236  2009_10 female    39     30-39       474  Mexican   &lt;NA&gt; Some College
+4: 55115  2009_10 female    36     30-39       433    Black   &lt;NA&gt; Some College
+5: 59809  2009_10   male    57     50-59       688 Hispanic   &lt;NA&gt;    8th Grade
+   MaritalStatus    HHIncome HHIncomeMid Poverty HomeRooms HomeOwn       Work
+          &lt;fctr&gt;      &lt;fctr&gt;       &lt;int&gt;   &lt;num&gt;     &lt;int&gt;  &lt;fctr&gt;     &lt;fctr&gt;
+1:       Widowed 20000-24999       22500    1.20         5     Own NotWorking
+2:       Married  more 99999      100000    5.00        10     Own NotWorking
+3:  NeverMarried        &lt;NA&gt;          NA    2.77         4    Rent    Working
+4:  NeverMarried        &lt;NA&gt;          NA      NA         8    Rent    Looking
+5:       Married 20000-24999       22500    0.60         7    Rent    Working
+   Weight Length HeadCirc Height   BMI BMICatUnder20yrs      BMI_WHO Pulse
+    &lt;num&gt;  &lt;num&gt;    &lt;num&gt;  &lt;num&gt; &lt;num&gt;           &lt;fctr&gt;       &lt;fctr&gt; &lt;int&gt;
+1:   65.6     NA       NA  162.8 24.75             &lt;NA&gt; 18.5_to_24.9    82
+2:   61.1     NA       NA  165.5 22.31             &lt;NA&gt; 18.5_to_24.9    56
+3:   56.3     NA       NA  160.3 21.91             &lt;NA&gt; 18.5_to_24.9    84
+4:   94.4     NA       NA  162.2 35.88             &lt;NA&gt;    30.0_plus    76
+5:   68.1     NA       NA  167.2 24.36             &lt;NA&gt; 18.5_to_24.9    86
+   BPSysAve BPDiaAve BPSys1 BPDia1 BPSys2 BPDia2 BPSys3 BPDia3 Testosterone
+      &lt;int&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;        &lt;num&gt;
+1:      138       35    134     48    140     36    136     34           NA
+2:      108       71    112     74    106     68    110     74           NA
+3:      107       58    102     62    108     56    106     60           NA
+4:      135       84    130     82    136     84    134     84           NA
+5:      137       85    142     88    138     86    136     84           NA
+   DirectChol TotChol UrineVol1 UrineFlow1 UrineVol2 UrineFlow2 Diabetes
+        &lt;num&gt;   &lt;num&gt;     &lt;int&gt;      &lt;num&gt;     &lt;int&gt;      &lt;num&gt;   &lt;fctr&gt;
+1:       2.15    5.30        58      0.331        NA         NA       No
+2:       1.94    5.43       200      1.449        NA         NA       No
+3:       1.89    6.05       248      1.355        NA         NA       No
+4:       1.01    5.77        76      0.691        NA         NA       No
+5:       1.16    6.54       141      0.876        NA         NA       No
+   DiabetesAge HealthGen DaysPhysHlthBad DaysMentHlthBad LittleInterest
+         &lt;int&gt;    &lt;fctr&gt;           &lt;int&gt;           &lt;int&gt;         &lt;fctr&gt;
+1:          NA      Good               0               0           &lt;NA&gt;
+2:          NA Excellent               0               0           None
+3:          NA      Good               5              15        Several
+4:          NA      Good               1               2           None
+5:          NA      Good               0               1           None
+   Depressed nPregnancies nBabies Age1stBaby SleepHrsNight SleepTrouble
+      &lt;fctr&gt;        &lt;int&gt;   &lt;int&gt;      &lt;int&gt;         &lt;int&gt;       &lt;fctr&gt;
+1:      &lt;NA&gt;            3       3         19             8           No
+2:      None            2       2         33             7           No
+3:   Several            2      NA         NA             8           No
+4:   Several            4       1         NA             9           No
+5:      None           NA      NA         NA             5           No
+   PhysActive PhysActiveDays TVHrsDay CompHrsDay TVHrsDayChild CompHrsDayChild
+       &lt;fctr&gt;          &lt;int&gt;   &lt;fctr&gt;     &lt;fctr&gt;         &lt;int&gt;           &lt;int&gt;
+1:         No             NA     &lt;NA&gt;       &lt;NA&gt;            NA              NA
+2:        Yes              5     &lt;NA&gt;       &lt;NA&gt;            NA              NA
+3:        Yes              5     &lt;NA&gt;       &lt;NA&gt;            NA              NA
+4:        Yes              2     &lt;NA&gt;       &lt;NA&gt;            NA              NA
+5:         No             NA     &lt;NA&gt;       &lt;NA&gt;            NA              NA
+   Alcohol12PlusYr AlcoholDay AlcoholYear SmokeNow Smoke100  Smoke100n SmokeAge
+            &lt;fctr&gt;      &lt;int&gt;       &lt;int&gt;   &lt;fctr&gt;   &lt;fctr&gt;     &lt;fctr&gt;    &lt;int&gt;
+1:              No         NA          NA     &lt;NA&gt;       No Non-Smoker       NA
+2:             Yes          2         208       No      Yes     Smoker       20
+3:             Yes         NA           0       No      Yes     Smoker       15
+4:             Yes          1           3     &lt;NA&gt;       No Non-Smoker       NA
+5:              No         NA           0       No      Yes     Smoker       14
+   Marijuana AgeFirstMarij RegularMarij AgeRegMarij HardDrugs SexEver SexAge
+      &lt;fctr&gt;         &lt;int&gt;       &lt;fctr&gt;       &lt;int&gt;    &lt;fctr&gt;  &lt;fctr&gt;  &lt;int&gt;
+1:      &lt;NA&gt;            NA         &lt;NA&gt;          NA      &lt;NA&gt;    &lt;NA&gt;     NA
+2:        No            NA           No          NA        No     Yes     20
+3:       Yes            19          Yes          19       Yes     Yes     13
+4:       Yes            22           No          NA        No     Yes     18
+5:        No            NA           No          NA        No    &lt;NA&gt;     NA
+   SexNumPartnLife SexNumPartYear SameSex SexOrientation PregnantNow
+             &lt;int&gt;          &lt;int&gt;  &lt;fctr&gt;         &lt;fctr&gt;      &lt;fctr&gt;
+1:              NA             NA    &lt;NA&gt;           &lt;NA&gt;        &lt;NA&gt;
+2:               2              1      No   Heterosexual        &lt;NA&gt;
+3:              55              1     Yes   Heterosexual          No
+4:               5              2      No   Heterosexual          No
+5:              NA             NA      No   Heterosexual        &lt;NA&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>dt[dt[,.I[<span class="fu">which.max</span>(Height)],by<span class="ot">=</span>.(Race1)]<span class="sc">$</span>V1]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      ID SurveyYr Gender   Age AgeDecade AgeMonths    Race1    Race3
+   &lt;int&gt;   &lt;fctr&gt; &lt;fctr&gt; &lt;int&gt;    &lt;fctr&gt;     &lt;int&gt;   &lt;fctr&gt;   &lt;fctr&gt;
+1: 71315  2011_12   male    44     40-49        NA    White    White
+2: 61489  2009_10   male    18     10-19       219    Other     &lt;NA&gt;
+3: 60251  2009_10   male    28     20-29       336  Mexican     &lt;NA&gt;
+4: 53010  2009_10   male    51     50-59       620    Black     &lt;NA&gt;
+5: 64728  2011_12   male    23     20-29        NA Hispanic Hispanic
+        Education MaritalStatus    HHIncome HHIncomeMid Poverty HomeRooms
+           &lt;fctr&gt;        &lt;fctr&gt;      &lt;fctr&gt;       &lt;int&gt;   &lt;num&gt;     &lt;int&gt;
+1:      8th Grade       Married 25000-34999       30000    1.11         7
+2:           &lt;NA&gt;          &lt;NA&gt;      0-4999        2500    0.28         8
+3:    High School  NeverMarried 35000-44999       40000    2.03         4
+4: 9 - 11th Grade     Separated 10000-14999       12500    0.28         5
+5:    High School  NeverMarried 35000-44999       40000    1.79         1
+   HomeOwn    Work Weight Length HeadCirc Height   BMI BMICatUnder20yrs
+    &lt;fctr&gt;  &lt;fctr&gt;  &lt;num&gt;  &lt;num&gt;    &lt;num&gt;  &lt;num&gt; &lt;num&gt;           &lt;fctr&gt;
+1:    Rent Working  162.2     NA       NA  200.4 40.40             &lt;NA&gt;
+2:   Other Working   90.3     NA       NA  190.6 24.86             &lt;NA&gt;
+3:    Rent Working  124.4     NA       NA  195.0 32.72             &lt;NA&gt;
+4:   Other Looking   80.7     NA       NA  194.9 21.24             &lt;NA&gt;
+5:    Rent Working   77.1     NA       NA  197.2 19.80             &lt;NA&gt;
+        BMI_WHO Pulse BPSysAve BPDiaAve BPSys1 BPDia1 BPSys2 BPDia2 BPSys3
+         &lt;fctr&gt; &lt;int&gt;    &lt;int&gt;    &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
+1:    30.0_plus    68      132       84    136     88     NA     NA    132
+2: 18.5_to_24.9    58      108       58    114     52    110     60    106
+3:    30.0_plus    86      124       71    124     80    126     72    122
+4: 18.5_to_24.9    70       98       72    106     70     98     72     NA
+5: 18.5_to_24.9    70      122       66    126     70    120     64    124
+   BPDia3 Testosterone DirectChol TotChol UrineVol1 UrineFlow1 UrineVol2
+    &lt;int&gt;        &lt;num&gt;      &lt;num&gt;   &lt;num&gt;     &lt;int&gt;      &lt;num&gt;     &lt;int&gt;
+1:     84       213.27       1.03    5.40       263      1.169        NA
+2:     56           NA       1.53    2.77       324      0.878        NA
+3:     70           NA       1.09    6.57        51      0.298        NA
+4:     NA           NA       1.97    5.56       149      1.211        NA
+5:     68       747.68       1.03    3.49       120      0.545        NA
+   UrineFlow2 Diabetes DiabetesAge HealthGen DaysPhysHlthBad DaysMentHlthBad
+        &lt;num&gt;   &lt;fctr&gt;       &lt;int&gt;    &lt;fctr&gt;           &lt;int&gt;           &lt;int&gt;
+1:         NA       No          NA      Good               0               0
+2:         NA       No          NA      Good               0               0
+3:         NA       No          NA      Fair               0               0
+4:         NA       No          NA      Good               0               0
+5:         NA       No          NA      Good               0               0
+   LittleInterest Depressed nPregnancies nBabies Age1stBaby SleepHrsNight
+           &lt;fctr&gt;    &lt;fctr&gt;        &lt;int&gt;   &lt;int&gt;      &lt;int&gt;         &lt;int&gt;
+1:           None      None           NA      NA         NA             5
+2:           None      None           NA      NA         NA             2
+3:           None      None           NA      NA         NA             6
+4:           None      None           NA      NA         NA             8
+5:           None      None           NA      NA         NA             7
+   SleepTrouble PhysActive PhysActiveDays  TVHrsDay CompHrsDay TVHrsDayChild
+         &lt;fctr&gt;     &lt;fctr&gt;          &lt;int&gt;    &lt;fctr&gt;     &lt;fctr&gt;         &lt;int&gt;
+1:           No         No             NA      1_hr  0_to_1_hr            NA
+2:           No        Yes              5      &lt;NA&gt;       &lt;NA&gt;            NA
+3:           No        Yes              7      &lt;NA&gt;       &lt;NA&gt;            NA
+4:           No        Yes              3      &lt;NA&gt;       &lt;NA&gt;            NA
+5:           No        Yes             NA More_4_hr  0_to_1_hr            NA
+   CompHrsDayChild Alcohol12PlusYr AlcoholDay AlcoholYear SmokeNow Smoke100
+             &lt;int&gt;          &lt;fctr&gt;      &lt;int&gt;       &lt;int&gt;   &lt;fctr&gt;   &lt;fctr&gt;
+1:              NA             Yes         NA           0       No      Yes
+2:              NA            &lt;NA&gt;         NA          NA     &lt;NA&gt;     &lt;NA&gt;
+3:              NA             Yes         12           1     &lt;NA&gt;       No
+4:              NA             Yes         12         364      Yes      Yes
+5:              NA              No         NA          NA     &lt;NA&gt;       No
+    Smoke100n SmokeAge Marijuana AgeFirstMarij RegularMarij AgeRegMarij
+       &lt;fctr&gt;    &lt;int&gt;    &lt;fctr&gt;         &lt;int&gt;       &lt;fctr&gt;       &lt;int&gt;
+1:     Smoker       17       Yes            15          Yes          16
+2:       &lt;NA&gt;       NA       Yes            15          Yes          17
+3: Non-Smoker       NA        No            NA           No          NA
+4:     Smoker       17       Yes            18           No          NA
+5: Non-Smoker       NA        No            NA           No          NA
+   HardDrugs SexEver SexAge SexNumPartnLife SexNumPartYear SameSex
+      &lt;fctr&gt;  &lt;fctr&gt;  &lt;int&gt;           &lt;int&gt;          &lt;int&gt;  &lt;fctr&gt;
+1:        No     Yes     19              13              1      No
+2:        No     Yes     10               6              3      No
+3:        No     Yes     16               7              0      No
+4:       Yes     Yes     18              10              1      No
+5:        No      No     NA               0              0      No
+   SexOrientation PregnantNow
+           &lt;fctr&gt;      &lt;fctr&gt;
+1:   Heterosexual        &lt;NA&gt;
+2:   Heterosexual        &lt;NA&gt;
+3:   Heterosexual        &lt;NA&gt;
+4:   Heterosexual        &lt;NA&gt;
+5:   Heterosexual        &lt;NA&gt;</code></pre>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="데이터-병합" class="level2">
+<h2 class="anchored" data-anchor-id="데이터-병합">2. 데이터 병합</h2>
+<p>R에서 데이터를 묶는 방법은 크게 두 종류가 있습니다. 하나는 <code>bind()</code> 이고, 다른 하나는 <code>merge()</code> 또는 <code>join()</code> 입니다.</p>
+<section id="bind" class="level3">
+<h3 class="anchored" data-anchor-id="bind">1) bind</h3>
+<p>bind 계열의 함수는 두 개 이상의 데이터를 합치는 함수입니다. merge는 뒤에서 언급하겠지만, bind는 merge와 달리 특정한 기준이 되는 column이 필요하지 않습니다.</p>
+<p>bind에는 <code>rbind()</code>, <code>cbind()</code>가 있습니다.</p>
+<section id="a.-rbind" class="level4">
+<h4 class="anchored" data-anchor-id="a.-rbind">a. <code>rbind()</code></h4>
+<p><code>rbind()</code>는 row-bind의 약자로, 두 가지 이상의 데이터의 행을 묶는 함수입니다. 행을 묶는 것이기 때문에 데이터가 아래로 추가됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,<span class="fu">c</span>(<span class="st">'a'</span>,<span class="st">'b'</span>,<span class="st">'c'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,] "1"  "2"  "3" 
+[2,] "a"  "b"  "c" </code></pre>
+</div>
+</div>
+<p><code>rbind()</code>를 통해 합치고자 하는 데이터의 길이가 맞지 않는 경우, 자동으로 부족한 부분을 채웁니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4]
+[1,]    1    2    3    1
+[2,]    1    2    3    4</code></pre>
+</div>
+</div>
+<p>만약 column 이름을 갖는 matrix나 data.table 형태를 <code>rbind()</code>하고자 하는 경우는 합치고자 하는 데이터의 column이름이 같아야 합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(data.table)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">num=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">str =</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">num=</span><span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>,</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">str =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(a,b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      num    str
+    &lt;int&gt; &lt;char&gt;
+ 1:     1      a
+ 2:     2      b
+ 3:     3      c
+ 4:     4      d
+ 5:     5      e
+ 6:     6      A
+ 7:     7      B
+ 8:     8      C
+ 9:     9      D
+10:    10      E</code></pre>
+</div>
+</div>
+<p>만약 두 데이터의 column 이름이 같지 않은 경우, 에러 메시지가 뜨게 됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">num=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">str=</span>letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">num=</span><span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>,</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">str2=</span>LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(a,b)</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 에러메시지</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Column 2 ['str2'] of item 2 is missing in item 1. Use fill=TRUE to fill with NA (NULL for list columns), or use.names=FALSE to ignore column names.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>이럴 때는 column 이름을 무시하거나, 이름이 같지 않은 column을 <code>NA</code>로 채워줄 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(a,b, <span class="at">use.names=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      num    str
+    &lt;int&gt; &lt;char&gt;
+ 1:     1      a
+ 2:     2      b
+ 3:     3      c
+ 4:     4      d
+ 5:     5      e
+ 6:     6      A
+ 7:     7      B
+ 8:     8      C
+ 9:     9      D
+10:    10      E</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(a,b, <span class="at">fill=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      num    str
+    &lt;int&gt; &lt;char&gt;
+ 1:     1      a
+ 2:     2      b
+ 3:     3      c
+ 4:     4      d
+ 5:     5      e
+ 6:     6      A
+ 7:     7      B
+ 8:     8      C
+ 9:     9      D
+10:    10      E</code></pre>
+</div>
+</div>
+</section>
+<section id="b.-cbind" class="level4">
+<h4 class="anchored" data-anchor-id="b.-cbind">b. <code>cbind()</code></h4>
+<p><code>cbind()</code>는 column-bind의 약자로, 두 가지 이상의 데이터의 열을 묶는 함수입니다. 열을 묶기 때문에 데이터가 옆으로 추가됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">num=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">str =</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">data.table</span>(<span class="at">num=</span><span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">str2 =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(a,b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     num    str   num   str2
+   &lt;int&gt; &lt;char&gt; &lt;int&gt; &lt;char&gt;
+1:     1      a     6      A
+2:     2      b     7      B
+3:     3      c     8      C
+4:     4      d     9      D
+5:     5      e    10      E</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="merge" class="level3">
+<h3 class="anchored" data-anchor-id="merge">2) merge</h3>
+<p><code>merge()</code>는 두가지의 데이터를 특정 column을 기준으로 합치는 함수입니다. bind 계열의 함수와 다르게 <u>기준이 되는 column</u>이 반드시 필요합니다.</p>
+<p><code>merge()</code>는 두 가지 데이터 중 어떤 방식으로 합치느냐에 따라 크게 3가지로 분류할 수 있습니다.</p>
+<section id="a.-inner-join" class="level4">
+<h4 class="anchored" data-anchor-id="a.-inner-join">a. inner join</h4>
+<p>inner join은 두 가지 데이터의 기준이 되는 column 에서 공통된 값들만 갖는 데이터를 합치는 방법입니다.</p>
+<p>data.table에서 inner join 하는 방법은 아래와 같습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1, dt2, <span class="at">by=</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="b.-left-right-join" class="level4">
+<h4 class="anchored" data-anchor-id="b.-left-right-join">b. left / right join</h4>
+<p>left/right join은 두 가지 데이터에서 왼(오른)쪽 데이터의 column을 기준으로 데이터를 합치는 방법입니다.</p>
+<p>data.table에서 left join과 right join을 하는 방법은 아래와 같습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1, dt2, by, <span class="at">all.x=</span>T) <span class="co"># left join</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1, dt2, by, <span class="at">all.y=</span>T) <span class="co"># right join</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>all.x 인자에 TRUE를 주면 left join을, all.y는 right join을 의미합니다.</p>
+</section>
+<section id="c.-outer-join" class="level4">
+<h4 class="anchored" data-anchor-id="c.-outer-join">c.&nbsp;outer join</h4>
+<p>outer join은 두 가지 데이터의 모든 column을 기준으로 데이터를 합치는 방법입니다.</p>
+<p>공통되지 않은 값을 갖는 경우는 <code>NA</code>로 채워넣어집니다.</p>
+<p>data.table에서 outer join을 하는 방법은 아래와 같습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1, dt2, all.x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>merge의 경우 공통된 이름의 column을 기준으로 두 데이터를 합치는 방법이라고 했습니다. 그런데 만약 기준이 되는 column의 이름이 다르다면 어떻게 해야 할까요? 이때는 <code>by.x</code>와 <code>by.y</code> 인자를 사용합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(by.x, by.y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>기존에는 <code>by</code>인자에 공통된 column명을 넣으면 됐지만, 두 가지 데이터의 column이 다르기 때문에 각각 by.x와 by.y에 기준이 되는 column 이름을 넣어주는 것입니다.</p>
+</section>
+</section>
+</section>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>두 가지 column을 기준으로 합치고자 할 때, 이름이 다른 경우 아래와 같이 사용합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1, dt2, <span class="at">by.x=</span><span class="fu">c</span>(<span class="st">'a'</span>,<span class="st">'b'</span>), <span class="at">by.y=</span><span class="fu">c</span>(<span class="st">'A'</span>,<span class="st">'B'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>.EACHI: X와 Y를 합칠 때, 요소별 합쳐진 개수 확인</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">6</span>), <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">key =</span> <span class="st">"x"</span>)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">6</span>), <span class="at">z =</span> letters[<span class="dv">2</span><span class="sc">:</span><span class="dv">1</span>], <span class="at">key =</span> <span class="st">"x"</span>)</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>X[Y,.N, by<span class="ot">=</span>x]; <span class="co">#X[Y,.N, by=y];</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;x&gt;
+       x     N
+   &lt;num&gt; &lt;int&gt;
+1:     2     2
+2:     6     1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>X[Y, .N, by<span class="ot">=</span>.EACHI]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;x&gt;
+       x     N
+   &lt;num&gt; &lt;int&gt;
+1:     2     2
+2:     6     1</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="pivoting" class="level2">
+<h2 class="anchored" data-anchor-id="pivoting">3. Pivoting</h2>
+<p>pivoting이란 column이 여러 개 좌우로 붙어있던 것을 위아래로 길게 늘이거나, 데이터를 좌우로 넓게 펼치는 것을 의미합니다.</p>
+<p>pivot: 축을 기준으로 데이터를 회전시키는 것을 의미합니다. 데이터 측면에서 축은 기준이 되는 column을 의미합니다. 예를 들면 환자의 식별자, 일자 등이 있습니다.</p>
+<p>pivoting 개념에서 사용되는 데이터 유형 두 가지에 대해 살펴보겠습니다.</p>
+<ul>
+<li><p><strong>Wide data</strong></p>
+<p>넓은(wide) 데이터는 이름 그대로 양 옆으로 넓은 데이터를 의미합니다. 양 옆으로 넓다는 것은 column의 개수가 많다는 것을 의미합니다. 지금까지 교재에서 다루었던 거의 대부분의 데이터가 column들이 옆으로 붙어있는 형태는 wide 데이터입니다.</p></li>
+<li><p><strong>Long data</strong></p>
+<p>긴 (long) 데이터는 넓은 데이터와 다르게, 반복되는 column을 기준으로 여러 변수(variable)와 값(value)으로 구성된 데이터입니다.</p>
+<p>이 때 반복되는 column이란 반복되어 기록된 값들입니다. 예를 들면 환자가 입원해있는 동안의 기록이나 일자별 날씨 같이 반복적으로 기록되어 있는 데이터 등이 있습니다.</p>
+<p>airquality는 <code>Month</code>와 <code>Day</code> 별 오존량, 풍량, 기온 등이 기록된 데이터입니다. 여기서 <code>Month</code>와 <code>Day</code>가 바로 반복되는 column입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>airquality <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Ozone Solar.R Wind Temp Month Day
+1    41     190  7.4   67     5   1
+2    36     118  8.0   72     5   2
+3    12     149 12.6   74     5   3
+4    18     313 11.5   62     5   4
+5    NA      NA 14.3   56     5   5
+6    28      NA 14.9   66     5   6</code></pre>
+</div>
+</div>
+<p>long 데이터는 이렇게 반복되는 column들을 기준으로 데이터를 variable과 value로 길게 확장시켜 놓은 것입니다.</p></li>
+</ul>
+<p>데이터 분석을 수행하는 우리 입장에서는 wide한 데이터가 보기에 더 편리합니다. column마다 어떤 데이터가 있는지 확인할 수 있고, 각 column 별로 계산을 수행할 수 있기 때문입니다.</p>
+<p>그러나 컴퓨터 입장에서는, 즉 계산하는 측면에서는 long data가 더 효율적입니다. 그렇기 때문에 동일한 column에 대해 연산을 할 때, long data가 훨씬 빠르게 계산됩니다.</p>
+<section id="melt" class="level3">
+<h3 class="anchored" data-anchor-id="melt">1) melt</h3>
+<p>melt는 column들이 옆으로 나열되어 있는 옆으로 넓은(wide)한 데이터를 위아래로 길게(long) 바꾸는 것을 의미합니다.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>melt는 어떤 것을 녹이는 의미를 갖고 있습니다. 넓게 퍼진 데이터를 녹여 길게 만든다고 이해하시면 됩니다.</p>
+</div>
+</div>
+<p>이렇게 옆으로 나열된 column들을 특정한 축을 기준으로 데이터를 variable과 value라는 column으로 녹입니다. 이렇게 되면 long data의 축에 오는 데이터들은 계속 반복되고, variable과 value만 변경되는 데이터로 변환됩니다.</p>
+<p>melt 함수에서는 기준이 되는 column의 이름과 길게 변환할 column을 지정해줄 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>air_dt <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(airquality)</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">melt</span>(air_dt,</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">id.vars=</span><span class="fu">c</span>(<span class="st">'Month'</span>,<span class="st">'Day'</span>),</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">measure.vars=</span><span class="fu">c</span>(<span class="st">'Ozone'</span>,<span class="st">'Temp'</span>),</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">na.rm =</span> T <span class="co"># TRUE일 경우 NA인 값은 제외</span></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>     )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Month   Day variable value
+     &lt;int&gt; &lt;int&gt;   &lt;fctr&gt; &lt;int&gt;
+  1:     5     1    Ozone    41
+  2:     5     2    Ozone    36
+  3:     5     3    Ozone    12
+  4:     5     4    Ozone    18
+  5:     5     6    Ozone    28
+ ---                           
+265:     9    26     Temp    70
+266:     9    27     Temp    77
+267:     9    28     Temp    75
+268:     9    29     Temp    76
+269:     9    30     Temp    68</code></pre>
+</div>
+</div>
+<p>만약 measure.vars에 아무런 인자를 주지 않는다면, melt를 수행했을 때, 기준 column을 제외한 모든 column들이 long 형태로 변경됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>air_melt <span class="ot">&lt;-</span> <span class="fu">melt</span>(air_dt,</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">id.vars=</span><span class="fu">c</span>(<span class="st">'Month'</span>,<span class="st">'Day'</span>),</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">na.rm =</span> T <span class="co"># TRUE일 경우 NA인 값은 제외</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>     )</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>air_melt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Month   Day variable value
+     &lt;int&gt; &lt;int&gt;   &lt;fctr&gt; &lt;num&gt;
+  1:     5     1    Ozone    41
+  2:     5     2    Ozone    36
+  3:     5     3    Ozone    12
+  4:     5     4    Ozone    18
+  5:     5     6    Ozone    28
+ ---                           
+564:     9    26     Temp    70
+565:     9    27     Temp    77
+566:     9    28     Temp    75
+567:     9    29     Temp    76
+568:     9    30     Temp    68</code></pre>
+</div>
+</div>
+<p>melt의 measure.vars에는 앞서 배웠던 patterns을 통해 비슷한 패턴을 갖는 column명을 선택할 수도 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">melt</span>(dt,</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">'Gender'</span>,<span class="st">'Age'</span>,<span class="st">'Race1'</span>),</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">measure.vars =</span> <span class="fu">patterns</span>(<span class="st">'HH'</span>) <span class="co"># HH가 들어가는 column 선택</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>     )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Gender   Age   Race1    variable       value
+       &lt;fctr&gt; &lt;int&gt;  &lt;fctr&gt;      &lt;fctr&gt;      &lt;char&gt;
+    1:   male    34   White    HHIncome 25000-34999
+    2:   male    34   White    HHIncome 25000-34999
+    3:   male    34   White    HHIncome 25000-34999
+    4:   male     4   Other    HHIncome 20000-24999
+    5: female    49   White    HHIncome 35000-44999
+   ---                                             
+19996:   male    28 Mexican HHIncomeMid        7500
+19997: female     0   White HHIncomeMid       87500
+19998:   male    27 Mexican HHIncomeMid       87500
+19999:   male    60   White HHIncomeMid       70000
+20000:   male    60   White HHIncomeMid       70000</code></pre>
+</div>
+</div>
+<p>여러 개의 패턴을 지정해 두 가지 이상으로 정리할 수도 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>house_dt <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">dob_child1 =</span> <span class="fu">c</span>(<span class="st">'1998-11-26'</span>,<span class="st">'1996-06-22'</span>,<span class="st">'2002-07-11'</span>,<span class="st">'2004-10-10'</span>,<span class="st">'2000-12-05'</span>),</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">dob_child2 =</span> <span class="fu">c</span>(<span class="st">'2000-01-29'</span>,<span class="cn">NA</span>,<span class="st">'2004-04-05'</span>,<span class="st">'2009-08-27'</span>,<span class="st">'2005-02-28'</span>),</span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">name_child1 =</span> <span class="fu">c</span>(<span class="st">'Susan'</span>,<span class="st">'Mark'</span>,<span class="st">'Sam'</span>,<span class="st">'Craig'</span>,<span class="st">'Parker'</span>),</span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">name_child2 =</span> <span class="fu">c</span>(<span class="st">'Jose'</span>,<span class="cn">NA</span>,<span class="st">'Seth'</span>,<span class="st">'Khai'</span>,<span class="st">'Gracie'</span>)</span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a>house_dt <span class="sc">|&gt;</span> </span>
+<span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">melt</span>(</span>
+<span id="cb71-11"><a href="#cb71-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">id.vars =</span> <span class="st">'family'</span>,</span>
+<span id="cb71-12"><a href="#cb71-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">measure.vars =</span> <span class="fu">patterns</span>(<span class="st">"^dob"</span>,<span class="st">"^name"</span>),</span>
+<span id="cb71-13"><a href="#cb71-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">value.name =</span> <span class="fu">c</span>(<span class="st">"dob"</span>,<span class="st">'name'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    family variable        dob   name
+     &lt;int&gt;   &lt;fctr&gt;     &lt;char&gt; &lt;char&gt;
+ 1:      1        1 1998-11-26  Susan
+ 2:      2        1 1996-06-22   Mark
+ 3:      3        1 2002-07-11    Sam
+ 4:      4        1 2004-10-10  Craig
+ 5:      5        1 2000-12-05 Parker
+ 6:      1        2 2000-01-29   Jose
+ 7:      2        2       &lt;NA&gt;   &lt;NA&gt;
+ 8:      3        2 2004-04-05   Seth
+ 9:      4        2 2009-08-27   Khai
+10:      5        2 2005-02-28 Gracie</code></pre>
+</div>
+</div>
+</section>
+<section id="dcast" class="level3">
+<h3 class="anchored" data-anchor-id="dcast">2) dcast</h3>
+<p>이렇게 옆으로 나열된 column들을 특정한 축을 기준으로 데이터를 variable과 value라는 column으로 녹입니다.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>cast는 어떤 형태로 데이터를 굳히는 것을 의미합니다. 기존에 melt로 녹아있던 데이터를 casting 하는 data+casting (dcast)라고 이해하시면 됩니다.</p>
+</div>
+</div>
+<p>dcast는 long data에서 축 column에서 특정 값들을 기준으로 넓게 펼칠 수 있습니다. dcast에서는 formula 형태로 기준이 되는 축과 wide하게 변경해줄 column을 선택해주면 됩니다. 이 때 formula 형태라는 것은 ~ 을 기준으로 기준 축과 column</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dcast</span>(<span class="at">data=</span>air_melt,</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">formula =</span> Month <span class="sc">+</span> Day <span class="sc">~</span> variable, <span class="co"># 기준 column ~ column 이름으로 들어갈 column</span></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> <span class="dv">0</span>, <span class="co"># NA인 경우 채워 넣어줄 값을 선택할 수 있습니다.</span></span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">value.var =</span> <span class="st">'value'</span> <span class="co"># 데이터로 들어갈 값들.</span></span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;Month, Day&gt;
+     Month   Day Ozone Solar.R  Wind  Temp
+     &lt;int&gt; &lt;int&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt; &lt;num&gt;
+  1:     5     1    41     190   7.4    67
+  2:     5     2    36     118   8.0    72
+  3:     5     3    12     149  12.6    74
+  4:     5     4    18     313  11.5    62
+  5:     5     5     0       0  14.3    56
+ ---                                      
+149:     9    26    30     193   6.9    70
+150:     9    27     0     145  13.2    77
+151:     9    28    14     191  14.3    75
+152:     9    29    18     131   8.0    76
+153:     9    30    20     223  11.5    68</code></pre>
+</div>
+</div>
+<p>dcast에는 fun.aggregate라는 인자가 존재합니다. 이 인자의 경우 만약 기준이 되는 column의 하나의 값에 여러 데이터(row)가 존재하는 경우에 사용합니다.</p>
+<p><code>airquality</code> 데이터를 예로 들어보겠습니다. 앞서 보여드린 air_melt의 경우 Month와 Day의 두 column을 기준으로 melt했기 때문에 기준 column에 공통되는 값들이 없었습니다 (5/1~ 9/27 까지 일일 데이터이므로).</p>
+<p>이번에는 <code>Day</code>만 기준 column으로 놓고 melt를 한 데이터를 다시 dcast 해보겠습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>air_melt2 <span class="ot">&lt;-</span> <span class="fu">melt</span>(air_dt, <span class="at">id.vars =</span> <span class="st">'Day'</span>,<span class="at">measure.vars =</span> <span class="fu">c</span>(<span class="st">'Ozone'</span>,<span class="st">'Solar.R'</span>,<span class="st">'Wind'</span>,<span class="st">'Temp'</span>))</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>air_melt2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Day variable value
+     &lt;int&gt;   &lt;fctr&gt; &lt;num&gt;
+  1:     1    Ozone    41
+  2:     2    Ozone    36
+  3:     3    Ozone    12
+  4:     4    Ozone    18
+  5:     5    Ozone    NA
+ ---                     
+608:    26     Temp    70
+609:    27     Temp    77
+610:    28     Temp    75
+611:    29     Temp    76
+612:    30     Temp    68</code></pre>
+</div>
+</div>
+<p><code>air_melt</code>와 달리 air_melt2에서는 Day별로 여러 개의 데이터가 존재하게 됩니다 (Day가 1인 경우, 5월 1일, 6월 1일 ~9월 1일 등의 데이터가 있기 때문입니다).</p>
+<p>이 데이터를 dcast하게 된다면 <code>Aggregate function missing, defaulting to 'length'</code> 아래와 같은 메시지가 뜹니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dcast</span>(air_melt2, Day <span class="sc">~</span> variable, <span class="at">value.var=</span><span class="st">'value'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;Day&gt;
+      Day Ozone Solar.R  Wind  Temp
+    &lt;int&gt; &lt;int&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt;
+ 1:     1     5       5     5     5
+ 2:     2     5       5     5     5
+ 3:     3     5       5     5     5
+ 4:     4     5       5     5     5
+ 5:     5     5       5     5     5
+ 6:     6     5       5     5     5
+ 7:     7     5       5     5     5
+ 8:     8     5       5     5     5
+ 9:     9     5       5     5     5
+10:    10     5       5     5     5
+11:    11     5       5     5     5
+12:    12     5       5     5     5
+13:    13     5       5     5     5
+14:    14     5       5     5     5
+15:    15     5       5     5     5
+16:    16     5       5     5     5
+17:    17     5       5     5     5
+18:    18     5       5     5     5
+19:    19     5       5     5     5
+20:    20     5       5     5     5
+21:    21     5       5     5     5
+22:    22     5       5     5     5
+23:    23     5       5     5     5
+24:    24     5       5     5     5
+25:    25     5       5     5     5
+26:    26     5       5     5     5
+27:    27     5       5     5     5
+28:    28     5       5     5     5
+29:    29     5       5     5     5
+30:    30     5       5     5     5
+31:    31     3       3     3     3
+      Day Ozone Solar.R  Wind  Temp</code></pre>
+</div>
+</div>
+<p>이 메시지가 뜬 이유는 다음과 같습니다. <code>Day</code>라는 고유한 값은 1~31까지 밖에 없는데, <code>air_melt2</code>에서는 <code>Day</code>별로 여러 건의 데이터가 있었습니다. 그렇기 때문에 dcast에서는 <code>Day</code>별 요약 또는 집계를 수행합니다. 이 때 <code>fun.aggregate</code>라는 인자에 어떻게 요약할 것인지 지정해주지 않았기 때문에 초기값인 <code>length()</code>가 적용된 것입니다.</p>
+<p>따라서 평균이나 중앙값, 최소, 최대 등 요약함수를 넣어주면 <code>Day</code>별로 여러 건의 데이터를 요약한 값으로 데이터가 펼쳐지게 됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dcast</span>(air_melt2, Day <span class="sc">~</span> variable, </span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">value.var=</span><span class="st">'value'</span>,</span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">fun.aggregate =</span> mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;Day&gt;
+      Day    Ozone  Solar.R      Wind     Temp
+    &lt;int&gt;    &lt;num&gt;    &lt;num&gt;     &lt;num&gt;    &lt;num&gt;
+ 1:     1       NA 199.0000  6.780000 80.20000
+ 2:     2       NA 174.8000  9.160000 80.80000
+ 3:     3       NA 177.4000  9.620000 79.40000
+ 4:     4       NA       NA  8.620000 81.80000
+ 5:     5       NA       NA  8.460000 79.20000
+ 6:     6       NA       NA 12.040000 79.80000
+ 7:     7 54.20000 241.8000  7.660000 80.80000
+ 8:     8       NA 217.6000  9.520000 81.20000
+ 9:     9 61.40000 203.8000 11.700000 81.60000
+10:    10       NA 234.6000  9.160000 82.00000
+11:    11       NA       NA 10.560000 83.20000
+12:    12       NA 244.2000 12.040000 79.20000
+13:    13 23.40000 224.8000  9.980000 77.60000
+14:    14       NA 215.6000 12.040000 78.00000
+15:    15       NA 122.2000 12.400000 73.40000
+16:    16 30.20000 218.6000 10.100000 75.40000
+17:    17 36.60000 228.0000 12.620000 73.20000
+18:    18 24.60000 108.4000 10.320000 71.60000
+19:    19 35.20000 222.2000  9.860000 74.80000
+20:    20 29.40000 158.4000  9.960000 76.60000
+21:    21       NA 132.4000 10.200000 70.20000
+22:    22       NA 137.4000 10.300000 74.60000
+23:    23       NA 161.0000  9.740000 75.00000
+24:    24       NA 179.4000  9.380000 74.20000
+25:    25       NA 136.4000 10.520000 72.20000
+26:    26       NA 176.4000  9.280000 74.80000
+27:    27       NA       NA  9.840000 76.20000
+28:    28       NA 143.6000 10.980000 81.40000
+29:    29       NA 182.8000  9.500000 82.80000
+30:    30       NA 214.8000  7.780000 81.80000
+31:    31 60.33333 240.3333  7.633333 83.66667
+      Day    Ozone  Solar.R      Wind     Temp</code></pre>
+</div>
+</div>
+<p>만약 여러 건의 데이터 중 첫 번째를 사용하고 싶은 경우에는 아래와 같이 사용할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dcast</span>(air_melt2, Day <span class="sc">~</span> variable, </span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">value.var=</span><span class="st">'value'</span>,</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">fun.aggregate =</span> <span class="cf">function</span>(x)x[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;Day&gt;
+      Day Ozone Solar.R  Wind  Temp
+    &lt;int&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt; &lt;num&gt;
+ 1:     1    41     190   7.4    67
+ 2:     2    36     118   8.0    72
+ 3:     3    12     149  12.6    74
+ 4:     4    18     313  11.5    62
+ 5:     5    NA      NA  14.3    56
+ 6:     6    28      NA  14.9    66
+ 7:     7    23     299   8.6    65
+ 8:     8    19      99  13.8    59
+ 9:     9     8      19  20.1    61
+10:    10    NA     194   8.6    69
+11:    11     7      NA   6.9    74
+12:    12    16     256   9.7    69
+13:    13    11     290   9.2    66
+14:    14    14     274  10.9    68
+15:    15    18      65  13.2    58
+16:    16    14     334  11.5    64
+17:    17    34     307  12.0    66
+18:    18     6      78  18.4    57
+19:    19    30     322  11.5    68
+20:    20    11      44   9.7    62
+21:    21     1       8   9.7    59
+22:    22    11     320  16.6    73
+23:    23     4      25   9.7    61
+24:    24    32      92  12.0    61
+25:    25    NA      66  16.6    57
+26:    26    NA     266  14.9    58
+27:    27    NA      NA   8.0    57
+28:    28    23      13  12.0    67
+29:    29    45     252  14.9    81
+30:    30   115     223   5.7    79
+31:    31    37     279   7.4    76
+      Day Ozone Solar.R  Wind  Temp</code></pre>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>가장 일반적으로 사용하는 데이터는 wide 형태의 데이터입니다.</p>
+<p>그러나 분석하고자 하는 유형, 필요한 데이터의 모양에 따라 데이터의 형태를 변환해줘야 할 때가 있습니다.</p>
+</div>
+</div>
+<section id="함께-보면-좋은-자료" class="level4">
+<h4 class="anchored" data-anchor-id="함께-보면-좋은-자료">함께 보면 좋은 자료</h4>
+<ul>
+<li><a href="../../posts/data.table_basic/index.html">data.table 기초</a></li>
+</ul>
+
+
+<!-- -->
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<pre class="markdown" data-shortcodes="false"><code>---
+title: "data.table 심화"
+description:  "특수 기호, 조인, 피봇 등 data.table에서 다루는 심화내용을 살펴봅시다."
+date: '2023-01-19'
+categories: [data.table, R]
+---
+
+[[data.table 기초]{.underline}](../data.table_basic/index.qmd) 포스트 에서는 대용량의 데이터를 빠르게 처리할 수 있는 `data.table` 패키지에 대해 배워봤습니다.
+
+이번 시간에는 `data.table` 패키지를 조금 더 효율적으로 사용할 수 있는 방법, 그리고 `data.table`을 이용하여 데이터를 원하는대로 붙이고 변형하는 방법에 대해 알아보겠습니다.
+
+## 1. 특수 기호
+
+data.table 패키지에는 유용하게 사용할 수 있는 특수 기호들이 있습니다. 이 특수한 기호들은 다른 패키지에서는 사용할 수 없는 것들로, data.table 형태의 데이터를 다룰 때만 사용이 가능합니다.
+
+이번에 배울 data.table의 특수 기호는 크게 3가지입니다. 바로 .SD, .N, .I 입니다. 이 특수기호들은 모두 data.table의 j(column 부분)에서 쓰입니다.
+
+### 1) lapply + .SD
+
+`.SD`는 Subset Data의 약자입니다. 말그대로 데이터의 일부분을 선택하기 위한 특수기호(special symbols)입니다.
+
+`.SD`와 함께 사용되는 것이 있습니다. 바로 `.SDcols` 입니다. `.SDcols`를 통해 데이터 중 원하는 column을 선택할 수 있습니다.
+
+만약 .SDcols 없이 .SD만 사용한다면 데이터의 모든 column을 선택한다는 뜻입니다.
+
+quarto-executable-code-5450563D
+
+```r
+require(data.table)
+require(NHANES)
+dt &lt;- as.data.table(NHANES)
+dt[,head(.SD)]
+dt[,str(.SD)]
+```
+
+반면 `.SDcols와` 함께 `.SD`를 사용한다면 `.SDcols`에 입력한 column만 선택합니다.
+
+quarto-executable-code-5450563D
+
+```r
+dt[,str(.SD),.SDcols=c('Gender','Age')]
+```
+
+`.SDcols`에 column을 선택하는 방법은 크게 세 가지가 있습니다.
+
+-   column 이름을 갖는 vector 만들어서 사용
+
+    아래의 예시처럼 찾고자 하는 column 이름 `c()`로 묶은 vector 형태로 넣어줄 수 있습니다.
+
+    ```{r}
+    dt[,.SD,.SDcols=c('Gender','Age','Race1','Education')]
+    # OR
+    target &lt;- c('Gender','Age','Race1','Education')
+    dt[,.SD,.SDcols=target]
+    ```
+
+-   `patterns()`를 통한 column 규칙 찾기
+
+    `patterns()` 함수를 이용해 해당 문자열을 갖는 모든 column을 찾을 수 있습니다.
+
+    ```{r}
+    dt[,.SD,.SDcols=patterns('Alcohol')]
+    ```
+
+-   `:`을 이용해 연속적인 column을 찾기
+
+    `.SDcols`에 적용할 column이 연이어 붙어있는 경우, `:`을 이용하여 찾을 수 있습니다.
+
+    ```{r}
+    dt[,.SD,.SDcols=Gender:Age]
+    ```
+
+한편 `.SD` (`.SDcols`)와 자주 사용되는 함수는 `lapply()`입니다.
+
+`lapply()`는 list + apply의 약자로, list에 [동일한 함수]{.underline}를 적용할 때 사용되는 함수입니다.
+
+`lapply()`는 크게 아래의 구조로 이루어져 있습니다.
+
+```{r eval=FALSE}
+lapply(
+  X, # 함수를 적용할 부분
+  FUN, # 선택된 X에 적용할 함수
+  ... # 추가 인자, e.g., na.rm=T
+)
+```
+
+`X` 에는 함수를 적용할 column이름 또는 벡터가 오게 됩니다. 이 챕터에서는 주로 data.table에 `lapply()`를 적용하기 때문에 column이름이 오게 됩니다.
+
+`FUN` 에는 X에서 선택된 column들에 동일하게 적용할 함수를 작성합니다. `FUN` 부분은 각 column이 호출되어야 하는 횟수에 따라 사용하는 방법이 달라집니다.
+
+보통 `function(x)` 또는 `\(x)` 를 이용해 적용시킬 함수를 입력해줍니다.
+
+quarto-executable-code-5450563D
+
+```r
+lapply(1:5, function(x) ifelse(is.na(x),mean(x,na.rm=T),x))
+lapply(1:5, \(x) mean(x,na.rm=T))
+```
+
+만약 평균을 구하늖 ㅏㅁ수처럼 `mean()` 처럼 각 column이 한번만 와도 되는 상황이라면 `function()`을 생략하고 함수의 이름만 사용할 수 있습니다. 결측치가 있는 경우 `…` 부분에 추가적으로 `na.rm=T` 를 사용할 수 있습니다.
+
+quarto-executable-code-5450563D
+
+```r
+lapply(1:5, mean, na.rm=T)
+```
+
+`lapply()`와 `.SD`를 사용할 때는 `.SD`와 `.SDcols`를 통해 선택되는 column에 동일한 함수를 적용하게 됩니다. 일일이 column마다 함수를 적용할 필요가 없으니, 입력해야 하는 코드도 줄어들 뿐만 아니라 계산에 필요한 시간도 훨씬 단축됩니다.
+
+quarto-executable-code-5450563D
+
+```r
+dt[,lapply(.SD, # 함수를 적용할 column 
+           mean, # functcion 부분
+           na.rm=T # 추가 인자 부분
+           ),
+   .SDcols=c('Age','BMI') # .SD 중 선택되는 column이름
+   ]
+```
+
+또한 `lapply()`와 `.SD`는 여러 column들의 평균, 표준편차 등의 요약통계량을 계산하는 경우, 동시에 column들의 유형을 numeric에서 character로 변환하는 경우 등에 자주 사용됩니다.
+
+quarto-executable-code-5450563D
+
+```r
+dt[,lapply(.SD, mean, na.rm=T), .SDcols=target]
+dt[,lapply(.SD, as.factor), .SDcols=target]
+```
+
+`lapply()`와 `.SD`를 활용하여 여러 column들을 변경한 후, 데이터에 저장하는 것은 chapter 3에서 배웠던 `:=` 를 이용합니다.
+
+여러 column을 동시에 변경하여 저장할 때는 `:=` 왼쪽 부분에 column 이름이 있는 `vector`를 `()`로 감싸주면 됩니다.
+
+예를 들어 나이와 BMI의 `NA`를 각 column의 중앙값으로 채워넣고자 하는 경우,
+
+quarto-executable-code-5450563D
+
+```r
+target &lt;- c('Age','BMI')
+
+dt[,(target):=lapply(.SD, \(x) ifelse(is.na(x), median(x,na.rm=T),x)),.SDcols=target]
+```
+
+### 2) `.N`
+
+`.N`은 데이터의 수, 다시 말해 row의 개수를 확인하는 특수기호입니다. `.N`은 주로 `by`와 함께 됩니다. `by`를 통해 특정 집단의 분포별로 몇 명이 있는지, 또는 몇 건의 데이터가 있는지 확인합니다.
+
+예를 들면 인종(`race`)에 따른 데이터의 수를 확인하고 싶을 때는 아래와 같이 사용합니다.
+
+quarto-executable-code-5450563D
+
+```r
+dt[,.N, by=Race1]
+```
+
+::: callout-note
+사실 그룹별 응답 수는 `table()` 함수를 이용해도 구할 수 있습니다. 그러나 .N을 이용하게 되면 각 범주별 빈도수를 [data.table 문법 내에서]{.underline} 구할 수 있기 때문에 활용성에 있어 `table()`보다 더 뛰어나다고 할 수 있습니다.
+
+quarto-executable-code-5450563D
+
+```r
+dt[,c(.N, lapply(.SD,mean)),by=.(Race1),.SDcols='Age']
+```
+:::
+
+### 3) `.I`
+
+`.I`는 j 부분에서 행을 다루기 특수기호입니다.
+
+보통 `.I`는 특정 조건을 만족하는 row의 위치를 찾을 때 사용합니다. 특히 by가 있는 경우, 다시 말해 범주별로 row의 위치를 찾을 때 많이 사용합니다.
+
+집단별 row가 필요하지 않다면, j가 아닌 i 부분에서 행을 선택할 수 있습니다. 그러나 i 부분만 입력하게 될 경우, 집단 별 조건을 확인할 수 없습니다. 왜냐하면 by를 사용하기 위해서는 j가 선행되어야 하기 때문입니다.
+
+따라서 i 부분에서 바로 row를 filtering 하는 것이 아니라, j 부분에서 집단별로 조건을 만족시키는 행의 번호를 찾아서 사용합니다.
+
+또한 `.I`를 사용하는 경우 행의 번호를 확인할 수 있기 때문에, 그 행의 번호에 해당하는 모든 column을 사용할 수 있습니다.
+
+예를 들어, 인종별 첫 번째 행을 선택하는 경우는 다음과 같이 실행할 수 있습니다.
+
+quarto-executable-code-5450563D
+
+```r
+dt[dt[,.I[1L],by=Race1]$V1]
+```
+
+이번에는 인종 별로 첫 번째 행이 아니라 Height가 최대인 (키가 가장 큰) 데이터를 추출해보겠습니다.
+
+quarto-executable-code-5450563D
+
+```r
+dt[dt[,.I[max(Height,na.rm=T)],by=.(Race1)]$V1]
+dt[dt[,.I[which.max(Height)],by=.(Race1)]$V1]
+```
+
+------------------------------------------------------------------------
+
+## 2. 데이터 병합
+
+R에서 데이터를 묶는 방법은 크게 두 종류가 있습니다. 하나는 `bind()` 이고, 다른 하나는 `merge()` 또는 `join()` 입니다.
+
+### 1) bind
+
+bind 계열의 함수는 두 개 이상의 데이터를 합치는 함수입니다. merge는 뒤에서 언급하겠지만, bind는 merge와 달리 특정한 기준이 되는 column이 필요하지 않습니다.
+
+bind에는 `rbind()`, `cbind()`가 있습니다.
+
+#### a. `rbind()`
+
+`rbind()`는 row-bind의 약자로, 두 가지 이상의 데이터의 행을 묶는 함수입니다. 행을 묶는 것이기 때문에 데이터가 아래로 추가됩니다.
+
+quarto-executable-code-5450563D
+
+```r
+rbind(1:3,c('a','b','c'))
+```
+
+`rbind()`를 통해 합치고자 하는 데이터의 길이가 맞지 않는 경우, 자동으로 부족한 부분을 채웁니다.
+
+quarto-executable-code-5450563D
+
+```r
+rbind(c(1:3),c(1:4))
+```
+
+만약 column 이름을 갖는 matrix나 data.table 형태를 `rbind()`하고자 하는 경우는 합치고자 하는 데이터의 column이름이 같아야 합니다.
+
+quarto-executable-code-5450563D
+
+```r
+require(data.table)
+a &lt;- data.table(num=1:5,
+                str = letters[1:5])
+b &lt;- data.table(num=6:10,
+                str = LETTERS[1:5])
+rbind(a,b)
+```
+
+만약 두 데이터의 column 이름이 같지 않은 경우, 에러 메시지가 뜨게 됩니다.
+
+```{r eval=FALSE}
+a &lt;- data.table(num=1:5,
+                str=letters[1:5])
+b &lt;- data.table(num=6:10,
+                str2=LETTERS[1:5])
+rbind(a,b)
+
+# 에러메시지
+# Column 2 ['str2'] of item 2 is missing in item 1. Use fill=TRUE to fill with NA (NULL for list columns), or use.names=FALSE to ignore column names.
+```
+
+이럴 때는 column 이름을 무시하거나, 이름이 같지 않은 column을 `NA`로 채워줄 수 있습니다.
+
+quarto-executable-code-5450563D
+
+```r
+rbind(a,b, use.names=F)
+```
+
+quarto-executable-code-5450563D
+
+```r
+rbind(a,b, fill=T)
+```
+
+#### b. `cbind()`
+
+`cbind()`는 column-bind의 약자로, 두 가지 이상의 데이터의 열을 묶는 함수입니다. 열을 묶기 때문에 데이터가 옆으로 추가됩니다.
+
+quarto-executable-code-5450563D
+
+```r
+a &lt;- data.table(num=1:5,
+                str = letters[1:5])
+b &lt;- data.table(num=6:10,
+                str2 = LETTERS[1:5])
+cbind(a,b)
+```
+
+### 2) merge
+
+`merge()`는 두가지의 데이터를 특정 column을 기준으로 합치는 함수입니다. bind 계열의 함수와 다르게 [기준이 되는 column]{.underline}이 반드시 필요합니다.
+
+`merge()`는 두 가지 데이터 중 어떤 방식으로 합치느냐에 따라 크게 3가지로 분류할 수 있습니다.
+
+#### a. inner join
+
+inner join은 두 가지 데이터의 기준이 되는 column 에서 공통된 값들만 갖는 데이터를 합치는 방법입니다.
+
+data.table에서 inner join 하는 방법은 아래와 같습니다.
+
+```{r eval=FALSE}
+merge(dt1, dt2, by=)
+```
+
+#### b. left / right join
+
+left/right join은 두 가지 데이터에서 왼(오른)쪽 데이터의 column을 기준으로 데이터를 합치는 방법입니다.
+
+data.table에서 left join과 right join을 하는 방법은 아래와 같습니다.
+
+```{r eval=FALSE}
+merge(dt1, dt2, by, all.x=T) # left join
+merge(dt1, dt2, by, all.y=T) # right join
+```
+
+all.x 인자에 TRUE를 주면 left join을, all.y는 right join을 의미합니다.
+
+#### c. outer join
+
+outer join은 두 가지 데이터의 모든 column을 기준으로 데이터를 합치는 방법입니다.
+
+공통되지 않은 값을 갖는 경우는 `NA`로 채워넣어집니다.
+
+data.table에서 outer join을 하는 방법은 아래와 같습니다.
+
+```{r eval=FALSE}
+merge(dt1, dt2, all.x)
+```
+
+merge의 경우 공통된 이름의 column을 기준으로 두 데이터를 합치는 방법이라고 했습니다. 그런데 만약 기준이 되는 column의 이름이 다르다면 어떻게 해야 할까요? 이때는 `by.x`와 `by.y` 인자를 사용합니다.
+
+```{r eval=FALSE}
+merge(by.x, by.y)
+```
+
+기존에는 `by`인자에 공통된 column명을 넣으면 됐지만, 두 가지 데이터의 column이 다르기 때문에 각각 by.x와 by.y에 기준이 되는 column 이름을 넣어주는 것입니다.
+
+## 
+
+::: callout-tip
+두 가지 column을 기준으로 합치고자 할 때, 이름이 다른 경우 아래와 같이 사용합니다.
+
+```{r eval=FALSE}
+merge(dt1, dt2, by.x=c('a','b'), by.y=c('A','B'))
+```
+:::
+
+.EACHI: X와 Y를 합칠 때, 요소별 합쳐진 개수 확인
+
+quarto-executable-code-5450563D
+
+```r
+X = data.table(x = c(1,1,1,2,2,5,6), y = 1:7, key = "x")
+Y = data.table(x = c(2,6), z = letters[2:1], key = "x")
+X[Y,.N, by=x]; #X[Y,.N, by=y];
+X[Y, .N, by=.EACHI]
+```
+
+------------------------------------------------------------------------
+
+## 3. Pivoting
+
+pivoting이란 column이 여러 개 좌우로 붙어있던 것을 위아래로 길게 늘이거나, 데이터를 좌우로 넓게 펼치는 것을 의미합니다.
+
+pivot: 축을 기준으로 데이터를 회전시키는 것을 의미합니다. 데이터 측면에서 축은 기준이 되는 column을 의미합니다. 예를 들면 환자의 식별자, 일자 등이 있습니다.
+
+pivoting 개념에서 사용되는 데이터 유형 두 가지에 대해 살펴보겠습니다.
+
+-   **Wide data**
+
+    넓은(wide) 데이터는 이름 그대로 양 옆으로 넓은 데이터를 의미합니다. 양 옆으로 넓다는 것은 column의 개수가 많다는 것을 의미합니다. 지금까지 교재에서 다루었던 거의 대부분의 데이터가 column들이 옆으로 붙어있는 형태는 wide 데이터입니다.
+
+-   **Long data**
+
+    긴 (long) 데이터는 넓은 데이터와 다르게, 반복되는 column을 기준으로 여러 변수(variable)와 값(value)으로 구성된 데이터입니다.
+
+    이 때 반복되는 column이란 반복되어 기록된 값들입니다. 예를 들면 환자가 입원해있는 동안의 기록이나 일자별 날씨 같이 반복적으로 기록되어 있는 데이터 등이 있습니다.
+
+    airquality는 `Month`와 `Day` 별 오존량, 풍량, 기온 등이 기록된 데이터입니다. 여기서 `Month`와 `Day`가 바로 반복되는 column입니다.
+
+    ```{r}
+    airquality |&gt; head()
+    ```
+
+    long 데이터는 이렇게 반복되는 column들을 기준으로 데이터를 variable과 value로 길게 확장시켜 놓은 것입니다.
+
+데이터 분석을 수행하는 우리 입장에서는 wide한 데이터가 보기에 더 편리합니다. column마다 어떤 데이터가 있는지 확인할 수 있고, 각 column 별로 계산을 수행할 수 있기 때문입니다.
+
+그러나 컴퓨터 입장에서는, 즉 계산하는 측면에서는 long data가 더 효율적입니다. 그렇기 때문에 동일한 column에 대해 연산을 할 때, long data가 훨씬 빠르게 계산됩니다.
+
+### 1) melt
+
+melt는 column들이 옆으로 나열되어 있는 옆으로 넓은(wide)한 데이터를 위아래로 길게(long) 바꾸는 것을 의미합니다.
+
+::: callout-tip
+melt는 어떤 것을 녹이는 의미를 갖고 있습니다. 넓게 퍼진 데이터를 녹여 길게 만든다고 이해하시면 됩니다.
+:::
+
+이렇게 옆으로 나열된 column들을 특정한 축을 기준으로 데이터를 variable과 value라는 column으로 녹입니다. 이렇게 되면 long data의 축에 오는 데이터들은 계속 반복되고, variable과 value만 변경되는 데이터로 변환됩니다.
+
+melt 함수에서는 기준이 되는 column의 이름과 길게 변환할 column을 지정해줄 수 있습니다.
+
+quarto-executable-code-5450563D
+
+```r
+air_dt &lt;- as.data.table(airquality)
+melt(air_dt,
+     id.vars=c('Month','Day'),
+     measure.vars=c('Ozone','Temp'),
+     na.rm = T # TRUE일 경우 NA인 값은 제외
+     )
+
+```
+
+만약 measure.vars에 아무런 인자를 주지 않는다면, melt를 수행했을 때, 기준 column을 제외한 모든 column들이 long 형태로 변경됩니다.
+
+quarto-executable-code-5450563D
+
+```r
+air_melt &lt;- melt(air_dt,
+     id.vars=c('Month','Day'),
+     na.rm = T # TRUE일 경우 NA인 값은 제외
+     )
+air_melt
+```
+
+melt의 measure.vars에는 앞서 배웠던 patterns을 통해 비슷한 패턴을 갖는 column명을 선택할 수도 있습니다.
+
+quarto-executable-code-5450563D
+
+```r
+melt(dt,
+     id.vars = c('Gender','Age','Race1'),
+     measure.vars = patterns('HH') # HH가 들어가는 column 선택
+     )
+```
+
+여러 개의 패턴을 지정해 두 가지 이상으로 정리할 수도 있습니다.
+
+quarto-executable-code-5450563D
+
+```r
+house_dt &lt;- data.table(
+  family = 1:5,
+  dob_child1 = c('1998-11-26','1996-06-22','2002-07-11','2004-10-10','2000-12-05'),
+  dob_child2 = c('2000-01-29',NA,'2004-04-05','2009-08-27','2005-02-28'),
+  name_child1 = c('Susan','Mark','Sam','Craig','Parker'),
+  name_child2 = c('Jose',NA,'Seth','Khai','Gracie')
+)
+
+house_dt |&gt; 
+    melt(
+        id.vars = 'family',
+        measure.vars = patterns("^dob","^name"),
+        value.name = c("dob",'name'))
+```
+
+### 2) dcast
+
+이렇게 옆으로 나열된 column들을 특정한 축을 기준으로 데이터를 variable과 value라는 column으로 녹입니다.
+
+::: callout-tip
+cast는 어떤 형태로 데이터를 굳히는 것을 의미합니다. 기존에 melt로 녹아있던 데이터를 casting 하는 data+casting (dcast)라고 이해하시면 됩니다.
+:::
+
+dcast는 long data에서 축 column에서 특정 값들을 기준으로 넓게 펼칠 수 있습니다. dcast에서는 formula 형태로 기준이 되는 축과 wide하게 변경해줄 column을 선택해주면 됩니다. 이 때 formula 형태라는 것은 \~ 을 기준으로 기준 축과 column
+
+quarto-executable-code-5450563D
+
+```r
+dcast(data=air_melt,
+      formula = Month + Day ~ variable, # 기준 column ~ column 이름으로 들어갈 column
+      fill = 0, # NA인 경우 채워 넣어줄 값을 선택할 수 있습니다.
+      value.var = 'value' # 데이터로 들어갈 값들.
+        )
+```
+
+dcast에는 fun.aggregate라는 인자가 존재합니다. 이 인자의 경우 만약 기준이 되는 column의 하나의 값에 여러 데이터(row)가 존재하는 경우에 사용합니다.
+
+`airquality` 데이터를 예로 들어보겠습니다. 앞서 보여드린 air_melt의 경우 Month와 Day의 두 column을 기준으로 melt했기 때문에 기준 column에 공통되는 값들이 없었습니다 (5/1\~ 9/27 까지 일일 데이터이므로).
+
+이번에는 `Day`만 기준 column으로 놓고 melt를 한 데이터를 다시 dcast 해보겠습니다.
+
+quarto-executable-code-5450563D
+
+```r
+air_melt2 &lt;- melt(air_dt, id.vars = 'Day',measure.vars = c('Ozone','Solar.R','Wind','Temp'))
+
+air_melt2
+```
+
+`air_melt`와 달리 air_melt2에서는 Day별로 여러 개의 데이터가 존재하게 됩니다 (Day가 1인 경우, 5월 1일, 6월 1일 \~9월 1일 등의 데이터가 있기 때문입니다).
+
+이 데이터를 dcast하게 된다면 `Aggregate function missing, defaulting to 'length'` 아래와 같은 메시지가 뜹니다.
+
+quarto-executable-code-5450563D
+
+```r
+dcast(air_melt2, Day ~ variable, value.var='value')
+```
+
+이 메시지가 뜬 이유는 다음과 같습니다. `Day`라는 고유한 값은 1\~31까지 밖에 없는데, `air_melt2`에서는 `Day`별로 여러 건의 데이터가 있었습니다. 그렇기 때문에 dcast에서는 `Day`별 요약 또는 집계를 수행합니다. 이 때 `fun.aggregate`라는 인자에 어떻게 요약할 것인지 지정해주지 않았기 때문에 초기값인 `length()`가 적용된 것입니다.
+
+따라서 평균이나 중앙값, 최소, 최대 등 요약함수를 넣어주면 `Day`별로 여러 건의 데이터를 요약한 값으로 데이터가 펼쳐지게 됩니다.
+
+quarto-executable-code-5450563D
+
+```r
+dcast(air_melt2, Day ~ variable, 
+      value.var='value',
+      fun.aggregate = mean)
+```
+
+만약 여러 건의 데이터 중 첫 번째를 사용하고 싶은 경우에는 아래와 같이 사용할 수 있습니다.
+
+quarto-executable-code-5450563D
+
+```r
+dcast(air_melt2, Day ~ variable, 
+      value.var='value',
+      fun.aggregate = function(x)x[1])
+```
+
+::: callout-note
+가장 일반적으로 사용하는 데이터는 wide 형태의 데이터입니다.
+
+그러나 분석하고자 하는 유형, 필요한 데이터의 모양에 따라 데이터의 형태를 변환해줘야 할 때가 있습니다.
+:::
+
+#### 함께 보면 좋은 자료
+
+-   [data.table 기초](../data.table_basic/index.qmd)</code></pre>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left"><a href="https://https://rchemist.quarto.pub/rchemistblog/">Rchemist</a> © 2022 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:danjang0123@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/danjang0123/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

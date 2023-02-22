@@ -1,0 +1,23 @@
+website:
+  title: "Rchemist"
+  reader-mode: true
+  navbar:
+    background: 'light'
+    search: true
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+      - posts.qmd
+  search:
+    location: navbar
+    type: overlay
+  page-footer:
+    left: "[Rchemist](https://https://rchemist.quarto.pub/rchemistblog/) © 2022 by [YH Jang](https://https://rchemist.quarto.pub/rchemistblog/about.html)"
+    right:
+      - icon: envelope
+        href: mailto:danjang0123@gmail.com
+      - icon: linkedin
+        href: https://www.linkedin.com/in/danjang0123/
+
+        

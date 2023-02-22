@@ -1,0 +1,152 @@
+---
+title: "ggplot2 facet label 설정"
+description: "ggplot에서 facet을 사용할 때 label을 변경하는 방법에 대해 알아봅시다."
+date: "2023-02-22"
+keywords: ["R","ggplot2","facet"]
+---
+
+```{r echo=FALSE}
+library(data.table)
+library(ggplot2)
+data <- structure(
+  list(
+    Day = c(
+      "1", "1", "1", "1", "1","1","1","1","2","2","2",
+      "2","2","2","2","2","3","3","3","3","3","3","3",
+      "3","7","7","7","7","7","7","7","7","0","0","0",
+      "0","0","0","0","0"),
+    AKI_stage = c(
+      3,0,1,2,0,1,3,2,3,0,1,2,0,1,3,2,3,0,1,2,0,1,
+      3,2,3,0,1,2,0,1,3,2,3,0,1,2,0,1,3,2),
+    Chronic_kidney_ds = c(
+      0L,0L,0L,0L,1L,1L,1L,1L,0L,0L,0L,0L,1L,1L,1L,
+      1L,0L,0L,0L,0L,1L,1L,1L,1L,0L,0L,0L,0L,1L,1L,
+      1L,1L,0L,0L,0L,0L,1L,1L,1L,1L),
+    mean = c(
+      2.90379080118694,0.822120669056151,
+      1.3607847082495,1.81656301145663,
+      2.01833333333333,2.08489795918367,
+      5.10583665338645,2.23857142857143,
+      2.32354182955434,0.721626468769326,
+      1.20273109243697,1.58797945205479,
+      1.98529411764706,2.00387755102041,
+      3.63720164609053,1.91611111111111,
+      1.86340054995417,0.648181818181818,
+      1.03606205250597,1.38434869739479,
+      1.88765306122449,1.89808510638298,
+      2.68564814814815,1.7028125,
+      1.55938842975206,0.583079136690647,
+      0.882204301075269,1.14693779904306,
+      1.7015,1.81761904761905,1.99811403508772,
+      1.21066666666667,1.55721153846154,
+      0.587523640661939,0.909899999999999,
+      1.19701782820097,1.815703125,
+      1.48142857142857,2.43863636363636,
+      1.11194444444444),
+    sd = c(
+      1.75708520720942,0.32119860291315,
+      0.304244814557366,0.473007784783369,
+      0.821916540775278,0.807248728833983,
+      2.59242747955226,0.758435475006212,
+      1.24758522796108,0.27725317091806,
+      0.329474380698239,0.519558157305167,
+      0.811636580117877,0.874442242057117,
+      2.09379652918968,0.793060177063787,
+      1.15658524753923,0.262977471087462,
+      0.363912821421313,0.55366552058807,
+      0.792407009107893,0.930851966697064,
+      1.94245725362942,0.798147994907081,
+      1.10307252536881,0.303205760040016,
+      0.385331000124667,0.577378193079033,
+      0.734475392756015,0.665897174959503,
+      1.50351407617191,0.438038919775509,
+      0.99035959625975,0.240634539706599,
+      0.317355351046229,0.482128183910255,
+      0.776500004911753,0.535284192431148,
+      1.81626107028355,0.348497341202766)
+),
+ row.names = c(NA,
+-40L),
+ class = c("data.table", "data.frame")
+)
+```
+
+CKD에 따라 그래프를 그린다고 가정해봅시다. CKD 여부에 따른 그래프를 각각 그릴 수 있을 것.
+
+```{r}
+plot_non_ckd <- data[Chronic_kidney_ds==0]|> 
+  ggplot(aes(x=Day, y=mean,
+             group = as.factor(AKI_stage)))+
+  geom_line(aes(color=as.factor(AKI_stage))) +
+  geom_ribbon(aes(y=mean, ymin=mean-sd ,ymax = mean+sd, fill=as.factor(AKI_stage)),
+              alpha=.2) +
+  geom_point(aes(color=as.factor(AKI_stage))) +
+  scale_y_continuous(expand=c(0,0),
+                     limits=c(0,8),
+                     breaks=seq(0,8,1))+
+  scale_color_discrete(name="AKI Stage") + 
+  scale_fill_discrete(name="AKI Stage") + 
+  theme_classic() + 
+  labs(x="ICU Days",
+       y= "Average Cr (mg/dL)") +
+  theme(legend.position = "top")
+
+plot_ckd <- data[Chronic_kidney_ds==1]|> 
+  ggplot(aes(x=Day, y=mean,
+             group = as.factor(AKI_stage)))+
+  geom_line(aes(color=as.factor(AKI_stage))) +
+  geom_ribbon(aes(y=mean, ymin=mean-sd ,ymax = mean+sd, fill=as.factor(AKI_stage)),
+              alpha=.2) +
+  geom_point(aes(color=as.factor(AKI_stage))) +
+  scale_y_continuous(expand=c(0,0),
+                     limits=c(0,8),
+                     breaks=seq(0,8,1))+
+  scale_color_discrete(name="AKI Stage") + 
+  scale_fill_discrete(name="AKI Stage") + 
+  theme_classic() + 
+  labs(x="ICU Days",
+       y= "Average Cr (mg/dL)") +
+  theme(legend.position = "top")
+
+library(patchwork)
+plot_non_ckd + plot_ckd
+```
+
+물론 두 개의 그래프를 각각 보여주는 것도 나쁘지 않습니다. 다만 y축이나 legend는 공통된 값들이기 때문에 두 번 보여줄 필요는 없습니다.
+
+그럴 때는 `facet_grid()` 를 이용해주면 됩니다.
+
+```{r}
+plot <- data|> 
+  ggplot(aes(x=Day, y=mean,
+             group = as.factor(AKI_stage)))+
+  geom_line(aes(color=as.factor(AKI_stage))) +
+  geom_ribbon(aes(y=mean, ymin=mean-sd ,ymax = mean+sd, fill=as.factor(AKI_stage)),
+              alpha=.2) +
+  geom_point(aes(color=as.factor(AKI_stage))) +
+  scale_y_continuous(expand=c(0,0),
+                     limits=c(0,8),
+                     breaks=seq(0,8,1))+
+  scale_color_discrete(name="AKI Stage") + 
+  scale_fill_discrete(name="AKI Stage") + 
+  theme_classic() + 
+  labs(x="ICU Days",
+       y= "Average Cr (mg/dL)") +
+  theme(legend.position = "top")
+
+plot + facet_grid(~Chronic_kidney_ds)
+
+```
+
+여기서 CKD 변수의 코딩이 0과 1로 되어있어, 그래프에도 0과 1로 나타났습니다. facet의 label을 수정하려면 아래와 같이 `labeller`를 추가해주면 됩니다.
+
+```{r}
+
+ckd_label <- c("Non-CKD","CKD")
+names(ckd_label) <- c(0,1)
+plot + 
+  facet_grid(~Chronic_kidney_ds,
+             labeller = labeller(Chronic_kidney_ds=ckd_label))
+```
+
+`labeller` 사용이 어렵다면 데이터의 자체를 리코딩(변경)해주면 됩니다.

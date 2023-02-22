@@ -1,0 +1,52 @@
+---
+title: "R로 EDA 하기"
+description:  "다양한 패키지를 활용한 EDA"
+date: '2023-02-09'
+categories: [EDA, R]
+---
+
+```{r eval=FALSE}
+#| include: false
+# install.packages('SmartEDA')
+# remotes::install_github('agstn/dataxray')
+
+require(DataExplorer)
+require(dataxray)
+require(SmartEDA)
+
+```
+
+### 1. DataExplorer
+
+```{r eval=FALSE}
+require(DataExplorer)
+require(dataxray)
+create_report(titanic_train, 
+              config = configure_report(add_plot_qq=F,
+                                        add_plot_prcomp = F,
+                                        global_ggtheme = theme_classic(),
+                                        ))
+
+plot_histogram(titanic_train)
+titanic_train$Survived <- as.factor(titanic_train$Survived)
+plot_boxplot(titanic_train, by = 'Survived',
+             ggtheme = theme_classic())
+str(titanic_train)
+dummify(titanic_train)
+
+
+ExpReport(titanic_train,
+          Target = 'Survived',
+          op_file = 'temp.html')
+
+```
+
+### 2. dataxary
+
+```{r eval=FALSE}
+
+
+titanic_train |> 
+  dataxray::make_xray() |> 
+  view_xray()
+```

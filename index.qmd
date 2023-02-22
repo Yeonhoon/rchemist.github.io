@@ -1,0 +1,43 @@
+---
+title: "Welcome to the blog of Rchemist"
+comments: false
+format:
+  html:
+    page-layout: full
+listing: 
+  - id: landing-posts
+    contents: posts
+    type: default
+    max-items: 3
+    sort:
+      - "date desc"
+      - "title asc"
+      
+about:
+  id: about-rchemist
+  template: jolla
+  image: images/meme.png
+  image-shape: round
+  links: 
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/danjang0123/
+    - icon: envelope
+      text: Email
+      href: mailto:danjang0123@gmail.com
+---
+
+:::{#about-rchemist}
+헬스케어 빅데이터를 다루는 데이터 사이언티스트입니다. 데이터 분석, 웹 개발에 관심이 있습니다.😃
+
+[자세한 건](about.qmd) 여기서 확인하세요 :)
+
+:::
+
+::::: {.grid}
+::::{.g-col-12 .g-col-md-6}
+## Rchemist Blog
+더 많은 포스트를 보시려면 post를 참고하세요.
+
+::::
+:::::

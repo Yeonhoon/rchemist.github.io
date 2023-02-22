@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-02-02">
+<meta name="description" content="across()로 배우는 열 동시 처리">
+
+<title>Rchemist - dplyr 심화: across()</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Rchemist</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../posts.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">dplyr 심화: across()</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                  <div>
+        <div class="description">
+          across()로 배우는 열 동시 처리
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">dplyr</div>
+                <div class="quarto-category">R</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 2, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#기본-사용법" id="toc-기본-사용법" class="nav-link active" data-scroll-target="#기본-사용법">기본 사용법</a></li>
+  <li><a href="#여러-함수-적용하기" id="toc-여러-함수-적용하기" class="nav-link" data-scroll-target="#여러-함수-적용하기">여러 함수 적용하기</a></li>
+  <li><a href="#다른-함수와의-활용" id="toc-다른-함수와의-활용" class="nav-link" data-scroll-target="#다른-함수와의-활용">다른 함수와의 활용</a></li>
+  <li><a href="#across-vs-_if-_at-_all의-비교" id="toc-across-vs-_if-_at-_all의-비교" class="nav-link" data-scroll-target="#across-vs-_if-_at-_all의-비교"><code>across()</code> vs <code>_if()</code>, <code>_at()</code>, <code>_all()</code>의 비교</a></li>
+  </ul>
+</nav>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>데이터 분석을 수행할 때, 여러 열에 대해 동일한 작업을 해주는 경우가 종종 있습니다. 그러나 동일한 코드를 복사해서 붙여넣기 하는 것은 굉장히 번거로운 일이고, 때로는 실수의 원인이 되기도 합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>storms <span class="sc">|&gt;</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(name, month) <span class="sc">|&gt;</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_wind =</span> <span class="fu">mean</span>(wind, <span class="at">na.rm=</span>T),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_pressure =</span> <span class="fu">mean</span>(pressure,<span class="at">na.rm=</span>T),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_tropical =</span> <span class="fu">mean</span>(tropicalstorm_force_diameter, <span class="at">na.rm=</span>T),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_hurricane_force =</span> <span class="fu">mean</span>(hurricane_force_diameter, <span class="at">na.rm=</span>T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 510 × 6
+# Groups:   name [258]
+   name     month mean_wind mean_pressure mean_tropical mean_hurricane_force
+   &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;                &lt;dbl&gt;
+ 1 AL011993     5      25           1002.         NaN                    NaN
+ 2 AL011993     6      30.6          999.         NaN                    NaN
+ 3 AL012000     6      25           1009.         NaN                    NaN
+ 4 AL021992     6      29           1007.         NaN                    NaN
+ 5 AL021994     7      24.2         1016.         NaN                    NaN
+ 6 AL021999     7      28.8         1005.         NaN                    NaN
+ 7 AL022000     6      29.2         1009.         NaN                    NaN
+ 8 AL022001     7      25           1011          NaN                    NaN
+ 9 AL022003     6      30           1009.         NaN                    NaN
+10 AL022006     7      31.5         1007.          18.5                    0
+# … with 500 more rows</code></pre>
+</div>
+</div>
+<p>이번 글에서는 여러 개의 열에 대해 동일한 작업을 수행할 수 있는 <code>across()</code> 에 대해 살펴보도록 하겠습니다.</p>
+<p><code>across()</code> 를 사용할 경우, 위의 코드는 다음과 같이 입력할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>storms <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(name,month) <span class="sc">|&gt;</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(wind<span class="sc">:</span>hurricane_force_diameter, mean, <span class="at">na.rm=</span>T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 510 × 6
+# Groups:   name [258]
+   name     month  wind pressure tropicalstorm_force_diameter hurricane_force_…¹
+   &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;                        &lt;dbl&gt;              &lt;dbl&gt;
+ 1 AL011993     5  25      1002.                        NaN                  NaN
+ 2 AL011993     6  30.6     999.                        NaN                  NaN
+ 3 AL012000     6  25      1009.                        NaN                  NaN
+ 4 AL021992     6  29      1007.                        NaN                  NaN
+ 5 AL021994     7  24.2    1016.                        NaN                  NaN
+ 6 AL021999     7  28.8    1005.                        NaN                  NaN
+ 7 AL022000     6  29.2    1009.                        NaN                  NaN
+ 8 AL022001     7  25      1011                         NaN                  NaN
+ 9 AL022003     6  30      1009.                        NaN                  NaN
+10 AL022006     7  31.5    1007.                         18.5                  0
+# … with 500 more rows, and abbreviated variable name ¹​hurricane_force_diameter</code></pre>
+</div>
+</div>
+<section id="기본-사용법" class="level3">
+<h3 class="anchored" data-anchor-id="기본-사용법">기본 사용법</h3>
+<p><code>across()</code> 에는 핵심적인 두 가지의 인자를 받을 수 있습니다.</p>
+<ul>
+<li><p><code>.cols</code>: 함수를 적용시킬 열들을 입력합니다. 열의 위치, 이름, 유형을 통해 열들을 선택할 수 있습니다.</p></li>
+<li><p><code>.fns</code>: 열들에 적용시킬 함수를 입력합니다. purrr 패키지 스타일의 식 <code>~.x/2</code>와 같은 형태로도 입력 가능합니다.</p></li>
+</ul>
+<p>across()는 주로 summarise() 와 함께 사용해 여러 열에 동일한 함수를 적용시켜줍니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 열의 유형으로 선택하기</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character), n_distinct))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 8
+   name hair_color skin_color eye_color   sex gender homeworld species
+  &lt;int&gt;      &lt;int&gt;      &lt;int&gt;     &lt;int&gt; &lt;int&gt;  &lt;int&gt;     &lt;int&gt;   &lt;int&gt;
+1    87         13         31        15     5      3        49      38</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 열의 이름으로 선택</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>()<span class="sc">&gt;</span><span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(sex,gender,homeworld), n_distinct))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 4
+  species    sex gender homeworld
+  &lt;chr&gt;    &lt;int&gt;  &lt;int&gt;     &lt;int&gt;
+1 Droid        1      2         3
+2 Gungan       1      1         1
+3 Human        2      2        16
+4 Kaminoan     2      2         1
+5 Mirialan     1      1         1
+6 Twi'lek      2      2         1
+7 Wookiee      1      1         1
+8 Zabrak       1      1         2
+9 &lt;NA&gt;         1      1         3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># purrr 방식 함수 적용</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>()<span class="sc">&gt;</span><span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(is.numeric, <span class="sc">~</span><span class="fu">mean</span>(.x, <span class="at">na.rm=</span>T)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 4
+  species  height  mass birth_year
+  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
+1 Droid      131.  69.8       53.3
+2 Gungan     209.  74         52  
+3 Human      177.  82.8       53.4
+4 Kaminoan   221   88        NaN  
+5 Mirialan   168   53.1       49  
+6 Twi'lek    179   55         48  
+7 Wookiee    231  124        200  
+8 Zabrak     173   80         54  
+9 &lt;NA&gt;       181.  48         62  </code></pre>
+</div>
+</div>
+</section>
+<section id="여러-함수-적용하기" class="level3">
+<h3 class="anchored" data-anchor-id="여러-함수-적용하기">여러 함수 적용하기</h3>
+<p><code>across()</code>를 이용해 여러 열에 두 가지 이상의 함수를 적용할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>min_max <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">min =</span> <span class="sc">~</span><span class="fu">min</span>(.x, <span class="at">na.rm=</span>T),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">max =</span> <span class="sc">~</span><span class="fu">max</span>(.x ,<span class="at">na.rm=</span>T)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(is.numeric,min_max))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 38 × 7
+   species   height_min height_max mass_min mass_max birth_year_min birth_year…¹
+   &lt;chr&gt;          &lt;int&gt;      &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt;          &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aleena            79         79       15       15            Inf         -Inf
+ 2 Besalisk         198        198      102      102            Inf         -Inf
+ 3 Cerean           198        198       82       82             92           92
+ 4 Chagrian         196        196      Inf     -Inf            Inf         -Inf
+ 5 Clawdite         168        168       55       55            Inf         -Inf
+ 6 Droid             96        200       32      140             15          112
+ 7 Dug              112        112       40       40            Inf         -Inf
+ 8 Ewok              88         88       20       20              8            8
+ 9 Geonosian        183        183       80       80            Inf         -Inf
+10 Gungan           196        224       66       82             52           52
+# … with 28 more rows, and abbreviated variable name ¹​birth_year_max</code></pre>
+</div>
+</div>
+<p>여러 개의 함수를 적용한 경우, <code>.names</code> 를 통해 결과 데이터에서 출력되는 열의 이름을 변경합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(is.numeric, min_max, <span class="at">.names =</span> <span class="st">"{.fn}_{.col}"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(<span class="fu">starts_with</span>(<span class="st">'min'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 6
+  min_height min_mass min_birth_year max_height max_mass max_birth_year
+       &lt;int&gt;    &lt;dbl&gt;          &lt;dbl&gt;      &lt;int&gt;    &lt;dbl&gt;          &lt;dbl&gt;
+1         66       15              8        264     1358            896</code></pre>
+</div>
+</div>
+</section>
+<section id="다른-함수와의-활용" class="level3">
+<h3 class="anchored" data-anchor-id="다른-함수와의-활용">다른 함수와의 활용</h3>
+<section id="mutate" class="level4">
+<h4 class="anchored" data-anchor-id="mutate">1. <code>mutate()</code></h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>min_max_scale <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">min</span>(x, <span class="at">na.rm=</span>T)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  M <span class="ot">&lt;-</span> <span class="fu">max</span>(x, <span class="at">na.rm=</span>T)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>((x<span class="sc">-</span>m)<span class="sc">/</span>(M<span class="sc">-</span>m))</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">y=</span><span class="fu">rnorm</span>(<span class="dv">4</span>))</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">across</span>(is.numeric, min_max_scale)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+      x     y
+  &lt;dbl&gt; &lt;dbl&gt;
+1 0     0.638
+2 0.333 0    
+3 0.667 0.339
+4 1     1    </code></pre>
+</div>
+</div>
+</section>
+<section id="distinct-count" class="level4">
+<h4 class="anchored" data-anchor-id="distinct-count">2. <code>distinct()</code> , <code>count()</code></h4>
+<p><code>count()</code>, <code>distinct()</code> 와 같은 함수는 summarise() 를 생략할 수 있습니다.</p>
+<p><code>distinct()</code>: unique한 값 찾기</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> <span class="fu">distinct</span>(<span class="fu">across</span>(<span class="fu">contains</span>(<span class="st">'color'</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 67 × 3
+   hair_color    skin_color  eye_color
+   &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;    
+ 1 blond         fair        blue     
+ 2 &lt;NA&gt;          gold        yellow   
+ 3 &lt;NA&gt;          white, blue red      
+ 4 none          white       yellow   
+ 5 brown         light       brown    
+ 6 brown, grey   light       blue     
+ 7 brown         light       blue     
+ 8 &lt;NA&gt;          white, red  red      
+ 9 black         light       brown    
+10 auburn, white fair        blue-gray
+# … with 57 more rows</code></pre>
+</div>
+</div>
+<p><code>count()</code>: 수를 셀 때 사용하는 함수입니다. <code>across()</code>와 함께 사용할 경우, 조건에 해당하는 열들의 조합별로 수를 셉니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> <span class="fu">count</span>(<span class="fu">across</span>(<span class="fu">contains</span>(<span class="st">'color'</span>)), <span class="at">sort =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 67 × 4
+   hair_color skin_color eye_color     n
+   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;     &lt;int&gt;
+ 1 brown      light      brown         6
+ 2 brown      fair       blue          4
+ 3 none       grey       black         4
+ 4 black      dark       brown         3
+ 5 blond      fair       blue          3
+ 6 black      fair       brown         2
+ 7 black      tan        brown         2
+ 8 black      yellow     blue          2
+ 9 brown      fair       brown         2
+10 none       white      yellow        2
+# … with 57 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="filter" class="level4">
+<h4 class="anchored" data-anchor-id="filter">filter()</h4>
+<p>filter()와 across()는 바로 사용할 수 없습니다.</p>
+<ul>
+<li><p><code>if_any()</code> : 하나만 함수 부분에 해당되더라도 선택합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">if_any</span>(<span class="fu">everything</span>(),<span class="sc">~!</span><span class="fu">is.na</span>(.x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 87 × 14
+   name        height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
+   &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
+ 1 Luke Skywa…    172    77 blond   fair    blue       19   male  mascu… Tatooi…
+ 2 C-3PO          167    75 &lt;NA&gt;    gold    yellow    112   none  mascu… Tatooi…
+ 3 R2-D2           96    32 &lt;NA&gt;    white,… red        33   none  mascu… Naboo  
+ 4 Darth Vader    202   136 none    white   yellow     41.9 male  mascu… Tatooi…
+ 5 Leia Organa    150    49 brown   light   brown      19   fema… femin… Aldera…
+ 6 Owen Lars      178   120 brown,… light   blue       52   male  mascu… Tatooi…
+ 7 Beru White…    165    75 brown   light   blue       47   fema… femin… Tatooi…
+ 8 R5-D4           97    32 &lt;NA&gt;    white,… red        NA   none  mascu… Tatooi…
+ 9 Biggs Dark…    183    84 black   light   brown      24   male  mascu… Tatooi…
+10 Obi-Wan Ke…    182    77 auburn… fair    blue-g…    57   male  mascu… Stewjon
+# … with 77 more rows, 4 more variables: species &lt;chr&gt;, films &lt;list&gt;,
+#   vehicles &lt;list&gt;, starships &lt;list&gt;, and abbreviated variable names
+#   ¹​hair_color, ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+</div>
+</div></li>
+<li><p><code>if_all()</code> : 열의 모든 값들이 함수 부분을 충족해야 선택합니다.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">if_all</span>(<span class="fu">everything</span>(),<span class="sc">~!</span><span class="fu">is.na</span>(.x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 29 × 14
+   name        height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
+   &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
+ 1 Luke Skywa…    172    77 blond   fair    blue       19   male  mascu… Tatooi…
+ 2 Darth Vader    202   136 none    white   yellow     41.9 male  mascu… Tatooi…
+ 3 Leia Organa    150    49 brown   light   brown      19   fema… femin… Aldera…
+ 4 Owen Lars      178   120 brown,… light   blue       52   male  mascu… Tatooi…
+ 5 Beru White…    165    75 brown   light   blue       47   fema… femin… Tatooi…
+ 6 Biggs Dark…    183    84 black   light   brown      24   male  mascu… Tatooi…
+ 7 Obi-Wan Ke…    182    77 auburn… fair    blue-g…    57   male  mascu… Stewjon
+ 8 Anakin Sky…    188    84 blond   fair    blue       41.9 male  mascu… Tatooi…
+ 9 Chewbacca      228   112 brown   unknown blue      200   male  mascu… Kashyy…
+10 Han Solo       180    80 brown   fair    brown      29   male  mascu… Corell…
+# … with 19 more rows, 4 more variables: species &lt;chr&gt;, films &lt;list&gt;,
+#   vehicles &lt;list&gt;, starships &lt;list&gt;, and abbreviated variable names
+#   ¹​hair_color, ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="across-vs-_if-_at-_all의-비교" class="level3">
+<h3 class="anchored" data-anchor-id="across-vs-_if-_at-_all의-비교"><code>across()</code> vs <code>_if()</code>, <code>_at()</code>, <code>_all()</code>의 비교</h3>
+<p><code>_if()</code>, <code>_at()</code>, <code>_all()</code>은 dplyr 이전 버전에서 쓰이던 함수들로, <code>across()</code> 처럼 여러 열에 대해 동시에 작업을 하기 위해 사용하는 함수들입니다.</p>
+<p><code>across()</code> 가 더 좋은 이유는 다음과 같습니다.</p>
+<ol type="1">
+<li>여러 열들에 대해 특정 함수를 사용하여 요약할 수 있습니다.</li>
+<li>각 함수별로 <code>_if()</code>, <code>_at()</code>, <code>_all()</code> 이 존재했습니다. <code>across()</code>는 이런 함수들의 기능을 아우르기 때문에, 사용해야 할 함수의 숫자를 줄여줍니다.</li>
+</ol>
+<p>across()와 <code>_if()</code>, <code>_at()</code>, <code>_all()</code> 을 대응시켜보면 다음과 같습니다. 만약 mutate()를 통해 column을 변화시키고자 할 경우,</p>
+<ul>
+<li><p><code>_if()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> <span class="fu">mutate_if</span>(is.numeric, mean, <span class="at">na.rm=</span>T) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 87 × 14
+   name        height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
+   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
+ 1 Luke Skywa…   174.  97.3 blond   fair    blue       87.6 male  mascu… Tatooi…
+ 2 C-3PO         174.  97.3 &lt;NA&gt;    gold    yellow     87.6 none  mascu… Tatooi…
+ 3 R2-D2         174.  97.3 &lt;NA&gt;    white,… red        87.6 none  mascu… Naboo  
+ 4 Darth Vader   174.  97.3 none    white   yellow     87.6 male  mascu… Tatooi…
+ 5 Leia Organa   174.  97.3 brown   light   brown      87.6 fema… femin… Aldera…
+ 6 Owen Lars     174.  97.3 brown,… light   blue       87.6 male  mascu… Tatooi…
+ 7 Beru White…   174.  97.3 brown   light   blue       87.6 fema… femin… Tatooi…
+ 8 R5-D4         174.  97.3 &lt;NA&gt;    white,… red        87.6 none  mascu… Tatooi…
+ 9 Biggs Dark…   174.  97.3 black   light   brown      87.6 male  mascu… Tatooi…
+10 Obi-Wan Ke…   174.  97.3 auburn… fair    blue-g…    87.6 male  mascu… Stewjon
+# … with 77 more rows, 4 more variables: species &lt;chr&gt;, films &lt;list&gt;,
+#   vehicles &lt;list&gt;, starships &lt;list&gt;, and abbreviated variable names
+#   ¹​hair_color, ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="fu">across</span>(is.numeric,mean, <span class="at">na.rm=</span>T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 87 × 14
+   name        height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
+   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
+ 1 Luke Skywa…   174.  97.3 blond   fair    blue       87.6 male  mascu… Tatooi…
+ 2 C-3PO         174.  97.3 &lt;NA&gt;    gold    yellow     87.6 none  mascu… Tatooi…
+ 3 R2-D2         174.  97.3 &lt;NA&gt;    white,… red        87.6 none  mascu… Naboo  
+ 4 Darth Vader   174.  97.3 none    white   yellow     87.6 male  mascu… Tatooi…
+ 5 Leia Organa   174.  97.3 brown   light   brown      87.6 fema… femin… Aldera…
+ 6 Owen Lars     174.  97.3 brown,… light   blue       87.6 male  mascu… Tatooi…
+ 7 Beru White…   174.  97.3 brown   light   blue       87.6 fema… femin… Tatooi…
+ 8 R5-D4         174.  97.3 &lt;NA&gt;    white,… red        87.6 none  mascu… Tatooi…
+ 9 Biggs Dark…   174.  97.3 black   light   brown      87.6 male  mascu… Tatooi…
+10 Obi-Wan Ke…   174.  97.3 auburn… fair    blue-g…    87.6 male  mascu… Stewjon
+# … with 77 more rows, 4 more variables: species &lt;chr&gt;, films &lt;list&gt;,
+#   vehicles &lt;list&gt;, starships &lt;list&gt;, and abbreviated variable names
+#   ¹​hair_color, ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+</div>
+</div></li>
+<li><p><code>_at()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>Mode <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">which.max</span>(<span class="fu">table</span>(x)))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(y)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="fu">ends_with</span>(<span class="st">'color'</span>)),Mode) <span class="sc">|&gt;</span> </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">ends_with</span>(<span class="st">'color'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 87 × 3
+   hair_color skin_color eye_color
+   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;    
+ 1 none       fair       brown    
+ 2 none       fair       brown    
+ 3 none       fair       brown    
+ 4 none       fair       brown    
+ 5 none       fair       brown    
+ 6 none       fair       brown    
+ 7 none       fair       brown    
+ 8 none       fair       brown    
+ 9 none       fair       brown    
+10 none       fair       brown    
+# … with 77 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">ends_with</span>(<span class="st">'color'</span>),Mode)) <span class="sc">|&gt;</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">ends_with</span>(<span class="st">'color'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 87 × 3
+   hair_color skin_color eye_color
+   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;    
+ 1 none       fair       brown    
+ 2 none       fair       brown    
+ 3 none       fair       brown    
+ 4 none       fair       brown    
+ 5 none       fair       brown    
+ 6 none       fair       brown    
+ 7 none       fair       brown    
+ 8 none       fair       brown    
+ 9 none       fair       brown    
+10 none       fair       brown    
+# … with 77 more rows</code></pre>
+</div>
+</div></li>
+<li><p><code>_all()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x=</span><span class="dv">2</span>, <span class="at">y=</span><span class="dv">4</span>, <span class="at">z=</span><span class="dv">8</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> <span class="fu">mutate_all</span>(<span class="sc">~</span>.x<span class="sc">/</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+      x     y     z
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1   0.5     1     8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(),<span class="sc">~</span>.x<span class="sc">/</span>y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+      x     y     z
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1   0.5     1     2</code></pre>
+</div>
+</div>
+<p><code>_all()</code> 함수는 <code>across()</code> 안에 <code>everything()</code>을 사용하여 구현이 가능합니다.</p></li>
+</ul>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<pre class="markdown" data-shortcodes="false"><code>---
+title: "dplyr 심화: across()"
+description:  "across()로 배우는 열 동시 처리"
+date: '2023-02-02'
+categories: [dplyr, R]
+---
+
+데이터 분석을 수행할 때, 여러 열에 대해 동일한 작업을 해주는 경우가 종종 있습니다. 그러나 동일한 코드를 복사해서 붙여넣기 하는 것은 굉장히 번거로운 일이고, 때로는 실수의 원인이 되기도 합니다.
+
+quarto-executable-code-5450563D
+
+```r
+library(dplyr)
+storms |&gt; 
+  group_by(name, month) |&gt; 
+  summarise(mean_wind = mean(wind, na.rm=T),
+            mean_pressure = mean(pressure,na.rm=T),
+            mean_tropical = mean(tropicalstorm_force_diameter, na.rm=T),
+            mean_hurricane_force = mean(hurricane_force_diameter, na.rm=T))
+```
+
+이번 글에서는 여러 개의 열에 대해 동일한 작업을 수행할 수 있는 `across()` 에 대해 살펴보도록 하겠습니다.
+
+`across()` 를 사용할 경우, 위의 코드는 다음과 같이 입력할 수 있습니다.
+
+quarto-executable-code-5450563D
+
+```r
+storms |&gt; 
+  group_by(name,month) |&gt; 
+  summarise(across(wind:hurricane_force_diameter, mean, na.rm=T))
+```
+
+### 기본 사용법
+
+`across()` 에는 핵심적인 두 가지의 인자를 받을 수 있습니다.
+
+-   `.cols`: 함수를 적용시킬 열들을 입력합니다. 열의 위치, 이름, 유형을 통해 열들을 선택할 수 있습니다.
+
+-   `.fns`: 열들에 적용시킬 함수를 입력합니다. purrr 패키지 스타일의 식 `~.x/2`와 같은 형태로도 입력 가능합니다.
+
+across()는 주로 summarise() 와 함께 사용해 여러 열에 동일한 함수를 적용시켜줍니다.
+
+quarto-executable-code-5450563D
+
+```r
+# 열의 유형으로 선택하기
+starwars |&gt; 
+  summarise(across(where(is.character), n_distinct))
+
+# 열의 이름으로 선택
+starwars |&gt; 
+  group_by(species) |&gt; 
+  filter(n()&gt;1) |&gt; 
+  summarise(across(c(sex,gender,homeworld), n_distinct))
+
+# purrr 방식 함수 적용
+starwars |&gt; 
+  group_by(species) |&gt; 
+  filter(n()&gt;1) |&gt; 
+  summarise(across(is.numeric, ~mean(.x, na.rm=T)))
+
+```
+
+### 여러 함수 적용하기
+
+`across()`를 이용해 여러 열에 두 가지 이상의 함수를 적용할 수 있습니다.
+
+quarto-executable-code-5450563D
+
+```r
+min_max &lt;- list(
+  min = ~min(.x, na.rm=T),
+  max = ~max(.x ,na.rm=T)
+)
+
+starwars |&gt; 
+  group_by(species) |&gt; 
+  summarise(across(is.numeric,min_max))
+
+```
+
+여러 개의 함수를 적용한 경우, `.names` 를 통해 결과 데이터에서 출력되는 열의 이름을 변경합니다.
+
+quarto-executable-code-5450563D
+
+```r
+starwars |&gt; 
+  summarise(across(is.numeric, min_max, .names = "{.fn}_{.col}")) |&gt; 
+  relocate(starts_with('min'))
+```
+
+### 다른 함수와의 활용
+
+#### 1. `mutate()`
+
+quarto-executable-code-5450563D
+
+```r
+min_max_scale &lt;- function(x){
+  m &lt;- min(x, na.rm=T)
+  M &lt;- max(x, na.rm=T)
+  return((x-m)/(M-m))
+}
+
+df &lt;- tibble(x=1:4, y=rnorm(4))
+df |&gt; mutate(
+  across(is.numeric, min_max_scale)
+)
+
+
+
+```
+
+#### 2. `distinct()` , `count()`
+
+`count()`, `distinct()` 와 같은 함수는 summarise() 를 생략할 수 있습니다.
+
+`distinct()`: unique한 값 찾기
+
+quarto-executable-code-5450563D
+
+```r
+starwars |&gt; distinct(across(contains('color')))
+```
+
+`count()`: 수를 셀 때 사용하는 함수입니다. `across()`와 함께 사용할 경우, 조건에 해당하는 열들의 조합별로 수를 셉니다.
+
+quarto-executable-code-5450563D
+
+```r
+starwars |&gt; count(across(contains('color')), sort = T)
+```
+
+#### filter()
+
+filter()와 across()는 바로 사용할 수 없습니다.
+
+-   `if_any()` : 하나만 함수 부분에 해당되더라도 선택합니다.
+
+    ```{r}
+    starwars |&gt; 
+      filter(if_any(everything(),~!is.na(.x)))
+    ```
+
+-   `if_all()` : 열의 모든 값들이 함수 부분을 충족해야 선택합니다.
+
+quarto-executable-code-5450563D
+
+```r
+starwars |&gt; 
+  filter(if_all(everything(),~!is.na(.x)))
+```
+
+### `across()` vs `_if()`, `_at()`, `_all()`의 비교
+
+`_if()`, `_at()`, `_all()`은 dplyr 이전 버전에서 쓰이던 함수들로, `across()` 처럼 여러 열에 대해 동시에 작업을 하기 위해 사용하는 함수들입니다.
+
+`across()` 가 더 좋은 이유는 다음과 같습니다.
+
+1.  여러 열들에 대해 특정 함수를 사용하여 요약할 수 있습니다.
+2.  각 함수별로 `_if()`, `_at()`, `_all()` 이 존재했습니다. `across()`는 이런 함수들의 기능을 아우르기 때문에, 사용해야 할 함수의 숫자를 줄여줍니다.
+
+across()와 `_if()`, `_at()`, `_all()` 을 대응시켜보면 다음과 같습니다. 만약 mutate()를 통해 column을 변화시키고자 할 경우,
+
+-   `_if()`
+
+    ```{r}
+    starwars |&gt; mutate_if(is.numeric, mean, na.rm=T) 
+
+    starwars |&gt; mutate(across(is.numeric,mean, na.rm=T))
+    ```
+
+-   `_at()`
+
+    ```{r}
+
+    Mode &lt;- function(x){
+      y &lt;- names(which.max(table(x)))
+      return(y)
+    }
+    starwars |&gt; 
+      mutate_at(vars(ends_with('color')),Mode) |&gt; 
+      select(ends_with('color'))
+
+    starwars |&gt; 
+      mutate(across(ends_with('color'),Mode)) |&gt; 
+      select(ends_with('color'))
+    ```
+
+-   `_all()`
+
+    ```{r}
+    df &lt;- tibble(x=2, y=4, z=8)
+    df |&gt; mutate_all(~.x/y)
+
+    df |&gt; mutate(across(everything(),~.x/y))
+    ```
+
+    `_all()` 함수는 `across()` 안에 `everything()`을 사용하여 구현이 가능합니다.</code></pre>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left"><a href="https://https://rchemist.quarto.pub/rchemistblog/">Rchemist</a> © 2022 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:danjang0123@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/danjang0123/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

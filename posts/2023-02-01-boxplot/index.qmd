@@ -1,0 +1,29 @@
+---
+title: "ggplot boxplot 그리기"
+description:  "ggplot으로 boxplot 그리는 방법"
+date: '2023-01-19'
+categories: [ggplot2, R, Visualization, boxplot]
+---
+
+```{r}
+library(ggplot2)
+```
+
+ggplot으로 boxplot을 그릴 때, outlier 제거하기
+
+```{r}
+diamonds |> 
+  ggplot(aes(x=cut, y=price))+
+  geom_boxplot(outlier.shape=NA #outlier 제거하기
+               ) 
+```
+
+boxplot에 errorbar 표시
+
+```{r}
+diamonds |> 
+  ggplot(aes(x=cut, y=price)) + 
+  stat_boxplot(geom='errorbar') +
+  geom_boxplot(outlier.shape=NA #outlier 제거하기
+               ) 
+```

@@ -1,0 +1,16 @@
+project:
+  type: website
+  output-dir: docs
+
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  error: false
+
+metadata-files: 
+  - _website.yml
+  - _format.yml
+
+
+editor: visual
