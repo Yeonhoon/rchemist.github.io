@@ -1,5 +1,6 @@
 ---
 title: "정규표현식을 활용한 문자 추출"
+description: "정규표현식을 사용하여 문자 벡터에서 규칙을 찾아 추출해봅시다."
 date: "2023-02-23"
 keywords: ["R","regex","stringr"]
 ---
@@ -10,12 +11,12 @@ keywords: ["R","regex","stringr"]
 #| echo: false
 library(clipr)
 temp <- read_clip()[1:51]
-temp
+head(temp,10)
 ```
 
 비록 문자 형태의 벡터이지만, 열 단위로 묶인 데이터프레임의 형태를 띄고 있습니다.
 
-저 문자열 속에서 location, age, year, sales 를 나눠 데이터프레임으로 만들어주려면 (~~일일이 복붙하면서 데이터프레임으로 선언하는 노가다를 해야 합니다)~~ 정규표현식을 사용해야 합니다.
+저 문자열 속에서 location, age, year, sales 를 나눠 데이터프레임으로 만들어주려면 (~~일일이 복붙하면서 데이터프레임으로 선언하는 노가다를 해야 합니다)~~ 정규표현식(Regular expression)을 사용해야 합니다.
 
 정규표현식 규칙은 크게 다음과 같습니다.
 
@@ -54,6 +55,8 @@ temp
 
 자 이제 처음에 보여드렸던 문자 데이터에서 각각의 데이터를 추출하여 데이터프레임으로 만들어보겠습니다. 가장 먼저 `location` 입니다.
 
+지역이 굉장히 다양하고, 또 단어마다 규칙들이 많아 찾기가 어려운 규칙입니다.
+
 ```{r}
 library(stringr)
 f <- "[:alpha:]+ [:alpha:]+ [:alpha:]+ [:alpha:]+ [:alpha:]+"
@@ -89,7 +92,7 @@ ages <- str_extract(
 head(ages)
 ```
 
-나머지 year와 sales는 앞의 두 가지보다 간단합니다.
+나머지 `year`와 `sales`는 앞의 두 가지보다 간단합니다.
 
 ```{r}
 year <- str_extract(
@@ -119,3 +122,9 @@ df <- data.frame(
 
 head(df)
 ```
+
+### 레퍼런스
+
+-   https://continuous-development.tistory.com/33
+
+-   https://stackoverflow.com/questions/26348643/r-regex-with-stringi-icu-why-is-a-considered-a-non-punct-character
