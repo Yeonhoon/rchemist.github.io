@@ -5,6 +5,8 @@ date: "2023-02-23"
 keywords: ["R","regex","stringr"]
 ---
 
+![](stringr_logo.png){fig-align="center"}
+
 아래와 같은 문자열 데이터가 있다고 가정해봅시다.
 
 ```{r}
