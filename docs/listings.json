@@ -2,11 +2,13 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/regular expression/index.html",
+      "/posts/ggplot_facet_label/index.html",
       "/posts/data.table_1.14.9_update/index.html",
       "/posts/mlr3_resampling/index.html",
       "/posts/mlr3_basic/index.html",
       "/posts/2023-02-02-imputation/index.html",
-      "/posts/ggplot_axis조정/index.html",
+      "/posts/ggplot_axis조정/index.html",
       "/posts/ggplot_ggsigfig/index.html",
       "/posts/2023-02-09-EDA/index.html",
       "/posts/2023-02-13-dplyr_pivot/index.html",
@@ -18,7 +20,9 @@
       "/posts/2023-01-19-ojs/index.html",
       "/posts/2023-01-19-quarto-intro/index.html",
       "/posts/2023-01-27-Rbase/index.html",
+      "/posts/2023-01-27-data.table_basic/index.html",
       "/posts/data.table_advanced/index.html",
+      "/posts/2023-01-28-data.table_advanced/index.html",
       "/posts/2023-02-01-boxplot/index.html",
       "/posts/data.table_basic/index.html"
     ]
@@ -26,12 +30,14 @@
   {
     "listing": "/posts.html",
     "items": [
+      "/posts/regular expression/index.html",
+      "/posts/ggplot_facet_label/index.html",
       "/posts/data.table_1.14.9_update/index.html",
-      "/posts/mlr3_basic/index.html",
       "/posts/mlr3_resampling/index.html",
+      "/posts/mlr3_basic/index.html",
       "/posts/2023-02-02-imputation/index.html",
-      "/posts/ggplot_axis조정/index.html",
       "/posts/ggplot_ggsigfig/index.html",
+      "/posts/ggplot_axis조정/index.html",
       "/posts/2023-02-09-EDA/index.html",
       "/posts/2023-02-13-dplyr_pivot/index.html",
       "/posts/2023-01-26-dplyr_colwise/index.html",
@@ -39,11 +45,13 @@
       "/posts/2023-01-25-dplyr_basic/index.html",
       "/posts/2023-01-26-dplyr_groupby/index.html",
       "/posts/2023-01-25-colors/index.html",
-      "/posts/2023-01-19-ojs/index.html",
-      "/posts/2023-01-19-quarto-intro/index.html",
-      "/posts/2023-01-27-Rbase/index.html",
-      "/posts/2023-02-01-boxplot/index.html",
       "/posts/data.table_advanced/index.html",
+      "/posts/2023-01-28-data.table_advanced/index.html",
+      "/posts/2023-02-01-boxplot/index.html",
+      "/posts/2023-01-27-Rbase/index.html",
+      "/posts/2023-01-19-quarto-intro/index.html",
+      "/posts/2023-01-19-ojs/index.html",
+      "/posts/2023-01-27-data.table_basic/index.html",
       "/posts/data.table_basic/index.html"
     ]
   }

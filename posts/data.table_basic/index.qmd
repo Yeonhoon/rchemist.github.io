@@ -7,6 +7,8 @@ categories: [data.table, R]
 
 ## 1. data.table 소개
 
+[![data.table](logo.png){fig-align="center"}](https://rdatatable.gitlab.io/data.table/)
+
 `data.table`은 R의 `data.frame`을 상속하여 만들어진 패키지입니다. 그렇기 때문에 대괄호(`[]`)를 쓰는 등의 문법은 대체로 `data.frame`과 비슷합니다. 그러나 `data.table`은 기존의 `data.frame`과 다른 장점을 갖고 있습니다.
 
 `data.table`의 장점은 다음과 같습니다.

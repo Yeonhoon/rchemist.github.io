@@ -3,6 +3,7 @@ format:
     toc: true
     toc-location: left
     reference-location: document
+    citation-location: document
     fontsize: 1.1em
     linestretch: 1.5
     theme: cosmo
