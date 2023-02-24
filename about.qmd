@@ -12,20 +12,41 @@ about:
     - icon: envelope
       text: Email
       href: mailto:danjang0123@gmail.com
+comments: false
 ---
 
 헬스케어 빅데이터를 다루는 데이터사이언티스트입니다. 😃
 
-R, Pyhton, SQL
+::: panel-tabset
+## Skills
 
-::: {#id}
+```{=html}
+<img src="https://img.shields.io/badge/R-276DC3?style=for-the-badge&logo=R&logoColor=white">
+```
+```{=html}
+<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=white">
+```
+```{=html}
+<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=PostgreSQL&logoColor=white">
+```
+```{=html}
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white">
+```
+```{=html}
+<img src="https://img.shields.io/badge/CSS3-E34F26?style=for-the-badge&logo=HTML5&logoColor=white">
+```
+```{=html}
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=black">
+```
 ## Education
 
-MPH, Seoul national university graduate school of public health
+-   MPH, Graduate School of Public Health, Seoul National University
+
+-   BS, Chinese language and literature, Konkuk University
 
 ## Experience
 
-**Comento \|** Mentor \| Sept 2022 - present
+-   **Comento** \| Mentor \| Sept 2022 - present
 
-**SNUBH** \| Data scientist \| June 2021 - present
+-   **SNUBH** \| Data scientist \| June 2021 - present
 :::

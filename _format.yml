@@ -1,15 +1,17 @@
 format:
   html:
+    df-print: kable
     toc: true
-    toc-location: left
+    toc-location: "left"
     reference-location: document
     citation-location: document
     fontsize: 1.1em
     linestretch: 1.5
-    theme: cosmo
+    theme:
+      light: cosmo
+      dark: darkly
     smooth-scroll: true
     highlight-style: github
-    code-fold: show
     code-copy: true
     # code-block-border-left: '#000000'
     css: styles.css

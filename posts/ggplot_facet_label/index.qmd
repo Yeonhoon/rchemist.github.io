@@ -2,7 +2,7 @@
 title: "ggplot2 facet label 설정"
 description: "ggplot에서 facet을 사용할 때 label을 변경하는 방법에 대해 알아봅시다."
 date: "2023-02-22"
-keywords: ["R","ggplot2","facet"]
+categories: [R,ggplot2,facet]
 ---
 
 ```{r echo=FALSE}

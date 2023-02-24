@@ -1,8 +1,9 @@
 ---
-title: 'mlr3 Resampling & benchmarking'
-description: "mlr3를 활용한 validation 및 모델 벤치마킹"
-date: "2023-02-20"
+title: 'mlr3: 교차검증'
+description: "resampling 이용한 cross validation"
+date: "2023-02-24"
 categories: [mlr3, R, machine learning]
+image: "https://mlr3proba.mlr-org.com/logo.svg"
 ---
 
 ```{r message=FALSE, warning=FALSE}
@@ -13,36 +14,121 @@ library(mlr3verse)
 library(mlr3viz)
 ```
 
-## 3. Resampling
+# Resampling
+
+특정한 데이터로 훈련된 머신러닝 모델은 새로운 데이터에도 일반화시킬 수 있어야 합니다. 다시 말해 학습 데이터로 훈련된 모델이 좋은 성능을 낸다면, 다른 데이터를 통해서도 좋은 성능이 나와야 한다는 것입니다.
+
+모델의 성능의 일반화를 평가하기 위해선 우선 모델의 성능을 평가할 지표를 선택해야 합니다. 목적에 따라 정확도가 될 수도 있고, auc 가 될 수도 있겠죠.
+
+적절한 평가지표를 선택했다면, 일반화 평가를 위해 사용 가능한 데이터를 어떻게 사용할지를 정해주어야 합니다. 이 때 모델 학습에 사용된 데이터는 사용되어서는 안됩니다. 동일한 데이터로 검증해봤자 동일한 성능이 나올테니까요. 훈련데이터서는 좋은 성능을 보여주었지만, 새로운 데이터에서는 예측 성능이 나빠질 수도 있구요 (과적합, Overfitting).
+
+따라서, 학습에 사용된 training 데이터를 사용하지 않고 모델의 성능을 테스트하는 것이 일반적입니다. 그러나 학습에 사용된 데이터와 동일한 피처, 동일한 형태를 갖고 있는 새로운 데이터가 없는 것이 일반적입니다. 이 문제를 해결하기 위해, 기존에 학습했던 데이터의 일부분만을 사용하여 평가에 사용하게 되었습니다. 그래서 전체 데이터에서 training 데이터, test 데이터를 나눈 뒤, train 데이터로만 학습을 하고, test 데이터는 새로운 데이터인 것처럼 간주하고 학습된 모델의 성능을 평가하는 것입니다.
+
+가장 흔한 전략은 홀드아웃(holdout) 전략입니다. 데이터에서 특정 비율로 랜덤하게 데이터를 나누어 training 데이터와 test 데이터로 나누는 것이죠.
+
+이상적으로는 training 데이터가 굉장히 커서, 학습 시 데이터의 특성을 대표할 수 있는 것입니다. test 데이터더 신뢰할 수 있는 일반화를 할 수 있도록 큰 데이터가 필요할테구요. 그렇지만 문제는 역시 사용할 수 있는 데이터가 제한됐다는 것입니다.
+
+이 문제를 해결할 수 있는 전략이 바로 Resampling 전략입니다. Resampling 전략은 가능한 모든 데이터를 여러 개의 training과 test 데이터로 반복적으로 나누어 학습을 하고, 모델의 성능의 평균을 계산하는 전략입니다. 반복하는 횟수가 많으면 많을수록 모델의 성능에 대한 분산이 감소할테고, 그러면 더욱 신뢰할 수 있는 성능을 확인할 수 있을 것입니다.
+
+## Resampling 종류
+
+`mlr3` 에서 실행가능한 모든 리샘플링 전략은 `mlr_resamplings` 딕셔너리를 통해 확인가능합니다. 홀드아웃, 교차 검증(CV), 부트스트랩 등이 포함되어있습니다.
 
 ```{r}
-# holdout: train-test split
-# Instantiate: F --> 아직 resample 안됨.
+as.data.table(mlr_resamplings)
+```
 
-task_sonar <- tsk("sonar")
-lrn_rf <- lrn("classif.ranger", predict_type="prob")
-resamp <- rsmp("holdout")
+`params` 열을 보면 resampling을 위한 파라미터들이 나와있습니다. 예를 들어 `holdout`은 `ratio`를 통해 어떤 비율로 train, test를 나눌 것인지, `cv`는 `folds`를 통해 몇 개로 데이터를 나눌 것인지를 설정해줄 수 있죠.
+
+## Resampling 객체 생성
+
+리샘플링 객체를 만들어봅시다. 우선 holdout을 이용해 리샘플링을 진행하겠습니다. 리샘플링 객체는 `rsmp()`를 통해 만들 수 있습니다.
+
+```{r}
+
+resampling <- rsmp("holdout")
+resampling
+```
+
+생성한 리샘플링 객체를 확인했을 때, `Instantiated: FALSE`라고 되어있습니다. 아직 리샘플링을 수행하지 않았기 때문입니다.
+
+또한 holdout 의 ratio를 정해주지 않았기 문에 2/3가 초기값으로 설정되어있습니다. 즉 데이터의 3분의 2는 훈련에, 3분의 1은 검증에 쓰이게 됩니다. 새로운 리샘플링 객체를 만들 때 holdout 비율을 설정하거나 기존의 객체의 파라미터 값을 수정할 수 있습니다.
+
+```{r}
+resampling <- rsmp("holdout", ratio=0.8)
+resampling$param_set$values <- list(ratio=0.5)
+```
+
+holdout은 성능을 일반화하는 과정을 한 번밖에 수행하지 않습니다. 따라서 좀더 신뢰성 있는 성능 측정을 위해, 가장 많이 사용되는 리샘플링 방법 중 하나인 교차 검증(`cv`)를 사용하도록 하겠습니다.
+
+```{r}
+resampling <- rsmp("cv", folds=10)
+```
+
+## Instantiation
+
+데이터가 들어가 있는 태스크에 대해 리샘플링을 수행하기 위해 리샘플링 객체의 `$instantiate()` 메소드를 이용해야합니다. 메소드 안에 태스크를 넣어주면 리샘플링이 적용됐다는 의미에서 `Instantiated: TRUE`가 출력됩니다.
+
+```{r}
+task <- tsk("sonar")
+resampling$instantiate(task)
+resampling
+
+```
+
+## 실행
+
+리샘플리의 실행은 `resample()` 을 사용합니다.
+
+```{r}
+learner <- lrn("classif.rpart", predict_type="prob")
+rr <- resample(task, learner, resample)
+rr
+```
+
+리샘플링 실행이 완료되었고, rr이라는 객체 안에 리샘플링 결과가 저장되어있습니다. 리샘플링을 통한 모델의 성능 평가는 `$score()`와 `$aggregate()` 메소드를 이용합니다.
+
+`$score()`와 `$aggregate()` 모두 Measure 객체를 이용해 성능을 측정합니다. 기본적으로 성능을 측정할 때는 검증을 위한 데이터셋을 활용하게 됩니다.
+
+우선 정확도(classif.acc)를 통해 모델의 정확도를 평가해보겠습니다.
+
+```{r}
+
+acc <- rr$score(msr("classif.acc"))
+acc[,.(iteration, classif.acc)]
+```
+
+`$score()`를 통해 모델의 성능을 살펴보니 cv에서 설정한 10번의 반복 별로 성능이 출력되는 것을 알 수 있습니다.
+
+다음으로는 \$aggregate()를 이용해 모델의 성능을 살펴보겠습니다. `$aggregate()`는 반복 때마다 계산된 성능의 평균 값을 꼐산하여 출력합니다.
+
+```{r}
+rr$aggregate(msr("classif.acc"))
+```
+
+여러 개의 평가 지표로 모델의 성능을 평가할 수도 있습니다.
+
+```{r}
 measures <- msrs(c("classif.acc",
                    "classif.sensitivity",
                    "classif.specificity",
                    "classif.auc"))
-print(resamp)
-
-resamp$instantiate(task_sonar)
-train <- resamp$train_set(1)
-test <- resamp$test_set(1)
-
-resamp <- rsmp('cv', folds=5)
-rr <- resample(task_sonar, lrn_rf, resamp, store_models = T)
 
 rr$aggregate(measures)
 ```
 
+## 결과 시각화
+
+`mlr3viz`의 `autoplot()`을 통해 리샘플링 결과를 시각화할 수 있습니다.
+
 ```{r}
-autoplot(rr, type='prc')
+#| fig
+require(mlr3viz)
+autoplot(rr, measure = msr("classif.acc"), type="boxplot")
+autoplot(rr, measure = msr("classif.acc"), type="histogram")
 ```
 
-## 4. Benchmarking
+##  4. Benchmarking
 
 different learners on multiple tasks and/or different resampling
 
@@ -170,7 +256,7 @@ Filter 클래스에는 `$calculate()` 메소드가 존재하는데, filter value
 
 예를 들어 information gain filter를 이용하는 경우,
 
-```{r}
+```{r eval=FALSE}
 library(mlr3verse)
 filter <- flt('information_gain')
 task <- tsk('penguins')
@@ -182,7 +268,7 @@ filter
 
 일부 filter들은 hyperparameters가 존재하는데, learner에서 param_set을 변경해주는 것처럼 간단히 변경 가능합니다.
 
-```{r}
+```{r eval=FALSE}
 filter_cor <- flt('correlation')
 filter_cor$param_set$values <- list(method='spearman')
 filter_cor$param_set
@@ -192,7 +278,7 @@ filter_cor$param_set
 
 importance 가 있는 모든 모델에서 사용 가능한 filter입니다. `ranger`와 같은 일부 learner에서는 learner를 만들 때 지정을 해줘야 합니다.
 
-```{r}
+```{r eval=FALSE}
 lrn_rf <- lrn('classif.ranger', importance='impurity')
 
 # remove missing values
@@ -207,7 +293,7 @@ filter_imp
 
 Embedded methods는 Learner들로 하여금 예측에 중요한 변수들을 선택하는 방법입니다. 많은 learner들이 이 기능을 갖고 있습니다.
 
-```{r}
+```{r eval=FALSE}
 task <- tsk('penguins')
 learner <- lrn('classif.rpart')
 
@@ -227,7 +313,7 @@ model에 의해 선택된 feature의 점수만 1, 나머지는 0 (dropped featur
 
 filter를 통해 각 feature들의 점수가 계산이 되었다면, 다음 모델링 단계에서 feature를 선택하여 학습을 시켜주어야 합니다.
 
-```{r}
+```{r eval=FALSE}
 task <- tsk('penguins')
 learner <- lrn('classif.rpart')
 filter <- flt('selected_features', learner=learner)
@@ -242,29 +328,29 @@ task$feature_names
 
 -   위에서 top N개의 feature 선택하는 경우
 
-    ```{r}
-    task <- tsk('penguins')
-    learner <- lrn('classif.rpart')
-    filter <- flt('information_gain')
-    filter$calculate(task)
+```{r eval=FALSE}
+task <- tsk('penguins')
+learner <- lrn('classif.rpart')
+filter <- flt('information_gain')
+filter$calculate(task)
 
-    # top 3개 선택
-    keep <- names(head(filter$scores,3))
-    task$select(keep)
-    ```
+# top 3개 선택
+keep <- names(head(filter$scores,3))
+task$select(keep)
+```
 
 -   score가 k 보다 큰 경우
 
-    ```{r}
-    task <- tsk('penguins')
-    learner <- lrn('classif.rpart')
-    filter <- flt('information_gain')
-    filter$calculate(task)
+```{r eval=FALSE}
+task <- tsk('penguins')
+learner <- lrn('classif.rpart')
+filter <- flt('information_gain')
+filter$calculate(task)
 
-    # information gain이 0.5보다 큰 경우
-    keep <- names(which(filter$scores>0.5))
-    task$select(keep)
-    ```
+# information gain이 0.5보다 큰 경우
+keep <- names(which(filter$scores>0.5))
+task$select(keep)
+```
 
 ### 5.3 Wrapper methods
 

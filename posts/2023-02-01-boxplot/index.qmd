@@ -3,6 +3,7 @@ title: "ggplot boxplot 그리기"
 description:  "ggplot으로 boxplot 그리는 방법"
 date: '2023-01-19'
 categories: [ggplot2, R, Visualization, boxplot]
+image: "https://ggplot2.tidyverse.org/logo.png"
 ---
 
 ```{r}

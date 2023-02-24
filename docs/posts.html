@@ -37,10 +37,12 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,7 +73,8 @@ ul.task-list li input[type="checkbox"] {
 
     const options = {
       valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] }],
-      
+      page: 20,
+    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
       searchColumns: ["listing-title","listing-date"],
     };
 
@@ -126,6 +129,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
 </ul>
               <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
                   <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -145,7 +149,7 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(23)</span></div><div class="category" data-category="EDA">EDA <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Quarto">Quarto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(20)</span></div><div class="category" data-category="Visualization">Visualization <span class="quarto-category-count">(3)</span></div><div class="category" data-category="axis">axis <span class="quarto-category-count">(1)</span></div><div class="category" data-category="boxplot">boxplot <span class="quarto-category-count">(1)</span></div><div class="category" data-category="color">color <span class="quarto-category-count">(1)</span></div><div class="category" data-category="data.frame">data.frame <span class="quarto-category-count">(1)</span></div><div class="category" data-category="data.table">data.table <span class="quarto-category-count">(5)</span></div><div class="category" data-category="dplyr">dplyr <span class="quarto-category-count">(4)</span></div><div class="category" data-category="ggplot2">ggplot2 <span class="quarto-category-count">(4)</span></div><div class="category" data-category="ggsignif">ggsignif <span class="quarto-category-count">(1)</span></div><div class="category" data-category="imputation">imputation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="javascript">javascript <span class="quarto-category-count">(1)</span></div><div class="category" data-category="machine learning">machine learning <span class="quarto-category-count">(2)</span></div><div class="category" data-category="mice">mice <span class="quarto-category-count">(1)</span></div><div class="category" data-category="mlr3">mlr3 <span class="quarto-category-count">(2)</span></div><div class="category" data-category="tidyr">tidyr <span class="quarto-category-count">(1)</span></div><div class="category" data-category="visualization">visualization <span class="quarto-category-count">(3)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-unnumbered"><div class="category" data-category="EDA">EDA</div><div class="category" data-category="Quarto">Quarto</div><div class="category" data-category="R">R</div><div class="category" data-category="Visualization">Visualization</div><div class="category" data-category="axis">axis</div><div class="category" data-category="boxplot">boxplot</div><div class="category" data-category="color">color</div><div class="category" data-category="data.frame">data.frame</div><div class="category" data-category="data.table">data.table</div><div class="category" data-category="dplyr">dplyr</div><div class="category" data-category="ggplot2">ggplot2</div><div class="category" data-category="ggsignif">ggsignif</div><div class="category" data-category="imputation">imputation</div><div class="category" data-category="javascript">javascript</div><div class="category" data-category="machine learning">machine learning</div><div class="category" data-category="mice">mice</div><div class="category" data-category="mlr3">mlr3</div><div class="category" data-category="tidyr">tidyr</div><div class="category" data-category="visualization">visualization</div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -166,7 +170,7 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>R 사용자를 위한 편리한 패키지 및 함수를 소개합니다.</p>
+<p>R 사용자를 위한, 사용하면 편리한 패키지 및 함수를 소개합니다.</p>
 
 
 
@@ -195,24 +199,20 @@ ul.task-list li input[type="checkbox"] {
     </div>
 </div>
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1677078000000" data-listing-file-modified-sort="1677157023942" data-listing-reading-time-sort="1.845">
+<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1677078000000" data-listing-file-modified-sort="1677199643582" data-listing-reading-time-sort="1.845">
 <div class="thumbnail">
-<a href="./posts/regular expression/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/regular expression/index.html"></a></p>
+<p><a href="./posts/regular expression/index.html"> <img src="https://stringr.tidyverse.org/logo.png" class="thumnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/regular expression/index.html">
 <h3 class="no-anchor listing-title">
-정규표현식을 활용한 문자 추출
+stringr을 이용한 문자 추출하기
 </h3>
 <div class="listing-subtitle">
 
 </div>
 <div class="listing-description">
-<p>정규표현식을 사용하여 문자 벡터에서 규칙을 찾아 추출해봅시다.</p>
+<p>정규표현식을 사용한 규칙 찾기</p>
 </div>
 </a>
 </div>
@@ -224,7 +224,7 @@ Feb 23, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1676991600000" data-listing-file-modified-sort="1677157023942" data-listing-reading-time-sort="4.02">
+<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1676991600000" data-listing-file-modified-sort="1677041531139" data-listing-reading-time-sort="4.02">
 <div class="thumbnail">
 <a href="./posts/ggplot_facet_label/index.html">
 <div class="thumbnail-image">
@@ -253,7 +253,7 @@ Feb 22, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="R,data.table" data-listing-date-sort="1676905200000" data-listing-file-modified-sort="1677157023941" data-listing-reading-time-sort="7.15">
+<div class="quarto-post image-right" data-index="2" data-categories="R,data.table" data-listing-date-sort="1676905200000" data-listing-file-modified-sort="1677044542134" data-listing-reading-time-sort="7.15">
 <div class="thumbnail">
 <a href="./posts/data.table_1.14.9_update/index.html">
 <div class="thumbnail-image">
@@ -292,51 +292,9 @@ Feb 21, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="mlr3,R,machine learning" data-listing-date-sort="1676818800000" data-listing-file-modified-sort="1677157023942" data-listing-reading-time-sort="4.105">
+<div class="quarto-post image-right" data-index="3" data-categories="mlr3,R,machine learning" data-listing-date-sort="1676818800000" data-listing-file-modified-sort="1677199512642" data-listing-reading-time-sort="9.01">
 <div class="thumbnail">
-<a href="./posts/mlr3_resampling/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/mlr3_resampling/index.html"></a></p>
-</div>
-<div class="body">
-<a href="./posts/mlr3_resampling/index.html">
-<h3 class="no-anchor listing-title">
-mlr3 Resampling &amp; benchmarking
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('mlr3'); return false;">
-mlr3
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('machine learning'); return false;">
-machine learning
-</div>
-</div>
-<a href="./posts/mlr3_resampling/index.html">
-<div class="listing-description">
-<p>mlr3를 활용한 validation 및 모델 벤치마킹</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/mlr3_resampling/index.html">
-<div class="listing-date">
-Feb 20, 2023
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="mlr3,R,machine learning" data-listing-date-sort="1676818800000" data-listing-file-modified-sort="1677157023942" data-listing-reading-time-sort="9.1">
-<div class="thumbnail">
-<p><a href="./posts/mlr3_basic/index.html"> <img src="https://raw.githubusercontent.com/mlr-org/mlr3/master/man/figures/mlr3verse.svg?sanitize=true" class="thumnail-image"> </a></p>
+<p><a href="./posts/mlr3_basic/index.html"> <img src="https://mlr3proba.mlr-org.com/logo.svg" class="thumnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/mlr3_basic/index.html">
@@ -372,7 +330,45 @@ Feb 20, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="5" data-categories="R,imputation,mice" data-listing-date-sort="1676646000000" data-listing-file-modified-sort="1677157023941" data-listing-reading-time-sort="2.485">
+<div class="quarto-post image-right" data-index="4" data-categories="mlr3,R,machine learning" data-listing-date-sort="1676818800000" data-listing-file-modified-sort="1677199741357" data-listing-reading-time-sort="4.105">
+<div class="thumbnail">
+<p><a href="./posts/mlr3_resampling/index.html"> <img src="https://mlr3proba.mlr-org.com/logo.svg" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/mlr3_resampling/index.html">
+<h3 class="no-anchor listing-title">
+mlr3: 교차검증
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('mlr3'); return false;">
+mlr3
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
+R
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('machine learning'); return false;">
+machine learning
+</div>
+</div>
+<a href="./posts/mlr3_resampling/index.html">
+<div class="listing-description">
+<p>resampling 이용한 cross validation</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/mlr3_resampling/index.html">
+<div class="listing-date">
+Feb 20, 2023
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-categories="R,imputation,mice" data-listing-date-sort="1676646000000" data-listing-file-modified-sort="1677197251287" data-listing-reading-time-sort="2.485">
 <div class="thumbnail">
 <a href="./posts/2023-02-02-imputation/index.html">
 <div class="thumbnail-image">
@@ -414,7 +410,49 @@ Feb 18, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="6" data-categories="R,ggplot2,visualization,ggsignif" data-listing-date-sort="1676127600000" data-listing-file-modified-sort="1677157023942" data-listing-reading-time-sort="1.975">
+<div class="quarto-post image-right" data-index="6" data-categories="R,ggplot2,visualization" data-listing-date-sort="1676127600000" data-listing-file-modified-sort="1676959738000" data-listing-reading-time-sort="0.7">
+<div class="thumbnail">
+<a href="./posts/ggplot_axis조정/index.html">
+<div class="thumbnail-image">
+
+</div>
+</a><p><a href="./posts/ggplot_axis조정/index.html"></a></p>
+</div>
+<div class="body">
+<a href="./posts/ggplot_axis조정/index.html">
+<h3 class="no-anchor listing-title">
+ggplot 그래프 세부 조정하기
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
+R
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('ggplot2'); return false;">
+ggplot2
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('visualization'); return false;">
+visualization
+</div>
+</div>
+<a href="./posts/ggplot_axis조정/index.html">
+<div class="listing-description">
+<p>그래프와 축 간 간격을 줄이거나, 그래프에 통계분석을 통해 유의미한 집단 간 차이 표시하는 방법을 살펴봅시다.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/ggplot_axis조정/index.html">
+<div class="listing-date">
+Feb 12, 2023
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="7" data-categories="R,ggplot2,visualization,ggsignif" data-listing-date-sort="1676127600000" data-listing-file-modified-sort="1677199288641" data-listing-reading-time-sort="1.975">
 <div class="thumbnail">
 <a href="./posts/ggplot_ggsigfig/index.html">
 <div class="thumbnail-image">
@@ -459,49 +497,7 @@ Feb 12, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="7" data-categories="R,ggplot2,visualization" data-listing-date-sort="1676127600000" data-listing-file-modified-sort="1677157023942" data-listing-reading-time-sort="0.7">
-<div class="thumbnail">
-<a href="./posts/ggplot_axis조정/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/ggplot_axis조정/index.html"></a></p>
-</div>
-<div class="body">
-<a href="./posts/ggplot_axis조정/index.html">
-<h3 class="no-anchor listing-title">
-ggplot 그래프 세부 조정하기
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('ggplot2'); return false;">
-ggplot2
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('visualization'); return false;">
-visualization
-</div>
-</div>
-<a href="./posts/ggplot_axis조정/index.html">
-<div class="listing-description">
-<p>그래프와 축 간 간격을 줄이거나, 그래프에 통계분석을 통해 유의미한 집단 간 차이 표시하는 방법을 살펴봅시다.</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/ggplot_axis조정/index.html">
-<div class="listing-date">
-Feb 12, 2023
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="8" data-categories="EDA,R" data-listing-date-sort="1675868400000" data-listing-file-modified-sort="1677157023941" data-listing-reading-time-sort="1.015">
+<div class="quarto-post image-right" data-index="8" data-categories="EDA,R" data-listing-date-sort="1675868400000" data-listing-file-modified-sort="1676959666000" data-listing-reading-time-sort="1.015">
 <div class="thumbnail">
 <a href="./posts/2023-02-09-EDA/index.html">
 <div class="thumbnail-image">
@@ -540,7 +536,7 @@ Feb 9, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="9" data-categories="R,dplyr,tidyr" data-listing-date-sort="1675350000000" data-listing-file-modified-sort="1677157023941" data-listing-reading-time-sort="2.885">
+<div class="quarto-post image-right" data-index="9" data-categories="R,dplyr,tidyr" data-listing-date-sort="1675350000000" data-listing-file-modified-sort="1676960487000" data-listing-reading-time-sort="2.885">
 <div class="thumbnail">
 <a href="./posts/2023-02-13-dplyr_pivot/index.html">
 <div class="thumbnail-image">
@@ -582,7 +578,7 @@ Feb 3, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="10" data-categories="dplyr,R" data-listing-date-sort="1675263600000" data-listing-file-modified-sort="1677157023939" data-listing-reading-time-sort="3.005">
+<div class="quarto-post image-right" data-index="10" data-categories="dplyr,R" data-listing-date-sort="1675263600000" data-listing-file-modified-sort="1676959342000" data-listing-reading-time-sort="3.005">
 <div class="thumbnail">
 <a href="./posts/2023-01-26-dplyr_colwise/index.html">
 <div class="thumbnail-image">
@@ -621,18 +617,14 @@ Feb 2, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="11" data-categories="ggplot2,R,Visualization,axis" data-listing-date-sort="1675263600000" data-listing-file-modified-sort="1677157023941" data-listing-reading-time-sort="1.785">
+<div class="quarto-post image-right" data-index="11" data-categories="ggplot2,R,Visualization,axis" data-listing-date-sort="1675263600000" data-listing-file-modified-sort="1677199806531" data-listing-reading-time-sort="1.785">
 <div class="thumbnail">
-<a href="./posts/2023-02-02-dual-yaxis/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/2023-02-02-dual-yaxis/index.html"></a></p>
+<p><a href="./posts/2023-02-02-dual-yaxis/index.html"> <img src="https://r-graph-gallery.com/line-chart-dual-Y-axis-ggplot2_files/figure-html/thecode3-1.png" class="thumnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/2023-02-02-dual-yaxis/index.html">
 <h3 class="no-anchor listing-title">
-두 번째 y축 그리기
+ggplot에서 두 번째 y축 그리기
 </h3>
 <div class="listing-subtitle">
 
@@ -666,7 +658,7 @@ Feb 2, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="12" data-categories="dplyr,R" data-listing-date-sort="1675177200000" data-listing-file-modified-sort="1677157023939" data-listing-reading-time-sort="4.975">
+<div class="quarto-post image-right" data-index="12" data-categories="dplyr,R" data-listing-date-sort="1675177200000" data-listing-file-modified-sort="1677024973000" data-listing-reading-time-sort="4.975">
 <div class="thumbnail">
 <a href="./posts/2023-01-25-dplyr_basic/index.html">
 <div class="thumbnail-image">
@@ -705,7 +697,7 @@ Feb 1, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="13" data-categories="dplyr,R" data-listing-date-sort="1675177200000" data-listing-file-modified-sort="1677157023940" data-listing-reading-time-sort="2.095">
+<div class="quarto-post image-right" data-index="13" data-categories="dplyr,R" data-listing-date-sort="1675177200000" data-listing-file-modified-sort="1676959336000" data-listing-reading-time-sort="2.095">
 <div class="thumbnail">
 <a href="./posts/2023-01-26-dplyr_groupby/index.html">
 <div class="thumbnail-image">
@@ -744,7 +736,7 @@ Feb 1, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="14" data-categories="color,R,visualization" data-listing-date-sort="1674572400000" data-listing-file-modified-sort="1677157023939" data-listing-reading-time-sort="2.305">
+<div class="quarto-post image-right" data-index="14" data-categories="color,R,visualization" data-listing-date-sort="1674572400000" data-listing-file-modified-sort="1676960040000" data-listing-reading-time-sort="2.305">
 <div class="thumbnail">
 <p><a href="./posts/2023-01-25-colors/index.html"> <img src="./posts/2023-01-25-colors/palette.png" class="thumnail-image"> </a></p>
 </div>
@@ -782,78 +774,39 @@ Jan 25, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="15" data-categories="data.table,R" data-listing-date-sort="1674054000000" data-listing-file-modified-sort="1677157023941" data-listing-reading-time-sort="10.185">
+<div class="quarto-post image-right" data-index="15" data-categories="Visualization,javascript" data-listing-date-sort="1674054000000" data-listing-file-modified-sort="1675922267000" data-listing-reading-time-sort="0.575">
 <div class="thumbnail">
-<a href="./posts/data.table_advanced/index.html">
+<a href="./posts/2023-01-19-ojs/index.html">
 <div class="thumbnail-image">
 
 </div>
-</a><p><a href="./posts/data.table_advanced/index.html"></a></p>
+</a><p><a href="./posts/2023-01-19-ojs/index.html"></a></p>
 </div>
 <div class="body">
-<a href="./posts/data.table_advanced/index.html">
+<a href="./posts/2023-01-19-ojs/index.html">
 <h3 class="no-anchor listing-title">
-data.table 심화
+Observable.js
 </h3>
 <div class="listing-subtitle">
-
+Interactive chart with ojs
 </div>
 </a>
 <div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('data.table'); return false;">
-data.table
+<div class="listing-category" onclick="window.quartoListingCategory('Visualization'); return false;">
+Visualization
 </div>
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
+<div class="listing-category" onclick="window.quartoListingCategory('javascript'); return false;">
+javascript
 </div>
 </div>
-<a href="./posts/data.table_advanced/index.html">
+<a href="./posts/2023-01-19-ojs/index.html">
 <div class="listing-description">
-<p>특수 기호, 조인, 피봇 등 data.table에서 다루는 심화내용을 살펴봅시다.</p>
+
 </div>
 </a>
 </div>
 <div class="metadata">
-<a href="./posts/data.table_advanced/index.html">
-<div class="listing-date">
-Jan 19, 2023
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="16" data-categories="data.table,R" data-listing-date-sort="1674054000000" data-listing-file-modified-sort="1677157023940" data-listing-reading-time-sort="11.76">
-<div class="thumbnail">
-<a href="./posts/2023-01-28-data.table_advanced/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/2023-01-28-data.table_advanced/index.html"></a></p>
-</div>
-<div class="body">
-<a href="./posts/2023-01-28-data.table_advanced/index.html">
-<h3 class="no-anchor listing-title">
-data.table 심화내용
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('data.table'); return false;">
-data.table
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-</div>
-<a href="./posts/2023-01-28-data.table_advanced/index.html">
-<div class="listing-description">
-<p>data.table 특수 기호, 조인, 피봇</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/2023-01-28-data.table_advanced/index.html">
+<a href="./posts/2023-01-19-ojs/index.html">
 <div class="listing-date">
 Jan 19, 2023
 </div>
@@ -863,7 +816,84 @@ JYH
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="17" data-categories="ggplot2,R,Visualization,boxplot" data-listing-date-sort="1674054000000" data-listing-file-modified-sort="1677157023940" data-listing-reading-time-sort="0.315">
+<div class="quarto-post image-right" data-index="16" data-categories="Quarto,R" data-listing-date-sort="1674054000000" data-listing-file-modified-sort="1676529709000" data-listing-reading-time-sort="3.375">
+<div class="thumbnail">
+<p><a href="./posts/2023-01-19-quarto-intro/index.html"> <img src="https://d33wubrfki0l68.cloudfront.net/1e13e2f2b4d1760d131ad2be5096e105573341e2/db099/blog/announcing-quarto-a-new-scientific-and-technical-publishing-system/thumbnail_huc2394eec6c3beee37cf037e067ab5abf_72127_2220x0_resize_q75_box.jpg" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2023-01-19-quarto-intro/index.html">
+<h3 class="no-anchor listing-title">
+Quarto 사용법
+</h3>
+<div class="listing-subtitle">
+Quarto, a substitute of Rmarkdown
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Quarto'); return false;">
+Quarto
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
+R
+</div>
+</div>
+<a href="./posts/2023-01-19-quarto-intro/index.html">
+<div class="listing-description">
+<p>Brief intorduction of Quarto</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2023-01-19-quarto-intro/index.html">
+<div class="listing-date">
+Jan 19, 2023
+</div>
+<div class="listing-author">
+JYH
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="17" data-categories="R,data.frame" data-listing-date-sort="1674054000000" data-listing-file-modified-sort="1676960603000" data-listing-reading-time-sort="12.825">
+<div class="thumbnail">
+<a href="./posts/2023-01-27-Rbase/index.html">
+<div class="thumbnail-image">
+
+</div>
+</a><p><a href="./posts/2023-01-27-Rbase/index.html"></a></p>
+</div>
+<div class="body">
+<a href="./posts/2023-01-27-Rbase/index.html">
+<h3 class="no-anchor listing-title">
+R 기초 이해
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
+R
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('data.frame'); return false;">
+data.frame
+</div>
+</div>
+<a href="./posts/2023-01-27-Rbase/index.html">
+<div class="listing-description">
+<p>R 사용을 위한 필수 개념 및 함수을 배워봅시다.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2023-01-27-Rbase/index.html">
+<div class="listing-date">
+Jan 19, 2023
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="18" data-categories="ggplot2,R,Visualization,boxplot" data-listing-date-sort="1674054000000" data-listing-file-modified-sort="1677034084752" data-listing-reading-time-sort="0.315">
 <div class="thumbnail">
 <a href="./posts/2023-02-01-boxplot/index.html">
 <div class="thumbnail-image">
@@ -908,133 +938,18 @@ Jan 19, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="18" data-categories="R,data.frame" data-listing-date-sort="1674054000000" data-listing-file-modified-sort="1677157023940" data-listing-reading-time-sort="12.825">
+<div class="quarto-post image-right" data-index="19" data-categories="data.table,R" data-listing-date-sort="1674054000000" data-listing-file-modified-sort="1677197134188" data-listing-reading-time-sort="10.2">
 <div class="thumbnail">
-<a href="./posts/2023-01-27-Rbase/index.html">
+<a href="./posts/data.table_advanced/index.html">
 <div class="thumbnail-image">
 
 </div>
-</a><p><a href="./posts/2023-01-27-Rbase/index.html"></a></p>
+</a><p><a href="./posts/data.table_advanced/index.html"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-01-27-Rbase/index.html">
+<a href="./posts/data.table_advanced/index.html">
 <h3 class="no-anchor listing-title">
-R 기초 이해
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('data.frame'); return false;">
-data.frame
-</div>
-</div>
-<a href="./posts/2023-01-27-Rbase/index.html">
-<div class="listing-description">
-<p>R 사용을 위한 필수 개념 및 함수을 배워봅시다.</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/2023-01-27-Rbase/index.html">
-<div class="listing-date">
-Jan 19, 2023
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="19" data-categories="Quarto,R" data-listing-date-sort="1674054000000" data-listing-file-modified-sort="1677157023938" data-listing-reading-time-sort="3.375">
-<div class="thumbnail">
-<p><a href="./posts/2023-01-19-quarto-intro/index.html"> <img src="https://d33wubrfki0l68.cloudfront.net/1e13e2f2b4d1760d131ad2be5096e105573341e2/db099/blog/announcing-quarto-a-new-scientific-and-technical-publishing-system/thumbnail_huc2394eec6c3beee37cf037e067ab5abf_72127_2220x0_resize_q75_box.jpg" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/2023-01-19-quarto-intro/index.html">
-<h3 class="no-anchor listing-title">
-Quarto 사용법
-</h3>
-<div class="listing-subtitle">
-Quarto, a substitute of Rmarkdown
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Quarto'); return false;">
-Quarto
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-</div>
-<a href="./posts/2023-01-19-quarto-intro/index.html">
-<div class="listing-description">
-<p>Brief intorduction of Quarto</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/2023-01-19-quarto-intro/index.html">
-<div class="listing-date">
-Jan 19, 2023
-</div>
-<div class="listing-author">
-JYH
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="20" data-categories="Visualization,javascript" data-listing-date-sort="1674054000000" data-listing-file-modified-sort="1677157023938" data-listing-reading-time-sort="0.575">
-<div class="thumbnail">
-<a href="./posts/2023-01-19-ojs/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/2023-01-19-ojs/index.html"></a></p>
-</div>
-<div class="body">
-<a href="./posts/2023-01-19-ojs/index.html">
-<h3 class="no-anchor listing-title">
-Observable.js
-</h3>
-<div class="listing-subtitle">
-Interactive chart with ojs
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('Visualization'); return false;">
-Visualization
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('javascript'); return false;">
-javascript
-</div>
-</div>
-<a href="./posts/2023-01-19-ojs/index.html">
-<div class="listing-description">
-
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/2023-01-19-ojs/index.html">
-<div class="listing-date">
-Jan 19, 2023
-</div>
-<div class="listing-author">
-JYH
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="21" data-categories="data.table,R" data-listing-date-sort="1674054000000" data-listing-file-modified-sort="1677157023940" data-listing-reading-time-sort="9.245">
-<div class="thumbnail">
-<p><a href="./posts/2023-01-27-data.table_basic/index.html"> <img src="https://pbs.twimg.com/media/FJ5hZ-sXoA0acyu?format=jpg&amp;name=medium" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/2023-01-27-data.table_basic/index.html">
-<h3 class="no-anchor listing-title">
-data.table 기초 문법
+data.table 심화
 </h3>
 <div class="listing-subtitle">
 
@@ -1048,26 +963,23 @@ data.table
 R
 </div>
 </div>
-<a href="./posts/2023-01-27-data.table_basic/index.html">
+<a href="./posts/data.table_advanced/index.html">
 <div class="listing-description">
-<p>data.table 문법, 연산자, 함수</p>
+<p>특수 기호, 조인, 피봇 등 data.table에서 다루는 심화내용을 살펴봅시다.</p>
 </div>
 </a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-01-27-data.table_basic/index.html">
+<a href="./posts/data.table_advanced/index.html">
 <div class="listing-date">
 Jan 19, 2023
-</div>
-<div class="listing-author">
-JYH
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="22" data-categories="data.table,R" data-listing-date-sort="1673967600000" data-listing-file-modified-sort="1677157023941" data-listing-reading-time-sort="9.34">
+<div class="quarto-post image-right" data-index="20" data-categories="data.table,R" data-listing-date-sort="1673967600000" data-listing-file-modified-sort="1677197134190" data-listing-reading-time-sort="9.34">
 <div class="thumbnail">
-<p><a href="./posts/data.table_basic/index.html"> <img src="https://pbs.twimg.com/media/FJ5hZ-sXoA0acyu?format=jpg&amp;name=medium" class="thumnail-image"> </a></p>
+<p><a href="./posts/data.table_basic/index.html"> <img data-src="./posts/data.table_basic/logo.png" class="thumnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/data.table_basic/index.html">
@@ -1104,6 +1016,9 @@ Jan 18, 2023
 <div class="listing-no-matching d-none">
 No matching items
 </div>
+<nav id="listing-pagination" class="listing-pagination" aria-label="Page Navigation">
+  <ul class="pagination"></ul>
+</nav>
 </div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1125,6 +1040,121 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
   toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {

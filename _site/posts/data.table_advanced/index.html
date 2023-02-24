@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="JYH">
 <meta name="dcterms.date" content="2023-01-19">
 <meta name="description" content="특수 기호, 조인, 피봇 등 data.table에서 다루는 심화내용을 살펴봅시다.">
 
@@ -101,10 +100,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -124,6 +125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-submit-button-title": "Submit"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -144,7 +146,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html">
  <span class="menu-text">Home</span></a>
@@ -159,11 +161,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>  
 </ul>
               <div class="quarto-toggle-container">
-                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
-  <div class="quarto-reader-toggle-btn">
-  <i class="bi"></i>
-  </div>
-</a>
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
               </div>
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
@@ -174,7 +172,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <div class="quarto-title-block"><div><h1 class="title">data.table 심화</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+      <h1 class="title">data.table 심화</h1>
                   <div>
         <div class="description">
           특수 기호, 조인, 피봇 등 data.table에서 다루는 심화내용을 살펴봅시다.
@@ -187,23 +185,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
                   </div>
   </div>
     
-  <div class="quarto-title-meta-author">
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-heading">Affiliation</div>
-    
-      <div class="quarto-title-meta-contents">
-      JYH <a href="https://orcid.org/0000-0001-8090-6555" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a>
-    </div>
-      <div class="quarto-title-meta-contents">
-          <p class="affiliation">
-              HIRC Lab, SNUBH
-            </p>
-        </div>
-      </div>
-
+  
   <div class="quarto-title-meta">
 
-        
+      
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
@@ -1515,8 +1500,6 @@ Note
 </ul>
 
 
-<!-- -->
-
 </section>
 </section>
 </section>
@@ -1542,6 +1525,121 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
   toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -1587,57 +1685,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  const viewSource = window.document.getElementById('quarto-view-source') ||
-                     window.document.getElementById('quarto-code-tools-source');
-  if (viewSource) {
-    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-    viewSource.addEventListener("click", function(e) {
-      if (sourceUrl) {
-        // rstudio viewer pane
-        if (/\bcapabilities=\b/.test(window.location)) {
-          window.open(sourceUrl);
-        } else {
-          window.location.href = sourceUrl;
-        }
-      } else {
-        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-        modal.show();
-      }
-      return false;
-    });
-  }
-  function toggleCodeHandler(show) {
-    return function(e) {
-      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-      for (let i=0; i<detailsSrc.length; i++) {
-        const details = detailsSrc[i].parentElement;
-        if (show) {
-          details.open = true;
-        } else {
-          details.removeAttribute("open");
-        }
-      }
-      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-      const fromCls = show ? "hidden" : "unhidden";
-      const toCls = show ? "unhidden" : "hidden";
-      for (let i=0; i<cellCodeDivs.length; i++) {
-        const codeDiv = cellCodeDivs[i];
-        if (codeDiv.classList.contains(fromCls)) {
-          codeDiv.classList.remove(fromCls);
-          codeDiv.classList.add(toCls);
-        } 
-      }
-      return false;
-    }
-  }
-  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-  if (hideAllCode) {
-    hideAllCode.addEventListener("click", toggleCodeHandler(false));
-  }
-  const showAllCode = window.document.getElementById("quarto-show-all-code");
-  if (showAllCode) {
-    showAllCode.addEventListener("click", toggleCodeHandler(true));
-  }
   function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
@@ -1705,532 +1752,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<pre class="markdown" data-shortcodes="false"><code>---
-title: "data.table 심화"
-description:  "특수 기호, 조인, 피봇 등 data.table에서 다루는 심화내용을 살펴봅시다."
-date: '2023-01-19'
-categories: [data.table, R]
----
-
-[[data.table 기초]{.underline}](../data.table_basic/index.qmd) 포스트 에서는 대용량의 데이터를 빠르게 처리할 수 있는 `data.table` 패키지에 대해 배워봤습니다.
-
-이번 시간에는 `data.table` 패키지를 조금 더 효율적으로 사용할 수 있는 방법, 그리고 `data.table`을 이용하여 데이터를 원하는대로 붙이고 변형하는 방법에 대해 알아보겠습니다.
-
-## 1. 특수 기호
-
-data.table 패키지에는 유용하게 사용할 수 있는 특수 기호들이 있습니다. 이 특수한 기호들은 다른 패키지에서는 사용할 수 없는 것들로, data.table 형태의 데이터를 다룰 때만 사용이 가능합니다.
-
-이번에 배울 data.table의 특수 기호는 크게 3가지입니다. 바로 .SD, .N, .I 입니다. 이 특수기호들은 모두 data.table의 j(column 부분)에서 쓰입니다.
-
-### 1) lapply + .SD
-
-`.SD`는 Subset Data의 약자입니다. 말그대로 데이터의 일부분을 선택하기 위한 특수기호(special symbols)입니다.
-
-`.SD`와 함께 사용되는 것이 있습니다. 바로 `.SDcols` 입니다. `.SDcols`를 통해 데이터 중 원하는 column을 선택할 수 있습니다.
-
-만약 .SDcols 없이 .SD만 사용한다면 데이터의 모든 column을 선택한다는 뜻입니다.
-
-quarto-executable-code-5450563D
-
-```r
-require(data.table)
-require(NHANES)
-dt &lt;- as.data.table(NHANES)
-dt[,head(.SD)]
-dt[,str(.SD)]
-```
-
-반면 `.SDcols와` 함께 `.SD`를 사용한다면 `.SDcols`에 입력한 column만 선택합니다.
-
-quarto-executable-code-5450563D
-
-```r
-dt[,str(.SD),.SDcols=c('Gender','Age')]
-```
-
-`.SDcols`에 column을 선택하는 방법은 크게 세 가지가 있습니다.
-
--   column 이름을 갖는 vector 만들어서 사용
-
-    아래의 예시처럼 찾고자 하는 column 이름 `c()`로 묶은 vector 형태로 넣어줄 수 있습니다.
-
-    ```{r}
-    dt[,.SD,.SDcols=c('Gender','Age','Race1','Education')]
-    # OR
-    target &lt;- c('Gender','Age','Race1','Education')
-    dt[,.SD,.SDcols=target]
-    ```
-
--   `patterns()`를 통한 column 규칙 찾기
-
-    `patterns()` 함수를 이용해 해당 문자열을 갖는 모든 column을 찾을 수 있습니다.
-
-    ```{r}
-    dt[,.SD,.SDcols=patterns('Alcohol')]
-    ```
-
--   `:`을 이용해 연속적인 column을 찾기
-
-    `.SDcols`에 적용할 column이 연이어 붙어있는 경우, `:`을 이용하여 찾을 수 있습니다.
-
-    ```{r}
-    dt[,.SD,.SDcols=Gender:Age]
-    ```
-
-한편 `.SD` (`.SDcols`)와 자주 사용되는 함수는 `lapply()`입니다.
-
-`lapply()`는 list + apply의 약자로, list에 [동일한 함수]{.underline}를 적용할 때 사용되는 함수입니다.
-
-`lapply()`는 크게 아래의 구조로 이루어져 있습니다.
-
-```{r eval=FALSE}
-lapply(
-  X, # 함수를 적용할 부분
-  FUN, # 선택된 X에 적용할 함수
-  ... # 추가 인자, e.g., na.rm=T
-)
-```
-
-`X` 에는 함수를 적용할 column이름 또는 벡터가 오게 됩니다. 이 챕터에서는 주로 data.table에 `lapply()`를 적용하기 때문에 column이름이 오게 됩니다.
-
-`FUN` 에는 X에서 선택된 column들에 동일하게 적용할 함수를 작성합니다. `FUN` 부분은 각 column이 호출되어야 하는 횟수에 따라 사용하는 방법이 달라집니다.
-
-보통 `function(x)` 또는 `\(x)` 를 이용해 적용시킬 함수를 입력해줍니다.
-
-quarto-executable-code-5450563D
-
-```r
-lapply(1:5, function(x) ifelse(is.na(x),mean(x,na.rm=T),x))
-lapply(1:5, \(x) mean(x,na.rm=T))
-```
-
-만약 평균을 구하늖 ㅏㅁ수처럼 `mean()` 처럼 각 column이 한번만 와도 되는 상황이라면 `function()`을 생략하고 함수의 이름만 사용할 수 있습니다. 결측치가 있는 경우 `…` 부분에 추가적으로 `na.rm=T` 를 사용할 수 있습니다.
-
-quarto-executable-code-5450563D
-
-```r
-lapply(1:5, mean, na.rm=T)
-```
-
-`lapply()`와 `.SD`를 사용할 때는 `.SD`와 `.SDcols`를 통해 선택되는 column에 동일한 함수를 적용하게 됩니다. 일일이 column마다 함수를 적용할 필요가 없으니, 입력해야 하는 코드도 줄어들 뿐만 아니라 계산에 필요한 시간도 훨씬 단축됩니다.
-
-quarto-executable-code-5450563D
-
-```r
-dt[,lapply(.SD, # 함수를 적용할 column 
-           mean, # functcion 부분
-           na.rm=T # 추가 인자 부분
-           ),
-   .SDcols=c('Age','BMI') # .SD 중 선택되는 column이름
-   ]
-```
-
-또한 `lapply()`와 `.SD`는 여러 column들의 평균, 표준편차 등의 요약통계량을 계산하는 경우, 동시에 column들의 유형을 numeric에서 character로 변환하는 경우 등에 자주 사용됩니다.
-
-quarto-executable-code-5450563D
-
-```r
-dt[,lapply(.SD, mean, na.rm=T), .SDcols=target]
-dt[,lapply(.SD, as.factor), .SDcols=target]
-```
-
-`lapply()`와 `.SD`를 활용하여 여러 column들을 변경한 후, 데이터에 저장하는 것은 chapter 3에서 배웠던 `:=` 를 이용합니다.
-
-여러 column을 동시에 변경하여 저장할 때는 `:=` 왼쪽 부분에 column 이름이 있는 `vector`를 `()`로 감싸주면 됩니다.
-
-예를 들어 나이와 BMI의 `NA`를 각 column의 중앙값으로 채워넣고자 하는 경우,
-
-quarto-executable-code-5450563D
-
-```r
-target &lt;- c('Age','BMI')
-
-dt[,(target):=lapply(.SD, \(x) ifelse(is.na(x), median(x,na.rm=T),x)),.SDcols=target]
-```
-
-### 2) `.N`
-
-`.N`은 데이터의 수, 다시 말해 row의 개수를 확인하는 특수기호입니다. `.N`은 주로 `by`와 함께 됩니다. `by`를 통해 특정 집단의 분포별로 몇 명이 있는지, 또는 몇 건의 데이터가 있는지 확인합니다.
-
-예를 들면 인종(`race`)에 따른 데이터의 수를 확인하고 싶을 때는 아래와 같이 사용합니다.
-
-quarto-executable-code-5450563D
-
-```r
-dt[,.N, by=Race1]
-```
-
-::: callout-note
-사실 그룹별 응답 수는 `table()` 함수를 이용해도 구할 수 있습니다. 그러나 .N을 이용하게 되면 각 범주별 빈도수를 [data.table 문법 내에서]{.underline} 구할 수 있기 때문에 활용성에 있어 `table()`보다 더 뛰어나다고 할 수 있습니다.
-
-quarto-executable-code-5450563D
-
-```r
-dt[,c(.N, lapply(.SD,mean)),by=.(Race1),.SDcols='Age']
-```
-:::
-
-### 3) `.I`
-
-`.I`는 j 부분에서 행을 다루기 특수기호입니다.
-
-보통 `.I`는 특정 조건을 만족하는 row의 위치를 찾을 때 사용합니다. 특히 by가 있는 경우, 다시 말해 범주별로 row의 위치를 찾을 때 많이 사용합니다.
-
-집단별 row가 필요하지 않다면, j가 아닌 i 부분에서 행을 선택할 수 있습니다. 그러나 i 부분만 입력하게 될 경우, 집단 별 조건을 확인할 수 없습니다. 왜냐하면 by를 사용하기 위해서는 j가 선행되어야 하기 때문입니다.
-
-따라서 i 부분에서 바로 row를 filtering 하는 것이 아니라, j 부분에서 집단별로 조건을 만족시키는 행의 번호를 찾아서 사용합니다.
-
-또한 `.I`를 사용하는 경우 행의 번호를 확인할 수 있기 때문에, 그 행의 번호에 해당하는 모든 column을 사용할 수 있습니다.
-
-예를 들어, 인종별 첫 번째 행을 선택하는 경우는 다음과 같이 실행할 수 있습니다.
-
-quarto-executable-code-5450563D
-
-```r
-dt[dt[,.I[1L],by=Race1]$V1]
-```
-
-이번에는 인종 별로 첫 번째 행이 아니라 Height가 최대인 (키가 가장 큰) 데이터를 추출해보겠습니다.
-
-quarto-executable-code-5450563D
-
-```r
-dt[dt[,.I[max(Height,na.rm=T)],by=.(Race1)]$V1]
-dt[dt[,.I[which.max(Height)],by=.(Race1)]$V1]
-```
-
-------------------------------------------------------------------------
-
-## 2. 데이터 병합
-
-R에서 데이터를 묶는 방법은 크게 두 종류가 있습니다. 하나는 `bind()` 이고, 다른 하나는 `merge()` 또는 `join()` 입니다.
-
-### 1) bind
-
-bind 계열의 함수는 두 개 이상의 데이터를 합치는 함수입니다. merge는 뒤에서 언급하겠지만, bind는 merge와 달리 특정한 기준이 되는 column이 필요하지 않습니다.
-
-bind에는 `rbind()`, `cbind()`가 있습니다.
-
-#### a. `rbind()`
-
-`rbind()`는 row-bind의 약자로, 두 가지 이상의 데이터의 행을 묶는 함수입니다. 행을 묶는 것이기 때문에 데이터가 아래로 추가됩니다.
-
-quarto-executable-code-5450563D
-
-```r
-rbind(1:3,c('a','b','c'))
-```
-
-`rbind()`를 통해 합치고자 하는 데이터의 길이가 맞지 않는 경우, 자동으로 부족한 부분을 채웁니다.
-
-quarto-executable-code-5450563D
-
-```r
-rbind(c(1:3),c(1:4))
-```
-
-만약 column 이름을 갖는 matrix나 data.table 형태를 `rbind()`하고자 하는 경우는 합치고자 하는 데이터의 column이름이 같아야 합니다.
-
-quarto-executable-code-5450563D
-
-```r
-require(data.table)
-a &lt;- data.table(num=1:5,
-                str = letters[1:5])
-b &lt;- data.table(num=6:10,
-                str = LETTERS[1:5])
-rbind(a,b)
-```
-
-만약 두 데이터의 column 이름이 같지 않은 경우, 에러 메시지가 뜨게 됩니다.
-
-```{r eval=FALSE}
-a &lt;- data.table(num=1:5,
-                str=letters[1:5])
-b &lt;- data.table(num=6:10,
-                str2=LETTERS[1:5])
-rbind(a,b)
-
-# 에러메시지
-# Column 2 ['str2'] of item 2 is missing in item 1. Use fill=TRUE to fill with NA (NULL for list columns), or use.names=FALSE to ignore column names.
-```
-
-이럴 때는 column 이름을 무시하거나, 이름이 같지 않은 column을 `NA`로 채워줄 수 있습니다.
-
-quarto-executable-code-5450563D
-
-```r
-rbind(a,b, use.names=F)
-```
-
-quarto-executable-code-5450563D
-
-```r
-rbind(a,b, fill=T)
-```
-
-#### b. `cbind()`
-
-`cbind()`는 column-bind의 약자로, 두 가지 이상의 데이터의 열을 묶는 함수입니다. 열을 묶기 때문에 데이터가 옆으로 추가됩니다.
-
-quarto-executable-code-5450563D
-
-```r
-a &lt;- data.table(num=1:5,
-                str = letters[1:5])
-b &lt;- data.table(num=6:10,
-                str2 = LETTERS[1:5])
-cbind(a,b)
-```
-
-### 2) merge
-
-`merge()`는 두가지의 데이터를 특정 column을 기준으로 합치는 함수입니다. bind 계열의 함수와 다르게 [기준이 되는 column]{.underline}이 반드시 필요합니다.
-
-`merge()`는 두 가지 데이터 중 어떤 방식으로 합치느냐에 따라 크게 3가지로 분류할 수 있습니다.
-
-#### a. inner join
-
-inner join은 두 가지 데이터의 기준이 되는 column 에서 공통된 값들만 갖는 데이터를 합치는 방법입니다.
-
-data.table에서 inner join 하는 방법은 아래와 같습니다.
-
-```{r eval=FALSE}
-merge(dt1, dt2, by=)
-```
-
-#### b. left / right join
-
-left/right join은 두 가지 데이터에서 왼(오른)쪽 데이터의 column을 기준으로 데이터를 합치는 방법입니다.
-
-data.table에서 left join과 right join을 하는 방법은 아래와 같습니다.
-
-```{r eval=FALSE}
-merge(dt1, dt2, by, all.x=T) # left join
-merge(dt1, dt2, by, all.y=T) # right join
-```
-
-all.x 인자에 TRUE를 주면 left join을, all.y는 right join을 의미합니다.
-
-#### c. outer join
-
-outer join은 두 가지 데이터의 모든 column을 기준으로 데이터를 합치는 방법입니다.
-
-공통되지 않은 값을 갖는 경우는 `NA`로 채워넣어집니다.
-
-data.table에서 outer join을 하는 방법은 아래와 같습니다.
-
-```{r eval=FALSE}
-merge(dt1, dt2, all.x)
-```
-
-merge의 경우 공통된 이름의 column을 기준으로 두 데이터를 합치는 방법이라고 했습니다. 그런데 만약 기준이 되는 column의 이름이 다르다면 어떻게 해야 할까요? 이때는 `by.x`와 `by.y` 인자를 사용합니다.
-
-```{r eval=FALSE}
-merge(by.x, by.y)
-```
-
-기존에는 `by`인자에 공통된 column명을 넣으면 됐지만, 두 가지 데이터의 column이 다르기 때문에 각각 by.x와 by.y에 기준이 되는 column 이름을 넣어주는 것입니다.
-
-## 
-
-::: callout-tip
-두 가지 column을 기준으로 합치고자 할 때, 이름이 다른 경우 아래와 같이 사용합니다.
-
-```{r eval=FALSE}
-merge(dt1, dt2, by.x=c('a','b'), by.y=c('A','B'))
-```
-:::
-
-.EACHI: X와 Y를 합칠 때, 요소별 합쳐진 개수 확인
-
-quarto-executable-code-5450563D
-
-```r
-X = data.table(x = c(1,1,1,2,2,5,6), y = 1:7, key = "x")
-Y = data.table(x = c(2,6), z = letters[2:1], key = "x")
-X[Y,.N, by=x]; #X[Y,.N, by=y];
-X[Y, .N, by=.EACHI]
-```
-
-------------------------------------------------------------------------
-
-## 3. Pivoting
-
-pivoting이란 column이 여러 개 좌우로 붙어있던 것을 위아래로 길게 늘이거나, 데이터를 좌우로 넓게 펼치는 것을 의미합니다.
-
-pivot: 축을 기준으로 데이터를 회전시키는 것을 의미합니다. 데이터 측면에서 축은 기준이 되는 column을 의미합니다. 예를 들면 환자의 식별자, 일자 등이 있습니다.
-
-pivoting 개념에서 사용되는 데이터 유형 두 가지에 대해 살펴보겠습니다.
-
--   **Wide data**
-
-    넓은(wide) 데이터는 이름 그대로 양 옆으로 넓은 데이터를 의미합니다. 양 옆으로 넓다는 것은 column의 개수가 많다는 것을 의미합니다. 지금까지 교재에서 다루었던 거의 대부분의 데이터가 column들이 옆으로 붙어있는 형태는 wide 데이터입니다.
-
--   **Long data**
-
-    긴 (long) 데이터는 넓은 데이터와 다르게, 반복되는 column을 기준으로 여러 변수(variable)와 값(value)으로 구성된 데이터입니다.
-
-    이 때 반복되는 column이란 반복되어 기록된 값들입니다. 예를 들면 환자가 입원해있는 동안의 기록이나 일자별 날씨 같이 반복적으로 기록되어 있는 데이터 등이 있습니다.
-
-    airquality는 `Month`와 `Day` 별 오존량, 풍량, 기온 등이 기록된 데이터입니다. 여기서 `Month`와 `Day`가 바로 반복되는 column입니다.
-
-    ```{r}
-    airquality |&gt; head()
-    ```
-
-    long 데이터는 이렇게 반복되는 column들을 기준으로 데이터를 variable과 value로 길게 확장시켜 놓은 것입니다.
-
-데이터 분석을 수행하는 우리 입장에서는 wide한 데이터가 보기에 더 편리합니다. column마다 어떤 데이터가 있는지 확인할 수 있고, 각 column 별로 계산을 수행할 수 있기 때문입니다.
-
-그러나 컴퓨터 입장에서는, 즉 계산하는 측면에서는 long data가 더 효율적입니다. 그렇기 때문에 동일한 column에 대해 연산을 할 때, long data가 훨씬 빠르게 계산됩니다.
-
-### 1) melt
-
-melt는 column들이 옆으로 나열되어 있는 옆으로 넓은(wide)한 데이터를 위아래로 길게(long) 바꾸는 것을 의미합니다.
-
-::: callout-tip
-melt는 어떤 것을 녹이는 의미를 갖고 있습니다. 넓게 퍼진 데이터를 녹여 길게 만든다고 이해하시면 됩니다.
-:::
-
-이렇게 옆으로 나열된 column들을 특정한 축을 기준으로 데이터를 variable과 value라는 column으로 녹입니다. 이렇게 되면 long data의 축에 오는 데이터들은 계속 반복되고, variable과 value만 변경되는 데이터로 변환됩니다.
-
-melt 함수에서는 기준이 되는 column의 이름과 길게 변환할 column을 지정해줄 수 있습니다.
-
-quarto-executable-code-5450563D
-
-```r
-air_dt &lt;- as.data.table(airquality)
-melt(air_dt,
-     id.vars=c('Month','Day'),
-     measure.vars=c('Ozone','Temp'),
-     na.rm = T # TRUE일 경우 NA인 값은 제외
-     )
-
-```
-
-만약 measure.vars에 아무런 인자를 주지 않는다면, melt를 수행했을 때, 기준 column을 제외한 모든 column들이 long 형태로 변경됩니다.
-
-quarto-executable-code-5450563D
-
-```r
-air_melt &lt;- melt(air_dt,
-     id.vars=c('Month','Day'),
-     na.rm = T # TRUE일 경우 NA인 값은 제외
-     )
-air_melt
-```
-
-melt의 measure.vars에는 앞서 배웠던 patterns을 통해 비슷한 패턴을 갖는 column명을 선택할 수도 있습니다.
-
-quarto-executable-code-5450563D
-
-```r
-melt(dt,
-     id.vars = c('Gender','Age','Race1'),
-     measure.vars = patterns('HH') # HH가 들어가는 column 선택
-     )
-```
-
-여러 개의 패턴을 지정해 두 가지 이상으로 정리할 수도 있습니다.
-
-quarto-executable-code-5450563D
-
-```r
-house_dt &lt;- data.table(
-  family = 1:5,
-  dob_child1 = c('1998-11-26','1996-06-22','2002-07-11','2004-10-10','2000-12-05'),
-  dob_child2 = c('2000-01-29',NA,'2004-04-05','2009-08-27','2005-02-28'),
-  name_child1 = c('Susan','Mark','Sam','Craig','Parker'),
-  name_child2 = c('Jose',NA,'Seth','Khai','Gracie')
-)
-
-house_dt |&gt; 
-    melt(
-        id.vars = 'family',
-        measure.vars = patterns("^dob","^name"),
-        value.name = c("dob",'name'))
-```
-
-### 2) dcast
-
-이렇게 옆으로 나열된 column들을 특정한 축을 기준으로 데이터를 variable과 value라는 column으로 녹입니다.
-
-::: callout-tip
-cast는 어떤 형태로 데이터를 굳히는 것을 의미합니다. 기존에 melt로 녹아있던 데이터를 casting 하는 data+casting (dcast)라고 이해하시면 됩니다.
-:::
-
-dcast는 long data에서 축 column에서 특정 값들을 기준으로 넓게 펼칠 수 있습니다. dcast에서는 formula 형태로 기준이 되는 축과 wide하게 변경해줄 column을 선택해주면 됩니다. 이 때 formula 형태라는 것은 \~ 을 기준으로 기준 축과 column
-
-quarto-executable-code-5450563D
-
-```r
-dcast(data=air_melt,
-      formula = Month + Day ~ variable, # 기준 column ~ column 이름으로 들어갈 column
-      fill = 0, # NA인 경우 채워 넣어줄 값을 선택할 수 있습니다.
-      value.var = 'value' # 데이터로 들어갈 값들.
-        )
-```
-
-dcast에는 fun.aggregate라는 인자가 존재합니다. 이 인자의 경우 만약 기준이 되는 column의 하나의 값에 여러 데이터(row)가 존재하는 경우에 사용합니다.
-
-`airquality` 데이터를 예로 들어보겠습니다. 앞서 보여드린 air_melt의 경우 Month와 Day의 두 column을 기준으로 melt했기 때문에 기준 column에 공통되는 값들이 없었습니다 (5/1\~ 9/27 까지 일일 데이터이므로).
-
-이번에는 `Day`만 기준 column으로 놓고 melt를 한 데이터를 다시 dcast 해보겠습니다.
-
-quarto-executable-code-5450563D
-
-```r
-air_melt2 &lt;- melt(air_dt, id.vars = 'Day',measure.vars = c('Ozone','Solar.R','Wind','Temp'))
-
-air_melt2
-```
-
-`air_melt`와 달리 air_melt2에서는 Day별로 여러 개의 데이터가 존재하게 됩니다 (Day가 1인 경우, 5월 1일, 6월 1일 \~9월 1일 등의 데이터가 있기 때문입니다).
-
-이 데이터를 dcast하게 된다면 `Aggregate function missing, defaulting to 'length'` 아래와 같은 메시지가 뜹니다.
-
-quarto-executable-code-5450563D
-
-```r
-dcast(air_melt2, Day ~ variable, value.var='value')
-```
-
-이 메시지가 뜬 이유는 다음과 같습니다. `Day`라는 고유한 값은 1\~31까지 밖에 없는데, `air_melt2`에서는 `Day`별로 여러 건의 데이터가 있었습니다. 그렇기 때문에 dcast에서는 `Day`별 요약 또는 집계를 수행합니다. 이 때 `fun.aggregate`라는 인자에 어떻게 요약할 것인지 지정해주지 않았기 때문에 초기값인 `length()`가 적용된 것입니다.
-
-따라서 평균이나 중앙값, 최소, 최대 등 요약함수를 넣어주면 `Day`별로 여러 건의 데이터를 요약한 값으로 데이터가 펼쳐지게 됩니다.
-
-quarto-executable-code-5450563D
-
-```r
-dcast(air_melt2, Day ~ variable, 
-      value.var='value',
-      fun.aggregate = mean)
-```
-
-만약 여러 건의 데이터 중 첫 번째를 사용하고 싶은 경우에는 아래와 같이 사용할 수 있습니다.
-
-quarto-executable-code-5450563D
-
-```r
-dcast(air_melt2, Day ~ variable, 
-      value.var='value',
-      fun.aggregate = function(x)x[1])
-```
-
-::: callout-note
-가장 일반적으로 사용하는 데이터는 wide 형태의 데이터입니다.
-
-그러나 분석하고자 하는 유형, 필요한 데이터의 모양에 따라 데이터의 형태를 변환해줘야 할 때가 있습니다.
-:::
-
-#### 함께 보면 좋은 자료
-
--   [data.table 기초](../data.table_basic/index.qmd)</code></pre>
-</div></div></div></div></div>
+</script>
+<script src="https://giscus.app/client.js" data-repo="rchemist0123/giscus-blog" data-repo-id="R_kgDOJBwa8Q" data-category="General" data-category-id="DIC_kwDOJBwa8c4CUbVM" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left"><a href="https://https://rchemist.quarto.pub/rchemistblog/">Rchemist</a> © 2022 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:danjang0123@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/danjang0123/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

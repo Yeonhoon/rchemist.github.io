@@ -1,1 +1,1 @@
-Sitemap: https://quartopub.com/sites/rchemist/rchemistblog/sitemap.xml
+Sitemap: https://rchemistblog.com/sitemap.xml

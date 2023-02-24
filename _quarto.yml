@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: docs
+  output-dir: _site
 
 execute: 
   eval: true
@@ -14,3 +14,6 @@ metadata-files:
 
 
 editor: visual
+comments:
+  giscus: 
+    repo: rchemist0123/giscus-blog

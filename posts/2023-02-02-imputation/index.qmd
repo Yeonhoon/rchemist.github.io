@@ -1,8 +1,9 @@
 ---
 title: "Imputation의 종류"
-description: "데이터의 결측치 제거를 위한 방법을 살펴봅시다."
+description: "mice를 이용한 multiple imputation"
 date: '2023-02-18'
 categories: [R, imputation, mice]
+image: "https://amices.org/mice/reference/figures/MICE_sticker_SMALL.png"
 ---
 
 ```{r include=FALSE}

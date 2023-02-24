@@ -1,6 +1,6 @@
 ---
-title: "R로 EDA 하기"
-description:  "다양한 패키지를 활용한 EDA"
+title: "DataExplorer을 활용한 EDA"
+description:  "DataExplorer를 통한 탐색적 데이터 분석"
 date: '2023-02-09'
 categories: [EDA, R]
 ---

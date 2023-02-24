@@ -1,6 +1,9 @@
 website:
   title: "Rchemist"
-  reader-mode: true
+  search:
+    location: navbar
+    type: overlay
+  sidebar: false
   navbar:
     background: 'light'
     search: true
@@ -9,9 +12,6 @@ website:
         text: Home
       - about.qmd
       - posts.qmd
-  search:
-    location: navbar
-    type: overlay
   page-navigation: true  
   page-footer:
     left: "[Rchemist](https://https://rchemist.quarto.pub/rchemistblog/) © 2022 by [YH Jang](https://https://rchemist.quarto.pub/rchemistblog/about.html)"

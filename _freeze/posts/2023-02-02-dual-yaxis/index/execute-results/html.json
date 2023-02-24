@@ -1,0 +1,16 @@
+{
+  "hash": "febda180eaa4a24683e45355a8f2d65b",
+  "result": {
+    "markdown": "---\ntitle: \"ggplot에서 두 번째 y축 그리기\"\ndescription:  \"ggplot으로 그래프에 두 개의 y축을 활용하는 방법을 배우기\"\ndate: '2023-02-02'\ncategories: [ggplot2, R, Visualization, axis]\nimage: \"https://r-graph-gallery.com/line-chart-dual-Y-axis-ggplot2_files/figure-html/thecode3-1.png\"\n---\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndat <- data.table(\n  day= as.factor(rep(c(1,2,3,7),each=2)),\n  transfusion=rep(c('Yes','No'), 4),\n  num=c(157,845,134,681,68,559, 27,342)\n)\ndat[,transfusion:=factor(transfusion, levels=c('No','Yes'))]\ndat[,y_pos := cumsum(num)-0.5*num,by=.(day)]\n\ndat[,prop :=num/sum(num)*100,by=day]\ndat\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n   day transfusion num y_pos      prop\n1:   1         Yes 157  78.5 15.668663\n2:   1          No 845 579.5 84.331337\n3:   2         Yes 134  67.0 16.441718\n4:   2          No 681 474.5 83.558282\n5:   3         Yes  68  34.0 10.845295\n6:   3          No 559 347.5 89.154705\n7:   7         Yes  27  13.5  7.317073\n8:   7          No 342 198.0 92.682927\n```\n:::\n\n```{.r .cell-code}\nratio <- data.table(\n  day= as.factor(c(1,2,3,7)),\n  prob = c(15.8,32.2,43.0,50.4)\n)\nratio\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n   day prob\n1:   1 15.8\n2:   2 32.2\n3:   3 43.0\n4:   7 50.4\n```\n:::\n\n```{.r .cell-code}\nggplot()+\n  geom_col(data=dat,aes(x=day,y=num, fill=transfusion),\n           color='black', alpha=.5,\n           width=0.5,\n    position = position_stack()) +\n  scale_y_continuous(limits=c(0,1010),expand=c(0,0),\n                     name='Number of patients',\n                     sec.axis = sec_axis(~.*0.1,\n                                         name='Proportion of patients received a transfusion (%)'))+\n  geom_point(data=ratio, aes(x=day, y=prob/0.1, \n                             color='Pateints received transfusion'), \n             size=3)+\n  geom_text(data=dat, aes(x=day, label=num, y=y_pos))+\n  geom_line(data=ratio, aes(x=day, y=prob/0.1, group=1,\n                            color='Pateints received transfusion'))+\n  theme_classic() +\n  scale_color_manual(values=c('Pateints received transfusion'='black'))+\n  scale_fill_discrete(direction=-1,\n                      breaks=c('Yes','No'))+\n  labs(x='Follow-up (days)',\n       fill='RBC transfusion',\n       color='')+\n  theme(legend.position='top',\n        legend.direction = 'vertical',\n        legend.box = 'horizontal',\n        legend.box.spacing = unit(1,units = 'mm'),\n        axis.text.x = element_text(size=12),\n        axis.text.y = element_text(size=12)\n        ) \n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,65 @@
+/* Roboto Font*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+
+.quarto-post {
+  text-transform: capitalize !important;
+  font-size: 0.9em !important;
+  padding: 0.2em 0.5em 0.5em 0.2em !important;
+}
+
+.quarto-category .listing-categories .listing-category {
+  text-transform: capitalize !important;
+  font-size: 0.8em !important;
+}
+
+/* Header , footer color*/
+#quarto-header .nav-footer {
+  background-color: dodgerblue;
+}
+
+.thumnail-image{
+  width: 150px !important;
+}
+
+main, p{
+  font-size: 1rem !important;
+}
+
+h3 {
+  font-weight: 600;
+}
+
+/*kable font size*/
+.cell-output-display{
+  font-size: 0.7rem;
+  font-family: 'Roboto', sans-serif;
+}
+
+.navbar{
+  padding-top: 0.3rem;
+  padding-bottom: 0.3em;
+}
+
+.quarto-listing-title{
+  font-size: 2rem;
+}
+
+#quarto-margin-sidebar{
+  top: 110px !important;
+  max-height: fit-content !important;
+}
+
+.quarto-listing-category{
+  font-size: 0.8rem;
+  line-height: 2em;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+/* right-sidebar CATEGORY WORD */
+.quarto-listing-category-title{
+  text-transform: uppercase;
+  font-family: 'Roboto', sans-serif;
+  line-height: 2em;
+  text-align: center;
+}
+

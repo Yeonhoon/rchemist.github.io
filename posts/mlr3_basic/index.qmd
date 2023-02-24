@@ -3,6 +3,7 @@ title: 'mlr3 기초'
 description: "mlr3에 대한 소개 및 mlr3를 사용하기 위한 필수문법에 대해 소개합니다."
 date: '2023-02-20'
 categories: [mlr3, R, machine learning]
+image: "https://mlr3proba.mlr-org.com/logo.svg"
 ---
 
 # Introduction {#sec-introduction}
@@ -138,17 +139,6 @@ R을 사용하셨던 분들이라면 위와 같은 구조의 코드가 낯설 �
 ```{r}
 task_sonar <- tsk('sonar')
 split <- partition(task_sonar, ratio=.7)
-```
-
-::: callout-tip
-mlr3에서 기본적으로 제공하는 태스크 이외에, [Openml.org](https://openml.org)[^1] [@vanschoren2014] , `mlr3oml` 을 통해 수많은 데이터셋을 이용할 수 있습니다.
-:::
-
-[^1]: [https://openml.org](https://openml.org/)
-
-```{r eval=FALSE}
-library(mlr3oml)
-mlr3oml::list_oml_data()
 ```
 
 ### 외부 데이터 태스크로 변환
@@ -352,7 +342,6 @@ learner_rf$param_set$values
 learner_rf$param_set$values$num.threads = 10
 learner_rf$param_set$values$num.trees = 20
 learner_rf$param_set$values
-
 ```
 
 또는 `lrn()` 함수로 러너를 생성할 때, 원하는 하이퍼파라미터를 설정해줄 수 있습니다.

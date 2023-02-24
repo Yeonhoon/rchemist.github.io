@@ -1,18 +1,17 @@
 ---
-title: "정규표현식을 활용한 문자 추출 (feat. `stringr`)" 
-description: "정규표현식을 사용하여 문자 벡터에서 규칙을 찾아 추출해봅시다."
+title: "stringr을 이용한 문자 추출하기" 
+description: "정규표현식을 사용한 규칙 찾기"
 date: "2023-02-23"
-keywords: ["R","regex","stringr"]
+categories: [R,regex,stringr]
+image: "https://stringr.tidyverse.org/logo.png"
 ---
-
-![](stringr_logo.png){fig-align="center"}
 
 아래와 같은 문자열 데이터가 있다고 가정해봅시다.
 
 ```{r}
 #| echo: false
-library(clipr)
-temp <- read_clip()[1:51]
+# library(clipr)
+temp <- read.csv("temp.csv")[,2]
 head(temp,10)
 ```
 

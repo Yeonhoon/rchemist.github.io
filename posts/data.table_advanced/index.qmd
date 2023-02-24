@@ -3,11 +3,8 @@ title: "data.table 심화"
 description:  "특수 기호, 조인, 피봇 등 data.table에서 다루는 심화내용을 살펴봅시다."
 date: '2023-01-19'
 categories: [data.table, R]
+image: "https://raw.githubusercontent.com/Rdatatable/data.table/master/.graphics/logo.png"
 ---
-
-```{r}
-#TODO: polaroid 패키지 통해 hex 아이콘 만들기.
-```
 
 [[data.table 기초]{.underline}](../data.table_basic/index.qmd) 포스트 에서는 대용량의 데이터를 빠르게 처리할 수 있는 `data.table` 패키지에 대해 배워봤습니다.
 

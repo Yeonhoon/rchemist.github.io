@@ -3,6 +3,7 @@ title: "tidyr로 Pivoting하기"
 description: "tidyr을 이용해 데이터의 형태를 바꾸는 pivoting에 대해 알아봅시다."
 date: '2023-02-03'
 categories: [R, dplyr, tidyr]
+image: "https://tidyr.tidyverse.org/logo.png"
 ---
 
 이번 시간에는 데이터의 형태를 변환시키는 pivoting을 배워보도록 하겠습니다.

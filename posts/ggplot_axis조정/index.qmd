@@ -1,8 +1,9 @@
 ---
-title: "ggplot 그래프 세부 조정하기"
-description: "그래프와 축 간 간격을 줄이거나, 그래프에 통계분석을 통해 유의미한 집단 간 차이 표시하는 방법을 살펴봅시다."
+title: "ggplot 세부 조정: 축 조정 "
+description: "그래프와 축 간격을 조정하거나 tick 간격을 변경하는 방법"
 date: '2023-02-12'
 categories: [R, ggplot2, visualization]
+image: "https://cdn.inflearn.com/public/files/courses/326318/51793d26-4a01-4b89-b729-a17c2876f4ef/Ggplot2-logo.png"
 ---
 
 ```{r eval=FALSE, include=FALSE}
@@ -51,6 +52,8 @@ ggplot(iris_dt, aes(x = Species2, y = Sepal.Length)) +
 ggplot(iris, aes(x = Species, y = Sepal.Length)) +
   geom_col()
 ```
+
+이제 y축의 범위를 아래와 같이 지정해주겠습니다.
 
 ```{r}
 ggplot(iris, aes(x = Species, y = Sepal.Length)) +

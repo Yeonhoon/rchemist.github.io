@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="JYH">
 <meta name="dcterms.date" content="2023-02-01">
 <meta name="description" content="dplyr를 활용한 그룹별 데이터 처리">
 
@@ -101,10 +100,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -124,6 +125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-submit-button-title": "Submit"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -144,7 +146,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html">
  <span class="menu-text">Home</span></a>
@@ -159,11 +161,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>  
 </ul>
               <div class="quarto-toggle-container">
-                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
-  <div class="quarto-reader-toggle-btn">
-  <i class="bi"></i>
-  </div>
-</a>
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
               </div>
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
@@ -174,7 +172,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <div class="quarto-title-block"><div><h1 class="title">dplyr group_by</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+      <h1 class="title">dplyr group_by</h1>
                   <div>
         <div class="description">
           dplyr를 활용한 그룹별 데이터 처리
@@ -187,23 +185,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
                   </div>
   </div>
     
-  <div class="quarto-title-meta-author">
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-heading">Affiliation</div>
-    
-      <div class="quarto-title-meta-contents">
-      JYH <a href="https://orcid.org/0000-0001-8090-6555" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a>
-    </div>
-      <div class="quarto-title-meta-contents">
-          <p class="affiliation">
-              HIRC Lab, SNUBH
-            </p>
-        </div>
-      </div>
-
+  
   <div class="quarto-title-meta">
 
-        
+      
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
@@ -709,8 +694,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 
 
-<!-- -->
-
 </section>
 </section>
 
@@ -735,6 +718,121 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
   toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -780,57 +878,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  const viewSource = window.document.getElementById('quarto-view-source') ||
-                     window.document.getElementById('quarto-code-tools-source');
-  if (viewSource) {
-    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-    viewSource.addEventListener("click", function(e) {
-      if (sourceUrl) {
-        // rstudio viewer pane
-        if (/\bcapabilities=\b/.test(window.location)) {
-          window.open(sourceUrl);
-        } else {
-          window.location.href = sourceUrl;
-        }
-      } else {
-        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-        modal.show();
-      }
-      return false;
-    });
-  }
-  function toggleCodeHandler(show) {
-    return function(e) {
-      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-      for (let i=0; i<detailsSrc.length; i++) {
-        const details = detailsSrc[i].parentElement;
-        if (show) {
-          details.open = true;
-        } else {
-          details.removeAttribute("open");
-        }
-      }
-      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-      const fromCls = show ? "hidden" : "unhidden";
-      const toCls = show ? "unhidden" : "hidden";
-      for (let i=0; i<cellCodeDivs.length; i++) {
-        const codeDiv = cellCodeDivs[i];
-        if (codeDiv.classList.contains(fromCls)) {
-          codeDiv.classList.remove(fromCls);
-          codeDiv.classList.add(toCls);
-        } 
-      }
-      return false;
-    }
-  }
-  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-  if (hideAllCode) {
-    hideAllCode.addEventListener("click", toggleCodeHandler(false));
-  }
-  const showAllCode = window.document.getElementById("quarto-show-all-code");
-  if (showAllCode) {
-    showAllCode.addEventListener("click", toggleCodeHandler(true));
-  }
   function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
@@ -898,197 +945,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb46" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "dplyr group_by"</span></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co">  "dplyr를 활용한 그룹별 데이터 처리"</span></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> '2023-02-01'</span></span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [dplyr, R]</span></span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="fu">### `group_by()` : 그룹별 계산</span></span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a><span class="in">`group_by()`</span>는 특정 집단의 범주별로 어떤 값들을 요약하거나 계산할 때 많이 활용되는 함수입니다.</span>
-<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span></span>
-<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species, sex) <span class="sc">%&gt;%</span></span>
-<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(height, mass) <span class="sc">%&gt;%</span></span>
-<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">height =</span> <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">mass =</span> <span class="fu">mean</span>(mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-28"><a href="#cb46-28" aria-hidden="true" tabindex="-1"></a>by_species <span class="ot">&lt;-</span> starwars <span class="sc">|&gt;</span> <span class="fu">group_by</span>(species)</span>
-<span id="cb46-29"><a href="#cb46-29" aria-hidden="true" tabindex="-1"></a>by_sex_gender <span class="ot">&lt;-</span> starwars <span class="sc">|&gt;</span> <span class="fu">group_by</span>(sex,gender)</span>
-<span id="cb46-30"><a href="#cb46-30" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-31"><a href="#cb46-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-32"><a href="#cb46-32" aria-hidden="true" tabindex="-1"></a>출력했을 때, 데이터가 그룹으로 묶인 것을 알 수 있습니다.</span>
-<span id="cb46-33"><a href="#cb46-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-36"><a href="#cb46-36" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-37"><a href="#cb46-37" aria-hidden="true" tabindex="-1"></a>by_species</span>
-<span id="cb46-38"><a href="#cb46-38" aria-hidden="true" tabindex="-1"></a>by_sex_gender</span>
-<span id="cb46-39"><a href="#cb46-39" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-40"><a href="#cb46-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-41"><a href="#cb46-41" aria-hidden="true" tabindex="-1"></a><span class="in">`tally()`</span> 를 이용해 그룹별 n수를 파악할 수도 있습니다.</span>
-<span id="cb46-42"><a href="#cb46-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-43"><a href="#cb46-43" aria-hidden="true" tabindex="-1"></a><span class="in">`sort`</span> 인자를 통해서 그룹 수가 많은 순서대로 정렬할 수 있습니다.</span>
-<span id="cb46-44"><a href="#cb46-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-47"><a href="#cb46-47" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-48"><a href="#cb46-48" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> <span class="fu">tally</span>()</span>
-<span id="cb46-49"><a href="#cb46-49" aria-hidden="true" tabindex="-1"></a>by_sex_gender <span class="sc">|&gt;</span> </span>
-<span id="cb46-50"><a href="#cb46-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>(<span class="at">sort=</span>T)</span>
-<span id="cb46-51"><a href="#cb46-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-52"><a href="#cb46-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-53"><a href="#cb46-53" aria-hidden="true" tabindex="-1"></a><span class="in">`group_by()`</span> 안에서 새로운 변수를 만들어 그룹별 계산을 진행할 수도 있습니다.</span>
-<span id="cb46-54"><a href="#cb46-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-57"><a href="#cb46-57" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-58"><a href="#cb46-58" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
-<span id="cb46-59"><a href="#cb46-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">bmi_cat =</span> <span class="fu">cut</span>(mass<span class="sc">/</span>(height<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span>, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">18</span>,<span class="dv">23</span>,<span class="dv">25</span>,<span class="dv">30</span>,<span class="cn">Inf</span>))) <span class="sc">|&gt;</span> </span>
-<span id="cb46-60"><a href="#cb46-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span>
-<span id="cb46-61"><a href="#cb46-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-62"><a href="#cb46-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-63"><a href="#cb46-63" aria-hidden="true" tabindex="-1"></a><span class="fu">### 그룹 변수 정보 확인</span></span>
-<span id="cb46-64"><a href="#cb46-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-65"><a href="#cb46-65" aria-hidden="true" tabindex="-1"></a>그룹 변수를 지정해준 경우, <span class="in">`group_keys()`</span> 를 통해 그룹 변수의 범주를 확인할 수 있습니다.</span>
-<span id="cb46-66"><a href="#cb46-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-69"><a href="#cb46-69" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-70"><a href="#cb46-70" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> <span class="fu">group_keys</span>()</span>
-<span id="cb46-71"><a href="#cb46-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-72"><a href="#cb46-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-73"><a href="#cb46-73" aria-hidden="true" tabindex="-1"></a>그룹 변수의 이름만 확인할 때는 <span class="in">`group_vars()`</span> 를 사용합니다.</span>
-<span id="cb46-74"><a href="#cb46-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-77"><a href="#cb46-77" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-78"><a href="#cb46-78" aria-hidden="true" tabindex="-1"></a>by_sex_gender <span class="sc">|&gt;</span> <span class="fu">group_vars</span>()</span>
-<span id="cb46-79"><a href="#cb46-79" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-80"><a href="#cb46-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-81"><a href="#cb46-81" aria-hidden="true" tabindex="-1"></a><span class="fu">### 그룹 변수 변경 및 추가</span></span>
-<span id="cb46-82"><a href="#cb46-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-83"><a href="#cb46-83" aria-hidden="true" tabindex="-1"></a>기존의 그룹처리 되어있는 데이터에 <span class="in">`group_by()`</span> 를 진행할 시, 새로운 그룹 변수로 덮어씌워집니다.</span>
-<span id="cb46-84"><a href="#cb46-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-87"><a href="#cb46-87" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-88"><a href="#cb46-88" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
-<span id="cb46-89"><a href="#cb46-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(homeworld) <span class="sc">|&gt;</span> </span>
-<span id="cb46-90"><a href="#cb46-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span>
-<span id="cb46-91"><a href="#cb46-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-92"><a href="#cb46-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-93"><a href="#cb46-93" aria-hidden="true" tabindex="-1"></a><span class="in">`.add=T`</span> 인자를 추가할 경우, 새로운 그룹 변수를 추가할 수도 있습니다.</span>
-<span id="cb46-94"><a href="#cb46-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-97"><a href="#cb46-97" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-98"><a href="#cb46-98" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
-<span id="cb46-99"><a href="#cb46-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(homeworld, <span class="at">.add=</span>T) <span class="sc">|&gt;</span> </span>
-<span id="cb46-100"><a href="#cb46-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span>
-<span id="cb46-101"><a href="#cb46-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-102"><a href="#cb46-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-103"><a href="#cb46-103" aria-hidden="true" tabindex="-1"></a><span class="fu">### 그룹 변수 제거</span></span>
-<span id="cb46-104"><a href="#cb46-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-105"><a href="#cb46-105" aria-hidden="true" tabindex="-1"></a>그룹 처리된 데이터를 제거하고 싶은 경우, <span class="in">`ungroup()`</span> 을 사용합니다.</span>
-<span id="cb46-106"><a href="#cb46-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-109"><a href="#cb46-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-110"><a href="#cb46-110" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
-<span id="cb46-111"><a href="#cb46-111" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb46-112"><a href="#cb46-112" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span>
-<span id="cb46-113"><a href="#cb46-113" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-114"><a href="#cb46-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-115"><a href="#cb46-115" aria-hidden="true" tabindex="-1"></a>물론 특정 그룹 변수만 제외할 수도 있습니다.</span>
-<span id="cb46-116"><a href="#cb46-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-119"><a href="#cb46-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-120"><a href="#cb46-120" aria-hidden="true" tabindex="-1"></a>by_sex_gender <span class="sc">|&gt;</span> </span>
-<span id="cb46-121"><a href="#cb46-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>(sex) <span class="sc">|&gt;</span> </span>
-<span id="cb46-122"><a href="#cb46-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span>
-<span id="cb46-123"><a href="#cb46-123" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-124"><a href="#cb46-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-125"><a href="#cb46-125" aria-hidden="true" tabindex="-1"></a><span class="fu">### `group_by()`와 함께 쓰는 동사</span></span>
-<span id="cb46-126"><a href="#cb46-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-127"><a href="#cb46-127" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 1. `summarise()`</span></span>
-<span id="cb46-128"><a href="#cb46-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-129"><a href="#cb46-129" aria-hidden="true" tabindex="-1"></a><span class="in">`summarise()`</span>와 <span class="in">`group_by()`</span>가 함께 사용될 경우, 그룹별로 요약 계산을 수행합니다.</span>
-<span id="cb46-130"><a href="#cb46-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-133"><a href="#cb46-133" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-134"><a href="#cb46-134" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
-<span id="cb46-135"><a href="#cb46-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb46-136"><a href="#cb46-136" aria-hidden="true" tabindex="-1"></a>    <span class="at">n=</span><span class="fu">n</span>(),</span>
-<span id="cb46-137"><a href="#cb46-137" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_height =</span> <span class="fu">mean</span>(height,<span class="at">na.rm=</span>T)</span>
-<span id="cb46-138"><a href="#cb46-138" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb46-139"><a href="#cb46-139" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-140"><a href="#cb46-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-141"><a href="#cb46-141" aria-hidden="true" tabindex="-1"></a>.groups= 인자는 출력되는 결과의 그룹 구조를 다루는 인자입니다.</span>
-<span id="cb46-142"><a href="#cb46-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-145"><a href="#cb46-145" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-146"><a href="#cb46-146" aria-hidden="true" tabindex="-1"></a>by_sex_gender <span class="sc">|&gt;</span> </span>
-<span id="cb46-147"><a href="#cb46-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">'keep'</span>)</span>
-<span id="cb46-148"><a href="#cb46-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-149"><a href="#cb46-149" aria-hidden="true" tabindex="-1"></a>by_sex_gender <span class="sc">|&gt;</span> </span>
-<span id="cb46-150"><a href="#cb46-150" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">'drop'</span>)</span>
-<span id="cb46-151"><a href="#cb46-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-152"><a href="#cb46-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-153"><a href="#cb46-153" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 2. `select()`, `rename()`, `relocate()`</span></span>
-<span id="cb46-154"><a href="#cb46-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-155"><a href="#cb46-155" aria-hidden="true" tabindex="-1"></a><span class="in">`rename()`</span>과 <span class="in">`relocate()`</span>는 <span class="in">`group_by()`</span>와 관계없이 동일한 작업을 수행합니다. 각각 열의 이름과 위치에만 영향을 미치게 때문입니다.</span>
-<span id="cb46-156"><a href="#cb46-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-157"><a href="#cb46-157" aria-hidden="true" tabindex="-1"></a><span class="in">`select()`</span>가 <span class="in">`group_by()`</span>와 함께 쓰이면 그룹 변수가 항상 함께 선택됩니다.</span>
-<span id="cb46-158"><a href="#cb46-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-161"><a href="#cb46-161" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-162"><a href="#cb46-162" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> <span class="fu">select</span>(mass)</span>
-<span id="cb46-163"><a href="#cb46-163" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-164"><a href="#cb46-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-165"><a href="#cb46-165" aria-hidden="true" tabindex="-1"></a>그룹 변수가 함께 선택되는 것을 원치 않는다면 <span class="in">`ungroup()`</span>을 먼저 사용해야 합니다.</span>
-<span id="cb46-166"><a href="#cb46-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-169"><a href="#cb46-169" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-170"><a href="#cb46-170" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> <span class="fu">select</span>(mass)</span>
-<span id="cb46-171"><a href="#cb46-171" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-172"><a href="#cb46-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-173"><a href="#cb46-173" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 3. `arrange()`</span></span>
-<span id="cb46-174"><a href="#cb46-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-175"><a href="#cb46-175" aria-hidden="true" tabindex="-1"></a><span class="in">`arrange()`</span>가 <span class="in">`group_by()`</span>와 함께 쓰일 경우, 그냥 사용하게 되면 <span class="in">`group_by()`</span> 가 없을 때와 동일합니다. 그러나 <span class="in">`.by_group=T`</span> 인자를 통해 그룹 변수를 기준으로 정렬되어 결과가 출력됩니다.</span>
-<span id="cb46-176"><a href="#cb46-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-179"><a href="#cb46-179" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-180"><a href="#cb46-180" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
-<span id="cb46-181"><a href="#cb46-181" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mass)) <span class="sc">|&gt;</span> </span>
-<span id="cb46-182"><a href="#cb46-182" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species, mass)</span>
-<span id="cb46-183"><a href="#cb46-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-184"><a href="#cb46-184" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
-<span id="cb46-185"><a href="#cb46-185" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mass), <span class="at">.by_group =</span> T) <span class="sc">|&gt;</span> </span>
-<span id="cb46-186"><a href="#cb46-186" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species, mass)</span>
-<span id="cb46-187"><a href="#cb46-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-188"><a href="#cb46-188" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-189"><a href="#cb46-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-190"><a href="#cb46-190" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 4. `mutate()`, `transmute()`</span></span>
-<span id="cb46-191"><a href="#cb46-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-192"><a href="#cb46-192" aria-hidden="true" tabindex="-1"></a>group_by()와 함께 새로운 변수를 생성할 경우, 같은 그룹의 경우 동일한 값이 들어가게 됩니다.</span>
-<span id="cb46-193"><a href="#cb46-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-194"><a href="#cb46-194" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 5. `filter()`</span></span>
-<span id="cb46-195"><a href="#cb46-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-196"><a href="#cb46-196" aria-hidden="true" tabindex="-1"></a><span class="in">`filter()`</span>와 <span class="in">`group_by()`</span>를 함께 사용하여, 특정 그룹의 수를 기준으로 선택할 때 사용할 수 있습니다.</span>
-<span id="cb46-197"><a href="#cb46-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-198"><a href="#cb46-198" aria-hidden="true" tabindex="-1"></a>아래의 예시에서는 그룹 별 수가 1인 경우를 모두 제외하고 선택한 결과입니다.</span>
-<span id="cb46-199"><a href="#cb46-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-202"><a href="#cb46-202" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-203"><a href="#cb46-203" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
-<span id="cb46-204"><a href="#cb46-204" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>()<span class="sc">!=</span><span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb46-205"><a href="#cb46-205" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span>
-<span id="cb46-206"><a href="#cb46-206" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb46-207"><a href="#cb46-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-208"><a href="#cb46-208" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 6. `slice()`</span></span>
-<span id="cb46-209"><a href="#cb46-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-210"><a href="#cb46-210" aria-hidden="true" tabindex="-1"></a>slice()와 slice() 계열 함수들이 group_by() 와 함께 사용될 경우, 그룹별로 해당되는 값이 출력됩니다.</span>
-<span id="cb46-211"><a href="#cb46-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-214"><a href="#cb46-214" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb46-215"><a href="#cb46-215" aria-hidden="true" tabindex="-1"></a><span class="co"># 그룹별 첫번째 값 </span></span>
-<span id="cb46-216"><a href="#cb46-216" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
-<span id="cb46-217"><a href="#cb46-217" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) </span>
-<span id="cb46-218"><a href="#cb46-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-219"><a href="#cb46-219" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span></span>
-<span id="cb46-220"><a href="#cb46-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(height)) <span class="sc">|&gt;</span> </span>
-<span id="cb46-221"><a href="#cb46-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(height,<span class="at">n=</span><span class="dv">2</span>)</span>
-<span id="cb46-222"><a href="#cb46-222" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div></div></div></div>
+</script>
+<script src="https://giscus.app/client.js" data-repo="rchemist0123/giscus-blog" data-repo-id="R_kgDOJBwa8Q" data-category="General" data-category-id="DIC_kwDOJBwa8c4CUbVM" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left"><a href="https://https://rchemist.quarto.pub/rchemistblog/">Rchemist</a> © 2022 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:danjang0123@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/danjang0123/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

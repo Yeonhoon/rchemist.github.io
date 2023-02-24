@@ -1,4 +1,4 @@
 - source: project
-  quarto-pub:
-    - id: 918c7e6d-de2b-4d80-89d3-e74c755b2c98
-      url: 'https://quartopub.com/sites/rchemist/rchemistblog'
+  netlify:
+    - id: 348f9c76-df37-4250-901c-fa0be68bc09f
+      url: 'https://rchemistblog.com'
