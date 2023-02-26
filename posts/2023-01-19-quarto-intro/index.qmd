@@ -2,28 +2,12 @@
 title: "Quarto 사용법"
 subtitle: "Quarto, a substitute of Rmarkdown"
 description:  "Brief intorduction of Quarto"
-author: 
-  - name: "JYH"
-    orcid: 0000-0001-8090-6555
-    affiliation: HIRC Lab, SNUBH
 date: '2023-01-19'
-format: 
-  html: 
-    toc: true
-    toc-location: left
-    code-fold: true
-    code-tools:
-      source: true
-    reference-location: document
-    theme: cosmo
-    fontsize: 1.1em
-    linestretch: 1.5
 categories: [Quarto, R]
+image: "https://quarto.org/quarto.png"
 ---
 
 ## Quarto란?
-
-![Quarto](https://d33wubrfki0l68.cloudfront.net/1e13e2f2b4d1760d131ad2be5096e105573341e2/db099/blog/announcing-quarto-a-new-scientific-and-technical-publishing-system/thumbnail_huc2394eec6c3beee37cf037e067ab5abf_72127_2220x0_resize_q75_box.jpg)
 
 Quarto는 Rmarkdown을 계승하는 차세대 문서양식입니다.
 

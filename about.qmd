@@ -20,24 +20,18 @@ comments: false
 ::: panel-tabset
 ## Skills
 
-```{=html}
-<img src="https://img.shields.io/badge/R-276DC3?style=for-the-badge&logo=R&logoColor=white">
-```
-```{=html}
-<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=white">
-```
-```{=html}
-<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=PostgreSQL&logoColor=white">
-```
-```{=html}
-<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white">
-```
-```{=html}
-<img src="https://img.shields.io/badge/CSS3-E34F26?style=for-the-badge&logo=HTML5&logoColor=white">
-```
-```{=html}
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=black">
-```
+<img src="https://img.shields.io/badge/R-276DC3?style=for-the-badge&amp;logo=R&amp;logoColor=white"/>
+
+<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&amp;logo=Python&amp;logoColor=white"/>
+
+<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&amp;logo=PostgreSQL&amp;logoColor=white"/>
+
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&amp;logo=HTML5&amp;logoColor=white"/>
+
+![](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=HTML5&logoColor=white)
+
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&amp;logo=JavaScript&amp;logoColor=black"/>
+
 ## Education
 
 -   MPH, Graduate School of Public Health, Seoul National University
