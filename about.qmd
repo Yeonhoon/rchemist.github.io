@@ -9,9 +9,13 @@ about:
     - icon: linkedin
       text: Linkedin
       href: https://www.linkedin.com/in/danjang0123/
+    - icon: slack
+      text: Slack
+      href: https://rchemisthq.slack.com
     - icon: envelope
       text: Email
       href: mailto:danjang0123@gmail.com
+      
 comments: false
 ---
 

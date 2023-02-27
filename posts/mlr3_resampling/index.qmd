@@ -176,5 +176,3 @@ bmr$aggregate(measures)
 ```{r}
 autoplot(bmr, type='roc')
 ```
-
-
