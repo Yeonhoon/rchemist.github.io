@@ -1,8 +1,10 @@
 {
-  "hash": "5077bc789309dda1b2c22066550573b9",
+  "hash": "3d38bbbcda7399ef2f3ff11d34041c99",
   "result": {
-    "markdown": "---\ntitle: \"Observable.js\"\nsubtitle: \"Interactive chart with ojs\"\ndescription:  \"\"\nauthor: \n  - name: \"JYH\"\n    orcid: 0000-0001-8090-6555\n    affiliation: HIRC Lab, SNUBH\ndate: \"2023-01-19\"\nformat: \n  html: \n    toc: true\n    toc-location: left\n    code-fold: true\n    code-tools:\n      source: true\n    reference-location: document\n    theme: cosmo\n    fontsize: 1.1em\n    linestretch: 1.5\ncategories: [Visualization, javascript]\n---\n\n\n::: panel-tabset\n## Plot\n\n\n::: {.cell}\n\n:::\n\n```{ojs}\n\nviewof bill_length_min = Inputs.range([32,50],\n{value: 35, step:1, label: \"Bill length (min)\"})\n\nviewof islands = Inputs.checkbox(\n  [\"Torgersen\",\"Biscoe\",\"Dream\"],\n  {value: [\"Torgersen\",\"Biscoe\"],\n    label: \"Islands:\"\n  }\n)\n\nfiltered = transpose(data).filter(function(penguin){\n  return bill_length_min < penguin.bill_length_mm && islands.includes(penguin.island)\n});\n\n\nPlot.rectY(filtered,\n  Plot.binX(\n    {y: \"count\"},\n    {x: \"body_mass_g\", fill: \"species\", thresholds: 20}\n  ))\n  .plot({\n    facet: {\n      data: filtered,\n      x: \"sex\",\n      y: \"species\",\n      marginRight:80\n    },\n    marks: [\n      Plot.frame(),\n    ]\n  })\n\n```\n\n\n## Data\n\n\n```{ojs}\nInputs.table(filtered)\n```\n\n:::\n",
-    "supporting": [],
+    "markdown": "---\ntitle: \"Observable.js\"\ndescription:  \"Interactive chart with ojs\"\ncategories: [OJS, Visualization, javascript]\n---\n\n\n::: panel-tabset\n## Plot\n\n\n::: {.cell}\n\n:::\n\n```{ojs}\n\nviewof bill_length_min = Inputs.range([32,50],\n{value: 35, step:1, label: \"Bill length (min)\"})\n\nviewof islands = Inputs.checkbox(\n  [\"Torgersen\",\"Biscoe\",\"Dream\"],\n  {value: [\"Torgersen\",\"Biscoe\"],\n    label: \"Islands:\"\n  }\n)\n\nfiltered = transpose(data).filter(function(penguin){\n  return bill_length_min < penguin.bill_length_mm && islands.includes(penguin.island)\n});\n\n\nPlot.rectY(filtered,\n  Plot.binX(\n    {y: \"count\"},\n    {x: \"body_mass_g\", fill: \"species\", thresholds: 20}\n  ))\n  .plot({\n    facet: {\n      data: filtered,\n      x: \"sex\",\n      y: \"species\",\n      marginRight:80\n    },\n    marks: [\n      Plot.frame(),\n    ]\n  })\n\n```\n\n\n## Data\n\n\n```{ojs}\nInputs.table(filtered)\n```\n\n:::\n",
+    "supporting": [
+      "index_files"
+    ],
     "filters": [
       "rmarkdown/pagebreak.lua"
     ],

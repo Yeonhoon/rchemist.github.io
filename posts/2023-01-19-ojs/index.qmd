@@ -1,24 +1,8 @@
 ---
 title: "Observable.js"
-subtitle: "Interactive chart with ojs"
-description:  ""
-author: 
-  - name: "JYH"
-    orcid: 0000-0001-8090-6555
-    affiliation: HIRC Lab, SNUBH
-date: "2023-01-19"
-format: 
-  html: 
-    toc: true
-    toc-location: left
-    code-fold: true
-    code-tools:
-      source: true
-    reference-location: document
-    theme: cosmo
-    fontsize: 1.1em
-    linestretch: 1.5
-categories: [Visualization, javascript]
+description:  "Interactive chart with ojs"
+date: "2023-01-01"
+categories: [OJS, Visualization, javascript]
 ---
 
 ::: panel-tabset
