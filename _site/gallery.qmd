@@ -1,13 +1,15 @@
 ---
-title: "Posts"
+title: "Gallery"
 listing: 
   sort-ui: [title, date]
   filter-ui: [title,date]
   contents: posts
   page-size: 20
-  type: default
+  type: table
   sort: "date desc"
   categories: unnumbered
 
 comments: false
 ---
+
+

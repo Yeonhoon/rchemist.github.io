@@ -12,6 +12,12 @@ listing:
     sort:
       - "date desc"
       - "title asc"
+  - id: viz-gallery
+    contents: gallery
+    type: grid
+    max-items: 3
+    sort:
+      - "date desc"
 about:
   id: about-rchemist
   template: jolla
@@ -30,8 +36,17 @@ about:
 헬스케어 데이터를 다루는 데이터 사이언티스트입니다. 데이터 분석, 데이터 사이언스, 웹 개발에 관심이 있습니다.😃
 :::
 
-::: grid
-::: {.g-col-12 .g-col-md-6}
+:::::{.grid}
+::::{.g-col-12 .g-col-md-6}
 ## Recent posts
+
+:::{#landing-posts}
 :::
+::::
+::::{.g-col-12 .g-col-md-6}
+## Gallery
+
+:::{#viz-gallery}
 :::
+::::
+:::::

@@ -10,7 +10,7 @@ set.seed(7795)
 ```
 
 ::: callout-important
-이 글은 [mlr3book](https://mlr3book.mlr-org.com/)[^_mlr3_setup-1]을 참고하여 작성되었습니다. `mlr3`[^_mlr3_setup-2] 패키지를 통해, R에서도 손쉽게 머신러닝을 수행할 수 있다는 것을 보여드리고자 합니다.
+이 글은 [mlr3book](https://mlr3book.mlr-org.com/)[^_mlr3_setup-1]을 참고하여 작성되었습니다. 국내 R 사용자들에게 잘 알려지지 않은 `mlr3`[^_mlr3_setup-2] 패키지를 통해, R에서도 손쉽게 머신러닝을 수행할 수 있다는 것을 보여드리고자 합니다.
 :::
 
 [^_mlr3_setup-1]: https://mlr3book.mlr-org.com/

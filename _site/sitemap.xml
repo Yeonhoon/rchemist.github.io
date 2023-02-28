@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://rchemistblog.com/about.html</loc>
-    <lastmod>2023-02-28T04:35:32.284Z</lastmod>
+    <lastmod>2023-02-28T08:56:54.794Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/index.html</loc>
-    <lastmod>2023-02-28T04:35:34.056Z</lastmod>
+    <lastmod>2023-02-28T09:00:18.939Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/posts/2023-01-19-ojs/index.html</loc>
@@ -90,7 +90,7 @@
   </url>
   <url>
     <loc>https://rchemistblog.com/posts/mlr3_hyperparameter/index.html</loc>
-    <lastmod>2023-02-28T04:36:16.447Z</lastmod>
+    <lastmod>2023-02-28T09:00:27.683Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/posts/mlr3_resampling/index.html</loc>
@@ -103,5 +103,17 @@
   <url>
     <loc>https://rchemistblog.com/posts.html</loc>
     <lastmod>2023-02-28T04:36:22.767Z</lastmod>
+  </url>
+  <url>
+    <loc>https://rchemistblog.com/gallery/ggplot2_forestplot/index.html</loc>
+    <lastmod>2023-02-28T08:50:14.180Z</lastmod>
+  </url>
+  <url>
+    <loc>https://rchemistblog.com/gallery/index.html</loc>
+    <lastmod>2023-02-28T08:56:51.662Z</lastmod>
+  </url>
+  <url>
+    <loc>https://rchemistblog.com/posts/index.html</loc>
+    <lastmod>2023-02-28T08:59:42.394Z</lastmod>
   </url>
 </urlset>

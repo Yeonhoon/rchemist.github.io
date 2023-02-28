@@ -11,9 +11,17 @@ website:
     search: true
     right:
       - href: index.qmd
+        icon: house
         text: Home
-      - about.qmd
-      - posts.qmd
+      - href: about.qmd
+        icon: file-person
+        text: About
+      - icon: newspaper
+        text: Posts
+        href: posts/
+      - icon: sliders2
+        text: Gallery
+        href: gallery/
   page-navigation: true  
   page-footer:
     background: "#9CB7F0"

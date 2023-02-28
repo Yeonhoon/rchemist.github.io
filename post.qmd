@@ -1,0 +1,20 @@
+---
+title: "Posts"
+listing: 
+  - id: posts
+    contents: posts
+    sort-ui: [title, date]
+    filter-ui: [title,date]
+    page-size: 20
+    type: default
+    sort: "date desc"
+    categories: unnumbered
+format: 
+  html: 
+    page-layout: full
+comments: false
+---
+
+
+:::{#posts}
+:::

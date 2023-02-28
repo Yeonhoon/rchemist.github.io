@@ -18,7 +18,7 @@
     "href": "index.html#recent-posts",
     "title": "Welcome to the blog of Rchemist",
     "section": "Recent posts",
-    "text": "Recent posts"
+    "text": "Recent posts\n\n\n\n\n\n\n\n\n\n\n\n\n\nPosts\n\n\n\n\n\n\n\n\n\n\n \n\n\n\n\n  \n\n\n\n\nmlr3 하이퍼파라미터 튜닝\n\n\n\n\n\nmlr3를 이용한 하이퍼파라미터 튜닝 학습\n\n\n\n\n \n\n\n\n\n  \n\n\n\n\n학습관점에서 비교하는 dplyr과 data.table\n\n\n\n\n\n\n\n\n\n\n\n\n\nFeb 27, 2023\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/2023-01-19-ojs/index.html",
@@ -537,5 +537,33 @@
     "title": "Posts",
     "section": "",
     "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n  \n\n\n\n\nmlr3 하이퍼파라미터 튜닝\n\n\n\n\n\n\n\nR\n\n\nmlr3\n\n\nmachine learning\n\n\n\n\nmlr3를 이용한 하이퍼파라미터 튜닝 학습\n\n\n\n\n \n\n\n\n\n  \n\n\n\n\n학습관점에서 비교하는 dplyr과 data.table\n\n\n\n\n\n\n\ndata.table\n\n\ndplyr\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\n\nFeb 27, 2023\n\n\n\n\n\n\n  \n\n\n\n\nmlr3 리샘플링 벤치마킹\n\n\n\n\n\n\n\nmlr3\n\n\nR\n\n\nmachine learning\n\n\n\n\n여러 모델 동시 학습 및 성능비교\n\n\n\n\n\n\nFeb 24, 2023\n\n\n\n\n\n\n  \n\n\n\n\nstringr을 이용한 문자 추출하기\n\n\n\n\n\n\n\nR\n\n\nregex\n\n\nstringr\n\n\n\n\n정규표현식을 사용한 규칙 찾기\n\n\n\n\n\n\nFeb 23, 2023\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot2 facet label 설정\n\n\n\n\n\n\n\nR\n\n\nggplot2\n\n\nfacet\n\n\n\n\nggplot에서 facet을 사용할 때 label을 변경하는 방법에 대해 알아봅시다.\n\n\n\n\n\n\nFeb 22, 2023\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ndata.table 1.14.9 업데이트\n\n\n\n\n\n\n\nR\n\n\ndata.table\n\n\n\n\ndata.table 1.14.9 버전에서 업데이트 될 내용을 살펴봅시다.\n\n\n\n\n\n\nFeb 21, 2023\n\n\n\n\n\n\n  \n\n\n\n\nmlr3 기초\n\n\n\n\n\n\n\nmlr3\n\n\nR\n\n\nmachine learning\n\n\n\n\nmlr3에 대한 소개 및 mlr3를 사용하기 위한 필수문법에 대해 소개합니다.\n\n\n\n\n\n\nFeb 20, 2023\n\n\n\n\n\n\n  \n\n\n\n\nImputation의 종류\n\n\n\n\n\n\n\nR\n\n\nimputation\n\n\nmice\n\n\n\n\nmice를 이용한 multiple imputation\n\n\n\n\n\n\nFeb 18, 2023\n\n\n\n\n\n\n  \n\n\n\n\nggplot 세부 조정: 축 조정\n\n\n\n\n\n\n\nR\n\n\nggplot2\n\n\nvisualization\n\n\n\n\n그래프와 축 간격을 조정하거나 tick 간격을 변경하는 방법\n\n\n\n\n\n\nFeb 12, 2023\n\n\n\n\n\n\n  \n\n\n\n\nggsignif: 통계적 유의성 시각화\n\n\n\n\n\n\n\nR\n\n\nggplot2\n\n\nvisualization\n\n\nggsignif\n\n\n\n\n그래프에 통계적 유의성(p-value) 출력\n\n\n\n\n\n\nFeb 12, 2023\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDataExplorer을 활용한 EDA\n\n\n\n\n\n\n\nEDA\n\n\nR\n\n\n\n\nDataExplorer를 통한 탐색적 데이터 분석\n\n\n\n\n\n\nFeb 9, 2023\n\n\n\n\n\n\n  \n\n\n\n\ntidyr로 Pivoting하기\n\n\n\n\n\n\n\nR\n\n\ndplyr\n\n\ntidyr\n\n\n\n\ntidyr을 이용해 데이터의 형태를 바꾸는 pivoting에 대해 알아봅시다.\n\n\n\n\n\n\nFeb 3, 2023\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ndplyr 심화: across()\n\n\n\n\n\n\n\ndplyr\n\n\nR\n\n\n\n\nacross()로 배우는 열 동시 처리\n\n\n\n\n\n\nFeb 2, 2023\n\n\n\n\n\n\n  \n\n\n\n\nggplot에서 두 번째 y축 그리기\n\n\n\n\n\n\n\nggplot2\n\n\nR\n\n\nVisualization\n\n\naxis\n\n\n\n\nggplot으로 그래프에 두 개의 y축을 활용하는 방법을 배우기\n\n\n\n\n\n\nFeb 2, 2023\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ndplyr 기초 문법 이해하기\n\n\n\n\n\n\n\ndplyr\n\n\nR\n\n\n\n\n파이프 연산자와 함께 dplyr 필수 함수들과 문법을 알아봅시다.\n\n\n\n\n\n\nFeb 1, 2023\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ndplyr group_by\n\n\n\n\n\n\n\ndplyr\n\n\nR\n\n\n\n\ndplyr를 활용한 그룹별 데이터 처리\n\n\n\n\n\n\nFeb 1, 2023\n\n\n\n\n\n\n  \n\n\n\n\nR에서 색상 다루기\n\n\n\n\n\n\n\ncolor\n\n\nR\n\n\nvisualization\n\n\n\n\n데이터 시각화를 진행할 때, 그래프에 적절한 색상을 선택하는 방법을 살펴봅시다.\n\n\n\n\n\n\nJan 25, 2023\n\n\n\n\n\n\n  \n\n\n\n\nQuarto 사용법\n\n\nQuarto, a substitute of Rmarkdown\n\n\n\n\nQuarto\n\n\nR\n\n\n\n\nBrief intorduction of Quarto\n\n\n\n\n\n\nJan 19, 2023\n\n\n\n\n\n\n  \n\n\n\n\nR 기초 이해\n\n\n\n\n\n\n\nR\n\n\ndata.frame\n\n\n\n\nR 사용을 위한 필수 개념 및 함수을 배워봅시다.\n\n\n\n\n\n\nJan 19, 2023\n\n\n\n\n\n\n  \n\n\n\n\nggplot boxplot 그리기\n\n\n\n\n\n\n\nggplot2\n\n\nR\n\n\nVisualization\n\n\nboxplot\n\n\n\n\nggplot으로 boxplot 그리는 방법\n\n\n\n\n\n\nJan 19, 2023\n\n\n\n\n\n\n  \n\n\n\n\ndata.table 심화\n\n\n\n\n\n\n\ndata.table\n\n\nR\n\n\n\n\n특수 기호, 조인, 피봇 등 data.table에서 다루는 심화내용을 살펴봅시다.\n\n\n\n\n\n\nJan 19, 2023\n\n\n\n\n\n\n  \n\n\n\n\ndata.table 기초 문법\n\n\n\n\n\n\n\ndata.table\n\n\nR\n\n\n\n\ndata.table 문법, 연산자, 함수\n\n\n\n\n\n\nJan 18, 2023\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nObservable.js\n\n\n\n\n\n\n\nOJS\n\n\nVisualization\n\n\njavascript\n\n\n\n\nInteractive chart with ojs\n\n\n\n\n\n\nJan 1, 2023\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "index.html#gallery",
+    "href": "index.html#gallery",
+    "title": "Welcome to the blog of Rchemist",
+    "section": "Gallery",
+    "text": "Gallery\n\n\n\n\n\n\n\nGallery\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot2를 활용한 forestplot 그리기\n\n\n\n\n\n\n\n\n\nJan 1, 2023\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "gallery/ggplot2_forestplot/index.html",
+    "href": "gallery/ggplot2_forestplot/index.html",
+    "title": "ggplot2를 활용한 forestplot 그리기",
+    "section": "",
+    "text": "ggplot2 를 이용한 예쁜 forest plot 만들기\n\ndf_data <- data.frame(Cancer=c(\"Brain\", \"Colorectal\", \"Kidney clear cell carcinoma\", \"Kidney renal papillary carcinoma\"),\n                      OR=c(1.03, 0.98, 1.27, 1.22),\n                      OR_lower=c(0.97, 0.62, 1.16, 1.03),\n                      OR_upper=c(1.09, 1.55, 1.38, 1.45)\n                      )\n\n### Visualize\n\nif (!require('ggplot2')) install.packages('ggplot2'); library('ggplot2')   # Load ggplot2 library\n\n\n\np <- ggplot(df_data, aes(x=Cancer, y=OR, ymin=OR_lower, ymax=OR_upper)) + \n  geom_linerange(size=8, colour=\"#a6d8f0\") +\n  geom_hline(aes(x=0, yintercept=1), lty=1) +\n  geom_point(size=3, shape=21, fill=\"#008fd5\", colour = \"white\", stroke = 1) +\n  scale_y_continuous(limits = c(0.5, 2)) +\n  coord_flip() +\n  ggtitle(\"Odds ratio for Gene of Interest\") +\n  theme_minimal()\np"
+  },
+  {
+    "objectID": "gallery/index.html",
+    "href": "gallery/index.html",
+    "title": "Gallery",
+    "section": "",
+    "text": "No matching items"
+  },
+  {
+    "objectID": "posts/index.html",
+    "href": "posts/index.html",
+    "title": "Posts",
+    "section": "",
+    "text": "No matching items"
   }
 ]
