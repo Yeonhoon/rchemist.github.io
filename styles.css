@@ -45,11 +45,6 @@ h3 {
   font-size: 2rem;
 }
 
-#quarto-margin-sidebar{
-  top: 110px !important;
-  max-height: fit-content !important;
-}
-
 .quarto-listing-category{
   font-size: 0.8rem;
   line-height: 2em;

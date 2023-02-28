@@ -6,6 +6,8 @@ categories: [mlr3, R, machine learning]
 image: "https://mlr3proba.mlr-org.com/logo.svg"
 ---
 
+{{< include ../_mlr3_setup.qmd >}}
+
 # Introduction {#sec-introduction}
 
 `mlr3` (Machine Learning in R) 패키지와 생태계는 R 언어에서 분류 (classification), 회귀 (regression), 기타 머신러닝 작업들을 수행할 수 있도록 도와주는 포괄적, 객체 지향적, 확장 가능한 프레임워크입니다.

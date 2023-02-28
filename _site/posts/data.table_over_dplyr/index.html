@@ -111,6 +111,7 @@ ul.task-list li input[type="checkbox"] {
       <h1 class="title">학습관점에서 비교하는 dplyr과 data.table</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">data.table</div>
+                <div class="quarto-category">dplyr</div>
                 <div class="quarto-category">R</div>
               </div>
                   </div>
@@ -145,7 +146,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#간결함" id="toc-간결함" class="nav-link" data-scroll-target="#간결함">1. 간결함</a></li>
   <li><a href="#패키지-의존성" id="toc-패키지-의존성" class="nav-link" data-scroll-target="#패키지-의존성"><strong>2. 패키지 의존성</strong></a></li>
   </ul></li>
-  <li><a href="#dplyr를-왜-더-많이-쓸까" id="toc-dplyr를-왜-더-많이-쓸까" class="nav-link" data-scroll-target="#dplyr를-왜-더-많이-쓸까"><code>dplyr</code>를 왜 더 많이 쓸까?</a></li>
+  <li><a href="#왜-dplyr를-더-많이-쓸까" id="toc-왜-dplyr를-더-많이-쓸까" class="nav-link" data-scroll-target="#왜-dplyr를-더-많이-쓸까">왜 <code>dplyr</code>를 더 많이 쓸까?</a></li>
   <li><a href="#결론" id="toc-결론" class="nav-link" data-scroll-target="#결론">결론</a></li>
   </ul>
 </nav>
@@ -160,7 +161,8 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="비유하기">비유하기</h2>
 <p>R로 데이터 핸들링을 할 때, <code>dplyr</code>와 <code>data.table</code>을 많이 활용합니다. 저 역시 두 가지를 모두 사용하고 있습니다. 저는 R 입문자의 입장에서 봤을 때, 이 두 패키지를 일본어와 중국어에 빗대어 설명드리고 싶습니다.</p>
 <blockquote class="blockquote">
-<p><em>“일본어는 처음엔 쉬운데, 나중엔 갈수록 어려워져. 반대로 중국어는 처음엔 어려운데, 나중엔 쉬워져.”</em></p>
+<p><em>“일본어는 처음엔 쉬운데, 나중엔 갈수록 어려워져.</em></p>
+<p><em>반대로 중국어는 처음엔 어려운데, 나중엔 쉬워져.”</em></p>
 </blockquote>
 <p>중국어를 배울 때 자주 들었던 말입니다. 어문계열 출신이다보니 중국어를 배울 때 항상 일본어와 비교를 하는 말을 들었습니다. 일본어는 어순도 우리나라와 비슷하고, 애니메이션 등의 영향으로 많이 익숙하죠. 반면에 중국어는 어순도 한국어와 다르고, 무엇보다 성조도 있죠. 그래서 중국어에 대한 진입장벽이 일본어보다 더 높다고들 얘기했던 기억이 납니다.</p>
 <p>저는 <code>dplyr</code>와 <code>data.table</code>의 관계가 일본어와 중국어와 비슷하다고 생각합니다.</p>
@@ -181,12 +183,11 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="패키지-의존성"><strong>2. 패키지 의존성</strong></h3>
 <p><code>dplyr</code>는 <code>tidyverse</code>라는 생태계에 속한 패키지입니다. 추가적인 동작을 사용하기 위해선 <code>tidyr</code>, <code>broom</code> 등과 같은 패키지를 설치해야만 합니다. 어느 패키지에 어떤 함수가 있는지 알아야 하고, 필요한 패키지를 추가적으로 설치해야 합니다. 그 패키지들도 설치하려면 다른 패키지가 필요해서 필요한 패키지 이외에도 여러 패키지들을 다운로드받아야 합니다.</p>
 <p>반면에 <code>data.table</code>은 <code>data.table</code> 패키지 하나만 설치하면 끝이죠. 이것저것 복잡하게 패키지를 다운받을 필요없이, <code>data.table</code> 하나의 패키지만 설치하면 웬만한 작업은 모두 수행할 수 있습니다.</p>
-<hr>
 </section>
 </section>
-<section id="dplyr를-왜-더-많이-쓸까" class="level2">
-<h2 class="anchored" data-anchor-id="dplyr를-왜-더-많이-쓸까"><code>dplyr</code>를 왜 더 많이 쓸까?</h2>
-<p>그럼에도 불구하고, 일반적인 R 사용자들은 dplyr를 더 많이 쓰는 것 같습니다. 여러 이유가 있겠지만, 가장 중요한 것은 아마 UI일 것입니다.</p>
+<section id="왜-dplyr를-더-많이-쓸까" class="level2">
+<h2 class="anchored" data-anchor-id="왜-dplyr를-더-많이-쓸까">왜 <code>dplyr</code>를 더 많이 쓸까?</h2>
+<p>그럼에도 불구하고, 일반적인 R 사용자들은 <code>dplyr</code>를 더 많이 쓰는 것 같습니다. 여러 이유가 있겠지만, 가장 중요한 것은 아마 UI일 것입니다.</p>
 <p>앞서 말씀드린 것처럼 <code>data.table</code>의 문법은 처음에 이해하기에 쉽지 않습니다. <code>[]</code>, <code>i</code>, <code>j</code>, <code>by</code> 등등 처음 데이터 분석을 배우는 사람의 입장에서는 이것들을 바로 이해하는 게 쉽지 않겠죠.</p>
 <p><code>dplyr</code>는 처음 봤을 때, 굉장히 쉽습니다. 영어 단어 몇 개만 이해하면 바로 써먹을 수 있습니다. <code>%&gt;%</code>를 통해 여러 함수들을 연결시킴으로써 직관적으로 코드가 눈에 들어올테니까요.</p>
 <p>또한 Posit (구 RStudio) 사에서는 공식적으로 <code>dplyr</code>가 있는 <code>tidyverse</code>를 밀어주는 느낌이 없잖아 있습니다. <code>tidyverse</code>와 관련된 내용의 강의를 제공하고 있습니다. 처음 R을 접하는 사람들에게 <code>dplyr</code>로 유입되게끔 유도를 하는 것이지요.</p>
@@ -196,7 +197,7 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="결론">결론</h2>
 <p>최근 <code>dplyr</code>를 다시 사용해야 할 일이 있어서 <code>dplyr</code>를 공부하다가 생각을 정리하고자 작성한 글입니다.</p>
 <p>비록 저 역시 <code>data.table</code> 패키지를 알기 전, <code>dplyr</code>를 먼저 접하게 되었습니다. (위에서 말한 것처럼) 커뮤니티가 온통 <code>dplyr</code> 세상이었거든요. 하지만 저는 주류와는 다른 선택을 하고 싶었고, 그래서 <code>data.table</code>을 찾아 공부했던 것 같습니다. 실제로 써보니 <code>data.table</code>이 만족도가 더 높았구요.</p>
-<p>입문자에게 <code>data.table</code>을 추천하기는 했지만, 나중에는 <code>dplyr</code>를 배워서, 둘 다 사용할 수 있는 것도 괜찮지 않을까요? ㅎㅎ.</p>
+<p>입문자에게 <code>data.table</code>을 추천하기는 했지만, 나중에는 <code>dplyr</code>를 배워서, 둘 다 사용할 수 있는 것도 괜찮지 않을까요? ㅎㅎ</p>
 
 
 </section>

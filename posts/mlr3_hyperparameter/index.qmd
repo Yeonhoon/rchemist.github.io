@@ -3,7 +3,10 @@ title: "mlr3 하이퍼파라미터 튜닝"
 description: "mlr3를 이용한 하이퍼파라미터 튜닝 학습"
 date: ""
 categories: [R, mlr3, machine learning]
+image: "https://mlr3proba.mlr-org.com/logo.svg"
 ---
+
+{{< include ../_mlr3_setup.qmd >}}
 
 ## 4. Hyperparameter tuning {#sec-hyperparameter}
 
@@ -32,15 +35,15 @@ tuner$optimize(instance)
 
 ```
 
-```{r}
-lrn_rf$param_set$values <- instance$result_learner_param_vals[[1]]
+```{r eval=FALSE}
+lrn_rf$param_set$values <-  instance$result_learner_param_vals[[1]]
 
 lrn_rf
 ```
 
 ### AutoTuner
 
-```{r}
+```{r eval=FALSE}
 lrn_xgb <- lrn('classif.xgboost',
                eta = to_tune(1e-4,1e-2),
                gamma=to_tune(1e-3,1e-2),
@@ -61,7 +64,7 @@ at$train(task_sonar)
 
 ### Nested Resampling
 
-```{r}
+```{r eval=FALSE}
 outer_resampling <- rsmp('cv',folds=3)
 
 rr <- resample(task_sonar, at, outer_resampling, store_models = T)

@@ -216,16 +216,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#instantiation" id="toc-instantiation" class="nav-link" data-scroll-target="#instantiation">Instantiation</a></li>
   <li><a href="#실행" id="toc-실행" class="nav-link" data-scroll-target="#실행">실행</a></li>
   <li><a href="#결과-시각화" id="toc-결과-시각화" class="nav-link" data-scroll-target="#결과-시각화">결과 시각화</a></li>
-  <li><a href="#benchmarking" id="toc-benchmarking" class="nav-link" data-scroll-target="#benchmarking">4. Benchmarking</a>
+  </ul></li>
+  <li><a href="#benchmarking" id="toc-benchmarking" class="nav-link" data-scroll-target="#benchmarking">Benchmarking</a>
   <ul class="collapse">
   <li><a href="#벤치마킹-설계하기" id="toc-벤치마킹-설계하기" class="nav-link" data-scroll-target="#벤치마킹-설계하기">벤치마킹 설계하기</a></li>
-  <li><a href="#벤치마크-실험하기" id="toc-벤치마크-실험하기" class="nav-link" data-scroll-target="#벤치마크-실험하기">벤치마크 실험하기</a></li>
-  <li><a href="#벤치마크-객체-전환하기" id="toc-벤치마크-객체-전환하기" class="nav-link" data-scroll-target="#벤치마크-객체-전환하기">벤치마크 객체 전환하기</a></li>
-  <li><a href="#design" id="toc-design" class="nav-link" data-scroll-target="#design">1) Design</a></li>
-  <li><a href="#execution" id="toc-execution" class="nav-link" data-scroll-target="#execution">2) Execution</a></li>
-  <li><a href="#plotting" id="toc-plotting" class="nav-link" data-scroll-target="#plotting">3) Plotting</a></li>
+  <li><a href="#벤치마킹-실험하기" id="toc-벤치마킹-실험하기" class="nav-link" data-scroll-target="#벤치마킹-실험하기">벤치마킹 실험하기</a></li>
+  <li><a href="#벤치마크결과-객체-살펴보기" id="toc-벤치마크결과-객체-살펴보기" class="nav-link" data-scroll-target="#벤치마크결과-객체-살펴보기">벤치마크결과 객체 살펴보기</a></li>
   </ul></li>
-  </ul></li>
+  <li><a href="#roc-분석" id="toc-roc-분석" class="nav-link" data-scroll-target="#roc-분석">ROC 분석</a></li>
+  <li><a href="#레퍼런스" id="toc-레퍼런스" class="nav-link" data-scroll-target="#레퍼런스">레퍼런스</a></li>
   </ul>
 </nav>
     </div>
@@ -235,16 +234,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"data.table"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Installing data.table [1.14.8] ...
-    OK [linked cache]</code></pre>
+<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3verse)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3viz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout-caption-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>이 글은 <a href="https://mlr3book.mlr-org.com/">mlr3book</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>을 참고하여 작성되었습니다.</p>
+</div>
 </div>
 <section id="resampling" class="level1">
 <h1>Resampling</h1>
@@ -259,7 +260,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="resampling-종류">Resampling 종류</h2>
 <p><code>mlr3</code> 에서 실행가능한 모든 리샘플링 전략은 <code>mlr_resamplings</code> 딕셔너리를 통해 확인가능합니다. 홀드아웃, 교차 검증(CV), 부트스트랩 등이 포함되어있습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(mlr_resamplings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(mlr_resamplings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -337,8 +338,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="resampling-객체-생성">Resampling 객체 생성</h2>
 <p>리샘플링 객체를 만들어봅시다. 우선 holdout을 이용해 리샘플링을 진행하겠습니다. 리샘플링 객체는 <code>rsmp()</code>를 통해 만들 수 있습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>resampling <span class="ot">&lt;-</span> <span class="fu">rsmp</span>(<span class="st">"holdout"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>resampling</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>resampling <span class="ot">&lt;-</span> <span class="fu">rsmp</span>(<span class="st">"holdout"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>resampling</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;ResamplingHoldout&gt;: Holdout
 * Iterations: 1
@@ -349,21 +350,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>생성한 리샘플링 객체를 확인했을 때, <code>Instantiated: FALSE</code>라고 되어있습니다. 아직 리샘플링을 수행하지 않았기 때문입니다.</p>
 <p>또한 holdout 의 ratio를 정해주지 않았기 문에 2/3가 초기값으로 설정되어있습니다. 즉 데이터의 3분의 2는 훈련에, 3분의 1은 검증에 쓰이게 됩니다. 새로운 리샘플링 객체를 만들 때 holdout 비율을 설정하거나 기존의 객체의 파라미터 값을 수정할 수 있습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>resampling <span class="ot">&lt;-</span> <span class="fu">rsmp</span>(<span class="st">"holdout"</span>, <span class="at">ratio=</span><span class="fl">0.8</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>resampling<span class="sc">$</span>param_set<span class="sc">$</span>values <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">ratio=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>resampling <span class="ot">&lt;-</span> <span class="fu">rsmp</span>(<span class="st">"holdout"</span>, <span class="at">ratio=</span><span class="fl">0.8</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>resampling<span class="sc">$</span>param_set<span class="sc">$</span>values <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">ratio=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>holdout은 성능을 일반화하는 과정을 한 번밖에 수행하지 않습니다. 따라서 좀더 신뢰성 있는 성능 측정을 위해, 가장 많이 사용되는 리샘플링 방법 중 하나인 교차 검증(<code>cv</code>)를 사용하도록 하겠습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>resampling <span class="ot">&lt;-</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>resampling <span class="ot">&lt;-</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="instantiation" class="level2">
 <h2 class="anchored" data-anchor-id="instantiation">Instantiation</h2>
 <p>데이터가 들어가 있는 태스크에 대해 리샘플링을 수행하기 위해 리샘플링 객체의 <code>$instantiate()</code> 메소드를 이용해야합니다. 메소드 안에 태스크를 넣어주면 리샘플링이 적용됐다는 의미에서 <code>Instantiated: TRUE</code>가 출력됩니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> <span class="fu">tsk</span>(<span class="st">"sonar"</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>resampling<span class="sc">$</span><span class="fu">instantiate</span>(task)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>resampling</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> <span class="fu">tsk</span>(<span class="st">"sonar"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>resampling<span class="sc">$</span><span class="fu">instantiate</span>(task)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>resampling</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;ResamplingCV&gt;: Cross-Validation
 * Iterations: 10
@@ -376,21 +377,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="실행">실행</h2>
 <p>리샘플리의 실행은 <code>resample()</code> 을 사용합니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>, <span class="at">predict_type=</span><span class="st">"prob"</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>rr <span class="ot">&lt;-</span> <span class="fu">resample</span>(task, learner, resampling)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>INFO  [18:04:35.776] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (iter 1/10)
-INFO  [18:04:35.854] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (iter 2/10)
-INFO  [18:04:35.890] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (iter 3/10)
-INFO  [18:04:35.920] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (iter 4/10)
-INFO  [18:04:35.954] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (iter 5/10)
-INFO  [18:04:35.986] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (iter 6/10)
-INFO  [18:04:36.019] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (iter 7/10)
-INFO  [18:04:36.050] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (iter 8/10)
-INFO  [18:04:36.081] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (iter 9/10)
-INFO  [18:04:36.131] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (iter 10/10)</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>, <span class="at">predict_type=</span><span class="st">"prob"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>rr <span class="ot">&lt;-</span> <span class="fu">resample</span>(task, learner, resampling)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>rr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;ResampleResult&gt; of 10 iterations
 * Task: sonar
@@ -403,8 +392,8 @@ INFO  [18:04:36.131] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (it
 <p><code>$score()</code>와 <code>$aggregate()</code> 모두 <code>Measure</code> 객체를 이용해 성능을 측정합니다. 기본적으로 성능을 측정할 때는 검증을 위한 데이터셋을 활용하게 됩니다.</p>
 <p>우선 정확도(<code>classif.acc</code>)를 통해 모델의 정확도를 평가해보겠습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> rr<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">"classif.acc"</span>))</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>acc[,.(iteration, classif.acc)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> rr<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">"classif.acc"</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>acc[,.(iteration, classif.acc)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -417,43 +406,43 @@ INFO  [18:04:36.131] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (it
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">0.7619048</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0.6666667</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">0.6190476</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">0.7142857</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">0.7619048</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">0.7619048</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">7</td>
 <td style="text-align: right;">0.8571429</td>
 </tr>
 <tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.5714286</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.7142857</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.6190476</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.6190476</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.8095238</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.7142857</td>
+</tr>
+<tr class="even">
 <td style="text-align: right;">8</td>
-<td style="text-align: right;">0.7619048</td>
+<td style="text-align: right;">0.7142857</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">9</td>
-<td style="text-align: right;">0.7500000</td>
+<td style="text-align: right;">0.8000000</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">10</td>
-<td style="text-align: right;">0.7000000</td>
+<td style="text-align: right;">0.8000000</td>
 </tr>
 </tbody>
 </table>
@@ -463,23 +452,23 @@ INFO  [18:04:36.131] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (it
 <p><code>$score()</code>를 통해 모델의 성능을 살펴보니 cv에서 설정한 10번의 반복 별로 성능이 출력되는 것을 알 수 있습니다.</p>
 <p>다음으로 <code>$aggregate()</code>를 이용해 모델의 성능을 살펴보겠습니다. <code>$aggregate()</code>는 반복 때마다 계산된 성능의 평균 값을 계산하여 출력합니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rr<span class="sc">$</span><span class="fu">aggregate</span>(<span class="fu">msr</span>(<span class="st">"classif.acc"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>rr<span class="sc">$</span><span class="fu">aggregate</span>(<span class="fu">msr</span>(<span class="st">"classif.acc"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>classif.acc 
-  0.7354762 </code></pre>
+  0.7219048 </code></pre>
 </div>
 </div>
 <p>여러 개의 평가 지표로 모델의 성능을 평가할 수도 있습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>measures <span class="ot">&lt;-</span> <span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"classif.acc"</span>,</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"classif.sensitivity"</span>,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"classif.specificity"</span>,</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"classif.auc"</span>))</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>rr<span class="sc">$</span><span class="fu">aggregate</span>(measures)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>measures <span class="ot">&lt;-</span> <span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"classif.acc"</span>,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"classif.sensitivity"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"classif.specificity"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"classif.auc"</span>))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>rr<span class="sc">$</span><span class="fu">aggregate</span>(measures)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        classif.acc classif.sensitivity classif.specificity         classif.auc 
-          0.7354762           0.7388967           0.7439880           0.7691579 </code></pre>
+          0.7219048           0.7557955           0.7094017           0.7738624 </code></pre>
 </div>
 </div>
 </section>
@@ -487,9 +476,9 @@ INFO  [18:04:36.131] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (it
 <h2 class="anchored" data-anchor-id="결과-시각화">결과 시각화</h2>
 <p><code>mlr3viz</code>의 <code>autoplot()</code>을 통해 리샘플링 결과를 시각화할 수 있습니다.</p>
 <div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(mlr3viz)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(rr, <span class="at">measure =</span> <span class="fu">msr</span>(<span class="st">"classif.acc"</span>), <span class="at">type=</span><span class="st">"boxplot"</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(rr, <span class="at">measure =</span> <span class="fu">msr</span>(<span class="st">"classif.acc"</span>), <span class="at">type=</span><span class="st">"histogram"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(mlr3viz)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(rr, <span class="at">measure =</span> <span class="fu">msr</span>(<span class="st">"classif.acc"</span>), <span class="at">type=</span><span class="st">"boxplot"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(rr, <span class="at">measure =</span> <span class="fu">msr</span>(<span class="st">"classif.acc"</span>), <span class="at">type=</span><span class="st">"histogram"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell quarto-layout-panel" data-output-location="fragment">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 45.0%;justify-content: center;">
@@ -515,32 +504,28 @@ INFO  [18:04:36.131] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (it
 </div>
 </div>
 </section>
-<section id="benchmarking" class="level2">
-<h2 class="anchored" data-anchor-id="benchmarking">4. Benchmarking</h2>
+</section>
+<section id="benchmarking" class="level1">
+<h1>Benchmarking</h1>
 <p>벤치마킹은 다른 러너 또는 여러 태스크들을 각기 다른 리샘플링 방법을 이용해 학습시킬 수 있는 방법입니다. 지금까지는 하나의 태스크에 하나의 러너, 하나의 리샘플링을 해주었다면, 벤치마킹을 이용해서는 여러 가지의 학습을 한번에 수행할 수 있는 것이지요.</p>
 <p>이 벤치마킹은 여러 가지 러너와 리샘플링을 비교함으로써 성능별로 좋은 러너를 나열하여 쉽게 비교할 수 있다는 장점이 있습니다.</p>
-<section id="벤치마킹-설계하기" class="level3">
-<h3 class="anchored" data-anchor-id="벤치마킹-설계하기">벤치마킹 설계하기</h3>
-</section>
-<section id="벤치마크-실험하기" class="level3">
-<h3 class="anchored" data-anchor-id="벤치마크-실험하기">벤치마크 실험하기</h3>
-</section>
-<section id="벤치마크-객체-전환하기" class="level3">
-<h3 class="anchored" data-anchor-id="벤치마크-객체-전환하기">벤치마크 객체 전환하기</h3>
-</section>
-<section id="design" class="level3">
-<h3 class="anchored" data-anchor-id="design">1) Design</h3>
+<section id="벤치마킹-설계하기" class="level2">
+<h2 class="anchored" data-anchor-id="벤치마킹-설계하기">벤치마킹 설계하기</h2>
+<p><code>mlr3</code>에서 벤치마크 실험을 진행하기 위해서는 <code>benchmark_grid()</code> 를 이용해 설계를 해줘야 합니다. 이 때 설계라는 것은 어떤 <u><strong>태스크</strong></u>를 사용할 것인지, 어떤 <u><strong>러너</strong></u>들을 어떻게 <u><strong>리샘플링</strong></u> 할 것인지 등을 조합해주는 것입니다.</p>
+<p><code>sonar</code> 태스크를 예시로, 분류 모형 중 로지스틱 회귀분석 (<code>classif.log_reg</code>), 의사결정나무(<code>classif.rpart</code>), 랜덤 포레스트(<code>classif.ranger</code>) 러너를 5 Fold 교차검증(CV)으로 비교하도록 설계를 진행하겠습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">benchmark_grid</span>(</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">tasks =</span> <span class="fu">tsk</span>(<span class="st">'sonar'</span>),</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">learners =</span> <span class="fu">lrns</span>(<span class="fu">c</span>(<span class="st">'classif.log_reg'</span>,<span class="st">'classif.ranger'</span>),</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">predict_type=</span><span class="st">'prob'</span>,</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">predict_sets=</span><span class="fu">c</span>(<span class="st">'train'</span>,<span class="st">'test'</span>)),</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">resamplings =</span> <span class="fu">rsmps</span>(<span class="st">'cv'</span>,<span class="at">folds=</span><span class="dv">5</span>)</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>design</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>tsk <span class="ot">&lt;-</span> <span class="fu">tsk</span>(<span class="st">"sonar"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>lrns <span class="ot">&lt;-</span> <span class="fu">lrns</span>(<span class="fu">c</span>(<span class="st">"classif.log_reg"</span>,<span class="st">"classif.rpart"</span>,<span class="st">"classif.ranger"</span>),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">predict_type=</span><span class="st">"prob"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>rsmp <span class="ot">&lt;-</span> <span class="fu">rsmps</span>(<span class="st">"cv"</span>, <span class="at">folds=</span><span class="dv">5</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">benchmark_grid</span>(</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">tasks =</span> tsk,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">learners =</span> lrns,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">resamplings =</span> rsmp</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(design)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -558,14 +543,19 @@ INFO  [18:04:36.131] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (it
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">&lt;environment: 0x0000022a6af044a0&gt;</td>
-<td style="text-align: left;">&lt;environment: 0x0000022a6b17f480&gt;</td>
-<td style="text-align: left;">&lt;environment: 0x0000022a64090610&gt;</td>
+<td style="text-align: left;">&lt;environment: 0x0000025f49e05ba0&gt;</td>
+<td style="text-align: left;">&lt;environment: 0x0000025f4a382488&gt;</td>
+<td style="text-align: left;">&lt;environment: 0x0000025f4c170068&gt;</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">&lt;environment: 0x0000022a6af044a0&gt;</td>
-<td style="text-align: left;">&lt;environment: 0x0000022a6bea6d28&gt;</td>
-<td style="text-align: left;">&lt;environment: 0x0000022a64090610&gt;</td>
+<td style="text-align: left;">&lt;environment: 0x0000025f49e05ba0&gt;</td>
+<td style="text-align: left;">&lt;environment: 0x0000025f4bdd1580&gt;</td>
+<td style="text-align: left;">&lt;environment: 0x0000025f4c170068&gt;</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&lt;environment: 0x0000025f49e05ba0&gt;</td>
+<td style="text-align: left;">&lt;environment: 0x0000025f43e9cce0&gt;</td>
+<td style="text-align: left;">&lt;environment: 0x0000025f4c170068&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -573,44 +563,100 @@ INFO  [18:04:36.131] [mlr3] Applying learner 'classif.rpart' on task 'sonar' (it
 </div>
 </div>
 </section>
-<section id="execution" class="level3">
-<h3 class="anchored" data-anchor-id="execution">2) Execution</h3>
+<section id="벤치마킹-실험하기" class="level2">
+<h2 class="anchored" data-anchor-id="벤치마킹-실험하기">벤치마킹 실험하기</h2>
+<p>벤치마크 설계를 실행하기 위해선 <code>benchmark()</code>함수를 이용합니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>bmr <span class="ot">&lt;-</span> <span class="fu">benchmark</span>(design, <span class="at">store_models =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>bmr <span class="ot">&lt;-</span> <span class="fu">benchmark</span>(design)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>bmr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>INFO  [18:04:37.540] [mlr3] Running benchmark with 10 resampling iterations
-INFO  [18:04:37.546] [mlr3] Applying learner 'classif.log_reg' on task 'sonar' (iter 1/5)
-INFO  [18:04:37.613] [mlr3] Applying learner 'classif.log_reg' on task 'sonar' (iter 2/5)
-INFO  [18:04:37.679] [mlr3] Applying learner 'classif.log_reg' on task 'sonar' (iter 3/5)
-INFO  [18:04:37.746] [mlr3] Applying learner 'classif.log_reg' on task 'sonar' (iter 4/5)
-INFO  [18:04:37.834] [mlr3] Applying learner 'classif.log_reg' on task 'sonar' (iter 5/5)
-INFO  [18:04:37.900] [mlr3] Applying learner 'classif.ranger' on task 'sonar' (iter 1/5)
-INFO  [18:04:38.741] [mlr3] Applying learner 'classif.ranger' on task 'sonar' (iter 2/5)
-INFO  [18:04:38.865] [mlr3] Applying learner 'classif.ranger' on task 'sonar' (iter 3/5)
-INFO  [18:04:38.993] [mlr3] Applying learner 'classif.ranger' on task 'sonar' (iter 4/5)
-INFO  [18:04:39.118] [mlr3] Applying learner 'classif.ranger' on task 'sonar' (iter 5/5)
-INFO  [18:04:39.243] [mlr3] Finished benchmark</code></pre>
+<pre><code>&lt;BenchmarkResult&gt; of 15 rows with 3 resampling runs
+ nr task_id      learner_id resampling_id iters warnings errors
+  1   sonar classif.log_reg            cv     5        0      0
+  2   sonar   classif.rpart            cv     5        0      0
+  3   sonar  classif.ranger            cv     5        0      0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>measures <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">msr</span>(<span class="st">'classif.acc'</span>,<span class="at">id=</span><span class="st">'accuracy'</span>),</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">msr</span>(<span class="st">'classif.auc'</span>,<span class="at">id=</span><span class="st">'AUC'</span>),</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">msr</span>(<span class="st">'classif.prauc'</span>,<span class="at">id=</span><span class="st">'PRC'</span>)</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>bmr<span class="sc">$</span><span class="fu">aggregate</span>(measures)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>벤치마킹이 끝났다면, <code>$aggregate()</code> 를 이용해 성능을 검증해보면 됩니다. 분류의 정확도를 예시로 살펴보겠습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> bmr<span class="sc">$</span><span class="fu">aggregate</span>(<span class="fu">msr</span>(<span class="st">"classif.acc"</span>))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>acc[,.(task_id, learner_id, classif.acc)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">task_id</th>
+<th style="text-align: left;">learner_id</th>
+<th style="text-align: right;">classif.acc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">sonar</td>
+<td style="text-align: left;">classif.log_reg</td>
+<td style="text-align: right;">0.6634146</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sonar</td>
+<td style="text-align: left;">classif.rpart</td>
+<td style="text-align: right;">0.7212544</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sonar</td>
+<td style="text-align: left;">classif.ranger</td>
+<td style="text-align: right;">0.8462253</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="벤치마크결과-객체-살펴보기" class="level2">
+<h2 class="anchored" data-anchor-id="벤치마크결과-객체-살펴보기">벤치마크결과 객체 살펴보기</h2>
+<p>벤치마크결과(<code>BenchmarkResult</code>) 객체는 리샘플링결과(<code>ResampleResult</code>) 객체의 집합입니다. 이 객체는 <code>$resample_result(i)</code> 메소드를 이용해 리샘플링 결과를 추출할 수 있습니다. 이 때, <code>i</code>는 벤치마크 실험번호를 의미합니다. 위의 예시는 세 가지 러너로 벤치마킹을 했기 때문에, <code>i</code>는 러너를 의미합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rr_lr <span class="ot">&lt;-</span> bmr<span class="sc">$</span><span class="fu">resample_result</span>(<span class="dv">1</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>rr_rpart <span class="ot">&lt;-</span> bmr<span class="sc">$</span><span class="fu">resample_result</span>(<span class="dv">2</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>rr_ranger <span class="ot">&lt;-</span> bmr<span class="sc">$</span><span class="fu">resample_result</span>(<span class="dv">3</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>rr_lr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;ResampleResult&gt; of 5 iterations
+* Task: sonar
+* Learner: classif.log_reg
+* Warnings: 0 in 0 iterations
+* Errors: 0 in 0 iterations</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rr_ranger</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;ResampleResult&gt; of 5 iterations
+* Task: sonar
+* Learner: classif.ranger
+* Warnings: 0 in 0 iterations
+* Errors: 0 in 0 iterations</code></pre>
+</div>
+</div>
+<p><code>ResampleResult</code> 객체들은 <code>as_benchmark_result()</code> 함수를 이용해 다시 <code>BenchmarkResult</code>로 변환될 수 있습니다. 또한 <code>c()</code>를 이용해 묶을 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>bmr1 <span class="ot">=</span> <span class="fu">as_benchmark_result</span>(rr_rpart)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>bmr2 <span class="ot">=</span> <span class="fu">as_benchmark_result</span>(rr_ranger)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>bmr_combined <span class="ot">=</span> <span class="fu">c</span>(bmr1, bmr2)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>bmr_combined<span class="sc">$</span><span class="fu">aggregate</span>(<span class="fu">msr</span>(<span class="st">"classif.acc"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
 <colgroup>
-<col style="width: 2%">
-<col style="width: 30%">
-<col style="width: 7%">
-<col style="width: 14%">
-<col style="width: 12%">
-<col style="width: 5%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
+<col style="width: 3%">
+<col style="width: 36%">
+<col style="width: 8%">
+<col style="width: 16%">
+<col style="width: 15%">
+<col style="width: 6%">
+<col style="width: 13%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -620,55 +666,156 @@ INFO  [18:04:39.243] [mlr3] Finished benchmark</code></pre>
 <th style="text-align: left;">learner_id</th>
 <th style="text-align: left;">resampling_id</th>
 <th style="text-align: right;">iters</th>
-<th style="text-align: right;">accuracy</th>
-<th style="text-align: right;">AUC</th>
-<th style="text-align: right;">PRC</th>
+<th style="text-align: right;">classif.acc</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">1</td>
-<td style="text-align: left;">&lt;environment: 0x0000022a5f0d3ec0&gt;</td>
+<td style="text-align: left;">&lt;environment: 0x0000025f5700bbf0&gt;</td>
 <td style="text-align: left;">sonar</td>
-<td style="text-align: left;">classif.log_reg</td>
+<td style="text-align: left;">classif.rpart</td>
 <td style="text-align: left;">cv</td>
 <td style="text-align: right;">5</td>
-<td style="text-align: right;">0.7406504</td>
-<td style="text-align: right;">0.7650445</td>
-<td style="text-align: right;">0.7683154</td>
+<td style="text-align: right;">0.7212544</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2</td>
-<td style="text-align: left;">&lt;environment: 0x0000022a5f0f1c68&gt;</td>
+<td style="text-align: left;">&lt;environment: 0x0000025f57031ab8&gt;</td>
 <td style="text-align: left;">sonar</td>
 <td style="text-align: left;">classif.ranger</td>
 <td style="text-align: left;">cv</td>
 <td style="text-align: right;">5</td>
-<td style="text-align: right;">0.8415796</td>
-<td style="text-align: right;">0.9235181</td>
-<td style="text-align: right;">0.9333841</td>
+<td style="text-align: right;">0.8462253</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-</section>
-<section id="plotting" class="level3">
-<h3 class="anchored" data-anchor-id="plotting">3) Plotting</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(bmr, <span class="at">type=</span><span class="st">'roc'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3viz)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(bmr, <span class="at">measure=</span><span class="fu">msr</span>(<span class="st">"classif.acc"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+</section>
+</section>
+<section id="roc-분석" class="level1">
+<h1>ROC 분석</h1>
+<p>ROC (Receiver Operating Characteristic) 분석은 타겟이 binary 형태인 분류 모델에서 널리 사용되고 있습니다. 두 개의 값을 분류하는 모델에서는 혼동 행렬 (Confusion matrix)을 통해 아래와 같은 값들을 계산할 수 있습니다.</p>
+<ul>
+<li><strong>True Positive Rate</strong> (<strong>TPR</strong>), <strong>Sensitivity</strong> 또는 <strong>Recall</strong>: 실제로 positive인 값들을 얼마나 많이 true positive로 예측했는가?</li>
+<li><strong>True Negative Rate</strong> (<strong>TNR</strong>) 또는 <strong>Specificity</strong>: 실제로 negative인 값들을 얼마나 많이 true negative로 예측했는가?</li>
+<li><strong>False Positive Rate</strong> (<strong>FPR</strong>) 또는 1-<strong>Specificity</strong>: 실제로 positive인 값들을 얼마마나 많이 true negative로 예측했는가?</li>
+<li><strong>Positive Predictive Value</strong> (<strong>PPV</strong>) 또는 <strong>Precision</strong>: positive라고 예측했다면, 실제로 positive인 경우와 얼마나 같은가?</li>
+<li><strong>Negative Predictive Value</strong> (<strong>NPV</strong>): negative라고 예측했을 때, 실제로 negative인 경우와 얼마나 같은가?</li>
+</ul>
+<p>TPR과 FPR은 배타적 관계(trade-off)에 있기 떄문에, 일반적으로 높은 TPR과 낮은 FPR을 동시에 달성하는 것은 어렵습니다. ROC 분석은 TPR과 FPR의 관계를 시각화함으로써 성능을 평가하기 위해 사용됩니다.</p>
+<p>이진 분류모델의 가장 좋은 성능은 TPR은 1, FPR은 0으로 나타나는 값입니다. 분류모델은 랜덤하게 분류 라벨을 예측하여 만들어지는 값입니다. 예를 들어 실제로 positive 값이 25%확률로 positive class에 분류된다면, TPR은 0.25가 됩니다. 반면에 negative 값이 25%의 확률로 positive class에 분류된다면 FPR이 0.25가 됩니다.</p>
+<p>만약 이진 분류모델이 확률을 예측하는 경우, threshold를 정하여 positive, negatvie로 분류할 확률을 나누고, 이들을 각각 positive, negative에 지정하게 됩니다. threshold를 어떻게 지정해주는지에 따라 TPR과 FPR 값이 달라지게 될 것이고, 이 값들을 시각화한 것이 바로 ROC 곡선입니다.<br>
+</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-roc" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-roc-1.png" class="img-fluid figure-img" width="768"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: (A): 이산형 클래스 예측, (B): 확률 예측 ROC 곡선</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>task <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">"sonar"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>, <span class="at">predict_type =</span> <span class="st">"prob"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>splits <span class="ot">=</span> <span class="fu">partition</span>(task, <span class="at">ratio =</span> <span class="fl">0.8</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>learner<span class="sc">$</span><span class="fu">train</span>(task, splits<span class="sc">$</span>train)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">predict</span>(task, splits<span class="sc">$</span>test)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>pred<span class="sc">$</span>confusion</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        truth
+response  M  R
+       M 17  9
+       R  5 10</code></pre>
+</div>
+</div>
+<p><code>mlr3</code>에서 ROC 곡선은 다른 그래프들과 마찬가지로 <code>mlr3viz</code>를 이용해 그릴 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3viz)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pred, <span class="at">type =</span> <span class="st">"roc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>ROC 곡선 뿐만 아니라 Precision-Recall (PR) 곡선도 그릴 수 있습니다. ROC 곡선과 PR 곡선은 주로 데이터가 불균형할 때 선호됩니다. 이 때 데이터가 불균형하다는 것은 예측 대상 (target)이 한쪽으로 치우쳤다는 것을 의미합니다. 이런 경우 ROC 곡선은 모델에 대한 정확한 성능을 평가하지 못합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pred, <span class="at">type =</span> <span class="st">"prc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>ResampleResult에 대해서도 ROC 곡선과 PR 곡선 으로 시각화가 가능합니다.</p>
+<div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>rr <span class="ot">=</span> <span class="fu">resample</span>(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">task =</span> <span class="fu">tsk</span>(<span class="st">"spam"</span>),</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>, <span class="at">predict_type=</span><span class="st">"prob"</span>),</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">resampling =</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds =</span> <span class="dv">10</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(rr, <span class="at">type =</span> <span class="st">"roc"</span>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(rr, <span class="at">type =</span> <span class="st">"prc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="index_files/figure-html/unnamed-chunk-23-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+<p>마찬가지로 여러 개의 러너를 비교하는 <code>BenchmarkResult</code> 역시 시각화할 수 있습니다.</p>
+<div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>design <span class="ot">=</span> <span class="fu">benchmark_grid</span>(</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">tasks =</span> <span class="fu">tsk</span>(<span class="st">"spam"</span>),</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">learners =</span> <span class="fu">lrns</span>(<span class="fu">c</span>(<span class="st">"classif.rpart"</span>, <span class="st">"classif.ranger"</span>), <span class="at">predict_type =</span> <span class="st">"prob"</span>),</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">resamplings =</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds =</span> <span class="dv">3</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>bmr <span class="ot">=</span> <span class="fu">benchmark</span>(design)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(bmr, <span class="at">type =</span> <span class="st">"roc"</span>)</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(bmr, <span class="at">type =</span> <span class="st">"prc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="index_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="index_files/figure-html/unnamed-chunk-24-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="레퍼런스" class="level1">
+<h1>레퍼런스</h1>
+<ul>
+<li>https://mlr3book.mlr-org.com/performance.html#sec-roc</li>
+</ul>
 
 
 </section>
-</section>
-</section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>https://mlr3book.mlr-org.com/<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

@@ -2,7 +2,7 @@ format:
   html:
     df-print: kable
     toc: true
-    toc-location: "right"
+    # toc-location: "right"
     reference-location: document
     citation-location: document
     fontsize: 1.1em

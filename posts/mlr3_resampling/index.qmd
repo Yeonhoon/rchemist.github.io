@@ -6,13 +6,7 @@ categories: [mlr3, R, machine learning]
 image: "https://mlr3proba.mlr-org.com/logo.svg"
 ---
 
-```{r message=FALSE, warning=FALSE}
-install.packages("data.table")
-library(data.table)
-library(mlr3)
-library(mlr3verse)
-library(mlr3viz)
-```
+{{< include ../_mlr3_setup.qmd >}}
 
 # Resampling
 
@@ -122,6 +116,7 @@ rr$aggregate(measures)
 ```{r}
 #| output-location: fragment
 #| layout: [[45, -10, 45]]
+#| fig-align: "center"
 #| fig-cap: 
 #|    - "Boxplot"
 #|    - "Histogram"
@@ -130,49 +125,208 @@ autoplot(rr, measure = msr("classif.acc"), type="boxplot")
 autoplot(rr, measure = msr("classif.acc"), type="histogram")
 ```
 
-## 4. Benchmarking
+# Benchmarking
 
 벤치마킹은 다른 러너 또는 여러 태스크들을 각기 다른 리샘플링 방법을 이용해 학습시킬 수 있는 방법입니다. 지금까지는 하나의 태스크에 하나의 러너, 하나의 리샘플링을 해주었다면, 벤치마킹을 이용해서는 여러 가지의 학습을 한번에 수행할 수 있는 것이지요.
 
 이 벤치마킹은 여러 가지 러너와 리샘플링을 비교함으로써 성능별로 좋은 러너를 나열하여 쉽게 비교할 수 있다는 장점이 있습니다.
 
-### 벤치마킹 설계하기
+## 벤치마킹 설계하기
 
-### 벤치마크 실험하기
+`mlr3`에서 벤치마크 실험을 진행하기 위해서는 `benchmark_grid()` 를 이용해 설계를 해줘야 합니다. 이 때 설계라는 것은 어떤 [**태스크**]{.underline}를 사용할 것인지, 어떤 [**러너**]{.underline}들을 어떻게 [**리샘플링**]{.underline} 할 것인지 등을 조합해주는 것입니다.
 
-### 벤치마크 객체 전환하기
-
-### 1) Design
+`sonar` 태스크를 예시로, 분류 모형 중 로지스틱 회귀분석 (`classif.log_reg`), 의사결정나무(`classif.rpart`), 랜덤 포레스트(`classif.ranger`) 러너를 5 Fold 교차검증(CV)으로 비교하도록 설계를 진행하겠습니다.
 
 ```{r}
 library(mlr3)
 library(mlr3learners)
+tsk <- tsk("sonar")
+lrns <- lrns(c("classif.log_reg","classif.rpart","classif.ranger"),
+                  predict_type="prob")
+rsmp <- rsmps("cv", folds=5)
 design <- benchmark_grid(
-  tasks = tsk('sonar'),
-  learners = lrns(c('classif.log_reg','classif.ranger'),
-                  predict_type='prob',
-                  predict_sets=c('train','test')),
-  resamplings = rsmps('cv',folds=5)
+  tasks = tsk,
+  learners = lrns,
+  resamplings = rsmp
 )
-design
+head(design)
 ```
 
-### 2) Execution
+## 벤치마킹 실험하기
+
+벤치마크 설계를 실행하기 위해선 `benchmark()`함수를 이용합니다.
 
 ```{r}
-bmr <- benchmark(design, store_models = T)
-
-measures <- list(
-  msr('classif.acc',id='accuracy'),
-  msr('classif.auc',id='AUC'),
-  msr('classif.prauc',id='PRC')
-)
-
-bmr$aggregate(measures)
+bmr <- benchmark(design)
+bmr
 ```
 
-### 3) Plotting
+벤치마킹이 끝났다면, `$aggregate()` 를 이용해 성능을 검증해보면 됩니다. 분류의 정확도를 예시로 살펴보겠습니다.
 
 ```{r}
-autoplot(bmr, type='roc')
+acc <- bmr$aggregate(msr("classif.acc"))
+acc[,.(task_id, learner_id, classif.acc)]
 ```
+
+## 벤치마크결과 객체 살펴보기
+
+벤치마크결과(`BenchmarkResult`) 객체는 리샘플링결과(`ResampleResult`) 객체의 집합입니다. 이 객체는 `$resample_result(i)` 메소드를 이용해 리샘플링 결과를 추출할 수 있습니다. 이 때, `i`는 벤치마크 실험번호를 의미합니다. 위의 예시는 세 가지 러너로 벤치마킹을 했기 때문에, `i`는 러너를 의미합니다.
+
+```{r}
+rr_lr <- bmr$resample_result(1)
+rr_rpart <- bmr$resample_result(2)
+rr_ranger <- bmr$resample_result(3)
+rr_lr
+```
+
+```{r}
+rr_ranger
+```
+
+`ResampleResult` 객체들은 `as_benchmark_result()` 함수를 이용해 다시 `BenchmarkResult`로 변환될 수 있습니다. 또한 `c()`를 이용해 묶을 수 있습니다.
+
+```{r}
+bmr1 = as_benchmark_result(rr_rpart)
+bmr2 = as_benchmark_result(rr_ranger)
+
+bmr_combined = c(bmr1, bmr2)
+bmr_combined$aggregate(msr("classif.acc"))
+```
+
+```{r}
+library(mlr3viz)
+autoplot(bmr, measure=msr("classif.acc"))
+```
+
+# ROC 분석
+
+ROC (Receiver Operating Characteristic) 분석은 타겟이 binary 형태인 분류 모델에서 널리 사용되고 있습니다. 두 개의 값을 분류하는 모델에서는 혼동 행렬 (Confusion matrix)을 통해 아래와 같은 값들을 계산할 수 있습니다.
+
+-   **True Positive Rate** (**TPR**), **Sensitivity** 또는 **Recall**: 실제로 positive인 값들을 얼마나 많이 true positive로 예측했는가?
+-   **True Negative Rate** (**TNR**) 또는 **Specificity**: 실제로 negative인 값들을 얼마나 많이 true negative로 예측했는가?
+-   **False Positive Rate** (**FPR**) 또는 1-**Specificity**: 실제로 positive인 값들을 얼마마나 많이 true negative로 예측했는가?
+-   **Positive Predictive Value** (**PPV**) 또는 **Precision**: positive라고 예측했다면, 실제로 positive인 경우와 얼마나 같은가?
+-   **Negative Predictive Value** (**NPV**): negative라고 예측했을 때, 실제로 negative인 경우와 얼마나 같은가?
+
+TPR과 FPR은 배타적 관계(trade-off)에 있기 떄문에, 일반적으로 높은 TPR과 낮은 FPR을 동시에 달성하는 것은 어렵습니다. ROC 분석은 TPR과 FPR의 관계를 시각화함으로써 성능을 평가하기 위해 사용됩니다.
+
+이진 분류모델의 가장 좋은 성능은 TPR은 1, FPR은 0으로 나타나는 값입니다. 분류모델은 랜덤하게 분류 라벨을 예측하여 만들어지는 값입니다. 예를 들어 실제로 positive 값이 25%확률로 positive class에 분류된다면, TPR은 0.25가 됩니다. 반면에 negative 값이 25%의 확률로 positive class에 분류된다면 FPR이 0.25가 됩니다.
+
+만약 이진 분류모델이 확률을 예측하는 경우, threshold를 정하여 positive, negatvie로 분류할 확률을 나누고, 이들을 각각 positive, negative에 지정하게 됩니다. threshold를 어떻게 지정해주는지에 따라 TPR과 FPR 값이 달라지게 될 것이고, 이 값들을 시각화한 것이 바로 ROC 곡선입니다.\
+
+```{r echo=FALSE}
+#| label: fig-roc
+#| fig-align: "center"
+#| fig.height: 3.5
+#| fig.width: 8
+#| fig.cap: "(A): 이산형 클래스 예측, (B): 확률 예측 ROC 곡선"
+
+
+library(ggplot2)
+df_base <- data.frame(x = c(0,1),
+                   y = c(0,1))
+
+classif <- data.table(x=c(0,1,0), y=c(1,1,0),
+                      classifier = c("best","random","random")) 
+
+fun <- ecdf(rexp(1000000, rate = 5))
+x <- seq(0, 1, length = 1000)
+d <-  data.frame(x = x, y = fun(x))
+
+p <- ggplot(df_base, aes(x=x, y=y))+
+  coord_fixed(ratio=1)+
+  labs(x=expression(FPR), y=expression(TPR)) +
+  theme_bw()
+
+p1 <- p + geom_line(color=2, lty=2) +
+  geom_text(aes(x=.5, y=.5, hjust=.5, vjust=-.5), label="baseline", color=2, size=3, angle=45) +
+  geom_point(data=classif, aes(x=x,y=y, color=classifier), size=3) +
+  geom_text(data=classif[classifier == "random"],
+            aes(x=x, y=y, hjust=c(1.1, -0.1),
+                vjust = c(0.5,0.5)),
+            label=c("Always predict class 1",
+                    "Never predict class 1"),
+            color = 2, size = 3) +
+  ggtitle("(A)") +
+  scale_color_manual("Classifier", values=c(1,2))
+
+d2 <-  rbind(
+  cbind(d, AUC = round(mean(d$y), 2)),
+  cbind(classif[c(3, 1, 2), 1:2], AUC = 1),
+  cbind(df_base, AUC = 0.5)
+)
+d2$AUC <-  factor(d2$AUC, levels = c("1", "0.8", "0.5"))
+p2 <-  p +
+  geom_text(aes(x = 0.5, y = 0.5, hjust = 0.5, vjust = -0.5, label = "baseline"), colour = 2, size = 3, angle = 45) +
+  geom_line(data = d2, aes(x = x, y = y, lty = AUC, col = AUC)) + ggtitle("(B)") +
+  geom_line(data = d2, aes(x = x, y = y, lty = AUC, col = AUC)) +
+  ylim(c(0, 1)) +
+  scale_linetype_manual("AUC",
+    values = c("1" = 4, "0.8" = 1, "0.5" = 2),
+    labels = paste0(c(1, 0.8, 0.5))) +
+  scale_color_manual("AUC",
+    values = c("1" = 1, "0.8" = 3, "0.5" = 2),
+    labels = paste0(c(1, 0.8, 0.5)))
+
+require(patchwork)
+
+p1 + plot_spacer() + p2 +
+  plot_layout(nrow=1, widths=c(1, 0.1, 1))
+  
+```
+
+```{r}
+task = tsk("sonar")
+learner = lrn("classif.rpart", predict_type = "prob")
+splits = partition(task, ratio = 0.8)
+
+learner$train(task, splits$train)
+pred = learner$predict(task, splits$test)
+pred$confusion
+```
+
+`mlr3`에서 ROC 곡선은 다른 그래프들과 마찬가지로 `mlr3viz`를 이용해 그릴 수 있습니다.
+
+```{r}
+library(mlr3viz)
+autoplot(pred, type = "roc")
+```
+
+ROC 곡선 뿐만 아니라 Precision-Recall (PR) 곡선도 그릴 수 있습니다. ROC 곡선과 PR 곡선은 주로 데이터가 불균형할 때 선호됩니다. 이 때 데이터가 불균형하다는 것은 예측 대상 (target)이 한쪽으로 치우쳤다는 것을 의미합니다. 이런 경우 ROC 곡선은 모델에 대한 정확한 성능을 평가하지 못합니다.
+
+```{r}
+autoplot(pred, type = "prc")
+```
+
+ResampleResult에 대해서도 ROC 곡선과 PR 곡선 으로 시각화가 가능합니다.
+
+```{r}
+#| layout-ncol: 2
+rr = resample(
+  task = tsk("spam"),
+  learner = lrn("classif.rpart", predict_type="prob"),
+  resampling = rsmp("cv", folds = 10)
+)
+
+autoplot(rr, type = "roc")
+autoplot(rr, type = "prc")
+```
+
+마찬가지로 여러 개의 러너를 비교하는 `BenchmarkResult` 역시 시각화할 수 있습니다.
+
+```{r}
+#| layout-ncol: 2
+design = benchmark_grid(
+  tasks = tsk("spam"),
+  learners = lrns(c("classif.rpart", "classif.ranger"), predict_type = "prob"),
+  resamplings = rsmp("cv", folds = 3)
+)
+bmr = benchmark(design)
+
+autoplot(bmr, type = "roc")
+autoplot(bmr, type = "prc")
+```
+
+# 레퍼런스
+
+-   https://mlr3book.mlr-org.com/performance.html#sec-roc
