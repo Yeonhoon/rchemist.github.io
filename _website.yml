@@ -1,11 +1,13 @@
 website:
+  site-url: https://rchemistblog.com
+  repo-url: https://github.com/rchemist0123/rchemistblog
   title: "Rchemist"
   search:
     location: navbar
     type: overlay
   sidebar: false
   navbar:
-    background: 'light'
+    background: "#9CB7F0"
     search: true
     right:
       - href: index.qmd
@@ -14,7 +16,9 @@ website:
       - posts.qmd
   page-navigation: true  
   page-footer:
+    background: "#9CB7F0"
     left: "[Rchemist](https://https://rchemistblog.com/) © 2023 by [YH Jang](https://https://rchemist.quarto.pub/rchemistblog/about.html)"
+    border: true
     right:
       - icon: envelope
         href: mailto:danjang0123@gmail.com
