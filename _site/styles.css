@@ -1,6 +1,11 @@
 /* Roboto Font*/
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
 
+code {
+  color: hsl(210,8%,15%);
+  border-radius: 5px;
+}
+
 .quarto-post {
   text-transform: capitalize !important;
   font-size: 0.9em !important;
@@ -10,7 +15,8 @@
 .quarto-category .listing-categories .listing-category {
   text-transform: capitalize !important;
   font-size: 0.8em !important;
-}
+
+/*Nav bar*/
 
 /* Header , footer color*/
 #quarto-header .nav-footer {
@@ -32,8 +38,8 @@ h3 {
 
 /*kable font size*/
 .cell-output-display{
-  font-size: 0.7rem;
-  font-family: 'Roboto', sans-serif;
+  font-size: 0.9rem;
+  font-family: 'Roboto', Arial;
 }
 
 .navbar{

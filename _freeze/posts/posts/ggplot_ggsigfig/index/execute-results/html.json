@@ -1,0 +1,16 @@
+{
+  "hash": "0790c1c7bd840d7415b26dd04f3cf440",
+  "result": {
+    "markdown": "---\ntitle: \"ggsignif: 통계적 유의성 시각화\"\ndescription: \"그래프에 통계적 유의성(p-value) 출력\"\ndate: '2023-02-12'\ncategories: [R, ggplot2, visualization, ggsignif]\nimage: \"https://const-ae.github.io/ggsignif/logo.svg\"\n---\n\n::: {.cell}\n\n```{.r .cell-code}\n# install.packages('ggsignif')\nlibrary(ggplot2)\nlibrary(ggsignif)\nlibrary(data.table)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nggplot(iris, aes(x = Species, y = Sepal.Length)) +\n  geom_boxplot() + # using `ggsignif` to display comparison of interest\n  geom_signif(\n    comparisons = list(c(\"versicolor\", \"virginica\")),\n    map_signif_level = TRUE\n  )\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\ndt_male <- data.table(\n  outcome = rep(c('Death','Heart disease','Stroke',\n                  'Cancer','Hypertension','Diabetes'),2),\n  model = as.factor(rep(2:3, each=6)),\n  value = c(0.877,0.731,0.794,0.776,0.769,0.806,\n            0.887,0.734,0.795,0.783,0.770,0.809)\n)\n\n\ndt_male$outcome <- factor(dt_male$outcome, \n                          levels=c('Death','Heart disease','Stroke','Cancer','Hypertension','Diabetes'))\nsetkey(dt_male, outcome)\nsig_loc <- c()\nfor(i in seq(1,11,2)){\n  sig_loc <- c(sig_loc,mean(dt_male$value[i:i+1]))\n}\ndt_male |> \n  ggplot(aes(x=outcome, y=value, fill=model))+\n  geom_col(position = position_dodge(),\n           width = .7) +\n  theme_classic() +\n  scale_y_continuous(limits=c(0,1),\n                     expand=c(0,0)) +\n  scale_fill_manual(values=c('grey30','grey60'),\n                    labels=c('DEMO + PGHD',\n                             'DEMO + PGHD + HLD'),\n                    ) +\n  theme(legend.position = 'top',\n        axis.title.x = element_blank(),\n        axis.title.y = element_text(size=13),\n        axis.text = element_text(size=12, color='black'),\n        # axis.ticks.x = element_line(color=c(rep(NA,len-1), rep('black',len))),\n        legend.title = element_blank(),\n        legend.direction = 'vertical') +\n  guides(fill=guide_legend(byrow = T))+ # legend 간격 띄우기\n  labs(y='Area under the curve (AUC)') + \n  geom_text(aes(label=value, y=value+0.015),\n            position = position_dodge(width=0.8)) +\n  \n  # 유의미한 변수 표시\n  geom_signif(\n    y_position = sig_loc+0.04,\n    xmin= c(0.75, 1.75, 2.75, 3.75, 4.75, 5.75),\n    xmax = c(1.25,2.25, 3.25, 4.25, 5.25, 6.25),\n    annotations = c('*')\n  )\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::\n\n\n레퍼런스\n\n-   https://const-ae.github.io/ggsignif/articles/intro.html\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

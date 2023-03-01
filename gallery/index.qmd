@@ -1,15 +1,17 @@
 ---
 title: "Gallery"
-listing: 
-  sort-ui: [title, date]
-  filter-ui: [title,date]
-  contents: posts
-  page-size: 20
-  type: table
-  sort: "date desc"
-  categories: unnumbered
+listing:
+  - id: gallery
+    contents: gallery
+    sort-ui: [title, date]
+    filter-ui: [title, date]
+    page-size: 20
+    type: grid
+    sort: "date desc"
+    categories: unnumbered
 
 comments: false
 ---
 
-
+:::{#gallery}
+:::

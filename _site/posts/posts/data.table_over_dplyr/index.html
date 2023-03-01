@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-02-27">
+<meta name="description" content="처음 배우는 사람에게 추천하는 패키지">
+
+<title>Rchemist - 학습관점에서 비교하는 dplyr과 data.table</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Rchemist</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"><i class="bi bi-house" role="img">
+</i> 
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html"><i class="bi bi-file-person" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../posts/index.html"><i class="bi bi-newspaper" role="img">
+</i> 
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../gallery/index.html"><i class="bi bi-sliders2" role="img">
+</i> 
+ <span class="menu-text">Gallery</span></a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">학습관점에서 비교하는 dplyr과 data.table</h1>
+                  <div>
+        <div class="description">
+          처음 배우는 사람에게 추천하는 패키지
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">data.table</div>
+                <div class="quarto-category">dplyr</div>
+                <div class="quarto-category">R</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 27, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#비유하기" id="toc-비유하기" class="nav-link active" data-scroll-target="#비유하기">비유하기</a></li>
+  <li><a href="#data.table을-추천하는-이유" id="toc-data.table을-추천하는-이유" class="nav-link" data-scroll-target="#data.table을-추천하는-이유"><code>data.table</code>을 추천하는 이유</a>
+  <ul class="collapse">
+  <li><a href="#간결함" id="toc-간결함" class="nav-link" data-scroll-target="#간결함">1. 간결함</a></li>
+  <li><a href="#패키지-의존성" id="toc-패키지-의존성" class="nav-link" data-scroll-target="#패키지-의존성"><strong>2. 패키지 의존성</strong></a></li>
+  </ul></li>
+  <li><a href="#왜-dplyr를-더-많이-쓸까" id="toc-왜-dplyr를-더-많이-쓸까" class="nav-link" data-scroll-target="#왜-dplyr를-더-많이-쓸까">왜 <code>dplyr</code>를 더 많이 쓸까?</a></li>
+  <li><a href="#결론" id="toc-결론" class="nav-link" data-scroll-target="#결론">결론</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="비유하기" class="level2">
+<h2 class="anchored" data-anchor-id="비유하기">비유하기</h2>
+<p>R로 데이터 핸들링을 할 때, <code>dplyr</code>와 <code>data.table</code>을 많이 활용합니다. 저 역시 두 가지를 모두 사용하고 있습니다. 저는 R 입문자의 입장에서 봤을 때, 이 두 패키지를 일본어와 중국어에 빗대어 설명드리고 싶습니다.</p>
+<blockquote class="blockquote">
+<p><em>“일본어는 처음엔 쉬운데, 나중엔 갈수록 어려워져.</em></p>
+<p><em>반대로 중국어는 처음엔 어려운데, 나중엔 쉬워져.”</em></p>
+</blockquote>
+<p>중국어를 배울 때 자주 들었던 말입니다. 어문계열 출신이다보니 중국어를 배울 때 항상 일본어와 비교를 하는 말을 들었습니다. 일본어는 어순도 우리나라와 비슷하고, 애니메이션 등의 영향으로 많이 익숙하죠. 반면에 중국어는 어순도 한국어와 다르고, 무엇보다 성조도 있죠. 그래서 중국어에 대한 진입장벽이 일본어보다 더 높다고들 얘기했던 기억이 납니다.</p>
+<p>저는 <code>dplyr</code>와 <code>data.table</code>의 관계가 일본어와 중국어와 비슷하다고 생각합니다.</p>
+<p><code>dplyr</code>는 처음엔 쉽습니다. <code>dplyr</code>는 함수 중심의 코드로 구성이 되어있습니다(Functional programming). 몇 개만 알면 기본적인 분석은 다 해낼 수 있습니다. 파이프 연산자를 이용해 코드를 읽어나가는 것도 더 쉽게 느낄 수 있습니다. 하지만 추가적인 작업을 하기 위해서는 여러 함수를 더 익혀야 합니다. 알아둬야하는 함수가 많아지고, 새로운 문법도 늘어납니다.</p>
+<p>반면에 <code>data.table</code>은 처음에 문법을 익히기가 어렵습니다. 기초 문법을 익힐 때, 어느 정도 난이도가 있습니다. 하지만 이 문법을 잘 이해하고 나면, 이것들을 잘 활용하기만 하면 끝입니다.</p>
+</section>
+<section id="data.table을-추천하는-이유" class="level2">
+<h2 class="anchored" data-anchor-id="data.table을-추천하는-이유"><code>data.table</code>을 추천하는 이유</h2>
+<p>그렇기 때문에 처음 데이터 핸들링 패키지를 선택하라고 하면 <code>dplyr</code>보다는 <code>data.table</code>을 추천드립니다. <code>dplyr</code>보다 <code>data.table</code>을 추천드리는지 이유는 아래와 같습니다.</p>
+<section id="간결함" class="level3">
+<h3 class="anchored" data-anchor-id="간결함">1. 간결함</h3>
+<p><code>dplyr</code>보다 <code>data.table</code>의 코드가 더 간단합니다. 간단하다는 것은 입력하는 코드가 적은 것은 물론, 숙지해야 할 문법 (또는 함수)도 더 단순합니다.</p>
+<p><code>dplyr</code>는 원하는 기능을 함수이름으로 설정해 놓았습니다. 그렇기 때문에 함수 자체를 익히는 것은 크게 어렵지 않습니다. 문제는 외워야 할 함수가 너무 많다는 것입니다. <code>select()</code>, <code>mutate()</code>, <code>filter()</code>, <code>summarise()</code>, <code>filter()</code>, <code>recode()</code>, <code>case_when()</code> 등등.. 익혀야 할 기본 함수들이 굉장히 많죠.</p>
+<p>또한 여러 가지 변수를 동시에 다루는 작업이라면 더욱 복잡해집니다. <code>~</code> 가 붙는 코드, <code>.</code>이 붙는 코드들이 생겨나면서 처음 배우는 사람들에게는 코드를 이해하는 데 어려움이 생깁니다.</p>
+<p>반면 <code>data.table</code> 안에서 기본적인 동작들은 함수가 아닌 문법을 통해 해결할 수 있습니다. <code>[]</code> 안에서 행과 열, 그룹을 다루는 문법을 처음에 잘 익혀두면 손쉽게 사용이 가능합니다. 또한 사용하는 함수의 종류도 크게 많지 않아 <code>dplyr</code>보다 쉽게 데이터를 핸들링할 수 있습니다.</p>
+</section>
+<section id="패키지-의존성" class="level3">
+<h3 class="anchored" data-anchor-id="패키지-의존성"><strong>2. 패키지 의존성</strong></h3>
+<p><code>dplyr</code>는 <code>tidyverse</code>라는 생태계에 속한 패키지입니다. 추가적인 동작을 사용하기 위해선 <code>tidyr</code>, <code>broom</code> 등과 같은 패키지를 설치해야만 합니다. 어느 패키지에 어떤 함수가 있는지 알아야 하고, 필요한 패키지를 추가적으로 설치해야 합니다. 그 패키지들도 설치하려면 다른 패키지가 필요해서 필요한 패키지 이외에도 여러 패키지들을 다운로드받아야 합니다.</p>
+<p>반면에 <code>data.table</code>은 <code>data.table</code> 패키지 하나만 설치하면 끝이죠. 이것저것 복잡하게 패키지를 다운받을 필요없이, <code>data.table</code> 하나의 패키지만 설치하면 웬만한 작업은 모두 수행할 수 있습니다.</p>
+</section>
+</section>
+<section id="왜-dplyr를-더-많이-쓸까" class="level2">
+<h2 class="anchored" data-anchor-id="왜-dplyr를-더-많이-쓸까">왜 <code>dplyr</code>를 더 많이 쓸까?</h2>
+<p>그럼에도 불구하고, 일반적인 R 사용자들은 <code>dplyr</code>를 더 많이 쓰는 것 같습니다. 여러 이유가 있겠지만, 가장 중요한 것은 아마 UI일 것입니다.</p>
+<p>앞서 말씀드린 것처럼 <code>data.table</code>의 문법은 처음에 이해하기에 쉽지 않습니다. <code>[]</code>, <code>i</code>, <code>j</code>, <code>by</code> 등등 처음 데이터 분석을 배우는 사람의 입장에서는 이것들을 바로 이해하는 게 쉽지 않겠죠.</p>
+<p><code>dplyr</code>는 처음 봤을 때, 굉장히 쉽습니다. 영어 단어 몇 개만 이해하면 바로 써먹을 수 있습니다. <code>%&gt;%</code>를 통해 여러 함수들을 연결시킴으로써 직관적으로 코드가 눈에 들어올테니까요.</p>
+<p>또한 Posit (구 RStudio) 사에서는 공식적으로 <code>dplyr</code>가 있는 <code>tidyverse</code>를 밀어주는 느낌이 없잖아 있습니다. <code>tidyverse</code>와 관련된 내용의 강의를 제공하고 있습니다. 처음 R을 접하는 사람들에게 <code>dplyr</code>로 유입되게끔 유도를 하는 것이지요.</p>
+<p>그렇기 때문에 <code>dplyr</code>의 사용자가 더 많을 것이고, 커뮤니티도 더 활성화가 되어있지 않나 생각합니다.</p>
+</section>
+<section id="결론" class="level2">
+<h2 class="anchored" data-anchor-id="결론">결론</h2>
+<p>최근 <code>dplyr</code>를 다시 사용해야 할 일이 있어서 <code>dplyr</code>를 공부하다가 생각을 정리하고자 작성한 글입니다.</p>
+<p>비록 저 역시 <code>data.table</code> 패키지를 알기 전, <code>dplyr</code>를 먼저 접하게 되었습니다. (위에서 말한 것처럼) 커뮤니티가 온통 <code>dplyr</code> 세상이었거든요. 하지만 저는 주류와는 다른 선택을 하고 싶었고, 그래서 <code>data.table</code>을 찾아 공부했던 것 같습니다. 실제로 써보니 <code>data.table</code>이 만족도가 더 높았구요.</p>
+<p>입문자에게 <code>data.table</code>을 추천하기는 했지만, 나중에는 <code>dplyr</code>를 배워서, 둘 다 사용할 수 있는 것도 괜찮지 않을까요? ㅎㅎ</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="rchemist0123/giscus-blog" data-repo-id="R_kgDOJBwa8Q" data-category="General" data-category-id="DIC_kwDOJBwa8c4CUbVM" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left"><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:danjang0123@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/danjang0123/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

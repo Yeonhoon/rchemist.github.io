@@ -1,0 +1,14 @@
+{
+  "hash": "2483f558877ad7543b09bfaf75188bc6",
+  "result": {
+    "markdown": "---\ntitle: \"DataExplorer을 활용한 EDA\"\ndescription:  \"DataExplorer를 통한 탐색적 데이터 분석\"\ndate: '2023-02-09'\ncategories: [EDA, R]\n---\n\n\n\n\n### 1. DataExplorer\n\n\n::: {.cell}\n\n```{.r .cell-code}\nrequire(DataExplorer)\nrequire(dataxray)\ncreate_report(titanic_train, \n              config = configure_report(add_plot_qq=F,\n                                        add_plot_prcomp = F,\n                                        global_ggtheme = theme_classic(),\n                                        ))\n\nplot_histogram(titanic_train)\ntitanic_train$Survived <- as.factor(titanic_train$Survived)\nplot_boxplot(titanic_train, by = 'Survived',\n             ggtheme = theme_classic())\nstr(titanic_train)\ndummify(titanic_train)\n\n\nExpReport(titanic_train,\n          Target = 'Survived',\n          op_file = 'temp.html')\n```\n:::\n\n\n### 2. dataxary\n\n\n::: {.cell}\n\n```{.r .cell-code}\ntitanic_train |> \n  dataxray::make_xray() |> \n  view_xray()\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

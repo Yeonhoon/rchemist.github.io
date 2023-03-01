@@ -1,0 +1,14 @@
+{
+  "hash": "259f5d3a42664f169f83fe572fa99ba9",
+  "result": {
+    "markdown": "---\ntitle: \"로지스틱 회귀분석 OR forest plot\"\ndescription:  \"ggplot으로 로지스틱 회귀분석 결과인 오즈비를 시각화\"\ndraft: true\nauthor: \n  - name: \"JYH\"\n    orcid: 0000-0001-8090-6555\n    affiliation: HIRC Lab, SNUBH\ndate: '2023-01-19'\nformat: \n  html: \n    toc: true\n    toc-location: left\n    code-fold: true\n    code-tools:\n      source: true\n    reference-location: document\n    theme: cosmo\n    fontsize: 1.1em\n    linestretch: 1.5\ncategories: [Logistic Regression, R, Visualization, forestplot]\n---\n\n\n로지스틱 회귀분석 모델을 만들어줍니다.\n\n\n::: {.cell}\n\n:::\n\n\n시각화를 진행해줍니다.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(ggplot2)\nggplot(df, aes(x = Outcome, y = OR, ymin = Lower, ymax = Upper,\n               col = group, fill = group)) + \n  geom_linerange(linewidth = 5, position = position_dodge(width = 0.5)) +\n  geom_hline(yintercept = 1, lty = 2) +\n  geom_point(size = 3, shape = 21, colour = \"white\", stroke = 0.5,\n             position = position_dodge(width = 0.5)) +\n  geom_text(aes(y = 3.75, group = group, \n                label = paste0(\"OR \", round(OR, 2), \", (\", round(Lower, 2), \n                               \" - \", round(Upper, 2), \")\")), hjust = 0,\n            position = position_dodge(width = 0.5), color = \"grey50\") +\n  scale_fill_manual(values = barCOLS) +\n  scale_color_manual(values = dotCOLS) +\n  scale_x_discrete(name = \"(Post)operative outcomes\") +\n  scale_y_continuous(name = \"Odds ratio\", limits = c(0.5, 5)) +\n  coord_flip() +\n  theme_minimal()\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

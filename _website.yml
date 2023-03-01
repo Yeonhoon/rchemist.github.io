@@ -18,10 +18,10 @@ website:
         text: About
       - icon: newspaper
         text: Posts
-        href: posts/
+        href: posts/index.qmd
       - icon: sliders2
         text: Gallery
-        href: gallery/
+        href: gallery/index.qmd
   page-navigation: true  
   page-footer:
     background: "#9CB7F0"

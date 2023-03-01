@@ -4,20 +4,6 @@ comments: false
 format:
   html:
     page-layout: full
-listing: 
-  - id: landing-posts
-    contents: posts
-    type: default
-    max-items: 3
-    sort:
-      - "date desc"
-      - "title asc"
-  - id: viz-gallery
-    contents: gallery
-    type: grid
-    max-items: 3
-    sort:
-      - "date desc"
 about:
   id: about-rchemist
   template: jolla
@@ -27,6 +13,9 @@ about:
     - icon: linkedin
       text: Linkedin
       href: https://www.linkedin.com/in/danjang0123/
+    - icon: slack
+      text: Slack
+      href: https://rchemisthq.slack.com
     - icon: envelope
       text: Email
       href: mailto:danjang0123@gmail.com
@@ -36,17 +25,4 @@ about:
 헬스케어 데이터를 다루는 데이터 사이언티스트입니다. 데이터 분석, 데이터 사이언스, 웹 개발에 관심이 있습니다.😃
 :::
 
-:::::{.grid}
-::::{.g-col-12 .g-col-md-6}
-## Recent posts
 
-:::{#landing-posts}
-:::
-::::
-::::{.g-col-12 .g-col-md-6}
-## Gallery
-
-:::{#viz-gallery}
-:::
-::::
-:::::
