@@ -1,0 +1,32 @@
+---
+title: "지수함수를 통한 복리 비교"
+---
+
+```{r}
+require(ggplot2)
+df <- data.frame(x=seq(1,50))
+x <- 1:50
+p <- ggplot(df, aes(x=x))
+for(i in 1:8){
+  p = local({
+    j <- i
+    y <- (1+0.01*j)^x
+    p + geom_line(aes(y=y, color=as.character(j)),
+                  linewidth=1) +
+      annotate("text",
+               label = 0.01*j,
+               size=2,
+               x=50, y=(1+0.01*j)^50,
+               hjust = -.3)
+  }
+  )
+}
+
+p + scale_color_brewer(
+  palette = "Spectral") +
+  theme_classic()+
+  scale_x_continuous(limits=c(0,55))+
+  theme(legend.position = "None") +
+  labs(x="Year", y="Total")
+  
+```

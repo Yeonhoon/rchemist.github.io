@@ -1,5 +1,5 @@
 ---
-title: "mlr3 하이퍼파라미터 튜닝"
+title: "mlr3 하이퍼파라미터 최적화"
 description: "mlr3를 이용한 하이퍼파라미터 튜닝 학습"
 date: ""
 categories: [R, mlr3, machine learning]
@@ -8,7 +8,53 @@ image: "https://mlr3proba.mlr-org.com/logo.svg"
 
 {{< include ../_mlr3_setup.qmd >}}
 
-## 4. Hyperparameter tuning {#sec-hyperparameter}
+머신러닝 알고리즘은 보통 파라미터와 하이퍼파라미터를 포함하고 있습니다. 파라미터란 모델의 회귀계수나 가중치처럼 모델을 만들 때 필요한 매개변수입니다. 반면, 하이퍼파라미터는 사용자에 의해 구성됨으로써 파라미터가 어떻게 나올지를 결정합니다.
+
+대표적인 하이퍼파라미터의 예시로는 랜덤포레스트 알고리즘에서 나무의 개수를 정한다던가, 신경망의 학습률을 조정하는 것 등이 있습니다.
+
+하이퍼파라미터는 어떻게 설정하는지에 따라 모델의 성능을 향상시킬 수도, 그 반대가 될 수도 있습니다. 따라서 하이퍼파라미터를 최적화함으로써, 주어진 태스크에 대해 최적의 알고리즘 모델을 개발하는 것이 필요합니다.
+
+어쩌면 최적의 모델을 구성하는 것이 하나의 러너에 하이퍼 파라미터를 다르게 부여하는 벤치마크 실험을 통해 모델을 선택하는 것과 같다고 생각할 수 있습니다. 예를 들어 랜덤포레스트 모델들을 구성하는 나무의 개수를 다르게 정의하여 성능을 비교해본다고 해봅시다.
+
+```{r}
+set.seed(123)
+bmr <- benchmark(
+  benchmark_grid(
+    tasks= tsk("penguins_simple"),
+    learners = list(
+      lrn("classif.ranger", num.trees = 1, id="1 tree"),
+      lrn("classif.ranger", num.trees = 10, id="10 tree"),
+      lrn("classif.ranger", num.trees = 100, id="100 tree")
+    ),
+    resamplings = rsmp("cv", folds=3)
+  )
+)
+
+autoplot(bmr)
+```
+
+결과를 봤을 때, 나무가 100개로 구성된 랜덤포레스트 모델의 성능이 가장 좋은 것으로 나타났습니다. 다만 이렇게 임의적으로 시행착오를 거쳐 하이퍼파라미터를 조정해주는 것은 많은 시간이 필요한 것은 물론, 종종 편향되고 재생산성이 떨어집니다.
+
+지금까지 개발되어온 정교한 하이퍼파라미터 최적화 방법은 종료(termination) 시점까지 반복적으로 다양한 파라미터를 검토 후, 최적의 하이퍼파라미터 구성을 내놓는 효율적이고 로버스트한 결과를 출력합니다.
+
+# 모델 튜닝하기
+
+mlr3tuning 패키지를 통해 mlr3 생태계에서 하이퍼파라미터 최적화를 수행할 수 있습니다.
+
+-   TuningInstanceSingleCrit, TuningInstanceMultiCrit: 튜닝 인스턴스를 만들 때 사용.
+
+-   Tuner: 최적의 알고리즘을 불러오고 설정할 때 사용.
+
+## 러너의 학습공간 설정
+
+각각의 러너들은 하이퍼파라미터 세트를 갖고 있습니다.
+
+```{r}
+lrn_svm <- lrn("classif.svm")
+lrn_svm$param_set
+```
+
+## Hyperparameter tuning {#sec-hyperparameter}
 
 ```{r eval=FALSE}
 lrn_rf$param_set
