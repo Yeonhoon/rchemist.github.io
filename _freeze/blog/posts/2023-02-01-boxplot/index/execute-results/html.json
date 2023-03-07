@@ -1,0 +1,20 @@
+{
+  "hash": "0881b1e7e7521782f275340941a2be5b",
+  "result": {
+    "markdown": "---\ntitle: \"ggplot boxplot 그리기\"\ndescription:  \"ggplot으로 boxplot 그리는 방법\"\ndate: '2023-01-19'\ncategories: [ggplot2, R, Visualization, boxplot]\nimage: \"https://ggplot2.tidyverse.org/logo.png\"\n---\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(ggplot2)\n```\n:::\n\n\nggplot으로 boxplot을 그릴 때, outlier 제거하기\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndiamonds |> \n  ggplot(aes(x=cut, y=price))+\n  geom_boxplot(outlier.shape=NA #outlier 제거하기\n               ) \n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\nboxplot에 errorbar 표시\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndiamonds |> \n  ggplot(aes(x=cut, y=price)) + \n  stat_boxplot(geom='errorbar') +\n  geom_boxplot(outlier.shape=NA #outlier 제거하기\n               ) \n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"../../../site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\r\n<script src=\"../../../site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\r\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

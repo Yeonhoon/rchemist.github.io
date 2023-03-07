@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-01-19">
+<meta name="description" content="R 사용을 위한 필수 개념 및 함수을 배워봅시다.">
+
+<title>Rchemist - R 기초 이해</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+<link href="../../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Rchemist</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"><i class="bi bi-house" role="img">
+</i> 
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html"><i class="bi bi-file-person" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html"><i class="bi bi-newspaper" role="img">
+</i> 
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../gallery/index.html"><i class="bi bi-sliders2" role="img">
+</i> 
+ <span class="menu-text">Gallery</span></a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">R 기초 이해</h1>
+                  <div>
+        <div class="description">
+          R 사용을 위한 필수 개념 및 함수을 배워봅시다.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">data.frame</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 19, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#r에서-사용되는-용어" id="toc-r에서-사용되는-용어" class="nav-link active" data-scroll-target="#r에서-사용되는-용어">R에서 사용되는 용어</a>
+  <ul class="collapse">
+  <li><a href="#object" id="toc-object" class="nav-link" data-scroll-target="#object">Object</a>
+  <ul class="collapse">
+  <li><a href="#object의-생성" id="toc-object의-생성" class="nav-link" data-scroll-target="#object의-생성">object의 생성</a></li>
+  <li><a href="#object의-생성과-출력" id="toc-object의-생성과-출력" class="nav-link" data-scroll-target="#object의-생성과-출력">object의 생성과 출력</a></li>
+  </ul></li>
+  <li><a href="#function-함수" id="toc-function-함수" class="nav-link" data-scroll-target="#function-함수">Function (함수)</a></li>
+  <li><a href="#작업-경로-working-directory-wd" id="toc-작업-경로-working-directory-wd" class="nav-link" data-scroll-target="#작업-경로-working-directory-wd">작업 경로 (working directory, wd)</a></li>
+  <li><a href="#패키지-packages" id="toc-패키지-packages" class="nav-link" data-scroll-target="#패키지-packages">패키지 (packages)</a></li>
+  </ul></li>
+  <li><a href="#데이터의-유형" id="toc-데이터의-유형" class="nav-link" data-scroll-target="#데이터의-유형">데이터의 유형</a>
+  <ul class="collapse">
+  <li><a href="#numeric" id="toc-numeric" class="nav-link" data-scroll-target="#numeric">numeric</a>
+  <ul class="collapse">
+  <li><a href="#integer" id="toc-integer" class="nav-link" data-scroll-target="#integer">integer</a></li>
+  <li><a href="#double" id="toc-double" class="nav-link" data-scroll-target="#double">double</a></li>
+  </ul></li>
+  <li><a href="#character" id="toc-character" class="nav-link" data-scroll-target="#character">character</a></li>
+  <li><a href="#factor" id="toc-factor" class="nav-link" data-scroll-target="#factor">factor</a></li>
+  <li><a href="#logical" id="toc-logical" class="nav-link" data-scroll-target="#logical">logical</a></li>
+  </ul></li>
+  <li><a href="#데이터의-구조" id="toc-데이터의-구조" class="nav-link" data-scroll-target="#데이터의-구조">데이터의 구조</a>
+  <ul class="collapse">
+  <li><a href="#vector" id="toc-vector" class="nav-link" data-scroll-target="#vector">Vector</a></li>
+  <li><a href="#matrix" id="toc-matrix" class="nav-link" data-scroll-target="#matrix">Matrix</a></li>
+  <li><a href="#data.frame" id="toc-data.frame" class="nav-link" data-scroll-target="#data.frame">Data.frame</a></li>
+  <li><a href="#list" id="toc-list" class="nav-link" data-scroll-target="#list">List</a></li>
+  </ul></li>
+  <li><a href="#operator-연산자" id="toc-operator-연산자" class="nav-link" data-scroll-target="#operator-연산자">Operator: 연산자</a>
+  <ul class="collapse">
+  <li><a href="#산술-연산자" id="toc-산술-연산자" class="nav-link" data-scroll-target="#산술-연산자">산술 연산자</a></li>
+  <li><a href="#논리-연산자" id="toc-논리-연산자" class="nav-link" data-scroll-target="#논리-연산자">논리 연산자</a></li>
+  <li><a href="#파이프-연산자" id="toc-파이프-연산자" class="nav-link" data-scroll-target="#파이프-연산자">파이프 연산자</a></li>
+  </ul></li>
+  <li><a href="#데이터-프레임" id="toc-데이터-프레임" class="nav-link" data-scroll-target="#데이터-프레임">데이터 프레임</a>
+  <ul class="collapse">
+  <li><a href="#번호로-선택하기" id="toc-번호로-선택하기" class="nav-link" data-scroll-target="#번호로-선택하기">번호로 선택하기</a></li>
+  <li><a href="#이름으로-선택하기" id="toc-이름으로-선택하기" class="nav-link" data-scroll-target="#이름으로-선택하기">이름으로 선택하기</a></li>
+  <li><a href="#조건으로-선택하기" id="toc-조건으로-선택하기" class="nav-link" data-scroll-target="#조건으로-선택하기">조건으로 선택하기</a></li>
+  </ul></li>
+  <li><a href="#함수" id="toc-함수" class="nav-link" data-scroll-target="#함수">함수</a>
+  <ul class="collapse">
+  <li><a href="#요약-함수" id="toc-요약-함수" class="nav-link" data-scroll-target="#요약-함수">요약 함수</a></li>
+  <li><a href="#data.frame-관련-함수" id="toc-data.frame-관련-함수" class="nav-link" data-scroll-target="#data.frame-관련-함수">data.frame 관련 함수</a>
+  <ul class="collapse">
+  <li><a href="#데이터-불러오기저장하기" id="toc-데이터-불러오기저장하기" class="nav-link" data-scroll-target="#데이터-불러오기저장하기">데이터 불러오기/저장하기</a></li>
+  <li><a href="#데이터-훑어보기" id="toc-데이터-훑어보기" class="nav-link" data-scroll-target="#데이터-훑어보기">데이터 훑어보기</a></li>
+  <li><a href="#행과-열의-수-확인" id="toc-행과-열의-수-확인" class="nav-link" data-scroll-target="#행과-열의-수-확인">행과 열의 수 확인</a></li>
+  </ul></li>
+  <li><a href="#논리-함수" id="toc-논리-함수" class="nav-link" data-scroll-target="#논리-함수">논리 함수</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>이번 포스트에서는 R을 사용하기 위해 반드시 알아야 하는 R 필수 개념에 대해 설명드리도록 하겠습니다.</p>
+<section id="r에서-사용되는-용어" class="level1">
+<h1>R에서 사용되는 용어</h1>
+<section id="object" class="level2">
+<h2 class="anchored" data-anchor-id="object">Object</h2>
+<p>object란 R에서 어떠한 데이터를 갖는 값을 의미합니다. Object는 객체라고도 불리며, 다양한 유형이나 구조의 데이터를 특정 이름으로 저장하는 것을 말합니다.</p>
+<section id="object의-생성" class="level3">
+<h3 class="anchored" data-anchor-id="object의-생성">object의 생성</h3>
+<p>R에서 object(객체)의 생성은 <code>&lt;-</code> 또는 <code>=</code> 를 통해 이루어집니다.</p>
+<p><code>&lt;-</code>를 기준으로 왼쪽의 값이 object의 이름이고 오른쪽이 object가 갖게 되는 또는 object에 저장되는 데이터입니다.</p>
+<blockquote class="blockquote">
+<p>LHS &lt;- RHS</p>
+<p>A &lt;- B</p>
+</blockquote>
+</section>
+<section id="object의-생성과-출력" class="level3">
+<h3 class="anchored" data-anchor-id="object의-생성과-출력">object의 생성과 출력</h3>
+<p>object를 생성한다는 것은 특정 데이터를 <u>특정한 이름으로 <strong>저장</strong></u>하는 것입니다.</p>
+<p><code>A &lt;- B</code> 를 사용해 데이터를 생성하면 A라는 object에는 B라는 데이터가 저장됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="st">'Welcome to R!'</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>aa <span class="ot">&lt;-</span> <span class="st">'aa'</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>aa <span class="ot">&lt;-</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>위에서는 ’Welcome to R!’이라고 하는 문자를 <code>a</code>라고 하는 object 로 생성한 것입니다. 반면 object의 출력은 생성한 object 에 <u>저장되어 있는 데이터를 확인</u>하는 것입니다.</p>
+<p>object를 생성한다고 해서 그 값이 출력되지는 않습니다. object 갖고 있는 데이터를 확인하기 위해서는 object의 이름을 실행하거나 출력하는 함수를 사용해야 합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>a </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Welcome to R!"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 또는</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Welcome to R!"</code></pre>
+</div>
+</div>
+<p>만약 object를 생성함과 동시에 그 object를 출력하고 싶다면 아래와 같이 실행하면 됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="st">'Welcome to R!'</span>; <span class="fu">print</span>(a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Welcome to R!"</code></pre>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="function-함수" class="level2">
+<h2 class="anchored" data-anchor-id="function-함수">Function (함수)</h2>
+<p>R에서 함수란 특정한 기능을 수행하는 명령어입니다. 보통 “~을 한다” 처럼 우리말의 동사라고 이해하면 쉽습니다.</p>
+<p>R에서 함수는 일반적으로 <code>()</code>가 붙습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>print <span class="ot">&lt;-</span> <span class="st">'프린트'</span> <span class="co"># 프린트라는 값을 갖는 object</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">'dd'</span>) <span class="co"># 'dd'를 출력하는 함수</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "dd"</code></pre>
+</div>
+</div>
+<p>위의 예시에서 <code>print</code>는 ’프린트’라는 문자를 갖는 <u>object</u>인 반면, <code>print()</code>는 특정 object를 출력하는 <u>함수</u>입니다.</p>
+<p>물론 함수의 이름으로도 object를 만들 수 있습니다. 그러나 이럴 경우, 분석 과정에서 이름을 혼동하는 경우가 발생할 수 있기 때문에, 나중을 생각한다면 그렇게 권장하는 방법은 아닙니다. 따라서 함수명이 아닌 다른 이름으로 object를 만드시는 것을 추천합니다.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>R 뿐만 아니라 프로그래밍 언어에는 일반적으로 영어를 활용하여 object 이름을 붙여줍니다.</p>
+<p>다양한 방법들이 있겠으나, 추천드리는 방법은 다음과 같습니다. 우선 띄어쓰기가 필요없는 하나의 단어로 object 이름을 지어주는 것은 말그대로 영어단어를 사용해주면 됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="st">'the result'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>하나의 단어를 뛰어 넘어 여러 개의 단어를 붙여 써야 하는 경우에는 아래의 방법 중 원하는 방식을 사용하시면 됩니다.</p>
+<ul>
+<li>myResult</li>
+<li>my_result</li>
+<li>my.result</li>
+</ul>
+</div>
+</div>
+<hr>
+</section>
+<section id="작업-경로-working-directory-wd" class="level2">
+<h2 class="anchored" data-anchor-id="작업-경로-working-directory-wd">작업 경로 (working directory, wd)</h2>
+<p>작업경로란 현재 내가 데이터 분석을 진행하고 있는 위치를 의미합니다.</p>
+<p>작업경로와 관련된 함수는 크게 2가지가 있습니다.</p>
+<ul>
+<li><p><code>getwd()</code> 현재 내 작업경로를 확인합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "C:/Users/user/Desktop/webpage/blog/posts/2023-01-27-Rbase"</code></pre>
+</div>
+</div></li>
+<li><p><code>setwd()</code> 작업경로를 특정한 곳으로 변경합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"작업경로로 설정할 위치"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+<p>작업경로를 설정하는 이유는 외부 데이터 파일(e.g., .csv) 을 불러올 때, 그 파일이 있는 경로가 필요하기 때문입니다.</p>
+<hr>
+</section>
+<section id="패키지-packages" class="level2">
+<h2 class="anchored" data-anchor-id="패키지-packages">패키지 (packages)</h2>
+<p>R에서 패키지란 <u><strong>특정 함수들을 포함하고 있는 함수 세트</strong></u> 라고 할 수 있습니다.</p>
+<p>데이터 분석에 필요한 패키지들을 설치한 뒤 그 패키지를 불러 들여와야 사용할 수 있습니다.</p>
+<ul>
+<li><p>패키지 설치: <code>install.packages()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'패키지명'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>위와 같이 설치하고자 하는 패키지를 <code>install.packages()</code> 함수 안에 <u>따옴표가 붙은 문자 형태</u>로 넣어주어야 합니다.</p></li>
+<li><p>패키지 불러오기: <code>library()</code> 또는 <code>require()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 또는</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>설치된 패키지를 불러오기 위해서는 <code>library()</code> 또는 <code>require()</code> 함수 안에 패키지 이름을 <u>object 형태(따옴표가 붙지 않은 형태)</u>로 넣어주어야 합니다.</p>
+<p>사실 패키지 이름을 입력할 때, 따옴표를 사용해 문자로 넣어주어도 가능합니다. 그러나 문자열로 넣게 된다면 <u>자동완성기능</u>을 활용할 수 없게 됩니다. 그렇기 때문에 패키지의 이름을 전부 입력해야만 하죠. 따라서 가급적이면 따옴표를 사용하지 않는 것을 추천합니다.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>library()</code>와 <code>require()</code>는 패키지를 불러온다는 점에서 동일한 역할을 하지만, 차이점이 존재합니다.</p>
+<p><code>library()</code> 는 설치되지 않은 패키지를 불러오면 에러메시지를 출력하지만, <code>require()</code>는 경고와 함께 T/F 값을 반환할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre style="color: red;"><code>Error in library(ggplot3) : there is no package called 'ggplot3'</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(ggplot3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre style="color: red"><code>필요한 패키지를 로딩중입니다: ggplot3
+Warning message:
+In library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE,  :
+  ‘ggplot3’이라고 불리는 패키지가 없습니다</code></pre>
+</div>
+</div></li>
+</ul>
+<p>패키지를 성공적으로 불러왔다면, 패키지에 있는 함수들을 활용할 수 있게 됩니다.</p>
+<p>물론 패키지를 불러오지 않고 (<code>library()</code>나 <code>require()</code>를 이용하지 않고) 패키지 내의 함수를 사용하는 방법이 있긴 합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">select</span>(column이름) <span class="co">#패키지명::함수</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>위의 코드처럼 <code>패키지명::함수명</code> 의 방식을 이용한다면 패키지 내에 있는 함수들을 사용할 수 있습니다.</p>
+<p>그러나 매번 <code>패키지명::</code>을 이용해 함수를 이용하는 것보다 <code>library()</code> 함수를 한 번 실행한 뒤, 패키지의 함수들을 이용하는 것이 훨씬 효율적이겠죠?</p>
+<hr>
+</section>
+</section>
+<section id="데이터의-유형" class="level1">
+<h1>데이터의 유형</h1>
+<p>R에서 가장 기본적으로 활용되는 데이터의 유형 (type)에 대해 알아볼 것입니다.</p>
+<p>R의 기본적인 데이터의 유형은 크게 <code>numeric</code>, <code>charcter</code>, <code>factor</code>, <code>logical</code> 이 있음.</p>
+<section id="numeric" class="level2">
+<h2 class="anchored" data-anchor-id="numeric">numeric</h2>
+<p><code>numeric</code>은 이름에서 알 수 있듯이 숫자 데이터입니다. numeric은 정수와 실수를 모두 포함합니다. R에서 정수는 <code>integer</code>, 실수는 <code>double</code>로 표현됩니다.</p>
+<section id="integer" class="level3">
+<h3 class="anchored" data-anchor-id="integer">integer</h3>
+<p>우리가 생각하는 정수는 흔히 소숫점이 없는 숫자입니다. 그러나 R에서는 단순히 숫자에 소수점이 없다고 해서 integer로 인식하지 않습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.integer</span>(<span class="dv">1</span>) <span class="co"># FALSE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(<span class="dv">1</span>) <span class="co"># numeric</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.integer</span>(1L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(1L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "integer"</code></pre>
+</div>
+</div>
+<p>위의 코드로 봤을 때, 단순한 <code>1</code>은 integer가 아니라 <code>numeric</code>입니다.</p>
+<p>R에서 <code>integer</code>를 사용하기 위해선 숫자 뒤에 <code>L</code>을 붙여주어야 합니다.</p>
+</section>
+<section id="double" class="level3">
+<h3 class="anchored" data-anchor-id="double">double</h3>
+<p>우리가 알고 있는 실수는 소수점이 있는 숫자입니다. 그러나 R에서는 앞서 살펴 보았듯, <code>L</code>이 붙어 <code>integer</code>로 지정된 숫자가 아니라면 모두 실수라고 할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.numeric</span>(<span class="dv">1</span>) <span class="co">#TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.double</span>(<span class="dv">1</span>) <span class="co">#TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(<span class="fl">1.5</span>) <span class="co">#numeric</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+</div>
+<p>1이라는 숫자는 <code>double</code>이기도 하면서 동시에 <code>numeric</code>입니다. 또한 소수점이 들어가는 숫자의 유형을 확인해보면 <code>double</code>이 아니라 <code>numeric</code>이라는 것을 알 수 있습니다.</p>
+<p>즉, <code>numeric</code>이 숫자데이터에서 가장 상위의 개념이고 그 하위 개념으로 <code>double</code> 과 <code>integer</code> 가 있다고 이해하시면 쉽습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|echo: false</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co">#|warning: false</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(ggforce)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x=</span><span class="fu">c</span>(<span class="dv">100</span>,<span class="dv">300</span>,<span class="dv">200</span>),</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y=</span><span class="fu">c</span>(<span class="dv">250</span>,<span class="dv">250</span>,<span class="dv">250</span>),</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">r=</span><span class="fu">c</span>(<span class="dv">80</span>,<span class="dv">80</span>,<span class="dv">200</span>),</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y_label=</span><span class="fu">c</span>(<span class="dv">250</span>,<span class="dv">250</span>,<span class="dv">450</span>),</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">label =</span> <span class="fu">c</span>(<span class="st">'integer'</span>,<span class="st">'double'</span>,<span class="st">'numeric'</span>))</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(temp) <span class="sc">+</span> </span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0=</span>x,<span class="at">y0=</span>y,<span class="at">r=</span>r, <span class="at">fill=</span>label),<span class="at">alpha=</span>.<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>()<span class="sc">+</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">data=</span>temp,<span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y_label,<span class="at">label=</span>label))<span class="sc">+</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">'    숫자유형 데이터의 관계'</span>)<span class="sc">+</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">'none'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>그러나 이 둘을 구분해서 사용하는 경우는 드뭅니다. 모든 숫자 데이터는 numeric으로 사용하셔도 상관없습니다.</p>
+</section>
+</section>
+<section id="character" class="level2">
+<h2 class="anchored" data-anchor-id="character">character</h2>
+<p><code>character</code>는 큰 따옴표 또는 작은 따옴표가 붙은 문자열 데이터를 의미합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>chr <span class="ot">&lt;-</span> <span class="st">'character'</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>chr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+</div>
+<p>앞서 object 부분에서 말씀드렸듯이, ‘character’ 라는 문자열 데이터이고, chr는 ‘character’ 값을 갖는 object입니다. <code>chr</code> 와 <code>'chr'</code>을 헷갈리지 마시기 바랍니다.</p>
+</section>
+<section id="factor" class="level2">
+<h2 class="anchored" data-anchor-id="factor">factor</h2>
+<p><code>factor</code>는 다른 데이터의 유형과 달리 순서 (level)를 갖는 데이터 유형입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>vec_num <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>vec_fac <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(vec_fac) <span class="co"># factor</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "factor"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(vec_fac) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 1  2  3  4  5  6  7  8  9  10
+Levels: 1 2 3 4 5 6 7 8 9 10</code></pre>
+</div>
+</div>
+<p><code>vec_num</code>과 <code>vec_fac</code>은 모두 1부터 10까지의 데이터를 갖고 있습니다. 그러나 <code>vec_num</code>과 달리 <code>vec_fac</code>을 출력했을 때, <code>Levels</code>도 함께 출력되는 것을 확인할 수 있습니다.</p>
+<p>만약 임의로 <code>factor</code> 변수의 level을 변경하고 싶다면 아래와 같이 <code>factor</code> 함수 안에 <code>levels</code> 부분을 수정해주면 됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>vec_fac2 <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,  <span class="at">levels=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">8</span>,<span class="dv">6</span>,<span class="dv">4</span>,<span class="dv">2</span>))</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(vec_fac2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 1  2  3  4  5  6  7  8  9  10
+Levels: 1 3 5 7 9 10 8 6 4 2</code></pre>
+</div>
+</div>
+<p><code>vec_fac</code>과 <code>vec_fac2</code>의 levels가 다른 것을 확인할 수 있습니다.</p>
+<p>또한 factor를 ordinal 하게 만들어줄 수 있습니다. <code>ordered=T</code> 를 이용해 nominal 한 factor를 ordinal하게 변경할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>vec_fac3 <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ordered =</span> T,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">levels=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">8</span>,<span class="dv">6</span>,<span class="dv">4</span>,<span class="dv">2</span>))</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(vec_fac3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 1  2  3  4  5  6  7  8  9  10
+Levels: 1 &lt; 3 &lt; 5 &lt; 7 &lt; 9 &lt; 10 &lt; 8 &lt; 6 &lt; 4 &lt; 2</code></pre>
+</div>
+</div>
+<p>출력 시 Levels에 <code>&lt;</code> 가 생성되는 것을 알 수 있습니다.</p>
+</section>
+<section id="logical" class="level2">
+<h2 class="anchored" data-anchor-id="logical">logical</h2>
+<p><code>logical</code>은 단어에서 알 수 있듯 논리형 데이터 입니다. 쉽게 말하면 참(<code>TRUE</code>)인지 거짓(<code>FALSE</code>)인지를 나타내는 데이터 유형입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(<span class="cn">TRUE</span>) <span class="co">#  logical</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "logical"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="cn">TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="cn">FALSE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>F</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div>
+<p>R에서 <code>TRUE</code> 와 <code>FALSE</code> 는 각각 <code>T</code> 와 <code>F</code>로 줄여쓸 수 있습니다.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>R에서 사용되는 변수를 개념적으로 정리해보면 다음과 같습니다.</p>
+<p>연속형 변수(Continuous variable): <code>numeric</code>, <code>integer</code>, <code>double</code></p>
+<p>범주형 변수(Categorical variable): <code>character</code>, <code>factor</code></p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="데이터의-구조" class="level1">
+<h1>데이터의 구조</h1>
+<p>앞서서 데이터의 유형에 배워봤다면, 이번에는 데이터가 어떤 형태로 존재하는지 알아볼 차례입니다.</p>
+<p>R에서 가장 많이 활용되는 4가지의 데이터 구조, <code>vector</code>, <code>matirx</code>, <code>data.frame</code>, <code>list</code>를 배워보도록 하겠습니다.</p>
+<section id="vector" class="level2">
+<h2 class="anchored" data-anchor-id="vector">Vector</h2>
+<p>vector는 하나 이상의 값을 갖는 1차원 구조의 데이터입니다. 가장 단순하지만, 또 데이터 분석에 많이 활용되는 데이터 구조 중 하나입니다.</p>
+<p>보통 vector를 생성할 때는 <code>c()</code> 를 이용해 생성합니다. <code>c()</code>는 ’concatenate’의 약자입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>); vec1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>vec2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'a'</span>,<span class="st">'b'</span>,<span class="st">'c'</span>); vec2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "a" "b" "c"</code></pre>
+</div>
+</div>
+<p><code>vec1</code>은 numeric 데이터를 갖는 vector이고 <code>vec2</code>는 character 데이터를 갖는 vector입니다.</p>
+<p>여러 유형의 데이터를 갖는 vector인 경우, 하나라도 문자(character) 또는 factor가 있는 경우, 전부 그 유형의 데이터를 갖는 vector로 저장됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>vec3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="st">'a'</span>,<span class="dv">5</span>,<span class="dv">6</span>)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>vec3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "1" "2" "3" "a" "5" "6"</code></pre>
+</div>
+</div>
+<p><code>vec3</code>를 선언할 때는 1,2,3 과 같은 숫자가 들어갔지만, <code>vec3</code>를 출력해보면 따옴표가 붙은 character인 것을 알 수 있습니다.</p>
+</section>
+<section id="matrix" class="level2">
+<h2 class="anchored" data-anchor-id="matrix">Matrix</h2>
+<p>2차원 구조의 데이터입니다. 행렬이라고 이해하시면 쉽습니다.</p>
+<p>R에서 <code>matrix</code>를 생성하는 함수는 <code>matrix()</code>입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>mat2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">nrow=</span><span class="dv">3</span>) <span class="co"># 행의 개수: 3</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>mat3 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">ncol=</span><span class="dv">3</span>) <span class="co"># 열의 개수: 3</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>mat4 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">ncol=</span><span class="dv">3</span>, <span class="at">byrow=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>matrix()</code> 함수에서는 행 또는 열의 개수를 지정해줄 수 있습니다.</p>
+<ul>
+<li><p><code>nrow()</code> : 행의 개수 지정</p></li>
+<li><p><code>ncol()</code>: 열의 개수 지정</p></li>
+</ul>
+<p>마지막의 <code>byrow</code>인자는 <code>matrix</code>의 입력 순서를 행의 방향으로 설정해주는 것입니다. 초기에는 <code>matrix</code>가 열 방향(위에서 아래로 (↓))이었다면, <code>byrow</code>를 통해 <code>matrix</code>의 값들을 행 방향 (좌에서 우로 (→))으로 입력할 수 있습니다.</p>
+</section>
+<section id="data.frame" class="level2">
+<h2 class="anchored" data-anchor-id="data.frame">Data.frame</h2>
+<p>2차원 구조의 데이터로서, R에서 데이터분석을 위해 가장 많이 활용되는 데이터 구조입니다. 데이터프레임은 matrix와 동일한 2차원 형태지만 몇 가지 다른 점이 있습니다.</p>
+<ul>
+<li>matrix와 달리, <code>$</code> 기호를 이용해 column 이름으로 호출 가능합니다.</li>
+<li>각 열(column)별로 다른 데이터 유형을 가질 수 있습니다.</li>
+</ul>
+<p><code>data.frame</code>은 앞으로 가장 많이 사용할 데이터 구조이기 때문에, 아래에서 더 다뤄보도록 하겠습니다.</p>
+</section>
+<section id="list" class="level2">
+<h2 class="anchored" data-anchor-id="list">List</h2>
+<p><code>list</code>는 다른 데이터 구조들과는 다릅니다.</p>
+<ul>
+<li><p>데이터프레임의 column처럼 데이터마다 이름을 가질 수 있습니다.</p></li>
+<li><p>각 이름마다 다른 유형, 다른 구조의 데이터를 가질 수 있습니다.</p></li>
+<li><p>각 이름마다 길이가 다른 데이터를 가질 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>l<span class="sc">$</span>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>l<span class="sc">$</span>b <span class="ot">&lt;-</span> LETTERS <span class="co"># 알파벳 대문자</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>l<span class="sc">$</span>c <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,<span class="at">nrow=</span><span class="dv">4</span>, <span class="at">byrow=</span>T)</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>l<span class="sc">$</span>d <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">a=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">b=</span>letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>l</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$a
+[1] 1 2 3 4 5
+
+$b
+ [1] "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S"
+[20] "T" "U" "V" "W" "X" "Y" "Z"
+
+$c
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    2    3    4    5
+[2,]    6    7    8    9   10
+[3,]   11   12   13   14   15
+[4,]   16   17   18   19   20
+
+$d
+  a b
+1 1 a
+2 2 b
+3 3 c
+4 4 d
+5 5 e</code></pre>
+</div>
+</div>
+<p>위의 코드를 보면, <code>l</code>이라고 하는 <code>list</code>에는 <code>a</code>라는 이름을 갖는 데이터와 <code>b</code>라는 이름을 갖는 데이터가 존재합니다.</p>
+<p>또한 <code>a</code>는 1부터 5까지의 <code>numeric</code> 유형의 <code>vector</code>를 갖는 반면, <code>b</code>는 알파벳 대문자의 <code>character</code> 유형의 <code>vector</code>를, <code>c</code>는 4행 5열의 <code>matrix</code>를, 마지막으로 <code>d</code>는 <code>data.frame</code>을 갖습니다.</p></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="operator-연산자" class="level1">
+<h1>Operator: 연산자</h1>
+<section id="산술-연산자" class="level2">
+<h2 class="anchored" data-anchor-id="산술-연산자">산술 연산자</h2>
+<p>산술연산자는 숫자를 계산하는 데 사용되는 연산자를 말합니다. 우리가 잘 아는 덧셈(+), 뺄셈(-), 곱셈(*), 나눗셈(/) 등의 연산자가 있습니다.</p>
+</section>
+<section id="논리-연산자" class="level2">
+<h2 class="anchored" data-anchor-id="논리-연산자">논리 연산자</h2>
+<p>논리 연산자는 참(<code>TRUE</code>)과 거짓(<code>FALSE</code>)를 반환하는 연산자들을 의미합니다. 보통 LHS와 RHS의 값을 비교할 때 사용하는 연산자입니다.</p>
+<p>연산 결과가 맞는 경우는 TRUE를, 그렇지 않은 경우는 FALSE를 반환합니다.</p>
+<p>논리 연산자는 주로 <u>데이터프레임과 함께 특정 조건을 만족하는 행을 찾아</u>낼 때 사용합니다.</p>
+<ul>
+<li><p><code>A == B</code>: 같음</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="sc">==</span> <span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div></li>
+<li><p><code>A &lt; B</code>, <code>A &lt;= B</code> : 작음, 작거나 같음</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> <span class="sc">&lt;</span> <span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span><span class="sc">&lt;=</span><span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div></li>
+<li><p><code>A &gt; B</code>, <code>A &gt;= B</code> :큼, 크거나 같음</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="dv">44</span><span class="sc">&gt;=</span><span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span><span class="sc">&gt;</span><span class="dv">35</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div></li>
+<li><p><code>A != B</code> : 같지 않음</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="sc">!=</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div></li>
+<li><p><code>A &amp; B</code> : A와 B가 모두 참일 때 <code>TRUE</code>를 반환합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="sc">&gt;</span><span class="dv">5</span> <span class="sc">&amp;</span> <span class="dv">25</span> <span class="sc">&gt;</span> <span class="dv">20</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div></li>
+<li><p><code>A | B</code> : A 또는 B 하나만 참이면 <code>TRUE</code>를 반환합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="sc">&lt;</span><span class="dv">5</span> <span class="sc">|</span> <span class="dv">50</span> <span class="sc">&gt;</span> <span class="dv">49</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="파이프-연산자" class="level2">
+<h2 class="anchored" data-anchor-id="파이프-연산자">파이프 연산자</h2>
+<p>파이프 연산자란 R의 특수한 연산자로, <code>%</code> 가 붙은 연산자들을 의미합니다. 대표적인 파이프 연산자는 <code>%&gt;%</code> 가 있습니다. 이 연산자를 사용하기 위해선 <code>magrittr</code> 패키지가 필요합니다. 단축키는 <code>ctrl + shift + m</code> 로 사용할 수 있습니다.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>기존에 존재하던 <code>%&gt;%</code> 는 <code>magrittr</code> 패키지를 불러들여와야 사용이 가능했습니다. 하지만 R 4.1 이후로는 기본적으로 <code>|&gt;</code> 라는 파이프 연산자를 제공하고 있습니다. 실질적으로 기능은 거의 같기 때문에 원하는 파이프 연산자를 사용하시면 됩니다.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="데이터-프레임" class="level1">
+<h1>데이터 프레임</h1>
+<p>이번 장에서는 R의 데이터 구조 중 가장 많이 활용되는 <code>data.frame</code>에 대해 심층적으로 알아보겠습니다데이터를 보며 설명하기 전, 데이터프레임에 대해 개념적으로 꼭 알아두어야 할 것이 있습니다. 바로 데이터프레임은 열(column) 중심의 데이터 구조라는 것입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>pkg <span class="ot">&lt;-</span> <span class="fu">require</span>(NHANES)</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span>pkg) <span class="fu">install.packages</span>(<span class="st">'NHANES'</span>) <span class="co"># 패키지 설치</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Installing NHANES [2.1.0] ...
+    OK [linked cache]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(NHANES)</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(NHANES)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>먼저 <code>df</code> 라는 이름으로 데이터를 저장하였습니다. <code>NHANES</code> 데이터는 <code>NHANES</code> 패키지 설치를 통해 사용할 수 있습니다. <code>NHANES</code> 데이터는 미국의 건강영양조사 데이터입니다.</p>
+<p>데이터프레임은 행/열의 번호나 이름을 통해 그 일부분을 선택할 수 있습니다. R 기본 데이터 프레임은 <code>df[row, column]</code> 형식으로 사용가능합니다.</p>
+<section id="번호로-선택하기" class="level3">
+<h3 class="anchored" data-anchor-id="번호로-선택하기">번호로 선택하기</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">1</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["SurveyYr"],"name":[2],"type":["fct"],"align":["left"]},{"label":["Gender"],"name":[3],"type":["fct"],"align":["left"]},{"label":["Age"],"name":[4],"type":["int"],"align":["right"]},{"label":["AgeDecade"],"name":[5],"type":["fct"],"align":["left"]},{"label":["AgeMonths"],"name":[6],"type":["int"],"align":["right"]},{"label":["Race1"],"name":[7],"type":["fct"],"align":["left"]},{"label":["Race3"],"name":[8],"type":["fct"],"align":["left"]},{"label":["Education"],"name":[9],"type":["fct"],"align":["left"]},{"label":["MaritalStatus"],"name":[10],"type":["fct"],"align":["left"]},{"label":["HHIncome"],"name":[11],"type":["fct"],"align":["left"]},{"label":["HHIncomeMid"],"name":[12],"type":["int"],"align":["right"]},{"label":["Poverty"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["HomeRooms"],"name":[14],"type":["int"],"align":["right"]},{"label":["HomeOwn"],"name":[15],"type":["fct"],"align":["left"]},{"label":["Work"],"name":[16],"type":["fct"],"align":["left"]},{"label":["Weight"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["Length"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["HeadCirc"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["Height"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["BMI"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["BMICatUnder20yrs"],"name":[22],"type":["fct"],"align":["left"]},{"label":["BMI_WHO"],"name":[23],"type":["fct"],"align":["left"]},{"label":["Pulse"],"name":[24],"type":["int"],"align":["right"]},{"label":["BPSysAve"],"name":[25],"type":["int"],"align":["right"]},{"label":["BPDiaAve"],"name":[26],"type":["int"],"align":["right"]},{"label":["BPSys1"],"name":[27],"type":["int"],"align":["right"]},{"label":["BPDia1"],"name":[28],"type":["int"],"align":["right"]},{"label":["BPSys2"],"name":[29],"type":["int"],"align":["right"]},{"label":["BPDia2"],"name":[30],"type":["int"],"align":["right"]},{"label":["BPSys3"],"name":[31],"type":["int"],"align":["right"]},{"label":["BPDia3"],"name":[32],"type":["int"],"align":["right"]},{"label":["Testosterone"],"name":[33],"type":["dbl"],"align":["right"]},{"label":["DirectChol"],"name":[34],"type":["dbl"],"align":["right"]},{"label":["TotChol"],"name":[35],"type":["dbl"],"align":["right"]},{"label":["UrineVol1"],"name":[36],"type":["int"],"align":["right"]},{"label":["UrineFlow1"],"name":[37],"type":["dbl"],"align":["right"]},{"label":["UrineVol2"],"name":[38],"type":["int"],"align":["right"]},{"label":["UrineFlow2"],"name":[39],"type":["dbl"],"align":["right"]},{"label":["Diabetes"],"name":[40],"type":["fct"],"align":["left"]},{"label":["DiabetesAge"],"name":[41],"type":["int"],"align":["right"]},{"label":["HealthGen"],"name":[42],"type":["fct"],"align":["left"]},{"label":["DaysPhysHlthBad"],"name":[43],"type":["int"],"align":["right"]},{"label":["DaysMentHlthBad"],"name":[44],"type":["int"],"align":["right"]},{"label":["LittleInterest"],"name":[45],"type":["fct"],"align":["left"]},{"label":["Depressed"],"name":[46],"type":["fct"],"align":["left"]},{"label":["nPregnancies"],"name":[47],"type":["int"],"align":["right"]},{"label":["nBabies"],"name":[48],"type":["int"],"align":["right"]},{"label":["Age1stBaby"],"name":[49],"type":["int"],"align":["right"]},{"label":["SleepHrsNight"],"name":[50],"type":["int"],"align":["right"]},{"label":["SleepTrouble"],"name":[51],"type":["fct"],"align":["left"]},{"label":["PhysActive"],"name":[52],"type":["fct"],"align":["left"]},{"label":["PhysActiveDays"],"name":[53],"type":["int"],"align":["right"]},{"label":["TVHrsDay"],"name":[54],"type":["fct"],"align":["left"]},{"label":["CompHrsDay"],"name":[55],"type":["fct"],"align":["left"]},{"label":["TVHrsDayChild"],"name":[56],"type":["int"],"align":["right"]},{"label":["CompHrsDayChild"],"name":[57],"type":["int"],"align":["right"]},{"label":["Alcohol12PlusYr"],"name":[58],"type":["fct"],"align":["left"]},{"label":["AlcoholDay"],"name":[59],"type":["int"],"align":["right"]},{"label":["AlcoholYear"],"name":[60],"type":["int"],"align":["right"]},{"label":["SmokeNow"],"name":[61],"type":["fct"],"align":["left"]},{"label":["Smoke100"],"name":[62],"type":["fct"],"align":["left"]},{"label":["Smoke100n"],"name":[63],"type":["fct"],"align":["left"]},{"label":["SmokeAge"],"name":[64],"type":["int"],"align":["right"]},{"label":["Marijuana"],"name":[65],"type":["fct"],"align":["left"]},{"label":["AgeFirstMarij"],"name":[66],"type":["int"],"align":["right"]},{"label":["RegularMarij"],"name":[67],"type":["fct"],"align":["left"]},{"label":["AgeRegMarij"],"name":[68],"type":["int"],"align":["right"]},{"label":["HardDrugs"],"name":[69],"type":["fct"],"align":["left"]},{"label":["SexEver"],"name":[70],"type":["fct"],"align":["left"]},{"label":["SexAge"],"name":[71],"type":["int"],"align":["right"]},{"label":["SexNumPartnLife"],"name":[72],"type":["int"],"align":["right"]},{"label":["SexNumPartYear"],"name":[73],"type":["int"],"align":["right"]},{"label":["SameSex"],"name":[74],"type":["fct"],"align":["left"]},{"label":["SexOrientation"],"name":[75],"type":["fct"],"align":["left"]},{"label":["PregnantNow"],"name":[76],"type":["fct"],"align":["left"]}],"data":[{"1":"51624","2":"2009_10","3":"male","4":"34","5":"30-39","6":"409","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.36","14":"6","15":"Own","16":"NotWorking","17":"87.4","18":"NA","19":"NA","20":"164.7","21":"32.22","22":"NA","23":"30.0_plus","24":"70","25":"113","26":"85","27":"114","28":"88","29":"114","30":"88","31":"112","32":"82","33":"NA","34":"1.29","35":"3.49","36":"352","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"15","45":"Most","46":"Several","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"NA","60":"0","61":"No","62":"Yes","63":"Smoker","64":"18","65":"Yes","66":"17","67":"No","68":"NA","69":"Yes","70":"Yes","71":"16","72":"8","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>우선 번호로 행을 선택하는 방법은 대괄호 안에 행의 번호를 입력한 뒤, ,를 찍어주는 것입니다.</p>
+<p>여러 행을 선택하기 위해선 <code>c()</code>로 묶거나, :을 통해 연속적인 행의 번호를 넣어주면 됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>),] <span class="co"># 1,3,5행 선택</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["SurveyYr"],"name":[2],"type":["fct"],"align":["left"]},{"label":["Gender"],"name":[3],"type":["fct"],"align":["left"]},{"label":["Age"],"name":[4],"type":["int"],"align":["right"]},{"label":["AgeDecade"],"name":[5],"type":["fct"],"align":["left"]},{"label":["AgeMonths"],"name":[6],"type":["int"],"align":["right"]},{"label":["Race1"],"name":[7],"type":["fct"],"align":["left"]},{"label":["Race3"],"name":[8],"type":["fct"],"align":["left"]},{"label":["Education"],"name":[9],"type":["fct"],"align":["left"]},{"label":["MaritalStatus"],"name":[10],"type":["fct"],"align":["left"]},{"label":["HHIncome"],"name":[11],"type":["fct"],"align":["left"]},{"label":["HHIncomeMid"],"name":[12],"type":["int"],"align":["right"]},{"label":["Poverty"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["HomeRooms"],"name":[14],"type":["int"],"align":["right"]},{"label":["HomeOwn"],"name":[15],"type":["fct"],"align":["left"]},{"label":["Work"],"name":[16],"type":["fct"],"align":["left"]},{"label":["Weight"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["Length"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["HeadCirc"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["Height"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["BMI"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["BMICatUnder20yrs"],"name":[22],"type":["fct"],"align":["left"]},{"label":["BMI_WHO"],"name":[23],"type":["fct"],"align":["left"]},{"label":["Pulse"],"name":[24],"type":["int"],"align":["right"]},{"label":["BPSysAve"],"name":[25],"type":["int"],"align":["right"]},{"label":["BPDiaAve"],"name":[26],"type":["int"],"align":["right"]},{"label":["BPSys1"],"name":[27],"type":["int"],"align":["right"]},{"label":["BPDia1"],"name":[28],"type":["int"],"align":["right"]},{"label":["BPSys2"],"name":[29],"type":["int"],"align":["right"]},{"label":["BPDia2"],"name":[30],"type":["int"],"align":["right"]},{"label":["BPSys3"],"name":[31],"type":["int"],"align":["right"]},{"label":["BPDia3"],"name":[32],"type":["int"],"align":["right"]},{"label":["Testosterone"],"name":[33],"type":["dbl"],"align":["right"]},{"label":["DirectChol"],"name":[34],"type":["dbl"],"align":["right"]},{"label":["TotChol"],"name":[35],"type":["dbl"],"align":["right"]},{"label":["UrineVol1"],"name":[36],"type":["int"],"align":["right"]},{"label":["UrineFlow1"],"name":[37],"type":["dbl"],"align":["right"]},{"label":["UrineVol2"],"name":[38],"type":["int"],"align":["right"]},{"label":["UrineFlow2"],"name":[39],"type":["dbl"],"align":["right"]},{"label":["Diabetes"],"name":[40],"type":["fct"],"align":["left"]},{"label":["DiabetesAge"],"name":[41],"type":["int"],"align":["right"]},{"label":["HealthGen"],"name":[42],"type":["fct"],"align":["left"]},{"label":["DaysPhysHlthBad"],"name":[43],"type":["int"],"align":["right"]},{"label":["DaysMentHlthBad"],"name":[44],"type":["int"],"align":["right"]},{"label":["LittleInterest"],"name":[45],"type":["fct"],"align":["left"]},{"label":["Depressed"],"name":[46],"type":["fct"],"align":["left"]},{"label":["nPregnancies"],"name":[47],"type":["int"],"align":["right"]},{"label":["nBabies"],"name":[48],"type":["int"],"align":["right"]},{"label":["Age1stBaby"],"name":[49],"type":["int"],"align":["right"]},{"label":["SleepHrsNight"],"name":[50],"type":["int"],"align":["right"]},{"label":["SleepTrouble"],"name":[51],"type":["fct"],"align":["left"]},{"label":["PhysActive"],"name":[52],"type":["fct"],"align":["left"]},{"label":["PhysActiveDays"],"name":[53],"type":["int"],"align":["right"]},{"label":["TVHrsDay"],"name":[54],"type":["fct"],"align":["left"]},{"label":["CompHrsDay"],"name":[55],"type":["fct"],"align":["left"]},{"label":["TVHrsDayChild"],"name":[56],"type":["int"],"align":["right"]},{"label":["CompHrsDayChild"],"name":[57],"type":["int"],"align":["right"]},{"label":["Alcohol12PlusYr"],"name":[58],"type":["fct"],"align":["left"]},{"label":["AlcoholDay"],"name":[59],"type":["int"],"align":["right"]},{"label":["AlcoholYear"],"name":[60],"type":["int"],"align":["right"]},{"label":["SmokeNow"],"name":[61],"type":["fct"],"align":["left"]},{"label":["Smoke100"],"name":[62],"type":["fct"],"align":["left"]},{"label":["Smoke100n"],"name":[63],"type":["fct"],"align":["left"]},{"label":["SmokeAge"],"name":[64],"type":["int"],"align":["right"]},{"label":["Marijuana"],"name":[65],"type":["fct"],"align":["left"]},{"label":["AgeFirstMarij"],"name":[66],"type":["int"],"align":["right"]},{"label":["RegularMarij"],"name":[67],"type":["fct"],"align":["left"]},{"label":["AgeRegMarij"],"name":[68],"type":["int"],"align":["right"]},{"label":["HardDrugs"],"name":[69],"type":["fct"],"align":["left"]},{"label":["SexEver"],"name":[70],"type":["fct"],"align":["left"]},{"label":["SexAge"],"name":[71],"type":["int"],"align":["right"]},{"label":["SexNumPartnLife"],"name":[72],"type":["int"],"align":["right"]},{"label":["SexNumPartYear"],"name":[73],"type":["int"],"align":["right"]},{"label":["SameSex"],"name":[74],"type":["fct"],"align":["left"]},{"label":["SexOrientation"],"name":[75],"type":["fct"],"align":["left"]},{"label":["PregnantNow"],"name":[76],"type":["fct"],"align":["left"]}],"data":[{"1":"51624","2":"2009_10","3":"male","4":"34","5":"30-39","6":"409","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.36","14":"6","15":"Own","16":"NotWorking","17":"87.4","18":"NA","19":"NA","20":"164.7","21":"32.22","22":"NA","23":"30.0_plus","24":"70","25":"113","26":"85","27":"114","28":"88","29":"114","30":"88","31":"112","32":"82","33":"NA","34":"1.29","35":"3.49","36":"352","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"15","45":"Most","46":"Several","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"NA","60":"0","61":"No","62":"Yes","63":"Smoker","64":"18","65":"Yes","66":"17","67":"No","68":"NA","69":"Yes","70":"Yes","71":"16","72":"8","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"1"},{"1":"51624","2":"2009_10","3":"male","4":"34","5":"30-39","6":"409","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.36","14":"6","15":"Own","16":"NotWorking","17":"87.4","18":"NA","19":"NA","20":"164.7","21":"32.22","22":"NA","23":"30.0_plus","24":"70","25":"113","26":"85","27":"114","28":"88","29":"114","30":"88","31":"112","32":"82","33":"NA","34":"1.29","35":"3.49","36":"352","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"15","45":"Most","46":"Several","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"NA","60":"0","61":"No","62":"Yes","63":"Smoker","64":"18","65":"Yes","66":"17","67":"No","68":"NA","69":"Yes","70":"Yes","71":"16","72":"8","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"3"},{"1":"51630","2":"2009_10","3":"female","4":"49","5":"40-49","6":"596","7":"White","8":"NA","9":"Some College","10":"LivePartner","11":"35000-44999","12":"40000","13":"1.91","14":"5","15":"Rent","16":"NotWorking","17":"86.7","18":"NA","19":"NA","20":"168.4","21":"30.57","22":"NA","23":"30.0_plus","24":"86","25":"112","26":"75","27":"118","28":"82","29":"108","30":"74","31":"116","32":"76","33":"NA","34":"1.16","35":"6.70","36":"77","37":"0.094","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"10","45":"Several","46":"Several","47":"2","48":"2","49":"27","50":"8","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"2","60":"20","61":"Yes","62":"Yes","63":"Smoker","64":"38","65":"Yes","66":"18","67":"No","68":"NA","69":"Yes","70":"Yes","71":"12","72":"10","73":"1","74":"Yes","75":"Heterosexual","76":"NA","_rn_":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,] <span class="co"># 1~10행 선택</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["SurveyYr"],"name":[2],"type":["fct"],"align":["left"]},{"label":["Gender"],"name":[3],"type":["fct"],"align":["left"]},{"label":["Age"],"name":[4],"type":["int"],"align":["right"]},{"label":["AgeDecade"],"name":[5],"type":["fct"],"align":["left"]},{"label":["AgeMonths"],"name":[6],"type":["int"],"align":["right"]},{"label":["Race1"],"name":[7],"type":["fct"],"align":["left"]},{"label":["Race3"],"name":[8],"type":["fct"],"align":["left"]},{"label":["Education"],"name":[9],"type":["fct"],"align":["left"]},{"label":["MaritalStatus"],"name":[10],"type":["fct"],"align":["left"]},{"label":["HHIncome"],"name":[11],"type":["fct"],"align":["left"]},{"label":["HHIncomeMid"],"name":[12],"type":["int"],"align":["right"]},{"label":["Poverty"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["HomeRooms"],"name":[14],"type":["int"],"align":["right"]},{"label":["HomeOwn"],"name":[15],"type":["fct"],"align":["left"]},{"label":["Work"],"name":[16],"type":["fct"],"align":["left"]},{"label":["Weight"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["Length"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["HeadCirc"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["Height"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["BMI"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["BMICatUnder20yrs"],"name":[22],"type":["fct"],"align":["left"]},{"label":["BMI_WHO"],"name":[23],"type":["fct"],"align":["left"]},{"label":["Pulse"],"name":[24],"type":["int"],"align":["right"]},{"label":["BPSysAve"],"name":[25],"type":["int"],"align":["right"]},{"label":["BPDiaAve"],"name":[26],"type":["int"],"align":["right"]},{"label":["BPSys1"],"name":[27],"type":["int"],"align":["right"]},{"label":["BPDia1"],"name":[28],"type":["int"],"align":["right"]},{"label":["BPSys2"],"name":[29],"type":["int"],"align":["right"]},{"label":["BPDia2"],"name":[30],"type":["int"],"align":["right"]},{"label":["BPSys3"],"name":[31],"type":["int"],"align":["right"]},{"label":["BPDia3"],"name":[32],"type":["int"],"align":["right"]},{"label":["Testosterone"],"name":[33],"type":["dbl"],"align":["right"]},{"label":["DirectChol"],"name":[34],"type":["dbl"],"align":["right"]},{"label":["TotChol"],"name":[35],"type":["dbl"],"align":["right"]},{"label":["UrineVol1"],"name":[36],"type":["int"],"align":["right"]},{"label":["UrineFlow1"],"name":[37],"type":["dbl"],"align":["right"]},{"label":["UrineVol2"],"name":[38],"type":["int"],"align":["right"]},{"label":["UrineFlow2"],"name":[39],"type":["dbl"],"align":["right"]},{"label":["Diabetes"],"name":[40],"type":["fct"],"align":["left"]},{"label":["DiabetesAge"],"name":[41],"type":["int"],"align":["right"]},{"label":["HealthGen"],"name":[42],"type":["fct"],"align":["left"]},{"label":["DaysPhysHlthBad"],"name":[43],"type":["int"],"align":["right"]},{"label":["DaysMentHlthBad"],"name":[44],"type":["int"],"align":["right"]},{"label":["LittleInterest"],"name":[45],"type":["fct"],"align":["left"]},{"label":["Depressed"],"name":[46],"type":["fct"],"align":["left"]},{"label":["nPregnancies"],"name":[47],"type":["int"],"align":["right"]},{"label":["nBabies"],"name":[48],"type":["int"],"align":["right"]},{"label":["Age1stBaby"],"name":[49],"type":["int"],"align":["right"]},{"label":["SleepHrsNight"],"name":[50],"type":["int"],"align":["right"]},{"label":["SleepTrouble"],"name":[51],"type":["fct"],"align":["left"]},{"label":["PhysActive"],"name":[52],"type":["fct"],"align":["left"]},{"label":["PhysActiveDays"],"name":[53],"type":["int"],"align":["right"]},{"label":["TVHrsDay"],"name":[54],"type":["fct"],"align":["left"]},{"label":["CompHrsDay"],"name":[55],"type":["fct"],"align":["left"]},{"label":["TVHrsDayChild"],"name":[56],"type":["int"],"align":["right"]},{"label":["CompHrsDayChild"],"name":[57],"type":["int"],"align":["right"]},{"label":["Alcohol12PlusYr"],"name":[58],"type":["fct"],"align":["left"]},{"label":["AlcoholDay"],"name":[59],"type":["int"],"align":["right"]},{"label":["AlcoholYear"],"name":[60],"type":["int"],"align":["right"]},{"label":["SmokeNow"],"name":[61],"type":["fct"],"align":["left"]},{"label":["Smoke100"],"name":[62],"type":["fct"],"align":["left"]},{"label":["Smoke100n"],"name":[63],"type":["fct"],"align":["left"]},{"label":["SmokeAge"],"name":[64],"type":["int"],"align":["right"]},{"label":["Marijuana"],"name":[65],"type":["fct"],"align":["left"]},{"label":["AgeFirstMarij"],"name":[66],"type":["int"],"align":["right"]},{"label":["RegularMarij"],"name":[67],"type":["fct"],"align":["left"]},{"label":["AgeRegMarij"],"name":[68],"type":["int"],"align":["right"]},{"label":["HardDrugs"],"name":[69],"type":["fct"],"align":["left"]},{"label":["SexEver"],"name":[70],"type":["fct"],"align":["left"]},{"label":["SexAge"],"name":[71],"type":["int"],"align":["right"]},{"label":["SexNumPartnLife"],"name":[72],"type":["int"],"align":["right"]},{"label":["SexNumPartYear"],"name":[73],"type":["int"],"align":["right"]},{"label":["SameSex"],"name":[74],"type":["fct"],"align":["left"]},{"label":["SexOrientation"],"name":[75],"type":["fct"],"align":["left"]},{"label":["PregnantNow"],"name":[76],"type":["fct"],"align":["left"]}],"data":[{"1":"51624","2":"2009_10","3":"male","4":"34","5":"30-39","6":"409","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.36","14":"6","15":"Own","16":"NotWorking","17":"87.4","18":"NA","19":"NA","20":"164.7","21":"32.22","22":"NA","23":"30.0_plus","24":"70","25":"113","26":"85","27":"114","28":"88","29":"114","30":"88","31":"112","32":"82","33":"NA","34":"1.29","35":"3.49","36":"352","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"15","45":"Most","46":"Several","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"NA","60":"0","61":"No","62":"Yes","63":"Smoker","64":"18","65":"Yes","66":"17","67":"No","68":"NA","69":"Yes","70":"Yes","71":"16","72":"8","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"1"},{"1":"51624","2":"2009_10","3":"male","4":"34","5":"30-39","6":"409","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.36","14":"6","15":"Own","16":"NotWorking","17":"87.4","18":"NA","19":"NA","20":"164.7","21":"32.22","22":"NA","23":"30.0_plus","24":"70","25":"113","26":"85","27":"114","28":"88","29":"114","30":"88","31":"112","32":"82","33":"NA","34":"1.29","35":"3.49","36":"352","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"15","45":"Most","46":"Several","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"NA","60":"0","61":"No","62":"Yes","63":"Smoker","64":"18","65":"Yes","66":"17","67":"No","68":"NA","69":"Yes","70":"Yes","71":"16","72":"8","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"2"},{"1":"51624","2":"2009_10","3":"male","4":"34","5":"30-39","6":"409","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.36","14":"6","15":"Own","16":"NotWorking","17":"87.4","18":"NA","19":"NA","20":"164.7","21":"32.22","22":"NA","23":"30.0_plus","24":"70","25":"113","26":"85","27":"114","28":"88","29":"114","30":"88","31":"112","32":"82","33":"NA","34":"1.29","35":"3.49","36":"352","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"15","45":"Most","46":"Several","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"NA","60":"0","61":"No","62":"Yes","63":"Smoker","64":"18","65":"Yes","66":"17","67":"No","68":"NA","69":"Yes","70":"Yes","71":"16","72":"8","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"3"},{"1":"51625","2":"2009_10","3":"male","4":"4","5":"0-9","6":"49","7":"Other","8":"NA","9":"NA","10":"NA","11":"20000-24999","12":"22500","13":"1.07","14":"9","15":"Own","16":"NA","17":"17.0","18":"NA","19":"NA","20":"105.4","21":"15.30","22":"NA","23":"12.0_18.5","24":"NA","25":"NA","26":"NA","27":"NA","28":"NA","29":"NA","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"4","57":"1","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","_rn_":"4"},{"1":"51630","2":"2009_10","3":"female","4":"49","5":"40-49","6":"596","7":"White","8":"NA","9":"Some College","10":"LivePartner","11":"35000-44999","12":"40000","13":"1.91","14":"5","15":"Rent","16":"NotWorking","17":"86.7","18":"NA","19":"NA","20":"168.4","21":"30.57","22":"NA","23":"30.0_plus","24":"86","25":"112","26":"75","27":"118","28":"82","29":"108","30":"74","31":"116","32":"76","33":"NA","34":"1.16","35":"6.70","36":"77","37":"0.094","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"10","45":"Several","46":"Several","47":"2","48":"2","49":"27","50":"8","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"2","60":"20","61":"Yes","62":"Yes","63":"Smoker","64":"38","65":"Yes","66":"18","67":"No","68":"NA","69":"Yes","70":"Yes","71":"12","72":"10","73":"1","74":"Yes","75":"Heterosexual","76":"NA","_rn_":"5"},{"1":"51638","2":"2009_10","3":"male","4":"9","5":"0-9","6":"115","7":"White","8":"NA","9":"NA","10":"NA","11":"75000-99999","12":"87500","13":"1.84","14":"6","15":"Rent","16":"NA","17":"29.8","18":"NA","19":"NA","20":"133.1","21":"16.82","22":"NA","23":"12.0_18.5","24":"82","25":"86","26":"47","27":"84","28":"50","29":"84","30":"50","31":"88","32":"44","33":"NA","34":"1.34","35":"4.86","36":"123","37":"1.538","38":"NA","39":"NA","40":"No","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"5","57":"0","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","_rn_":"6"},{"1":"51646","2":"2009_10","3":"male","4":"8","5":"0-9","6":"101","7":"White","8":"NA","9":"NA","10":"NA","11":"55000-64999","12":"60000","13":"2.33","14":"7","15":"Own","16":"NA","17":"35.2","18":"NA","19":"NA","20":"130.6","21":"20.64","22":"NA","23":"18.5_to_24.9","24":"72","25":"107","26":"37","27":"114","28":"46","29":"108","30":"36","31":"106","32":"38","33":"NA","34":"1.55","35":"4.09","36":"238","37":"1.322","38":"NA","39":"NA","40":"No","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"1","57":"6","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","_rn_":"7"},{"1":"51647","2":"2009_10","3":"female","4":"45","5":"40-49","6":"541","7":"White","8":"NA","9":"College Grad","10":"Married","11":"75000-99999","12":"87500","13":"5.00","14":"6","15":"Own","16":"Working","17":"75.7","18":"NA","19":"NA","20":"166.7","21":"27.24","22":"NA","23":"25.0_to_29.9","24":"62","25":"118","26":"64","27":"106","28":"62","29":"118","30":"68","31":"118","32":"60","33":"NA","34":"2.12","35":"5.82","36":"106","37":"1.116","38":"NA","39":"NA","40":"No","41":"NA","42":"Vgood","43":"0","44":"3","45":"None","46":"None","47":"1","48":"NA","49":"NA","50":"8","51":"No","52":"Yes","53":"5","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"3","60":"52","61":"NA","62":"No","63":"Non-Smoker","64":"NA","65":"Yes","66":"13","67":"No","68":"NA","69":"No","70":"Yes","71":"13","72":"20","73":"0","74":"Yes","75":"Bisexual","76":"NA","_rn_":"8"},{"1":"51647","2":"2009_10","3":"female","4":"45","5":"40-49","6":"541","7":"White","8":"NA","9":"College Grad","10":"Married","11":"75000-99999","12":"87500","13":"5.00","14":"6","15":"Own","16":"Working","17":"75.7","18":"NA","19":"NA","20":"166.7","21":"27.24","22":"NA","23":"25.0_to_29.9","24":"62","25":"118","26":"64","27":"106","28":"62","29":"118","30":"68","31":"118","32":"60","33":"NA","34":"2.12","35":"5.82","36":"106","37":"1.116","38":"NA","39":"NA","40":"No","41":"NA","42":"Vgood","43":"0","44":"3","45":"None","46":"None","47":"1","48":"NA","49":"NA","50":"8","51":"No","52":"Yes","53":"5","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"3","60":"52","61":"NA","62":"No","63":"Non-Smoker","64":"NA","65":"Yes","66":"13","67":"No","68":"NA","69":"No","70":"Yes","71":"13","72":"20","73":"0","74":"Yes","75":"Bisexual","76":"NA","_rn_":"9"},{"1":"51647","2":"2009_10","3":"female","4":"45","5":"40-49","6":"541","7":"White","8":"NA","9":"College Grad","10":"Married","11":"75000-99999","12":"87500","13":"5.00","14":"6","15":"Own","16":"Working","17":"75.7","18":"NA","19":"NA","20":"166.7","21":"27.24","22":"NA","23":"25.0_to_29.9","24":"62","25":"118","26":"64","27":"106","28":"62","29":"118","30":"68","31":"118","32":"60","33":"NA","34":"2.12","35":"5.82","36":"106","37":"1.116","38":"NA","39":"NA","40":"No","41":"NA","42":"Vgood","43":"0","44":"3","45":"None","46":"None","47":"1","48":"NA","49":"NA","50":"8","51":"No","52":"Yes","53":"5","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"3","60":"52","61":"NA","62":"No","63":"Non-Smoker","64":"NA","65":"Yes","66":"13","67":"No","68":"NA","69":"No","70":"Yes","71":"13","72":"20","73":"0","74":"Yes","75":"Bisexual","76":"NA","_rn_":"10"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>만약 <code>,</code> 없이 숫자만 들어간다면 행을 선택하는 것이 아니라 열을 선택하게 됩니다. 따라서 행을 선택하고자 한다면 반드시 <code>,</code>를 붙여줘야 합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>)] <span class="co"># 1,3,5열 선택</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>올바르게 열을 선택하기 위해선 , 다음에 선택하고자 하는 열의 번호를 선택하면 됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>df[,<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 51624 51624 51624 51625 51630 51638 51646 51647 51647 51647 51654 51656
+[13] 51657 51659 51666 51667 51671 51677 51678 51679</code></pre>
+</div>
+</div>
+</section>
+<section id="이름으로-선택하기" class="level3">
+<h3 class="anchored" data-anchor-id="이름으로-선택하기">이름으로 선택하기</h3>
+<p>앞서 말씀드린 것처럼 <code>data.frame</code>은 column이 중심이 되는 데이터 구조입니다. 따라서 행을 선택하는 일보다는 column을 선택하여 데이터 분석을 진행하는 일이 훨씬 많습니다.</p>
+<p>데이터 프레임에서 열을 선택하기 위해서는 앞서 열의 번호를 선택하는 방법도 있습니다. 그러나 모든 열의 위치를 번호로 호출하는 것은 번거로운 일입니다. 따라서 열의 이름으로 호출하는 것이 더욱 쉽고 효율적입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>df[,<span class="st">'BMI'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 32.22 32.22 32.22 15.30 30.57 16.82 20.64 27.24 27.24 27.24 23.67 23.69
+[13] 26.03 19.20 26.22 26.60 27.40 28.54 25.84 24.74</code></pre>
+</div>
+</div>
+<p>위처럼 대괄호와 열의 이름을 함께 사용할 수도 있으나, <code>$</code> 을 이용해 더욱 쉽게 데이터프레임의 열을 선택할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>Gender</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] male   male   male   male   female male   male   female female female
+[11] male   male   male   female female male   female male   male   male  
+Levels: female male</code></pre>
+</div>
+</div>
+<p>대괄호보다 <code>$</code>가 좋은 점은 <u>자동완성 기능</u>이 있다는 것입니다. <code>$</code> 를 누른 뒤, 제시되는 column들이 떴을 때, 위아래 방향키를 통해 원하는 열의 이름을 선택하기만 하면 됩니다.</p>
+</section>
+<section id="조건으로-선택하기" class="level3">
+<h3 class="anchored" data-anchor-id="조건으로-선택하기">조건으로 선택하기</h3>
+<p>앞서 논리 연산자를 통해 특정 조건을 충족하는 행을 선택할 수 있다고 하였습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">$</span>Gender<span class="sc">==</span><span class="st">'female'</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["SurveyYr"],"name":[2],"type":["fct"],"align":["left"]},{"label":["Gender"],"name":[3],"type":["fct"],"align":["left"]},{"label":["Age"],"name":[4],"type":["int"],"align":["right"]},{"label":["AgeDecade"],"name":[5],"type":["fct"],"align":["left"]},{"label":["AgeMonths"],"name":[6],"type":["int"],"align":["right"]},{"label":["Race1"],"name":[7],"type":["fct"],"align":["left"]},{"label":["Race3"],"name":[8],"type":["fct"],"align":["left"]},{"label":["Education"],"name":[9],"type":["fct"],"align":["left"]},{"label":["MaritalStatus"],"name":[10],"type":["fct"],"align":["left"]},{"label":["HHIncome"],"name":[11],"type":["fct"],"align":["left"]},{"label":["HHIncomeMid"],"name":[12],"type":["int"],"align":["right"]},{"label":["Poverty"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["HomeRooms"],"name":[14],"type":["int"],"align":["right"]},{"label":["HomeOwn"],"name":[15],"type":["fct"],"align":["left"]},{"label":["Work"],"name":[16],"type":["fct"],"align":["left"]},{"label":["Weight"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["Length"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["HeadCirc"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["Height"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["BMI"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["BMICatUnder20yrs"],"name":[22],"type":["fct"],"align":["left"]},{"label":["BMI_WHO"],"name":[23],"type":["fct"],"align":["left"]},{"label":["Pulse"],"name":[24],"type":["int"],"align":["right"]},{"label":["BPSysAve"],"name":[25],"type":["int"],"align":["right"]},{"label":["BPDiaAve"],"name":[26],"type":["int"],"align":["right"]},{"label":["BPSys1"],"name":[27],"type":["int"],"align":["right"]},{"label":["BPDia1"],"name":[28],"type":["int"],"align":["right"]},{"label":["BPSys2"],"name":[29],"type":["int"],"align":["right"]},{"label":["BPDia2"],"name":[30],"type":["int"],"align":["right"]},{"label":["BPSys3"],"name":[31],"type":["int"],"align":["right"]},{"label":["BPDia3"],"name":[32],"type":["int"],"align":["right"]},{"label":["Testosterone"],"name":[33],"type":["dbl"],"align":["right"]},{"label":["DirectChol"],"name":[34],"type":["dbl"],"align":["right"]},{"label":["TotChol"],"name":[35],"type":["dbl"],"align":["right"]},{"label":["UrineVol1"],"name":[36],"type":["int"],"align":["right"]},{"label":["UrineFlow1"],"name":[37],"type":["dbl"],"align":["right"]},{"label":["UrineVol2"],"name":[38],"type":["int"],"align":["right"]},{"label":["UrineFlow2"],"name":[39],"type":["dbl"],"align":["right"]},{"label":["Diabetes"],"name":[40],"type":["fct"],"align":["left"]},{"label":["DiabetesAge"],"name":[41],"type":["int"],"align":["right"]},{"label":["HealthGen"],"name":[42],"type":["fct"],"align":["left"]},{"label":["DaysPhysHlthBad"],"name":[43],"type":["int"],"align":["right"]},{"label":["DaysMentHlthBad"],"name":[44],"type":["int"],"align":["right"]},{"label":["LittleInterest"],"name":[45],"type":["fct"],"align":["left"]},{"label":["Depressed"],"name":[46],"type":["fct"],"align":["left"]},{"label":["nPregnancies"],"name":[47],"type":["int"],"align":["right"]},{"label":["nBabies"],"name":[48],"type":["int"],"align":["right"]},{"label":["Age1stBaby"],"name":[49],"type":["int"],"align":["right"]},{"label":["SleepHrsNight"],"name":[50],"type":["int"],"align":["right"]},{"label":["SleepTrouble"],"name":[51],"type":["fct"],"align":["left"]},{"label":["PhysActive"],"name":[52],"type":["fct"],"align":["left"]},{"label":["PhysActiveDays"],"name":[53],"type":["int"],"align":["right"]},{"label":["TVHrsDay"],"name":[54],"type":["fct"],"align":["left"]},{"label":["CompHrsDay"],"name":[55],"type":["fct"],"align":["left"]},{"label":["TVHrsDayChild"],"name":[56],"type":["int"],"align":["right"]},{"label":["CompHrsDayChild"],"name":[57],"type":["int"],"align":["right"]},{"label":["Alcohol12PlusYr"],"name":[58],"type":["fct"],"align":["left"]},{"label":["AlcoholDay"],"name":[59],"type":["int"],"align":["right"]},{"label":["AlcoholYear"],"name":[60],"type":["int"],"align":["right"]},{"label":["SmokeNow"],"name":[61],"type":["fct"],"align":["left"]},{"label":["Smoke100"],"name":[62],"type":["fct"],"align":["left"]},{"label":["Smoke100n"],"name":[63],"type":["fct"],"align":["left"]},{"label":["SmokeAge"],"name":[64],"type":["int"],"align":["right"]},{"label":["Marijuana"],"name":[65],"type":["fct"],"align":["left"]},{"label":["AgeFirstMarij"],"name":[66],"type":["int"],"align":["right"]},{"label":["RegularMarij"],"name":[67],"type":["fct"],"align":["left"]},{"label":["AgeRegMarij"],"name":[68],"type":["int"],"align":["right"]},{"label":["HardDrugs"],"name":[69],"type":["fct"],"align":["left"]},{"label":["SexEver"],"name":[70],"type":["fct"],"align":["left"]},{"label":["SexAge"],"name":[71],"type":["int"],"align":["right"]},{"label":["SexNumPartnLife"],"name":[72],"type":["int"],"align":["right"]},{"label":["SexNumPartYear"],"name":[73],"type":["int"],"align":["right"]},{"label":["SameSex"],"name":[74],"type":["fct"],"align":["left"]},{"label":["SexOrientation"],"name":[75],"type":["fct"],"align":["left"]},{"label":["PregnantNow"],"name":[76],"type":["fct"],"align":["left"]}],"data":[{"1":"51630","2":"2009_10","3":"female","4":"49","5":"40-49","6":"596","7":"White","8":"NA","9":"Some College","10":"LivePartner","11":"35000-44999","12":"40000","13":"1.91","14":"5","15":"Rent","16":"NotWorking","17":"86.7","18":"NA","19":"NA","20":"168.4","21":"30.57","22":"NA","23":"30.0_plus","24":"86","25":"112","26":"75","27":"118","28":"82","29":"108","30":"74","31":"116","32":"76","33":"NA","34":"1.16","35":"6.70","36":"77","37":"0.094","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"10","45":"Several","46":"Several","47":"2","48":"2","49":"27","50":"8","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"2","60":"20","61":"Yes","62":"Yes","63":"Smoker","64":"38","65":"Yes","66":"18","67":"No","68":"NA","69":"Yes","70":"Yes","71":"12","72":"10","73":"1","74":"Yes","75":"Heterosexual","76":"NA","_rn_":"5"},{"1":"51647","2":"2009_10","3":"female","4":"45","5":"40-49","6":"541","7":"White","8":"NA","9":"College Grad","10":"Married","11":"75000-99999","12":"87500","13":"5.00","14":"6","15":"Own","16":"Working","17":"75.7","18":"NA","19":"NA","20":"166.7","21":"27.24","22":"NA","23":"25.0_to_29.9","24":"62","25":"118","26":"64","27":"106","28":"62","29":"118","30":"68","31":"118","32":"60","33":"NA","34":"2.12","35":"5.82","36":"106","37":"1.116","38":"NA","39":"NA","40":"No","41":"NA","42":"Vgood","43":"0","44":"3","45":"None","46":"None","47":"1","48":"NA","49":"NA","50":"8","51":"No","52":"Yes","53":"5","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"3","60":"52","61":"NA","62":"No","63":"Non-Smoker","64":"NA","65":"Yes","66":"13","67":"No","68":"NA","69":"No","70":"Yes","71":"13","72":"20","73":"0","74":"Yes","75":"Bisexual","76":"NA","_rn_":"8"},{"1":"51647","2":"2009_10","3":"female","4":"45","5":"40-49","6":"541","7":"White","8":"NA","9":"College Grad","10":"Married","11":"75000-99999","12":"87500","13":"5.00","14":"6","15":"Own","16":"Working","17":"75.7","18":"NA","19":"NA","20":"166.7","21":"27.24","22":"NA","23":"25.0_to_29.9","24":"62","25":"118","26":"64","27":"106","28":"62","29":"118","30":"68","31":"118","32":"60","33":"NA","34":"2.12","35":"5.82","36":"106","37":"1.116","38":"NA","39":"NA","40":"No","41":"NA","42":"Vgood","43":"0","44":"3","45":"None","46":"None","47":"1","48":"NA","49":"NA","50":"8","51":"No","52":"Yes","53":"5","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"3","60":"52","61":"NA","62":"No","63":"Non-Smoker","64":"NA","65":"Yes","66":"13","67":"No","68":"NA","69":"No","70":"Yes","71":"13","72":"20","73":"0","74":"Yes","75":"Bisexual","76":"NA","_rn_":"9"},{"1":"51647","2":"2009_10","3":"female","4":"45","5":"40-49","6":"541","7":"White","8":"NA","9":"College Grad","10":"Married","11":"75000-99999","12":"87500","13":"5.00","14":"6","15":"Own","16":"Working","17":"75.7","18":"NA","19":"NA","20":"166.7","21":"27.24","22":"NA","23":"25.0_to_29.9","24":"62","25":"118","26":"64","27":"106","28":"62","29":"118","30":"68","31":"118","32":"60","33":"NA","34":"2.12","35":"5.82","36":"106","37":"1.116","38":"NA","39":"NA","40":"No","41":"NA","42":"Vgood","43":"0","44":"3","45":"None","46":"None","47":"1","48":"NA","49":"NA","50":"8","51":"No","52":"Yes","53":"5","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"3","60":"52","61":"NA","62":"No","63":"Non-Smoker","64":"NA","65":"Yes","66":"13","67":"No","68":"NA","69":"No","70":"Yes","71":"13","72":"20","73":"0","74":"Yes","75":"Bisexual","76":"NA","_rn_":"10"},{"1":"51659","2":"2009_10","3":"female","4":"10","5":"10-19","6":"123","7":"White","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"10","15":"Own","16":"NA","17":"38.6","18":"NA","19":"NA","20":"141.8","21":"19.20","22":"NA","23":"18.5_to_24.9","24":"80","25":"104","26":"68","27":"102","28":"66","29":"102","30":"66","31":"106","32":"70","33":"NA","34":"NA","35":"NA","36":"7","37":"0.046","38":"NA","39":"NA","40":"No","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"4","57":"3","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","_rn_":"14"},{"1":"51666","2":"2009_10","3":"female","4":"58","5":"50-59","6":"700","7":"Mexican","8":"NA","9":"High School","10":"Married","11":"75000-99999","12":"87500","13":"2.03","14":"10","15":"Rent","16":"Looking","17":"57.5","18":"NA","19":"NA","20":"148.1","21":"26.22","22":"NA","23":"25.0_to_29.9","24":"94","25":"127","26":"83","27":"NA","28":"NA","29":"134","30":"82","31":"120","32":"84","33":"NA","34":"1.14","35":"4.78","36":"29","37":"0.299","38":"NA","39":"NA","40":"No","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"5","51":"No","52":"Yes","53":"2","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"Yes","62":"Yes","63":"Smoker","64":"17","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","_rn_":"15"},{"1":"51671","2":"2009_10","3":"female","4":"9","5":"0-9","6":"112","7":"Black","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"3","15":"Rent","16":"NA","17":"53.1","18":"NA","19":"NA","20":"139.2","21":"27.40","22":"NA","23":"25.0_to_29.9","24":"92","25":"93","26":"63","27":"86","28":"56","29":"90","30":"64","31":"96","32":"62","33":"NA","34":"1.22","35":"4.86","36":"156","37":"0.975","38":"NA","39":"NA","40":"No","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"0","57":"1","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","_rn_":"17"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">$</span>Gender<span class="sc">==</span><span class="st">'male'</span> <span class="sc">&amp;</span> df<span class="sc">$</span>BPDiaAve<span class="sc">&gt;=</span><span class="dv">80</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["SurveyYr"],"name":[2],"type":["fct"],"align":["left"]},{"label":["Gender"],"name":[3],"type":["fct"],"align":["left"]},{"label":["Age"],"name":[4],"type":["int"],"align":["right"]},{"label":["AgeDecade"],"name":[5],"type":["fct"],"align":["left"]},{"label":["AgeMonths"],"name":[6],"type":["int"],"align":["right"]},{"label":["Race1"],"name":[7],"type":["fct"],"align":["left"]},{"label":["Race3"],"name":[8],"type":["fct"],"align":["left"]},{"label":["Education"],"name":[9],"type":["fct"],"align":["left"]},{"label":["MaritalStatus"],"name":[10],"type":["fct"],"align":["left"]},{"label":["HHIncome"],"name":[11],"type":["fct"],"align":["left"]},{"label":["HHIncomeMid"],"name":[12],"type":["int"],"align":["right"]},{"label":["Poverty"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["HomeRooms"],"name":[14],"type":["int"],"align":["right"]},{"label":["HomeOwn"],"name":[15],"type":["fct"],"align":["left"]},{"label":["Work"],"name":[16],"type":["fct"],"align":["left"]},{"label":["Weight"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["Length"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["HeadCirc"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["Height"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["BMI"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["BMICatUnder20yrs"],"name":[22],"type":["fct"],"align":["left"]},{"label":["BMI_WHO"],"name":[23],"type":["fct"],"align":["left"]},{"label":["Pulse"],"name":[24],"type":["int"],"align":["right"]},{"label":["BPSysAve"],"name":[25],"type":["int"],"align":["right"]},{"label":["BPDiaAve"],"name":[26],"type":["int"],"align":["right"]},{"label":["BPSys1"],"name":[27],"type":["int"],"align":["right"]},{"label":["BPDia1"],"name":[28],"type":["int"],"align":["right"]},{"label":["BPSys2"],"name":[29],"type":["int"],"align":["right"]},{"label":["BPDia2"],"name":[30],"type":["int"],"align":["right"]},{"label":["BPSys3"],"name":[31],"type":["int"],"align":["right"]},{"label":["BPDia3"],"name":[32],"type":["int"],"align":["right"]},{"label":["Testosterone"],"name":[33],"type":["dbl"],"align":["right"]},{"label":["DirectChol"],"name":[34],"type":["dbl"],"align":["right"]},{"label":["TotChol"],"name":[35],"type":["dbl"],"align":["right"]},{"label":["UrineVol1"],"name":[36],"type":["int"],"align":["right"]},{"label":["UrineFlow1"],"name":[37],"type":["dbl"],"align":["right"]},{"label":["UrineVol2"],"name":[38],"type":["int"],"align":["right"]},{"label":["UrineFlow2"],"name":[39],"type":["dbl"],"align":["right"]},{"label":["Diabetes"],"name":[40],"type":["fct"],"align":["left"]},{"label":["DiabetesAge"],"name":[41],"type":["int"],"align":["right"]},{"label":["HealthGen"],"name":[42],"type":["fct"],"align":["left"]},{"label":["DaysPhysHlthBad"],"name":[43],"type":["int"],"align":["right"]},{"label":["DaysMentHlthBad"],"name":[44],"type":["int"],"align":["right"]},{"label":["LittleInterest"],"name":[45],"type":["fct"],"align":["left"]},{"label":["Depressed"],"name":[46],"type":["fct"],"align":["left"]},{"label":["nPregnancies"],"name":[47],"type":["int"],"align":["right"]},{"label":["nBabies"],"name":[48],"type":["int"],"align":["right"]},{"label":["Age1stBaby"],"name":[49],"type":["int"],"align":["right"]},{"label":["SleepHrsNight"],"name":[50],"type":["int"],"align":["right"]},{"label":["SleepTrouble"],"name":[51],"type":["fct"],"align":["left"]},{"label":["PhysActive"],"name":[52],"type":["fct"],"align":["left"]},{"label":["PhysActiveDays"],"name":[53],"type":["int"],"align":["right"]},{"label":["TVHrsDay"],"name":[54],"type":["fct"],"align":["left"]},{"label":["CompHrsDay"],"name":[55],"type":["fct"],"align":["left"]},{"label":["TVHrsDayChild"],"name":[56],"type":["int"],"align":["right"]},{"label":["CompHrsDayChild"],"name":[57],"type":["int"],"align":["right"]},{"label":["Alcohol12PlusYr"],"name":[58],"type":["fct"],"align":["left"]},{"label":["AlcoholDay"],"name":[59],"type":["int"],"align":["right"]},{"label":["AlcoholYear"],"name":[60],"type":["int"],"align":["right"]},{"label":["SmokeNow"],"name":[61],"type":["fct"],"align":["left"]},{"label":["Smoke100"],"name":[62],"type":["fct"],"align":["left"]},{"label":["Smoke100n"],"name":[63],"type":["fct"],"align":["left"]},{"label":["SmokeAge"],"name":[64],"type":["int"],"align":["right"]},{"label":["Marijuana"],"name":[65],"type":["fct"],"align":["left"]},{"label":["AgeFirstMarij"],"name":[66],"type":["int"],"align":["right"]},{"label":["RegularMarij"],"name":[67],"type":["fct"],"align":["left"]},{"label":["AgeRegMarij"],"name":[68],"type":["int"],"align":["right"]},{"label":["HardDrugs"],"name":[69],"type":["fct"],"align":["left"]},{"label":["SexEver"],"name":[70],"type":["fct"],"align":["left"]},{"label":["SexAge"],"name":[71],"type":["int"],"align":["right"]},{"label":["SexNumPartnLife"],"name":[72],"type":["int"],"align":["right"]},{"label":["SexNumPartYear"],"name":[73],"type":["int"],"align":["right"]},{"label":["SameSex"],"name":[74],"type":["fct"],"align":["left"]},{"label":["SexOrientation"],"name":[75],"type":["fct"],"align":["left"]},{"label":["PregnantNow"],"name":[76],"type":["fct"],"align":["left"]}],"data":[{"1":"51624","2":"2009_10","3":"male","4":"34","5":"30-39","6":"409","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.36","14":"6","15":"Own","16":"NotWorking","17":"87.4","18":"NA","19":"NA","20":"164.7","21":"32.22","22":"NA","23":"30.0_plus","24":"70","25":"113","26":"85","27":"114","28":"88","29":"114","30":"88","31":"112","32":"82","33":"NA","34":"1.29","35":"3.49","36":"352","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"15","45":"Most","46":"Several","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"NA","60":"0","61":"No","62":"Yes","63":"Smoker","64":"18","65":"Yes","66":"17","67":"No","68":"NA","69":"Yes","70":"Yes","71":"16","72":"8","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"1"},{"1":"51624","2":"2009_10","3":"male","4":"34","5":"30-39","6":"409","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.36","14":"6","15":"Own","16":"NotWorking","17":"87.4","18":"NA","19":"NA","20":"164.7","21":"32.22","22":"NA","23":"30.0_plus","24":"70","25":"113","26":"85","27":"114","28":"88","29":"114","30":"88","31":"112","32":"82","33":"NA","34":"1.29","35":"3.49","36":"352","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"15","45":"Most","46":"Several","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"NA","60":"0","61":"No","62":"Yes","63":"Smoker","64":"18","65":"Yes","66":"17","67":"No","68":"NA","69":"Yes","70":"Yes","71":"16","72":"8","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"2"},{"1":"51624","2":"2009_10","3":"male","4":"34","5":"30-39","6":"409","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.36","14":"6","15":"Own","16":"NotWorking","17":"87.4","18":"NA","19":"NA","20":"164.7","21":"32.22","22":"NA","23":"30.0_plus","24":"70","25":"113","26":"85","27":"114","28":"88","29":"114","30":"88","31":"112","32":"82","33":"NA","34":"1.29","35":"3.49","36":"352","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"15","45":"Most","46":"Several","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"NA","60":"0","61":"No","62":"Yes","63":"Smoker","64":"18","65":"Yes","66":"17","67":"No","68":"NA","69":"Yes","70":"Yes","71":"16","72":"8","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"3"},{"1":"NA","2":"NA","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA","20":"NA","21":"NA","22":"NA","23":"NA","24":"NA","25":"NA","26":"NA","27":"NA","28":"NA","29":"NA","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"NA","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","_rn_":"__NA__"},{"1":"51657","2":"2009_10","3":"male","4":"54","5":"50-59","6":"654","7":"White","8":"NA","9":"9 - 11th Grade","10":"Married","11":"65000-74999","12":"70000","13":"2.20","14":"6","15":"Rent","16":"Working","17":"74.7","18":"NA","19":"NA","20":"169.4","21":"26.03","22":"NA","23":"25.0_to_29.9","24":"76","25":"134","26":"85","27":"136","28":"86","29":"132","30":"88","31":"136","32":"82","33":"NA","34":"1.16","35":"6.41","36":"215","37":"0.903","38":"NA","39":"NA","40":"No","41":"NA","42":"Fair","43":"4","44":"0","45":"None","46":"None","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"Yes","53":"1","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"6","60":"364","61":"NA","62":"No","63":"Non-Smoker","64":"NA","65":"Yes","66":"15","67":"Yes","68":"15","69":"Yes","70":"Yes","71":"12","72":"100","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"13"},{"1":"51678","2":"2009_10","3":"male","4":"60","5":"60-69","6":"721","7":"White","8":"NA","9":"High School","10":"Married","11":"15000-19999","12":"17500","13":"1.03","14":"5","15":"Own","16":"Working","17":"74.6","18":"NA","19":"NA","20":"169.9","21":"25.84","22":"NA","23":"25.0_to_29.9","24":"84","25":"152","26":"100","27":"154","28":"98","29":"150","30":"98","31":"154","32":"102","33":"NA","34":"1.34","35":"6.39","36":"238","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Vgood","43":"7","44":"0","45":"None","46":"None","47":"NA","48":"NA","49":"NA","50":"6","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"6","60":"36","61":"No","62":"Yes","63":"Smoker","64":"16","65":"NA","66":"NA","67":"NA","68":"NA","69":"No","70":"Yes","71":"20","72":"1","73":"NA","74":"No","75":"NA","76":"NA","_rn_":"19"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p><code>[]</code>안에서 논리 연산자를 통해 특정 column의 조건을 만족하는 행들을 선택할 수 있습니다.</p>
+<hr>
+</section>
+</section>
+<section id="함수" class="level1">
+<h1>함수</h1>
+<p>R에는 수많은 함수들이 존재합니다. 수치를 계산하는 함수부터 데이터를 파악하는 함수까지 그 수를 헤아릴 수 없습니다.</p>
+<p>이번 장에서는 R을 사용하면서 반드시 알아야 하거나 알아두면 편리한 함수들에 대해 알아보겠습니다.</p>
+<section id="요약-함수" class="level2">
+<h2 class="anchored" data-anchor-id="요약-함수">요약 함수</h2>
+<p>R에서는 다양한 숫자 데이터를 특정한 값으로 요약할 수 있습니다. 이 글에서는 다음과 같은 함수들을 요약함수로 지칭하겠습니다. 대표적인 요약 함수로는 <code>mean()</code>평균, <code>sd()</code>표준편차, <code>min()</code>최소값, <code>max()</code>최대값, <code>median()</code>중앙값, <code>sum()</code>합계, <code>quantile()</code> 4분위수 등이 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(df<span class="sc">$</span>Age) <span class="co"># 평균</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 36.05</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(df<span class="sc">$</span>Age) <span class="co"># 표준편차</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20.182</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(df<span class="sc">$</span>Age) <span class="co"># 최소</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(df<span class="sc">$</span>Age) <span class="co"># 최대</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 66</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(df<span class="sc">$</span>Age)  <span class="co"># 중앙값</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 39.5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(df<span class="sc">$</span>Age) <span class="co"># 4분위수</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0%  25%  50%  75% 100% 
+ 4.0 14.5 39.5 51.0 66.0 </code></pre>
+</div>
+</div>
+<p>만약 numeric 데이터에 결측치(<code>NA</code>)가 있다면 요약함수를 실행했을 때, <code>NA</code>가 출력됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(df<span class="sc">$</span>BMI) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 25.682</code></pre>
+</div>
+</div>
+<p>따라서 데이터 내에 <code>NA</code>가 있는 경우는 요약함수 안에 <code>na.rm=T</code>를 넣어줘야 합니다. <code>NA</code>를 제외한 나머지 데이터로 요약한 값이 출력됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(df<span class="sc">$</span>BMI, <span class="at">na.rm=</span>T) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 25.682</code></pre>
+</div>
+</div>
+<p>한편, 숫자형 데이터 이외에, character, factor 등 범주형 데이터의 경우 각 범주의 응답 분포를 확인할 수 있습니다. <code>table()</code> 함수를 통해 이를 파악할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>Gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+female   male 
+     7     13 </code></pre>
+</div>
+</div>
+<p>응답 분포를 확률로 표현할 수 있는 함수는 <code>prop.table()</code> 입니다. 이 때, <code>prop.table()</code> 에 넣어줄 인자는 <code>table()</code>에 범주를 확인하고자 하는 변수를 넣은 값입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(df<span class="sc">$</span>Gender))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+female   male 
+  0.35   0.65 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(df<span class="sc">$</span>Gender))<span class="sc">*</span><span class="dv">100</span> <span class="co"># percent 위해 100 곱하기</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+female   male 
+    35     65 </code></pre>
+</div>
+</div>
+</section>
+<section id="data.frame-관련-함수" class="level2">
+<h2 class="anchored" data-anchor-id="data.frame-관련-함수">data.frame 관련 함수</h2>
+<p>다음으로 데이터프레임과 관련된 함수를 알아보겠습니다. 사실 이 함수들은 <code>data.frame</code>뿐만 아니라 <code>vector</code>나 다른 구조의 데이터들과도 사용되는 함수입니다.</p>
+<p>다만 앞으로 우리가 다룰 데이터 구조의 대부분이 <code>data.frame</code>이고, <code>data.frame</code>을 활용해 데이터를 분석할 때 그 활용도가 높기 때문에 편의상<code>data.frame</code> 관련 함수라고 지칭하겠습니다.</p>
+<section id="데이터-불러오기저장하기" class="level3">
+<h3 class="anchored" data-anchor-id="데이터-불러오기저장하기">데이터 불러오기/저장하기</h3>
+<p><code>read.csv()</code> 를 통해 외부 csv 파일을 작업환경으로 불러올 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'데이터명.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>반면 작업환경에서 분석하던 <code>data.frame</code>을 외부 csv 파일로 저장할 수 있습니다. <code>write.csv()</code> 함수를 통해 가능합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(df2,<span class="st">'~/temp.csv'</span>) <span class="co">#작업저장경로+파일이름</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="데이터-훑어보기" class="level3">
+<h3 class="anchored" data-anchor-id="데이터-훑어보기">데이터 훑어보기</h3>
+<p>일반적으로 데이터를 분석하기 전, 데이터의 특징을 파악하는 것이 필요합니다. 데이터의 특징을 파악하는 함수들은 <code>head()</code>,<code>tail()</code>, <code>str()</code>, <code>summary()</code>등이 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df) <span class="co"># 데이터의 첫 6행을 확인</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["SurveyYr"],"name":[2],"type":["fct"],"align":["left"]},{"label":["Gender"],"name":[3],"type":["fct"],"align":["left"]},{"label":["Age"],"name":[4],"type":["int"],"align":["right"]},{"label":["AgeDecade"],"name":[5],"type":["fct"],"align":["left"]},{"label":["AgeMonths"],"name":[6],"type":["int"],"align":["right"]},{"label":["Race1"],"name":[7],"type":["fct"],"align":["left"]},{"label":["Race3"],"name":[8],"type":["fct"],"align":["left"]},{"label":["Education"],"name":[9],"type":["fct"],"align":["left"]},{"label":["MaritalStatus"],"name":[10],"type":["fct"],"align":["left"]},{"label":["HHIncome"],"name":[11],"type":["fct"],"align":["left"]},{"label":["HHIncomeMid"],"name":[12],"type":["int"],"align":["right"]},{"label":["Poverty"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["HomeRooms"],"name":[14],"type":["int"],"align":["right"]},{"label":["HomeOwn"],"name":[15],"type":["fct"],"align":["left"]},{"label":["Work"],"name":[16],"type":["fct"],"align":["left"]},{"label":["Weight"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["Length"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["HeadCirc"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["Height"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["BMI"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["BMICatUnder20yrs"],"name":[22],"type":["fct"],"align":["left"]},{"label":["BMI_WHO"],"name":[23],"type":["fct"],"align":["left"]},{"label":["Pulse"],"name":[24],"type":["int"],"align":["right"]},{"label":["BPSysAve"],"name":[25],"type":["int"],"align":["right"]},{"label":["BPDiaAve"],"name":[26],"type":["int"],"align":["right"]},{"label":["BPSys1"],"name":[27],"type":["int"],"align":["right"]},{"label":["BPDia1"],"name":[28],"type":["int"],"align":["right"]},{"label":["BPSys2"],"name":[29],"type":["int"],"align":["right"]},{"label":["BPDia2"],"name":[30],"type":["int"],"align":["right"]},{"label":["BPSys3"],"name":[31],"type":["int"],"align":["right"]},{"label":["BPDia3"],"name":[32],"type":["int"],"align":["right"]},{"label":["Testosterone"],"name":[33],"type":["dbl"],"align":["right"]},{"label":["DirectChol"],"name":[34],"type":["dbl"],"align":["right"]},{"label":["TotChol"],"name":[35],"type":["dbl"],"align":["right"]},{"label":["UrineVol1"],"name":[36],"type":["int"],"align":["right"]},{"label":["UrineFlow1"],"name":[37],"type":["dbl"],"align":["right"]},{"label":["UrineVol2"],"name":[38],"type":["int"],"align":["right"]},{"label":["UrineFlow2"],"name":[39],"type":["dbl"],"align":["right"]},{"label":["Diabetes"],"name":[40],"type":["fct"],"align":["left"]},{"label":["DiabetesAge"],"name":[41],"type":["int"],"align":["right"]},{"label":["HealthGen"],"name":[42],"type":["fct"],"align":["left"]},{"label":["DaysPhysHlthBad"],"name":[43],"type":["int"],"align":["right"]},{"label":["DaysMentHlthBad"],"name":[44],"type":["int"],"align":["right"]},{"label":["LittleInterest"],"name":[45],"type":["fct"],"align":["left"]},{"label":["Depressed"],"name":[46],"type":["fct"],"align":["left"]},{"label":["nPregnancies"],"name":[47],"type":["int"],"align":["right"]},{"label":["nBabies"],"name":[48],"type":["int"],"align":["right"]},{"label":["Age1stBaby"],"name":[49],"type":["int"],"align":["right"]},{"label":["SleepHrsNight"],"name":[50],"type":["int"],"align":["right"]},{"label":["SleepTrouble"],"name":[51],"type":["fct"],"align":["left"]},{"label":["PhysActive"],"name":[52],"type":["fct"],"align":["left"]},{"label":["PhysActiveDays"],"name":[53],"type":["int"],"align":["right"]},{"label":["TVHrsDay"],"name":[54],"type":["fct"],"align":["left"]},{"label":["CompHrsDay"],"name":[55],"type":["fct"],"align":["left"]},{"label":["TVHrsDayChild"],"name":[56],"type":["int"],"align":["right"]},{"label":["CompHrsDayChild"],"name":[57],"type":["int"],"align":["right"]},{"label":["Alcohol12PlusYr"],"name":[58],"type":["fct"],"align":["left"]},{"label":["AlcoholDay"],"name":[59],"type":["int"],"align":["right"]},{"label":["AlcoholYear"],"name":[60],"type":["int"],"align":["right"]},{"label":["SmokeNow"],"name":[61],"type":["fct"],"align":["left"]},{"label":["Smoke100"],"name":[62],"type":["fct"],"align":["left"]},{"label":["Smoke100n"],"name":[63],"type":["fct"],"align":["left"]},{"label":["SmokeAge"],"name":[64],"type":["int"],"align":["right"]},{"label":["Marijuana"],"name":[65],"type":["fct"],"align":["left"]},{"label":["AgeFirstMarij"],"name":[66],"type":["int"],"align":["right"]},{"label":["RegularMarij"],"name":[67],"type":["fct"],"align":["left"]},{"label":["AgeRegMarij"],"name":[68],"type":["int"],"align":["right"]},{"label":["HardDrugs"],"name":[69],"type":["fct"],"align":["left"]},{"label":["SexEver"],"name":[70],"type":["fct"],"align":["left"]},{"label":["SexAge"],"name":[71],"type":["int"],"align":["right"]},{"label":["SexNumPartnLife"],"name":[72],"type":["int"],"align":["right"]},{"label":["SexNumPartYear"],"name":[73],"type":["int"],"align":["right"]},{"label":["SameSex"],"name":[74],"type":["fct"],"align":["left"]},{"label":["SexOrientation"],"name":[75],"type":["fct"],"align":["left"]},{"label":["PregnantNow"],"name":[76],"type":["fct"],"align":["left"]}],"data":[{"1":"51624","2":"2009_10","3":"male","4":"34","5":"30-39","6":"409","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.36","14":"6","15":"Own","16":"NotWorking","17":"87.4","18":"NA","19":"NA","20":"164.7","21":"32.22","22":"NA","23":"30.0_plus","24":"70","25":"113","26":"85","27":"114","28":"88","29":"114","30":"88","31":"112","32":"82","33":"NA","34":"1.29","35":"3.49","36":"352","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"15","45":"Most","46":"Several","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"NA","60":"0","61":"No","62":"Yes","63":"Smoker","64":"18","65":"Yes","66":"17","67":"No","68":"NA","69":"Yes","70":"Yes","71":"16","72":"8","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"1"},{"1":"51624","2":"2009_10","3":"male","4":"34","5":"30-39","6":"409","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.36","14":"6","15":"Own","16":"NotWorking","17":"87.4","18":"NA","19":"NA","20":"164.7","21":"32.22","22":"NA","23":"30.0_plus","24":"70","25":"113","26":"85","27":"114","28":"88","29":"114","30":"88","31":"112","32":"82","33":"NA","34":"1.29","35":"3.49","36":"352","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"15","45":"Most","46":"Several","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"NA","60":"0","61":"No","62":"Yes","63":"Smoker","64":"18","65":"Yes","66":"17","67":"No","68":"NA","69":"Yes","70":"Yes","71":"16","72":"8","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"2"},{"1":"51624","2":"2009_10","3":"male","4":"34","5":"30-39","6":"409","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.36","14":"6","15":"Own","16":"NotWorking","17":"87.4","18":"NA","19":"NA","20":"164.7","21":"32.22","22":"NA","23":"30.0_plus","24":"70","25":"113","26":"85","27":"114","28":"88","29":"114","30":"88","31":"112","32":"82","33":"NA","34":"1.29","35":"3.49","36":"352","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"15","45":"Most","46":"Several","47":"NA","48":"NA","49":"NA","50":"4","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"NA","60":"0","61":"No","62":"Yes","63":"Smoker","64":"18","65":"Yes","66":"17","67":"No","68":"NA","69":"Yes","70":"Yes","71":"16","72":"8","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"3"},{"1":"51625","2":"2009_10","3":"male","4":"4","5":"0-9","6":"49","7":"Other","8":"NA","9":"NA","10":"NA","11":"20000-24999","12":"22500","13":"1.07","14":"9","15":"Own","16":"NA","17":"17.0","18":"NA","19":"NA","20":"105.4","21":"15.30","22":"NA","23":"12.0_18.5","24":"NA","25":"NA","26":"NA","27":"NA","28":"NA","29":"NA","30":"NA","31":"NA","32":"NA","33":"NA","34":"NA","35":"NA","36":"NA","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"4","57":"1","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","_rn_":"4"},{"1":"51630","2":"2009_10","3":"female","4":"49","5":"40-49","6":"596","7":"White","8":"NA","9":"Some College","10":"LivePartner","11":"35000-44999","12":"40000","13":"1.91","14":"5","15":"Rent","16":"NotWorking","17":"86.7","18":"NA","19":"NA","20":"168.4","21":"30.57","22":"NA","23":"30.0_plus","24":"86","25":"112","26":"75","27":"118","28":"82","29":"108","30":"74","31":"116","32":"76","33":"NA","34":"1.16","35":"6.70","36":"77","37":"0.094","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"10","45":"Several","46":"Several","47":"2","48":"2","49":"27","50":"8","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"2","60":"20","61":"Yes","62":"Yes","63":"Smoker","64":"38","65":"Yes","66":"18","67":"No","68":"NA","69":"Yes","70":"Yes","71":"12","72":"10","73":"1","74":"Yes","75":"Heterosexual","76":"NA","_rn_":"5"},{"1":"51638","2":"2009_10","3":"male","4":"9","5":"0-9","6":"115","7":"White","8":"NA","9":"NA","10":"NA","11":"75000-99999","12":"87500","13":"1.84","14":"6","15":"Rent","16":"NA","17":"29.8","18":"NA","19":"NA","20":"133.1","21":"16.82","22":"NA","23":"12.0_18.5","24":"82","25":"86","26":"47","27":"84","28":"50","29":"84","30":"50","31":"88","32":"44","33":"NA","34":"1.34","35":"4.86","36":"123","37":"1.538","38":"NA","39":"NA","40":"No","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"5","57":"0","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(df) <span class="co"># 데이터의 마지막 6행을 확인</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["SurveyYr"],"name":[2],"type":["fct"],"align":["left"]},{"label":["Gender"],"name":[3],"type":["fct"],"align":["left"]},{"label":["Age"],"name":[4],"type":["int"],"align":["right"]},{"label":["AgeDecade"],"name":[5],"type":["fct"],"align":["left"]},{"label":["AgeMonths"],"name":[6],"type":["int"],"align":["right"]},{"label":["Race1"],"name":[7],"type":["fct"],"align":["left"]},{"label":["Race3"],"name":[8],"type":["fct"],"align":["left"]},{"label":["Education"],"name":[9],"type":["fct"],"align":["left"]},{"label":["MaritalStatus"],"name":[10],"type":["fct"],"align":["left"]},{"label":["HHIncome"],"name":[11],"type":["fct"],"align":["left"]},{"label":["HHIncomeMid"],"name":[12],"type":["int"],"align":["right"]},{"label":["Poverty"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["HomeRooms"],"name":[14],"type":["int"],"align":["right"]},{"label":["HomeOwn"],"name":[15],"type":["fct"],"align":["left"]},{"label":["Work"],"name":[16],"type":["fct"],"align":["left"]},{"label":["Weight"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["Length"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["HeadCirc"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["Height"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["BMI"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["BMICatUnder20yrs"],"name":[22],"type":["fct"],"align":["left"]},{"label":["BMI_WHO"],"name":[23],"type":["fct"],"align":["left"]},{"label":["Pulse"],"name":[24],"type":["int"],"align":["right"]},{"label":["BPSysAve"],"name":[25],"type":["int"],"align":["right"]},{"label":["BPDiaAve"],"name":[26],"type":["int"],"align":["right"]},{"label":["BPSys1"],"name":[27],"type":["int"],"align":["right"]},{"label":["BPDia1"],"name":[28],"type":["int"],"align":["right"]},{"label":["BPSys2"],"name":[29],"type":["int"],"align":["right"]},{"label":["BPDia2"],"name":[30],"type":["int"],"align":["right"]},{"label":["BPSys3"],"name":[31],"type":["int"],"align":["right"]},{"label":["BPDia3"],"name":[32],"type":["int"],"align":["right"]},{"label":["Testosterone"],"name":[33],"type":["dbl"],"align":["right"]},{"label":["DirectChol"],"name":[34],"type":["dbl"],"align":["right"]},{"label":["TotChol"],"name":[35],"type":["dbl"],"align":["right"]},{"label":["UrineVol1"],"name":[36],"type":["int"],"align":["right"]},{"label":["UrineFlow1"],"name":[37],"type":["dbl"],"align":["right"]},{"label":["UrineVol2"],"name":[38],"type":["int"],"align":["right"]},{"label":["UrineFlow2"],"name":[39],"type":["dbl"],"align":["right"]},{"label":["Diabetes"],"name":[40],"type":["fct"],"align":["left"]},{"label":["DiabetesAge"],"name":[41],"type":["int"],"align":["right"]},{"label":["HealthGen"],"name":[42],"type":["fct"],"align":["left"]},{"label":["DaysPhysHlthBad"],"name":[43],"type":["int"],"align":["right"]},{"label":["DaysMentHlthBad"],"name":[44],"type":["int"],"align":["right"]},{"label":["LittleInterest"],"name":[45],"type":["fct"],"align":["left"]},{"label":["Depressed"],"name":[46],"type":["fct"],"align":["left"]},{"label":["nPregnancies"],"name":[47],"type":["int"],"align":["right"]},{"label":["nBabies"],"name":[48],"type":["int"],"align":["right"]},{"label":["Age1stBaby"],"name":[49],"type":["int"],"align":["right"]},{"label":["SleepHrsNight"],"name":[50],"type":["int"],"align":["right"]},{"label":["SleepTrouble"],"name":[51],"type":["fct"],"align":["left"]},{"label":["PhysActive"],"name":[52],"type":["fct"],"align":["left"]},{"label":["PhysActiveDays"],"name":[53],"type":["int"],"align":["right"]},{"label":["TVHrsDay"],"name":[54],"type":["fct"],"align":["left"]},{"label":["CompHrsDay"],"name":[55],"type":["fct"],"align":["left"]},{"label":["TVHrsDayChild"],"name":[56],"type":["int"],"align":["right"]},{"label":["CompHrsDayChild"],"name":[57],"type":["int"],"align":["right"]},{"label":["Alcohol12PlusYr"],"name":[58],"type":["fct"],"align":["left"]},{"label":["AlcoholDay"],"name":[59],"type":["int"],"align":["right"]},{"label":["AlcoholYear"],"name":[60],"type":["int"],"align":["right"]},{"label":["SmokeNow"],"name":[61],"type":["fct"],"align":["left"]},{"label":["Smoke100"],"name":[62],"type":["fct"],"align":["left"]},{"label":["Smoke100n"],"name":[63],"type":["fct"],"align":["left"]},{"label":["SmokeAge"],"name":[64],"type":["int"],"align":["right"]},{"label":["Marijuana"],"name":[65],"type":["fct"],"align":["left"]},{"label":["AgeFirstMarij"],"name":[66],"type":["int"],"align":["right"]},{"label":["RegularMarij"],"name":[67],"type":["fct"],"align":["left"]},{"label":["AgeRegMarij"],"name":[68],"type":["int"],"align":["right"]},{"label":["HardDrugs"],"name":[69],"type":["fct"],"align":["left"]},{"label":["SexEver"],"name":[70],"type":["fct"],"align":["left"]},{"label":["SexAge"],"name":[71],"type":["int"],"align":["right"]},{"label":["SexNumPartnLife"],"name":[72],"type":["int"],"align":["right"]},{"label":["SexNumPartYear"],"name":[73],"type":["int"],"align":["right"]},{"label":["SameSex"],"name":[74],"type":["fct"],"align":["left"]},{"label":["SexOrientation"],"name":[75],"type":["fct"],"align":["left"]},{"label":["PregnantNow"],"name":[76],"type":["fct"],"align":["left"]}],"data":[{"1":"51666","2":"2009_10","3":"female","4":"58","5":"50-59","6":"700","7":"Mexican","8":"NA","9":"High School","10":"Married","11":"75000-99999","12":"87500","13":"2.03","14":"10","15":"Rent","16":"Looking","17":"57.5","18":"NA","19":"NA","20":"148.1","21":"26.22","22":"NA","23":"25.0_to_29.9","24":"94","25":"127","26":"83","27":"NA","28":"NA","29":"134","30":"82","31":"120","32":"84","33":"NA","34":"1.14","35":"4.78","36":"29","37":"0.299","38":"NA","39":"NA","40":"No","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"5","51":"No","52":"Yes","53":"2","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"Yes","62":"Yes","63":"Smoker","64":"17","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","_rn_":"15"},{"1":"51667","2":"2009_10","3":"male","4":"50","5":"50-59","6":"603","7":"White","8":"NA","9":"Some College","10":"NeverMarried","11":"15000-19999","12":"17500","13":"1.24","14":"4","15":"Rent","16":"Looking","17":"84.1","18":"NA","19":"NA","20":"177.8","21":"26.60","22":"NA","23":"25.0_to_29.9","24":"74","25":"142","26":"68","27":"138","28":"66","29":"142","30":"74","31":"142","32":"62","33":"NA","34":"1.06","35":"5.22","36":"64","37":"0.190","38":"NA","39":"NA","40":"No","41":"NA","42":"Good","43":"0","44":"0","45":"None","46":"None","47":"NA","48":"NA","49":"NA","50":"7","51":"No","52":"Yes","53":"7","54":"NA","55":"NA","56":"NA","57":"NA","58":"No","59":"NA","60":"0","61":"NA","62":"No","63":"Non-Smoker","64":"NA","65":"No","66":"NA","67":"No","68":"NA","69":"No","70":"Yes","71":"NA","72":"9","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"16"},{"1":"51671","2":"2009_10","3":"female","4":"9","5":"0-9","6":"112","7":"Black","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"3","15":"Rent","16":"NA","17":"53.1","18":"NA","19":"NA","20":"139.2","21":"27.40","22":"NA","23":"25.0_to_29.9","24":"92","25":"93","26":"63","27":"86","28":"56","29":"90","30":"64","31":"96","32":"62","33":"NA","34":"1.22","35":"4.86","36":"156","37":"0.975","38":"NA","39":"NA","40":"No","41":"NA","42":"NA","43":"NA","44":"NA","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"NA","51":"NA","52":"NA","53":"NA","54":"NA","55":"NA","56":"0","57":"1","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","_rn_":"17"},{"1":"51677","2":"2009_10","3":"male","4":"33","5":"30-39","6":"404","7":"White","8":"NA","9":"High School","10":"Married","11":"25000-34999","12":"30000","13":"1.27","14":"11","15":"Own","16":"Working","17":"93.8","18":"NA","19":"NA","20":"181.3","21":"28.54","22":"NA","23":"25.0_to_29.9","24":"96","25":"128","26":"74","27":"126","28":"80","29":"128","30":"74","31":"NA","32":"NA","33":"NA","34":"0.91","35":"5.59","36":"155","37":"0.574","38":"NA","39":"NA","40":"No","41":"NA","42":"Fair","43":"3","44":"7","45":"Several","46":"None","47":"NA","48":"NA","49":"NA","50":"6","51":"No","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"3","60":"104","61":"No","62":"Yes","63":"Smoker","64":"NA","65":"No","66":"NA","67":"No","68":"NA","69":"No","70":"Yes","71":"27","72":"1","73":"1","74":"No","75":"Heterosexual","76":"NA","_rn_":"18"},{"1":"51678","2":"2009_10","3":"male","4":"60","5":"60-69","6":"721","7":"White","8":"NA","9":"High School","10":"Married","11":"15000-19999","12":"17500","13":"1.03","14":"5","15":"Own","16":"Working","17":"74.6","18":"NA","19":"NA","20":"169.9","21":"25.84","22":"NA","23":"25.0_to_29.9","24":"84","25":"152","26":"100","27":"154","28":"98","29":"150","30":"98","31":"154","32":"102","33":"NA","34":"1.34","35":"6.39","36":"238","37":"NA","38":"NA","39":"NA","40":"No","41":"NA","42":"Vgood","43":"7","44":"0","45":"None","46":"None","47":"NA","48":"NA","49":"NA","50":"6","51":"Yes","52":"No","53":"NA","54":"NA","55":"NA","56":"NA","57":"NA","58":"Yes","59":"6","60":"36","61":"No","62":"Yes","63":"Smoker","64":"16","65":"NA","66":"NA","67":"NA","68":"NA","69":"No","70":"Yes","71":"20","72":"1","73":"NA","74":"No","75":"NA","76":"NA","_rn_":"19"},{"1":"51679","2":"2009_10","3":"male","4":"16","5":"10-19","6":"194","7":"Other","8":"NA","9":"NA","10":"NA","11":"NA","12":"NA","13":"NA","14":"7","15":"Own","16":"NotWorking","17":"73.2","18":"NA","19":"NA","20":"172.0","21":"24.74","22":"NA","23":"18.5_to_24.9","24":"76","25":"126","26":"72","27":"132","28":"74","29":"126","30":"68","31":"126","32":"76","33":"NA","34":"1.14","35":"3.00","36":"345","37":"1.742","38":"NA","39":"NA","40":"No","41":"NA","42":"Fair","43":"0","44":"20","45":"NA","46":"NA","47":"NA","48":"NA","49":"NA","50":"6","51":"No","52":"Yes","53":"3","54":"NA","55":"NA","56":"NA","57":"NA","58":"NA","59":"NA","60":"NA","61":"NA","62":"NA","63":"NA","64":"NA","65":"NA","66":"NA","67":"NA","68":"NA","69":"NA","70":"NA","71":"NA","72":"NA","73":"NA","74":"NA","75":"NA","76":"NA","_rn_":"20"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df) <span class="co"># 데이터의 구조 확인</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   20 obs. of  76 variables:
+ $ ID              : int  51624 51624 51624 51625 51630 51638 51646 51647 51647 51647 ...
+ $ SurveyYr        : Factor w/ 2 levels "2009_10","2011_12": 1 1 1 1 1 1 1 1 1 1 ...
+ $ Gender          : Factor w/ 2 levels "female","male": 2 2 2 2 1 2 2 1 1 1 ...
+ $ Age             : int  34 34 34 4 49 9 8 45 45 45 ...
+ $ AgeDecade       : Factor w/ 8 levels " 0-9"," 10-19",..: 4 4 4 1 5 1 1 5 5 5 ...
+ $ AgeMonths       : int  409 409 409 49 596 115 101 541 541 541 ...
+ $ Race1           : Factor w/ 5 levels "Black","Hispanic",..: 4 4 4 5 4 4 4 4 4 4 ...
+ $ Race3           : Factor w/ 6 levels "Asian","Black",..: NA NA NA NA NA NA NA NA NA NA ...
+ $ Education       : Factor w/ 5 levels "8th Grade","9 - 11th Grade",..: 3 3 3 NA 4 NA NA 5 5 5 ...
+ $ MaritalStatus   : Factor w/ 6 levels "Divorced","LivePartner",..: 3 3 3 NA 2 NA NA 3 3 3 ...
+ $ HHIncome        : Factor w/ 12 levels " 0-4999"," 5000-9999",..: 6 6 6 5 7 11 9 11 11 11 ...
+ $ HHIncomeMid     : int  30000 30000 30000 22500 40000 87500 60000 87500 87500 87500 ...
+ $ Poverty         : num  1.36 1.36 1.36 1.07 1.91 1.84 2.33 5 5 5 ...
+ $ HomeRooms       : int  6 6 6 9 5 6 7 6 6 6 ...
+ $ HomeOwn         : Factor w/ 3 levels "Own","Rent","Other": 1 1 1 1 2 2 1 1 1 1 ...
+ $ Work            : Factor w/ 3 levels "Looking","NotWorking",..: 2 2 2 NA 2 NA NA 3 3 3 ...
+ $ Weight          : num  87.4 87.4 87.4 17 86.7 29.8 35.2 75.7 75.7 75.7 ...
+ $ Length          : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ HeadCirc        : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ Height          : num  165 165 165 105 168 ...
+ $ BMI             : num  32.2 32.2 32.2 15.3 30.6 ...
+ $ BMICatUnder20yrs: Factor w/ 4 levels "UnderWeight",..: NA NA NA NA NA NA NA NA NA NA ...
+ $ BMI_WHO         : Factor w/ 4 levels "12.0_18.5","18.5_to_24.9",..: 4 4 4 1 4 1 2 3 3 3 ...
+ $ Pulse           : int  70 70 70 NA 86 82 72 62 62 62 ...
+ $ BPSysAve        : int  113 113 113 NA 112 86 107 118 118 118 ...
+ $ BPDiaAve        : int  85 85 85 NA 75 47 37 64 64 64 ...
+ $ BPSys1          : int  114 114 114 NA 118 84 114 106 106 106 ...
+ $ BPDia1          : int  88 88 88 NA 82 50 46 62 62 62 ...
+ $ BPSys2          : int  114 114 114 NA 108 84 108 118 118 118 ...
+ $ BPDia2          : int  88 88 88 NA 74 50 36 68 68 68 ...
+ $ BPSys3          : int  112 112 112 NA 116 88 106 118 118 118 ...
+ $ BPDia3          : int  82 82 82 NA 76 44 38 60 60 60 ...
+ $ Testosterone    : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ DirectChol      : num  1.29 1.29 1.29 NA 1.16 1.34 1.55 2.12 2.12 2.12 ...
+ $ TotChol         : num  3.49 3.49 3.49 NA 6.7 4.86 4.09 5.82 5.82 5.82 ...
+ $ UrineVol1       : int  352 352 352 NA 77 123 238 106 106 106 ...
+ $ UrineFlow1      : num  NA NA NA NA 0.094 ...
+ $ UrineVol2       : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ UrineFlow2      : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ Diabetes        : Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 1 1 ...
+ $ DiabetesAge     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HealthGen       : Factor w/ 5 levels "Excellent","Vgood",..: 3 3 3 NA 3 NA NA 2 2 2 ...
+ $ DaysPhysHlthBad : int  0 0 0 NA 0 NA NA 0 0 0 ...
+ $ DaysMentHlthBad : int  15 15 15 NA 10 NA NA 3 3 3 ...
+ $ LittleInterest  : Factor w/ 3 levels "None","Several",..: 3 3 3 NA 2 NA NA 1 1 1 ...
+ $ Depressed       : Factor w/ 3 levels "None","Several",..: 2 2 2 NA 2 NA NA 1 1 1 ...
+ $ nPregnancies    : int  NA NA NA NA 2 NA NA 1 1 1 ...
+ $ nBabies         : int  NA NA NA NA 2 NA NA NA NA NA ...
+ $ Age1stBaby      : int  NA NA NA NA 27 NA NA NA NA NA ...
+ $ SleepHrsNight   : int  4 4 4 NA 8 NA NA 8 8 8 ...
+ $ SleepTrouble    : Factor w/ 2 levels "No","Yes": 2 2 2 NA 2 NA NA 1 1 1 ...
+ $ PhysActive      : Factor w/ 2 levels "No","Yes": 1 1 1 NA 1 NA NA 2 2 2 ...
+ $ PhysActiveDays  : int  NA NA NA NA NA NA NA 5 5 5 ...
+ $ TVHrsDay        : Factor w/ 7 levels "0_hrs","0_to_1_hr",..: NA NA NA NA NA NA NA NA NA NA ...
+ $ CompHrsDay      : Factor w/ 7 levels "0_hrs","0_to_1_hr",..: NA NA NA NA NA NA NA NA NA NA ...
+ $ TVHrsDayChild   : int  NA NA NA 4 NA 5 1 NA NA NA ...
+ $ CompHrsDayChild : int  NA NA NA 1 NA 0 6 NA NA NA ...
+ $ Alcohol12PlusYr : Factor w/ 2 levels "No","Yes": 2 2 2 NA 2 NA NA 2 2 2 ...
+ $ AlcoholDay      : int  NA NA NA NA 2 NA NA 3 3 3 ...
+ $ AlcoholYear     : int  0 0 0 NA 20 NA NA 52 52 52 ...
+ $ SmokeNow        : Factor w/ 2 levels "No","Yes": 1 1 1 NA 2 NA NA NA NA NA ...
+ $ Smoke100        : Factor w/ 2 levels "No","Yes": 2 2 2 NA 2 NA NA 1 1 1 ...
+ $ Smoke100n       : Factor w/ 2 levels "Non-Smoker","Smoker": 2 2 2 NA 2 NA NA 1 1 1 ...
+ $ SmokeAge        : int  18 18 18 NA 38 NA NA NA NA NA ...
+ $ Marijuana       : Factor w/ 2 levels "No","Yes": 2 2 2 NA 2 NA NA 2 2 2 ...
+ $ AgeFirstMarij   : int  17 17 17 NA 18 NA NA 13 13 13 ...
+ $ RegularMarij    : Factor w/ 2 levels "No","Yes": 1 1 1 NA 1 NA NA 1 1 1 ...
+ $ AgeRegMarij     : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ HardDrugs       : Factor w/ 2 levels "No","Yes": 2 2 2 NA 2 NA NA 1 1 1 ...
+ $ SexEver         : Factor w/ 2 levels "No","Yes": 2 2 2 NA 2 NA NA 2 2 2 ...
+ $ SexAge          : int  16 16 16 NA 12 NA NA 13 13 13 ...
+ $ SexNumPartnLife : int  8 8 8 NA 10 NA NA 20 20 20 ...
+ $ SexNumPartYear  : int  1 1 1 NA 1 NA NA 0 0 0 ...
+ $ SameSex         : Factor w/ 2 levels "No","Yes": 1 1 1 NA 2 NA NA 2 2 2 ...
+ $ SexOrientation  : Factor w/ 3 levels "Bisexual","Heterosexual",..: 2 2 2 NA 2 NA NA 1 1 1 ...
+ $ PregnantNow     : Factor w/ 3 levels "Yes","No","Unknown": NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df) <span class="co"># 데이터의 column 요약통계량</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       ID           SurveyYr     Gender        Age          AgeDecade
+ Min.   :51624   2009_10:20   female: 7   Min.   : 4.00    0-9   :4  
+ 1st Qu.:51636   2011_12: 0   male  :13   1st Qu.:14.50    30-39 :4  
+ Median :51651                            Median :39.50    40-49 :4  
+ Mean   :51651                            Mean   :36.05    50-59 :4  
+ 3rd Qu.:51666                            3rd Qu.:51.00    10-19 :2  
+ Max.   :51679                            Max.   :66.00    60-69 :2  
+                                                          (Other):0  
+   AgeMonths          Race1         Race3             Education
+ Min.   : 49.0   Black   : 1   Asian   : 0   8th Grade     :0  
+ 1st Qu.:176.2   Hispanic: 0   Black   : 0   9 - 11th Grade:1  
+ Median :475.0   Mexican : 1   Hispanic: 0   High School   :6  
+ Mean   :436.2   White   :16   Mexican : 0   Some College  :3  
+ 3rd Qu.:615.8   Other   : 2   White   : 0   College Grad  :4  
+ Max.   :795.0                 Other   : 0   NA's          :6  
+                               NA's    :20                     
+      MaritalStatus        HHIncome  HHIncomeMid        Poverty     
+ Divorced    : 1    25000-34999:5   Min.   : 17500   Min.   :1.030  
+ LivePartner : 1    75000-99999:5   1st Qu.: 30000   1st Qu.:1.360  
+ Married     :11    15000-19999:2   Median : 40000   Median :1.910  
+ NeverMarried: 1    20000-24999:1   Mean   : 53824   Mean   :2.424  
+ Separated   : 0    35000-44999:1   3rd Qu.: 87500   3rd Qu.:2.330  
+ Widowed     : 0    (Other)    :3   Max.   :100000   Max.   :5.000  
+ NA's        : 6    NA's       :3   NA's   :3        NA's   :3      
+   HomeRooms      HomeOwn           Work       Weight          Length   
+ Min.   : 3.00   Own  :13   Looking   :2   Min.   :17.00   Min.   : NA  
+ 1st Qu.: 5.75   Rent : 7   NotWorking:6   1st Qu.:56.40   1st Qu.: NA  
+ Median : 6.00   Other: 0   Working   :7   Median :75.20   Median : NA  
+ Mean   : 6.70              NA's      :5   Mean   :67.70   Mean   :NaN  
+ 3rd Qu.: 7.50                             3rd Qu.:84.75   3rd Qu.: NA  
+ Max.   :11.00                             Max.   :93.80   Max.   : NA  
+                                                           NA's   :20   
+    HeadCirc       Height           BMI           BMICatUnder20yrs
+ Min.   : NA   Min.   :105.4   Min.   :15.30   UnderWeight: 0     
+ 1st Qu.: NA   1st Qu.:146.5   1st Qu.:23.68   NormWeight : 0     
+ Median : NA   Median :166.7   Median :26.41   OverWeight : 0     
+ Mean   :NaN   Mean   :159.1   Mean   :25.68   Obese      : 0     
+ 3rd Qu.: NA   3rd Qu.:169.6   3rd Qu.:27.68   NA's       :20     
+ Max.   : NA   Max.   :181.9   Max.   :32.22                      
+ NA's   :20                                                       
+         BMI_WHO      Pulse          BPSysAve        BPDiaAve     
+ 12.0_18.5   :2   Min.   :60.00   Min.   : 86.0   Min.   : 37.00  
+ 18.5_to_24.9:5   1st Qu.:66.00   1st Qu.:109.0   1st Qu.: 64.00  
+ 25.0_to_29.9:9   Median :74.00   Median :113.0   Median : 72.00  
+ 30.0_plus   :4   Mean   :75.26   Mean   :116.8   Mean   : 71.37  
+                  3rd Qu.:83.00   3rd Qu.:126.5   3rd Qu.: 84.00  
+                  Max.   :96.00   Max.   :152.0   Max.   :100.00  
+                  NA's   :1       NA's   :1       NA's   :1       
+     BPSys1          BPDia1          BPSys2          BPDia2     
+ Min.   : 84.0   Min.   :46.00   Min.   : 84.0   Min.   :36.00  
+ 1st Qu.:106.0   1st Qu.:62.00   1st Qu.:108.0   1st Qu.:67.00  
+ Median :114.0   Median :70.00   Median :114.0   Median :72.00  
+ Mean   :115.7   Mean   :71.89   Mean   :116.4   Mean   :72.42  
+ 3rd Qu.:125.5   3rd Qu.:85.00   3rd Qu.:127.0   3rd Qu.:85.00  
+ Max.   :154.0   Max.   :98.00   Max.   :150.0   Max.   :98.00  
+ NA's   :2       NA's   :2       NA's   :1       NA's   :1      
+     BPSys3          BPDia3        Testosterone   DirectChol       TotChol     
+ Min.   : 88.0   Min.   : 38.00   Min.   : NA   Min.   :0.670   Min.   :3.000  
+ 1st Qu.:107.5   1st Qu.: 60.50   1st Qu.: NA   1st Qu.:1.140   1st Qu.:4.128  
+ Median :115.0   Median : 73.00   Median : NA   Median :1.255   Median :4.925  
+ Mean   :116.6   Mean   : 70.11   Mean   :NaN   Mean   :1.327   Mean   :4.948  
+ 3rd Qu.:119.5   3rd Qu.: 82.00   3rd Qu.: NA   3rd Qu.:1.340   3rd Qu.:5.820  
+ Max.   :154.0   Max.   :102.00   Max.   : NA   Max.   :2.120   Max.   :6.700  
+ NA's   :2       NA's   :2        NA's   :20    NA's   :2       NA's   :2      
+   UrineVol1       UrineFlow1       UrineVol2     UrineFlow2  Diabetes
+ Min.   :  7.0   Min.   :0.0460   Min.   : NA   Min.   : NA   No :20  
+ 1st Qu.:106.0   1st Qu.:0.3465   1st Qu.: NA   1st Qu.: NA   Yes: 0  
+ Median :155.0   Median :0.9390   Median : NA   Median : NA           
+ Mean   :173.5   Mean   :0.8229   Mean   :NaN   Mean   :NaN           
+ 3rd Qu.:238.0   3rd Qu.:1.1160   3rd Qu.: NA   3rd Qu.: NA           
+ Max.   :352.0   Max.   :1.7420   Max.   : NA   Max.   : NA           
+ NA's   :1       NA's   :6        NA's   :20    NA's   :20            
+  DiabetesAge      HealthGen DaysPhysHlthBad  DaysMentHlthBad LittleInterest
+ Min.   : NA   Excellent:0   Min.   : 0.000   Min.   : 0.00   None   :8     
+ 1st Qu.: NA   Vgood    :6   1st Qu.: 0.000   1st Qu.: 0.00   Several:2     
+ Median : NA   Good     :5   Median : 0.000   Median : 3.00   Most   :3     
+ Mean   :NaN   Fair     :3   Mean   : 1.714   Mean   : 6.50   NA's   :7     
+ 3rd Qu.: NA   Poor     :0   3rd Qu.: 2.250   3rd Qu.:13.75                 
+ Max.   : NA   NA's     :6   Max.   :10.000   Max.   :20.00                 
+ NA's   :20                  NA's   :6        NA's   :6                     
+   Depressed  nPregnancies     nBabies     Age1stBaby SleepHrsNight
+ None   :9   Min.   :1.00   Min.   :2    Min.   :27   Min.   :4.0  
+ Several:4   1st Qu.:1.00   1st Qu.:2    1st Qu.:27   1st Qu.:4.5  
+ Most   :0   Median :1.00   Median :2    Median :27   Median :6.0  
+ NA's   :7   Mean   :1.25   Mean   :2    Mean   :27   Mean   :6.0  
+             3rd Qu.:1.25   3rd Qu.:2    3rd Qu.:27   3rd Qu.:7.5  
+             Max.   :2.00   Max.   :2    Max.   :27   Max.   :8.0  
+             NA's   :16     NA's   :19   NA's   :19   NA's   :5    
+ SleepTrouble PhysActive PhysActiveDays       TVHrsDay      CompHrsDay
+ No  :9       No  :6     Min.   :1.000   0_hrs    : 0   0_hrs    : 0  
+ Yes :6       Yes :9     1st Qu.:3.000   0_to_1_hr: 0   0_to_1_hr: 0  
+ NA's:5       NA's:5     Median :5.000   1_hr     : 0   1_hr     : 0  
+                         Mean   :4.444   2_hr     : 0   2_hr     : 0  
+                         3rd Qu.:5.000   3_hr     : 0   3_hr     : 0  
+                         Max.   :7.000   (Other)  : 0   (Other)  : 0  
+                         NA's   :11      NA's     :20   NA's     :20  
+ TVHrsDayChild CompHrsDayChild Alcohol12PlusYr   AlcoholDay     AlcoholYear 
+ Min.   :0.0   Min.   :0.0     No  : 1         Min.   :1.000   Min.   :  0  
+ 1st Qu.:1.0   1st Qu.:1.0     Yes :12         1st Qu.:2.000   1st Qu.:  0  
+ Median :4.0   Median :1.0     NA's: 7         Median :3.000   Median : 52  
+ Mean   :2.8   Mean   :2.2                     Mean   :3.222   Mean   : 68  
+ 3rd Qu.:4.0   3rd Qu.:3.0                     3rd Qu.:3.000   3rd Qu.:100  
+ Max.   :5.0   Max.   :6.0                     Max.   :6.000   Max.   :364  
+ NA's   :15    NA's   :15                      NA's   :11      NA's   :7    
+ SmokeNow  Smoke100      Smoke100n    SmokeAge     Marijuana AgeFirstMarij  
+ No  : 6   No  :6   Non-Smoker:6   Min.   :13.00   No  :2    Min.   :13.00  
+ Yes : 2   Yes :8   Smoker    :8   1st Qu.:16.50   Yes :9    1st Qu.:13.00  
+ NA's:12   NA's:6   NA's      :6   Median :18.00   NA's:9    Median :17.00  
+                                   Mean   :19.71             Mean   :15.78  
+                                   3rd Qu.:18.00             3rd Qu.:17.00  
+                                   Max.   :38.00             Max.   :19.00  
+                                   NA's   :13                NA's   :11     
+ RegularMarij  AgeRegMarij    HardDrugs SexEver       SexAge     
+ No  :9       Min.   :15.00   No  :7    No  : 0   Min.   :12.00  
+ Yes :2       1st Qu.:16.25   Yes :6    Yes :13   1st Qu.:13.00  
+ NA's:9       Median :17.50   NA's:7    NA's: 7   Median :16.00  
+              Mean   :17.50                       Mean   :16.42  
+              3rd Qu.:18.75                       3rd Qu.:17.75  
+              Max.   :20.00                       Max.   :27.00  
+              NA's   :18                          NA's   :8      
+ SexNumPartnLife  SexNumPartYear   SameSex       SexOrientation  PregnantNow
+ Min.   :  1.00   Min.   :0.0000   No  :9   Bisexual    :3      Yes    : 0  
+ 1st Qu.:  8.00   1st Qu.:0.5000   Yes :4   Heterosexual:8      No     : 0  
+ Median :  9.00   Median :1.0000   NA's:7   Homosexual  :0      Unknown: 0  
+ Mean   : 17.46   Mean   :0.7273            NA's        :9      NA's   :20  
+ 3rd Qu.: 20.00   3rd Qu.:1.0000                                            
+ Max.   :100.00   Max.   :1.0000                                            
+ NA's   :7        NA's   :9                                                 </code></pre>
+</div>
+</div>
+</section>
+<section id="행과-열의-수-확인" class="level3">
+<h3 class="anchored" data-anchor-id="행과-열의-수-확인">행과 열의 수 확인</h3>
+<p>다음으로 데이터의 행과 열의 개수를 확인하는 함수들입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(df) <span class="co"># 행의 개수</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb128"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(df) <span class="co"># 열의 개수</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 76</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df) <span class="co"># 데이터의 행과 열의 수 확인</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20 76</code></pre>
+</div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>기존에 선언했던 object 와 동일한 이름으로 새로운 데이터를 저장하게 되면, 기존에 저장되어 있던 값은 사라지게 됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>),<span class="at">name=</span><span class="fu">c</span>(<span class="st">'a'</span>,<span class="st">'b'</span>,<span class="st">'c'</span>));</span>
+<span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id=</span><span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>),<span class="at">name=</span><span class="fu">c</span>(<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>따라서 object의 이름을 설정할 때는 헷갈리지 않게끔 다른 이름으로 지어주는 것이 필요합니다.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="논리-함수" class="level2">
+<h2 class="anchored" data-anchor-id="논리-함수">논리 함수</h2>
+<p>논리 함수는 논리 연산자처럼 <code>TRUE</code> 나 <code>FALSE</code>를 반환하는 함수입니다.</p>
+<ul>
+<li><p><code>is.na()</code> : <code>NA</code>가 있는지 확인하는 함수입니다. <code>NA</code>가 있는 경우 <code>TRUE</code>를, 그렇지 않은 경우를 <code>FALSE</code>로 반환합니다.</p>
+<p><code>is.na()</code>는 모든 행에 대해 결과를 반환하므로, 보통 <code>table()</code> 함수처럼 응답을 요약하여 해당 변수에 몇 개의 결측치가 있는지 확인하기 위해 사용하는 것이 일반적입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>BMI))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+FALSE 
+   20 </code></pre>
+</div>
+</div></li>
+<li><p><code>is.numeric()</code>, <code>is.factor()</code>, <code>is.character()</code>: 특정 column의 데이터 유형을 확인하는 함수입니다. 해당 유형이 맞다면 <code>TRUE</code>, 아니면 <code>FALSE</code>를 반환합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.numeric</span>(<span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.factor</span>(<span class="st">'dd'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb139"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.character</span>(<span class="st">'dexmedetomidine'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div></li>
+<li><p><code>ifelse()</code> 함수는 data.frame에서 가장 많이 쓰이는 함수 중 하나입니다. 그렇기 때문에 매우 중요하고, 반드시 알고 넘어가야 하는 함수입니다.</p>
+<p><code>ifelse()</code>의 구조는 다음과 같습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb141"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ifelse(조건, </span></span>
+<span id="cb141-2"><a href="#cb141-2" aria-hidden="true" tabindex="-1"></a><span class="co">#        '조건이 참일 때 사용할 값', </span></span>
+<span id="cb141-3"><a href="#cb141-3" aria-hidden="true" tabindex="-1"></a><span class="co">#        '조건이 거짓일 때 사용할 값')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>ifelse()</code>는 주로 새로운 column을 생성할 때, 또는 기존의 column을 변경할 때 많이 사용됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb142"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>Obesity <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df<span class="sc">$</span>BMI<span class="sc">&gt;=</span><span class="dv">25</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb142-2"><a href="#cb142-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>Obesity)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ 0  1 
+ 7 13 </code></pre>
+</div>
+</div>
+<p>위의 코드에서 <code>df$BMI&gt;=25</code>가 조건절에 해당됩니다. <code>1</code>은 BMI가 25보다 클 때 비만이라는 의미로 넣는 값이고, <code>0</code>은 BMI가 25미만인 경우에 넣어줄 값입니다.</p></li>
+<li><p>또한 <code>ifelse()</code>와 <code>is.na()</code>를 함께 사용하여 해당 열에 결측치가 있는 경우, 채워넣기 위한 용도로 자주 활용됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb144"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>BMI2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>BMI), </span>
+<span id="cb144-2"><a href="#cb144-2" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">mean</span>(df<span class="sc">$</span>BMI, <span class="at">na.rm=</span>T),</span>
+<span id="cb144-3"><a href="#cb144-3" aria-hidden="true" tabindex="-1"></a>                 df<span class="sc">$</span>BMI)</span>
+<span id="cb144-4"><a href="#cb144-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df<span class="sc">$</span>BMI)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  15.30   23.68   26.41   25.68   27.68   32.22 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb146"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df<span class="sc">$</span>BMI2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  15.30   23.68   26.41   25.68   27.68   32.22 </code></pre>
+</div>
+</div>
+<p><code>BMI2</code>는 <code>BMI</code>와 다르게 <code>NA</code>를 <code>BMI</code>의 평균으로 채워넣었습니다.</p></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="rchemist0123/giscus-blog" data-repo-id="R_kgDOJBwa8Q" data-category="General" data-category-id="DIC_kwDOJBwa8c4CUbVM" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left"><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:danjang0123@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/danjang0123/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

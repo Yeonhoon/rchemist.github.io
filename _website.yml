@@ -16,9 +16,6 @@ website:
       - href: about.qmd
         icon: file-person
         text: About
-      - icon: newspaper
-        text: Posts
-        href: posts/index.qmd
       - icon: sliders2
         text: Gallery
         href: gallery/index.qmd

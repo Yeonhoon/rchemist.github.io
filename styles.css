@@ -1,9 +1,20 @@
-/* Roboto Font*/
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Fira+Code")
 
 code {
   color: hsl(210,8%,15%);
   border-radius: 5px;
+}
+
+.navbar-title {
+  font-family: cursive;
+  font-weight: bold;
 }
 
 .quarto-post {
@@ -27,9 +38,9 @@ code {
   width: 150px !important;
 }
 
-main, p{
+
+main, p {
   font-size: 1rem !important;
-  font-family: 'Roboto', sans-serif;
 }
 
 h3 {

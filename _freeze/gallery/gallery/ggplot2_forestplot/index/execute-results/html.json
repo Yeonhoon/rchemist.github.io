@@ -1,5 +1,5 @@
 {
-  "hash": "6ca8b26ca7ed53a18376509b0f3ef8f7",
+  "hash": "ea1ff810b9b56b71deb9e3f2de4208e4",
   "result": {
     "markdown": "---\ntitle: \"ggplot2를 활용한 forestplot 그리기\"\ndate: \"2023\"\ncategories: [R, ggplot2, forestplot]\n---\n\n\nggplot2 를 이용한 예쁜 forest plot 만들기\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndf_data <- data.frame(Cancer=c(\"Brain\", \"Colorectal\", \"Kidney clear cell carcinoma\", \"Kidney renal papillary carcinoma\"),\n                      OR=c(1.03, 0.98, 1.27, 1.22),\n                      OR_lower=c(0.97, 0.62, 1.16, 1.03),\n                      OR_upper=c(1.09, 1.55, 1.38, 1.45)\n                      )\n\n### Visualize\n\nif (!require('ggplot2')) install.packages('ggplot2'); library('ggplot2')   # Load ggplot2 library\n\n\n\np <- ggplot(df_data, aes(x=Cancer, y=OR, ymin=OR_lower, ymax=OR_upper)) + \n  geom_linerange(size=8, colour=\"#a6d8f0\") +\n  geom_hline(aes(x=0, yintercept=1), lty=1) +\n  geom_point(size=3, shape=21, fill=\"#008fd5\", colour = \"white\", stroke = 1) +\n  scale_y_continuous(limits = c(0.5, 2)) +\n  coord_flip() +\n  ggtitle(\"Odds ratio for Gene of Interest\") +\n  theme_minimal()\np\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-1-1.png){width=672}\n:::\n:::\n",
     "supporting": [
@@ -10,7 +10,7 @@
     ],
     "includes": {
       "include-in-header": [
-        "<link href=\"../../../site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"../../../site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+        "<link href=\"../../../site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\r\n<script src=\"../../../site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\r\n"
       ]
     },
     "engineDependencies": {},

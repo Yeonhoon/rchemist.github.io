@@ -1,26 +1,16 @@
 ---
-title: "Welcome!"
-comments: false
-format:
-  html:
+title: "Rchemist 블로그"
+format: 
+  html: 
     page-layout: full
-about:
-  id: about-rchemist
-  template: jolla
-  image: images/meme.png
-  image-shape: round
-  links: 
-    - icon: linkedin
-      text: Linkedin
-      href: https://www.linkedin.com/in/danjang0123/
-    - icon: slack
-      text: Slack
-      href: https://rchemisthq.slack.com
-    - icon: envelope
-      text: Email
-      href: mailto:danjang0123@gmail.com
+listing: 
+  - id: posts
+    sort-ui: [title, date]
+    filter-ui: [title,date]
+    contents: blog/posts
+    page-size: 20
+    type: default
+    sort: "date desc"
+    categories: unnumbered
+comments: false
 ---
-
-::: {#about-rchemist}
-헬스케어 데이터를 다루는 데이터 사이언티스트입니다. 데이터 분석, 데이터 사이언스, 웹 개발에 관심이 있습니다.😃
-:::

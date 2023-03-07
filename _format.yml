@@ -15,5 +15,5 @@ format:
     code-copy: true
     # code-block-border-left: '#000000'
     css: styles.css
-    mainfont: Pretendard, Apple SD Gothic Neo
-    monofont: Fira code, monospace
+mainfont: Pretendard
+monofont: Fira code
