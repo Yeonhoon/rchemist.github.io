@@ -87,9 +87,9 @@ md.pattern(titanic_train |> select(Survived, Pclass, SibSp, Parch, Age, Sex))
 
 대표적인 method는 pmm, cart, lasso.norm 등이 있습니다.
 
--   pmm: Predictive mean matching
--   cart: classification and regression trees 이용
--   lasso.norm: Lasso linear regression 이용
+-   `pmm`: Predictive mean matching
+-   `cart`: classification and regression trees 이용
+-   `lasso.norm`: Lasso linear regression 이용
 
 그 외에도 다양한 imputation 방법이 있으니, 자세한 사항은 `?mice()`를 참고하시기 바랍니다.
 

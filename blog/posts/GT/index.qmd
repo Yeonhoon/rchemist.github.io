@@ -1,0 +1,192 @@
+---
+title: "GT"
+author: "JYH"
+categories: [R, table, gt]
+image: "https://gt.rstudio.com/reference/figures/logo.svg"
+---
+
+## 패키지 소개
+
+![](https://gt.rstudio.com/reference/figures/logo.svg){fig-align="center" width="350" height="350"}
+
+-   데이터프레임 등을 table로 변환하여 출력.
+-   조건 별로 색상을 칠하거나 글자색상 변경 가능.
+
+## Table 구조
+
+![](https://gt.rstudio.com/reference/figures/gt_parts_of_a_table.svg){fig-align="center"}
+
+```{r}
+#| output-location: column-fragment
+#| echo: true
+library(gt)
+gtcar_dt <- as.data.table(gtcars)[,.(ctry_origin, mfr, model,year, trim, msrp)]
+gtcar_dt <- gtcar_dt[gtcar_dt[,.I[1:2],by=.(ctry_origin)]$V1]
+gtcar_dt[,id := seq_len(.N)]
+gtcar_dt
+gtcar_dt |> 
+  gt(rowname_col = "id") |> 
+  tab_header(
+    title = md("**Super cars**"),
+    subtitle = md("Find your *Dream* car!")
+  ) |> 
+  tab_footnote(
+    footnote = "Manufacturer",
+    locations = cells_column_labels(columns = mfr)
+  ) |> 
+  tab_footnote(
+    footnote = "Units: $",
+    locations = cells_column_labels(msrp)
+  ) |> 
+  tab_source_note(
+    source_note = md("URL: https://gt.rstudio.com/articles/intro-creating-gt-tables.html")
+  )
+```
+
+## Stub
+
+-   row (행)의 이름과 연관된 항목들
+-   행을 그룹으로 묶기
+
+```{r}
+#| echo: true
+#| output-location: column-fragment
+gtcar_dt |> 
+  gt(rowname_col = "id") |> 
+  tab_stubhead(label="No") |> 
+  tab_row_group(
+    label = "USA",
+    rows = 1:2
+  ) |> 
+  tab_row_group(
+    label = "Italy",
+    rows = 3:4
+  ) |>  as_raw_html()
+```
+
+## Stub
+
+-   또는 `group_by()`
+
+```{r}
+#| warning: false
+library(dplyr)
+gtcar_dt |> 
+  group_by(ctry_origin) |> 
+  arrange(mfr, desc(msrp)) |> 
+  gt(rowname_col = "id")
+```
+
+```{r}
+gtcar_dt |> 
+  arrange(mfr, desc(msrp)) |> 
+  mutate(car = paste(mfr, model)) |> 
+  select(-mfr, -model, -id) |> 
+  group_by(ctry_origin) |> 
+  gt(rowname_col = "car")
+```
+
+## Column labels
+
+-   table의 열 다루기
+
+Column 묶기
+
+```{r}
+#| echo: true
+#| output-location: column-fragment
+air_dt <- airquality |> head(10)
+
+air_tbl <- air_dt |> 
+  gt() |> 
+  tab_header(
+    title = "New York Air Quality Measurements"
+  ) |> 
+  tab_spanner(
+    label="Measurement",
+    columns = c(Ozone, Solar.R, Wind, Temp)
+  ) |> 
+  tab_spanner(
+    label="Time",
+    columns = c(Month, Day)
+  )
+
+air_tbl |> as_raw_html()
+```
+
+## Column 이동 및 이름 수정
+
+```{r}
+#| echo: true
+#| output-location: column-fragment
+air_tbl <- air_tbl |> 
+  cols_move_to_start(
+    columns = c(Month, Day)
+  ) |> 
+  cols_label(
+    Ozone = html("Ozone,<br>ppbV"),
+    Solar.R = html("Solar R.,<br>cal/m<sup>2</sup>"),
+    Wind = html("Wind,<br>mph"),
+    Temp = html("Temp,<br>&deg;F")
+  )
+
+air_tbl |> as_raw_html()
+```
+
+## Column 정렬
+
+```{r}
+#| output-location: column-fragment
+#| echo: true
+air_tbl |> 
+  cols_align(
+    align = "center",
+    columns = c(Month, Day)
+  )
+```
+
+## Column 값에 따른 스타일 변경 1
+
+-   조건에 따라 색상 지정
+
+```{r}
+#| output-location: column-fragment
+#| echo: true
+air_dt |> 
+  gt() |> 
+  tab_style(
+    style = list(cell_fill(color="red"),
+                 cell_text(weight="bold",color="white")),
+    locations = cells_body(columns = Wind,
+                           rows = Wind > 10 )
+  ) |> 
+  tab_style(
+    style = list(cell_fill(color="blue"),
+                 cell_text(weight="bold",color="white")),
+    locations = cells_body(columns = Wind,
+                           rows = Wind < 10 )
+  )
+  
+```
+
+## Column 값에 따른 스타일 변경 2
+
+-   범위 조건으로 색상 지정 (연속형)
+
+```{r}
+#| output-location: column-fragment
+#| echo: true
+air_dt |> 
+  gt() |> 
+  data_color(Wind,
+             scales::col_numeric(
+               palette=c("red","white","blue"),
+               domain= c(7,21)
+             ))
+```
+
+```{r}
+#| eval: false
+#| echo: true
+cols_hide() #숨기기
+```

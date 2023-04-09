@@ -1,0 +1,88 @@
+---
+title: "R Shiny에서 DB 다루기"
+---
+
+```{r}
+# 데이터 읽기
+dbData <- reactive({
+    dbTrigger$depend()
+      as.data.table(dbGetQuery(con, 'SELECT id, dates, cat_big, type, cat_small,
+                                      weight, no_rep, no_set,
+                                      weight * no_rep * no_set as volume, memo
+                               FROM diary'))
+  })
+```
+
+```{r}
+# 데이터 db에 입력
+observeEvent(input$write,{
+    record <- list(
+      dates = input$dates,
+      cat_big = input$cat_big,
+      type = input$type,
+      cat_small = input$cat_small,
+      weight = input$weight,
+      no_rep = input$no_rep,
+      no_set = input$no_set,
+      memo = input$memo
+    )
+    if(input$cat_small=="" |
+       input$no_rep==0 |
+       input$no_set==0){
+      shinyWidgets::show_alert(
+        type = 'error',
+        title='Oops!!',
+        text = "운동 일지 빈칸이 존재함.")
+    }
+    else {
+      query <- sqlInterpolate(con,
+                     'INSERT INTO diary ([dates],[cat_big],[type],[cat_small],[weight],[no_set],[no_rep],[memo])
+                     VALUES (?dates, ?cat_big, ?type, ?cat_small, ?weight, ?no_set, ?no_rep, ?memo);',
+                     dates = input$dates,
+                     cat_big = input$cat_big,
+                     type = input$type,
+                     cat_small = input$cat_small,
+                     weight = input$weight,
+                     no_rep = input$no_rep,
+                     no_set = input$no_set,
+                     memo = input$memo
+                     )
+      dbExecute(con, query)
+      dbTrigger$trigger()
+      shinyWidgets::show_alert(
+        type='success',
+        title='Success !!',
+        text = "운동일지 저장 완료.")
+      Sys.sleep(2)
+      # session$reload()
+  }
+})
+```
+
+```{r}
+  observeEvent(input$records_cell_edit, {
+    row  <- input$records_cell_edit$row; print(row)
+    column <- input$records_cell_edit$col; print(column)
+    value <- input$records_cell_edit$value; print(value)
+    target_id <-  dt()[row, id] # 변경id
+
+    edited_col_name <- names(dt())[column+1]
+    dt()[row, col := input$records_cell_edit$value,
+                       env= list(col = edited_col_name)]
+
+    query <- dbSendQuery(con,
+                         paste0("UPDATE diary SET '",edited_col_name,"' = ? where id = ?"),
+                            params=c(value, target_id)
+    )
+    DBI::dbClearResult(query)
+    dbTrigger$trigger()
+  })
+
+    query <- dbSendQuery(con,
+                         paste0("UPDATE diary SET '",edited_col_name,"' = ? where id = ?"),
+                            params=c(value, target_id)
+    )
+    DBI::dbClearResult(query)
+    dbTrigger$trigger()
+  })
+```

@@ -1,0 +1,209 @@
+---
+title: "MICE를 이용한 multiple imputation"
+author: "JYH"
+date: "2023-03-28"
+categories: [R, imputation, mice]
+image: "https://amices.org/mice/reference/figures/MICE_sticker_SMALL.png"
+---
+
+# MICE 소개
+
+multiple imputation은 평균이나 중앙값 등 하나의 값으로 결측값을 채워넣는 single imputation과 달리, 결측치(`NA`)를 여러가지 변수를 고려하여 채워넣는 방법입니다. 즉, `NA`가 있는 변수 이외의 다른 변수들까지 함께 고려하여, 채워넣을 변수를 지정하는 방법입니다.
+
+R에는 multiple imputation을 도와주는 대표적인 패키지인`mice` 가 있습니다. `mice`는 Multivariate Imputation by Chained Equations 의 약자인데, 연속형, 이분형, 범주형, 그리고 순서형 변수들을 채워넣을 수 있습니다.
+
+# 설치
+
+MICE 를 사용하기 위한 패키지는 아래와 같습니다. `mice` 패키지를 통해 MICE를 진행하도록 하겠습니다.
+
+```{r}
+library(mice, warn.conflicts = F)
+```
+
+# Imputation 예시
+
+mice를 활용한 imputation 매커니즘은 아래와 같습니다.
+
+https://data.library.virginia.edu/getting-started-with-multiple-imputation-in-r/
+
+https://angeloyeo.github.io/2020/09/17/MCMC.html
+
+[![](https://data.library.virginia.edu/files/figure1_mi.jpg){fig-align="center"}](https://data.library.virginia.edu/getting-started-with-multiple-imputation-in-r/)
+
+1.  `mice()`: 결측치가 있는 불완전한 데이터에 대해 결측치 대체를 진행합니다. 이 때 결측치가 대체된 여러 개의 데이터를 생성합니다.
+2.  `with()`: 결측치가 대체된 각각의 데이터를 활용해 분석을 진행합니다.결측치가 대체된 데이터마다 분석결과가 만들어집니다 (mira, Multiply imputed repeated analysis).
+3.  `pool()`: 여러 개의 분석 결과를 합칩니다 (multiply imputed polled object).
+
+## 0. 데이터 살펴보기
+
+`mice`에 내장되어 있는 `nhanes` 데이터를 이용하도록 하겠습니다.
+
+```{r}
+mice::nhanes
+```
+
+우선 데이터의 어떤 변수에 `NA`가 있는지, 결측값의 규칙을 확인할 수 있습니다.
+
+```{r}
+md.pattern(nhanes)
+```
+
+위 코드를 실행하게 되면, 테이블과 그래프가 함께 출력됩니다.
+
+테이블의 경우, 1이 `NA`가 아닌 경우, 0이 `NA`인 경우를 의미합니다.
+
+좀 더 직관적으로 `NA`의 패턴을 이해하려면 그래프를 보는 것이 좋습니다.
+
+위의 그림에서 파란 색은 값이 존재하는 것이고, 빨간색이 `NA`인 부분입니다. 그래프를 해석하면 다음과 같습니다.
+
+-   맨 위는 column별 이름입니다.
+
+-   오른쪽의 번호는 [`NA`가 있는 개수]{.underline}를 규칙으로 번호를 매긴 것입니다. 예를 들어 0은 age \~ chl까지 하나도 결측치가 없는 것을 의미합니다. 1의 경우에는 4가지 column중 `NA`가 한 군데 존재하는 것을 의미합니다. 3의 경우 4가지 column 중 3개에서 `NA`가 있는 경우를 의미합니다.
+
+-   왼쪽의 번호는 데이터에서 오른쪽의 규칙에 해당하는 row(행)들이 몇 개가 있는지를 나타냅니다. 예를 들어 결측치가 하나도 없는 행은 전체 데이터에서 총 13개이고, 결측치가 `hyp`, `bmi`, `chl`에 있는 경우는 총 7개의 행이 있다는 것입니다.
+
+-   맨 아래의 숫자 (0, 8, 9, 10)은 각 column별로 존재하는 `NA`의 합입니다.
+
+## 1. Imputation
+
+이제 `mice()`를 이용하여 `NA`를 채워넣어보도록 하겠습니다. `mice()`에서 인자를 설정해줄 수 있는데, 다음과 같습니다.
+
+-   `method`: 결측치를 채우는 imputation 방법. 지정해주는 값에 따라 single imputation이 될 수도, multiple imputation이 될 수도 있음.
+
+    -   single imputation: mean, median, norm.predict 등
+
+    -   multiple imputation: pmm, rf, cart 등
+
+-   `m`: `NA`를 채운 데이터셋의 수
+
+-   `maxit`: multiple imputation 값을 지정할 때 iteration 횟수
+
+-   `seed`: 동일한 결과 출력을 위한 난수 지정
+
+`m`의 경우 imputation 된 데이터의 개수인데, m이 높을수록 정확성이 올라가지만, imputation 되는 데 시간이 많이 소요됩니다.
+
+`maxit`의 경우, *MCMC(Markov Chain Monte Carlo)* 알고리즘을 이용해 반복을 하게 되는데, 이 때 반복할 횟수를 지정해주게 됩니다. `maxit`이 높을수록 알고리즘의 수렴도가 개선되지만, `m`과 마찬가지로 계산시간이 오래 걸릴 수 있습니다.
+
+::: callout-tip
+**Monte Carlo**
+
+통계적인 수치를 얻기 위해 수행하는 시뮬레이션. 통계학의 특성 상, 무수히 많은 시도를 거쳐야 정답을 파악할 수 있지만, 현실적으로는 불가능하기 때문에 유한한 시도를 통해 정답을 추정하는 것.
+
+**Markov Chain**
+
+어떤 상태에서 다른 상태로 넘어갈 때, 바로 전 단계의 상태에만 영향을 받는 확률 과정.
+
+> 예시: 어제 짜장면을 먹은 사람의 경우, 오늘 면 종류의 음식을 먹지 않을 것
+
+**MCMC**를 수행한다는 것은 첫 샘플을 랜덤하게 선정한 뒤, 그 다음의 샘플링이 추천되는 방식의 시도를 무수하게 해보는 것.
+
+출처: https://angeloyeo.github.io/2020/09/17/MCMC.html
+:::
+
+평균값으로 `NA`를 채워보도록 하겠습니다.
+
+```{r}
+imp <- mice(nhanes, 
+            method = "pmm",
+            maxit = 5, 
+            m = 5,
+            seed = 2023,
+            printFlag = F)
+imp
+```
+
+The predictor matrix specifies which variables are used in the linear predictors of each of the imputation models.
+
+A value of 1 specifies that the variable given in the column name is used in the model to impute the variable given in the row name (and 0 specifies that this variable is not used in that model).
+
+`imp`는 `mice` 객체입니다. multiple imputation 횟수와 함께 imputation methods가 등장합니다.
+
+`imp` 객체는 NA가 채워진 데이터는 물론, imputation 이전 데이터, 채워진 값, NA의 개수, 반복횟수 등의 값을 갖고 있습니다. 예를 들어 imp\$method를 통해 변수별 imputation 방법을 확인할 수 있습니다.
+
+```{r}
+attributes(imp)
+imp$method
+```
+
+mice의 imputation methods는 다양합니다.
+
+```{r}
+methods(mice)
+```
+
+bmi의 imputation 방법을 바꿔볼 수도 있습니다.
+
+```{r}
+meth <- imp$method
+meth
+```
+
+```{r}
+meth["bmi"] <- "norm" #Bayesian linear regression
+meth
+```
+
+그런 다음, imputation을 다시 진행해줍니다.
+
+```{r}
+imp2 <- mice(nhanes, method = meth, printFlag = F)
+
+plot(imp2)
+```
+
+또는 처음부터 imputation 방법을 지정해줄 수도 있습니다.
+
+```{r}
+imp3 <- mice(nhanes, method = c("","pmm","logreg","pmm"), printFlag = F)
+```
+
+iteration의 수를 늘려줄 수도 있습니다. 기본적으로는 5회 반복을 진행해 주는데, 추가적으로 iteration을 해줌으로써 imputation의 흐름이 없도록 만들어줄 수 있습니다.
+
+```{r}
+imp40 <- mice.mids(imp2, maxit = 35, printFlag = F)
+plot(imp40)
+```
+
+missing 데이터와
+
+```{r}
+stripplot(imp2,
+          data = chl~.imp,
+          pch=20, 
+          cex = 2)
+```
+
+## Modeling
+
+with 함수를 통해 imputation 객체 내에 있는 결측치 대체 데이터별 모델링을 수행합니다.
+
+```{r}
+fit <- with(imp2, lm(chl ~ bmi + age))
+fit
+```
+
+## Pooling
+
+```{r}
+fit_pooled <- pool(fit)
+summary(fit_pooled)
+```
+
+## 데이터 추출
+
+`complete()`를 통해 imputation 된 데이터를 내보낼 수 있습니다. `mice()` 시 `m`(imputation 횟수)을 5로 주었기 때문에 1\~5까지의 imputation 데이터가 존재합니다.
+
+```{r}
+imp$data
+nhanes_imp <- complete(imp, 3)
+```
+
+또한 m번 imputed된 데이터는 long, broad, repeated 형식으로 추출할 수 있습니다.
+
+```{r}
+complete(imp, "long")
+```
+
+```{r}
+complete(imp, "broad")
+```

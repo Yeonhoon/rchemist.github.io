@@ -1,0 +1,182 @@
+---
+title: "통계 table 끝판왕 gtsummary"
+author: "JYH"
+categories: [R, table, gtsummary]
+image: "https://www.danieldsjoberg.com/gtsummary/logo.png"
+---
+
+## 패키지 소개
+
+![](https://www.danieldsjoberg.com/gtsummary/logo.png){fig-align="center" width="350"}
+
+데이터 요약 & 회귀분석 결과 테이블 만들기
+
+## 필요한 패키지 설치
+
+```{r}
+#| eval: false
+#| echo: true
+pkgs <- c("gtsummary","gt")
+install.packages(pkgs)
+library(gtsummary)
+library(gt)
+```
+
+```{r}
+#| echo: false
+library(gtsummary)
+library(gt)
+```
+
+
+## Baseline characteristics
+
+-   data의 일반 특성 요약
+-   집단 별 통계량 표시
+
+## 기본 테이블 {.smaller}
+
+```{r warning=FALSE}
+#| echo: true
+#| code-line-numbers: "|3|4|6|"
+#| output-location: column-fragment
+library(gtsummary)
+library(gt)
+tbl_summary(
+  data = dt_imp,
+  by = HeartDisease
+) |> 
+  add_overall() |> 
+  as_gt() |> 
+  as_raw_html()
+```
+
+## 통계량 변경 {.smaller}
+
+```{r}
+#| code-line-numbers: "|4|5-7|8-11|12-15|16|"
+#| output-location: column-fragment
+tbl_summary(
+  data = dt_imp,
+  by = HeartDisease,
+  include = c(Sex, BMI, Smoking, AlcoholDrinking, Stroke, Diabetic),
+  type = list(
+    c(Smoking, AlcoholDrinking, Stroke, Diabetic)~ "categorical"
+  ),
+  statistic = list(
+    all_continuous() ~"{mean} ± {sd}",
+    all_categorical() ~ "{n} ({p})"
+  ),
+  digits = list(
+    all_continuous() ~ 1,
+    all_categorical() ~ c(0,1)
+  ),
+  missing = "no",
+) |> 
+  add_overall() |> 
+  as_gt() |> 
+  as_raw_html()
+```
+
+## P-value {.smaller}
+
+```{r}
+#| code-line-numbers: "|17-24|"
+#| output-location: column-fragment
+tbl_summary(
+   data = dt_imp,
+    by = HeartDisease,
+    include = c(Sex, BMI, Smoking, AlcoholDrinking, Stroke, Diabetic),
+  statistic = list(
+    all_continuous() ~"{mean} ± {sd}",
+    # statistic = "{median} ({p25}-{p75})",
+    all_categorical() ~ "{n} ({p})"
+  ),
+  digits = list(
+    all_continuous() ~ 1,
+    all_categorical() ~ c(0,1)
+  ),
+  missing = "no",
+) |> 
+  add_overall() |> 
+  add_p(
+    test = list(
+      all_continuous() ~ "t.test",
+      all_categorical() ~ "chisq.test"
+    ),
+    pvalue_fun = ~style_pvalue(., digits = 3)
+  ) |> 
+  as_gt() |> 
+  as_raw_html()
+```
+
+## Regression table {.smaller}
+
+### 1) 단변량 회귀분석(Univariable regression)
+
+```{r}
+#| output-location: column-fragment
+#| code-line-numbers: "|3-4|5|6|7|"
+uni_tbl <- tbl_uvregression(
+  data = dt_imp[,.(HeartDisease, Sex, BMI, Smoking, AlcoholDrinking, Stroke, Diabetic)],
+  method = glm,
+  method.args = list(family = binomial),
+  y = HeartDisease,
+  exponentiate = T,
+  hide_n = T
+  ) |> 
+  modify_footnote(everything() ~ NA)
+uni_tbl |> 
+  as_gt() |> 
+  as_raw_html()
+
+```
+
+## Regression table {.smaller}
+
+### 2) 다변량 회귀분석(Multivariable regression)
+
+```{r}
+#| output-location: column-fragment
+#| code-line-numbers: "|1-2|6-7|10-12|13-17"
+fit <- glm(HeartDisease ~ Sex +  BMI + Smoking + AlcoholDrinking + Stroke + Diabetic, family=binomial, data = dt_imp)
+mult_tbl <- tbl_regression(
+  x = fit,
+  exponentiate = T,
+  pvalue_fun = ~ style_pvalue(., digits = 3),
+  estimate_fun = ~style_ratio(., digits = 2)
+) |> 
+  bold_p() |> 
+  # modify_column_merge(pattern = "{estimate} ({conf.low}-{conf.high})",
+  #                     rows = !is.na(estimate)) |> 
+  add_significance_stars(hide_ci = T, hide_se = T) |> 
+  modify_header(
+    label = "**Variable**",
+    estimate = "**OR (95% CI)**",
+    p.value = "**P value**"
+  ) |> 
+  modify_footnote(everything() ~ NA)
+mult_tbl |> 
+  as_gt() |> 
+  as_raw_html()
+```
+
+## Regression table {.smaller}
+
+### 3) 두 개의 테이블 합치기
+
+```{r}
+#| code-line-numbers: "|2|3-4|"
+#| output-location: column-fragment
+tbl_merge(
+  list(uni_tbl, mult_tbl),
+  tab_spanner = 
+    c("**Univariable**", "**Multivariable**")
+) |> 
+  as_gt() |> 
+  as_raw_html()
+```
+
+
+참고자료
+https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html
