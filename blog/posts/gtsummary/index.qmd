@@ -28,13 +28,12 @@ library(gtsummary)
 library(gt)
 ```
 
-
-## Baseline characteristics
+## 1. Baseline characteristics
 
 -   data의 일반 특성 요약
 -   집단 별 통계량 표시
 
-## 기본 테이블 {.smaller}
+### 기본 테이블 {.smaller}
 
 ```{r warning=FALSE}
 #| echo: true
@@ -51,7 +50,11 @@ tbl_summary(
   as_raw_html()
 ```
 
-## 통계량 변경 {.smaller}
+### 통계량 변경 {.smaller}
+
+테이블에 표시되는 숫자의 양식을 변경해줄 수 있습니다. 예를 들어, 연속형(continuous) 변수의 경우 기본적으로 median(IQR)로 표시가 됩니다. tbl_summary()의 `statistic` 인자를 통해 `mean ± sd` 형태로 표시할 수 있습니다.
+
+주의해야 할 점은 항상 `{}`가 붙은 문자 형태(`""`)로 사용해야 한다는 것입니다.
 
 ```{r}
 #| code-line-numbers: "|4|5-7|8-11|12-15|16|"
@@ -78,7 +81,7 @@ tbl_summary(
   as_raw_html()
 ```
 
-## P-value {.smaller}
+### P-value {.smaller}
 
 ```{r}
 #| code-line-numbers: "|17-24|"
@@ -110,13 +113,15 @@ tbl_summary(
   as_raw_html()
 ```
 
-## Regression table {.smaller}
+## 2. Regression table 만들기 {.smaller}
 
-### 1) 단변량 회귀분석(Univariable regression)
+### 단순 회귀분석(Univariable regression)
+
+단순회귀분석의 경우,
 
 ```{r}
-#| output-location: column-fragment
-#| code-line-numbers: "|3-4|5|6|7|"
+#| echo: true
+#| eval: false
 uni_tbl <- tbl_uvregression(
   data = dt_imp[,.(HeartDisease, Sex, BMI, Smoking, AlcoholDrinking, Stroke, Diabetic)],
   method = glm,
@@ -126,19 +131,22 @@ uni_tbl <- tbl_uvregression(
   hide_n = T
   ) |> 
   modify_footnote(everything() ~ NA)
+uni_tbl
+```
+
+```{r}
+#| echo: false
+#| eval: true
 uni_tbl |> 
   as_gt() |> 
   as_raw_html()
-
 ```
 
-## Regression table {.smaller}
+### 다변량 회귀분석(Multivariable regression)
 
-### 2) 다변량 회귀분석(Multivariable regression)
+다중 회귀분석 테이블을 만드는 함수는 `tbl_regression()`입니다. 단순 회귀분석을 만드는 `tbl_uvregression()`과 다르게, 먼저 회귀식을 작성한 뒤에 `tbl_regression()`의 인자로 사용해야 합니다.
 
 ```{r}
-#| output-location: column-fragment
-#| code-line-numbers: "|1-2|6-7|10-12|13-17"
 fit <- glm(HeartDisease ~ Sex +  BMI + Smoking + AlcoholDrinking + Stroke + Diabetic, family=binomial, data = dt_imp)
 mult_tbl <- tbl_regression(
   x = fit,
@@ -156,14 +164,20 @@ mult_tbl <- tbl_regression(
     p.value = "**P value**"
   ) |> 
   modify_footnote(everything() ~ NA)
+mult_tbl
+```
+
+```{r}
+#| eval: true
+#| echo: false
 mult_tbl |> 
   as_gt() |> 
   as_raw_html()
 ```
 
-## Regression table {.smaller}
+### 두 개의 테이블 합치기
 
-### 3) 두 개의 테이블 합치기
+이제 단순 회귀분석 테이블과 다중 회귀분석 테이블을 합쳐보도록 하겠습니다.
 
 ```{r}
 #| code-line-numbers: "|2|3-4|"
@@ -177,6 +191,6 @@ tbl_merge(
   as_raw_html()
 ```
 
+## 참고자료
 
-참고자료
 https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html

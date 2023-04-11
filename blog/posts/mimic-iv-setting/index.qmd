@@ -1,0 +1,40 @@
+---
+title: "MIMIC-IV 분석 준비"
+categories: [dataset, MIMIC-IV, PostgreSQL]
+---
+
+## 1. 데이터 다운로드
+
+physionet에서 MIMIC-IV 데이터 다운로드하기
+
+## 2. DB에 데이터 저장하기
+
+원하는 DB를 선택하여 MIMIC-IV 데이터를 저장할 수 있습니다.
+
+DB가 PC에 설치되어 있어야 합니다.
+
+PostgreSQL, mySQL, 구글 bigquery, duckdb, sqlite 중에서 선택 가능합니다.
+
+저는 PostgreSQL 으로 진행하겠습니다.
+
+github에서 [mimic-code](https://github.com/MIT-LCP/mimic-code)/[mimic-iv](https://github.com/MIT-LCP/mimic-code/tree/main/mimic-iv)/[buildmimic](https://github.com/MIT-LCP/mimic-code/tree/main/mimic-iv/buildmimic)/**postgres**/
+
+에 들어가면 진행 가능.
+
+```{bash}
+# clone repo
+git clone https://github.com/MIT-LCP/mimic-code.git
+cd mimic-code
+# download data
+wget -r -N -c -np --user <USERNAME> --ask-password https://physionet.org/files/mimiciv/2.0/
+mv physionet.org/files/mimiciv mimiciv && rmdir physionet.org/files && rm physionet.org/robots.txt && rmdir physionet.org
+createdb mimiciv
+psql -d mimiciv -f mimic-iv/buildmimic/postgres/create.sql
+psql -d mimiciv -v ON_ERROR_STOP=1 -v mimic_data_dir=mimiciv/2.0 -f mimic-iv/buildmimic/postgres/load_gz.sql
+psql -d mimiciv -v ON_ERROR_STOP=1 -v mimic_data_dir=mimiciv/2.0 -f mimic-iv/buildmimic/postgres/constraint.sql
+psql -d mimiciv -v ON_ERROR_STOP=1 -v mimic_data_dir=mimiciv/2.0 -f mimic-iv/buildmimic/postgres/index.sql
+```
+
+https://physionet.org/content/mimic-iv-demo/2.2/
+
+https://github.com/MIT-LCP/mimic-code

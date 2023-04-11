@@ -1,18 +1,20 @@
 ---
 title: "MICE를 이용한 multiple imputation"
 author: "JYH"
-date: "2023-03-28"
+date: "2023-04-11"
 categories: [R, imputation, mice]
 image: "https://amices.org/mice/reference/figures/MICE_sticker_SMALL.png"
 ---
 
-# MICE 소개
+## MICE 소개
 
 multiple imputation은 평균이나 중앙값 등 하나의 값으로 결측값을 채워넣는 single imputation과 달리, 결측치(`NA`)를 여러가지 변수를 고려하여 채워넣는 방법입니다. 즉, `NA`가 있는 변수 이외의 다른 변수들까지 함께 고려하여, 채워넣을 변수를 지정하는 방법입니다.
 
-R에는 multiple imputation을 도와주는 대표적인 패키지인`mice` 가 있습니다. `mice`는 Multivariate Imputation by Chained Equations 의 약자인데, 연속형, 이분형, 범주형, 그리고 순서형 변수들을 채워넣을 수 있습니다.
+R에는 multiple imputation을 도와주는 대표적인 패키지인 `mice` 가 있습니다. `mice`는 Multivariate Imputation by Chained Equations 의 약자입니다,
 
-# 설치
+mice를 통해 연속형, 이분형, 범주형 등 다양한 변수들의 결측값들을 채워넣을 수 있습니다.
+
+## 설치
 
 MICE 를 사용하기 위한 패키지는 아래와 같습니다. `mice` 패키지를 통해 MICE를 진행하도록 하겠습니다.
 
@@ -20,21 +22,15 @@ MICE 를 사용하기 위한 패키지는 아래와 같습니다. `mice` 패키�
 library(mice, warn.conflicts = F)
 ```
 
-# Imputation 예시
-
-mice를 활용한 imputation 매커니즘은 아래와 같습니다.
-
-https://data.library.virginia.edu/getting-started-with-multiple-imputation-in-r/
-
-https://angeloyeo.github.io/2020/09/17/MCMC.html
+`mice`를 활용한 imputation 매커니즘은 아래의 그림과 같습니다.
 
 [![](https://data.library.virginia.edu/files/figure1_mi.jpg){fig-align="center"}](https://data.library.virginia.edu/getting-started-with-multiple-imputation-in-r/)
 
 1.  `mice()`: 결측치가 있는 불완전한 데이터에 대해 결측치 대체를 진행합니다. 이 때 결측치가 대체된 여러 개의 데이터를 생성합니다.
 2.  `with()`: 결측치가 대체된 각각의 데이터를 활용해 분석을 진행합니다.결측치가 대체된 데이터마다 분석결과가 만들어집니다 (mira, Multiply imputed repeated analysis).
-3.  `pool()`: 여러 개의 분석 결과를 합칩니다 (multiply imputed polled object).
+3.  `pool()`: 여러 개의 분석 결과를 합칩니다 (mipo, multiply imputed polled object).
 
-## 0. 데이터 살펴보기
+## 데이터 살펴보기
 
 `mice`에 내장되어 있는 `nhanes` 데이터를 이용하도록 하겠습니다.
 
@@ -64,7 +60,7 @@ md.pattern(nhanes)
 
 -   맨 아래의 숫자 (0, 8, 9, 10)은 각 column별로 존재하는 `NA`의 합입니다.
 
-## 1. Imputation
+## Imputation
 
 이제 `mice()`를 이용하여 `NA`를 채워넣어보도록 하겠습니다. `mice()`에서 인자를 설정해줄 수 있는데, 다음과 같습니다.
 
@@ -80,9 +76,13 @@ md.pattern(nhanes)
 
 -   `seed`: 동일한 결과 출력을 위한 난수 지정
 
-`m`의 경우 imputation 된 데이터의 개수인데, m이 높을수록 정확성이 올라가지만, imputation 되는 데 시간이 많이 소요됩니다.
+`m`의 경우 imputation 된 데이터의 개수인데, `m`이 높을수록 정확성이 올라가지만, imputation 되는 데 시간이 많이 소요됩니다.
 
 `maxit`의 경우, *MCMC(Markov Chain Monte Carlo)* 알고리즘을 이용해 반복을 하게 되는데, 이 때 반복할 횟수를 지정해주게 됩니다. `maxit`이 높을수록 알고리즘의 수렴도가 개선되지만, `m`과 마찬가지로 계산시간이 오래 걸릴 수 있습니다.
+
+::: callout-note
+mice 패키지의 창시자 Van Buuren (2018)은 "iteration의 수는 변수 간 상관관계와 변수의 결측 비율에 따라 달라진다"고 이야기했습니다. 그는 또한 5-20번의 반복이면 결과가 제대로 수렴할 것이라고 이야기했습니다.
+:::
 
 ::: callout-tip
 **Monte Carlo**
@@ -100,8 +100,6 @@ md.pattern(nhanes)
 출처: https://angeloyeo.github.io/2020/09/17/MCMC.html
 :::
 
-평균값으로 `NA`를 채워보도록 하겠습니다.
-
 ```{r}
 imp <- mice(nhanes, 
             method = "pmm",
@@ -112,59 +110,69 @@ imp <- mice(nhanes,
 imp
 ```
 
-The predictor matrix specifies which variables are used in the linear predictors of each of the imputation models.
-
-A value of 1 specifies that the variable given in the column name is used in the model to impute the variable given in the row name (and 0 specifies that this variable is not used in that model).
-
 `imp`는 `mice` 객체입니다. multiple imputation 횟수와 함께 imputation methods가 등장합니다.
 
-`imp` 객체는 NA가 채워진 데이터는 물론, imputation 이전 데이터, 채워진 값, NA의 개수, 반복횟수 등의 값을 갖고 있습니다. 예를 들어 imp\$method를 통해 변수별 imputation 방법을 확인할 수 있습니다.
+`imp` 객체는 NA가 채워진 데이터는 물론, imputation 이전 데이터, 채워진 값, NA의 개수, 반복횟수 등의 값을 갖고 있습니다. 예를 들어 `imp$method`를 통해 변수별 imputation 방법을 확인할 수 있습니다.
 
 ```{r}
 attributes(imp)
 imp$method
 ```
 
-mice의 imputation methods는 다양합니다.
+mice의 imputation methods는 다양합니다 (`methods(mice)` 참고).
+
+`mice()` 함수에서 method 인자를 통해 imputation 방법을 지정해줄 수도 있습니다.
 
 ```{r}
-methods(mice)
+imp2 <- mice(nhanes, method = c("","pmm","logreg","pmm"), printFlag = F)
 ```
 
-bmi의 imputation 방법을 바꿔볼 수도 있습니다.
+기본적으로 `mice()`는 연속형 변수에 대해서는 `pmm`을, 범주형 변수에 대해서는 `logreg`를 적용해 NA를 채워넣습니다.
+
+범주형 변수에 대해 자동으로 `logreg`를 적용하기 위해서는 해당 변수를 `character` 또는 `factor`로 변경해주어야 합니다.
 
 ```{r}
-meth <- imp$method
-meth
+nhanes$hyp <- as.factor(nhanes$hyp)
+imp4 <- mice(nhanes, printFlag = F)
+imp4
 ```
 
-```{r}
-meth["bmi"] <- "norm" #Bayesian linear regression
-meth
-```
 
-그런 다음, imputation을 다시 진행해줍니다.
+`pmm`은 hot deck 방법 중 하나입니다. 이 때, **hot deck** 방법이란, `NA`가 아닌 데이터를 다른 변수와 매칭시켜 `NA`를 채워넣는 방법입니다. 쉽게 말해서, `NA`가 있는 행의 데이터의 다른 열을 바탕으로 `NA`의 행을 채워넣는 것을 말합니다.
 
-```{r}
-imp2 <- mice(nhanes, method = meth, printFlag = F)
+`pmm` 알고리즘은 쉽게 말해, 특정 변수의 `NA`가 아닌 값과 다른 변수를 활용하여 `NA`의 값을 채워넣는 것입니다. 예를 들어 `nhanes` 데이터의 `bmi` 변수에 결측치가 있어 이를 채워넣는다고 했을 때, `age`와 `bmi`의 관계를 고려하여 `bmi`의 `NA`를 채워넣는 것입니다.
 
-plot(imp2)
-```
+::: callout-note
+좀더 디테일하게 `pmm` 알고리즘의 과정을 살펴보겠습니다.
 
-또는 처음부터 imputation 방법을 지정해줄 수도 있습니다.
+1.  `bmi` 변수와 age 변수를 활용하여 regression을 통해 age에 대한 회귀계수 $\hat{\beta}_{bmi}$ 을 계산합니다.
 
-```{r}
-imp3 <- mice(nhanes, method = c("","pmm","logreg","pmm"), printFlag = F)
-```
+2.  베이지안 회귀분석을 통해 age에 대한 회귀계수 $\bar{\beta}_{bmi}$ 를 계산합니다.
 
-iteration의 수를 늘려줄 수도 있습니다. 기본적으로는 5회 반복을 진행해 주는데, 추가적으로 iteration을 해줌으로써 imputation의 흐름이 없도록 만들어줄 수 있습니다.
+3.  $\hat{\beta}_{bmi}$를 바탕으로 결측치가 아닌 bmi 값들에 대한 관측값 $bmi_{obs}$을 예측합니다. 또한 결측치 bmi 값들에 대한 $bmi_{pred}$ 를 계산합니다. 여기서 $bmi_{pred}$ 값이 각각 21.5, 23.8, 28.3이 나왔다고 가정하겠습니다.
 
-```{r}
-imp40 <- mice.mids(imp2, maxit = 35, printFlag = F)
-plot(imp40)
-```
+4.  $bmi_{obs}$ 와 $bmi_{pred}$ 의 차이를 구하여 가장 낮은 차이를 갖는 값들을 구합니다. 예를 들어 첫 번째 $bmi_{pred}$ 값인 21.5와의 차이를 계산했을 때, 1.4, 1.5, 1.7 순으로 낮은 값을 갖습니다.
 
-missing 데이터와
+    | $age$ | $bmi$ | $bmi_{obs}$ | $difference$ |
+    |-------|-------|-------------|--------------|
+    | 1     | NA    | NA          | NA           |
+    | 2     | 22.7  | 23.0        | 1.5          |
+    | 1     | NA    | NA          | NA           |
+    | 3     | NA    | NA          | NA           |
+    | 1     | 20.4  | 20.7        | 1.7          |
+    | 1     | 22.5  | 22.9        | 1.4          |
+    | 1     | 30.1  | 30.7        | 9.2          |
+
+    이후, 낮은 값을 갖는 $bmi_{obs}$ 의 값인 23.0, 20.7, 22.9 등이 랜덤하게 선택되어, `bmi`의 `NA`를 채우게 됩니다.
+:::
+
+이처럼 `pmm` 알고리즘의 장점은 `NA`를 비현실적인 데이터로 채우는 것이 아니라, `NA`가 아닌 관측되는 값 중에서 채워넣는다는 것입니다.
+
+`log_reg` 방식도 `pmm`과 마찬가지로 진행이 됩니다.
+
+mice로 `NA`를 채워준 이후, 원래 데이터들처럼 잘 채워졌는지 확인하기 위해서 `stripplot()` 을 통해 분포를 확인해볼 수 있습니다. 파란 점이 관측값, 붉은 점이 `NA`에서 채워진 값들입니다.
+
+그래프를 봤을 때, imputation된 값들이 일반 관측치들과 거의 유사한 분포를 띄고 있는 것을 확인할 수 있습니다.
 
 ```{r}
 stripplot(imp2,
@@ -175,7 +183,7 @@ stripplot(imp2,
 
 ## Modeling
 
-with 함수를 통해 imputation 객체 내에 있는 결측치 대체 데이터별 모델링을 수행합니다.
+`with` 함수를 통해 imputation 객체 내에 있는 결측치 대체 데이터별 모델링을 수행합니다. mice()에서 지정된 imputation 수 (default=5) 별로 각각 모델링이 됩니다.
 
 ```{r}
 fit <- with(imp2, lm(chl ~ bmi + age))
@@ -184,26 +192,103 @@ fit
 
 ## Pooling
 
+마지막으로 풀링을 통해, 앞서 만든 5개의 imputation 된 데이터들의 회귀계수, 신뢰 구간, p-value 등을 계산할 수 있습니다.
+
 ```{r}
 fit_pooled <- pool(fit)
-summary(fit_pooled)
+summary(fit_pooled, conf.int = T)
 ```
 
 ## 데이터 추출
 
 `complete()`를 통해 imputation 된 데이터를 내보낼 수 있습니다. `mice()` 시 `m`(imputation 횟수)을 5로 주었기 때문에 1\~5까지의 imputation 데이터가 존재합니다.
 
-```{r}
-imp$data
-nhanes_imp <- complete(imp, 3)
-```
+일반적으로 결측치가 대체된 데이터셋은 "long" 을 이용해 데이터를 추출하여 요약통계량을 계산합니다. "long"을 이용하면 5개의 데이터셋이 행 단위로 붙게 됩니다.
 
-또한 m번 imputed된 데이터는 long, broad, repeated 형식으로 추출할 수 있습니다.
-
-```{r}
-complete(imp, "long")
-```
+::: callout-caution
+`complete()` 사용 시, 1\~5번 중 하나를 선택하여 데이터셋을 사용하는 것은 잘못된 방법입니다.
+:::
 
 ```{r}
-complete(imp, "broad")
+dt_imp <- complete(imp2, "long")
 ```
+
+## 기술통계량 계산
+
+::: callout-warning
+해당 부분은 아직까지 공부 중입니다.
+
+더 나은 함수나 패키지가 있는지 확인이 되면 수정하도록 하겠습니다.
+:::
+
+지금까지는 `mice`를 통해 회귀분석 등의 모델링을 하는 방법에 대해 살펴보았습니다.
+
+이제 문제는 multiple imputation된 데이터들을 어떻게 종합하여 baseline table 등을 만들 것인지 입니다. multiple imputation된 데이터에서 각 변수별 기술통계량 또는 요약통계량(descriptive statistics)을 계산하는 방법은 [**Rubin's rule**]{.underline}을 따라야 합니다.
+
+Rubin's Rules (RR) 이란 평균, 회귀계수, 표준오차, 신뢰 구간, p-value와 같은 파라미터 측정치들을 풀링하기 위해 고안된 규칙입니다.
+
+한마디로 여러 번 진행된 imputation의 값들을 반영하기 위해, 풀링하여 계산하여야 한다는 뜻입니다.
+
+### t-test
+
+multiple imputation 을 위한 t-tests는 `MKmisc` 패키지의 `mi.t.test()` 를 이용해 가능합니다. 다만 `MKmisc` 패키지를 설치하기 위해서는 `BiocMananger` 를 우선 설치해야 합니다. 그 다음 `limma`를 설치해주어야 `MKmisc`를 설치할 수 있습니다.
+
+```{r}
+#| warning: false
+#| eval: false
+#| echo: true
+install.packages("BiocManager")
+BiocManager::install("limma")
+install.packages("MKmisc")
+library(MKmisc)
+```
+
+mi.t.test()에 들어가는 값은 complete("long")을 이용해 추출한 전체 데이터를 리스트로 변환한 값, 연속형 변수 `x`, 범주형 종속형 변수 `y`입니다.
+
+```{r}
+library(MKmisc)
+
+dt_imp_list <- split(dt_imp, dt_imp$.imp)
+MKmisc::mi.t.test(dt_imp_list, x='bmi', y="hyp")
+
+```
+
+### chi-square
+
+multiple imputation 데이터에 카이제곱 검정을 수행하기 위해서는 `miceadds`패키지의 `micombine.chisquare()`를 이용합니다.
+
+```{r}
+#| eval: false
+install.packages("miceadds")
+library(miceadds)
+```
+
+```{r}
+imps <- unique(dt_imp$.imp)
+dt_imp$hyp <- as.character(dt_imp$hyp) |> as.numeric()
+mi_chisq <- lapply(imps, \(x)
+       xtabs(hyp ~ age, dt_imp, subset = imps==x)) |> 
+  lapply(chisq.test)
+mi_chisq[[1]]$statistic
+sapply(mi_chisq, \(x) x$statistic) |> miceadds::micombine.chisquare(df=2, display = T)
+```
+
+### ANOVA
+
+ANOVA 또한 `miceadds`패키지를 이용합니다. `mi.anova()`를 이용합니다.
+
+```{r}
+mi.anova(imp4, formula = "bmi ~ age")
+```
+
+## 참고자료
+
+https://data.library.virginia.edu/getting-started-with-multiple-imputation-in-r/
+
+https://angeloyeo.github.io/2020/09/17/MCMC.html
+
+https://bookdown.org/mwheymans/bookmi/data-analysis-after-multiple-imputation.html
+
+https://bookdown.org/mwheymans/bookmi/rubins-rules.html
+
+https://nerler.github.io/EP16_Multiple_Imputation/slide/03_analysis_and_pooling.pdf
