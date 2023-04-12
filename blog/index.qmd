@@ -14,5 +14,5 @@ format:
 comments: false
 ---
 
-:::{#posts}
+::: {#posts}
 :::

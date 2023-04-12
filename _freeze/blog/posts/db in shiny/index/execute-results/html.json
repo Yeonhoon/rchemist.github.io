@@ -1,0 +1,18 @@
+{
+  "hash": "ff033c7166f6cafb3b9e7a440bca7c85",
+  "result": {
+    "markdown": "---\ntitle: \"R Shiny에서 DB 다루기\"\ndate: \"2022-03-01\"\nauthor: \"JYH\"\n---\n\n::: {.cell}\n\n```{.r .cell-code}\n# 데이터 읽기\ndbData <- reactive({\n    dbTrigger$depend()\n      as.data.table(dbGetQuery(con, 'SELECT id, dates, cat_big, type, cat_small,\n                                      weight, no_rep, no_set,\n                                      weight * no_rep * no_set as volume, memo\n                               FROM diary'))\n  })\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\n# 데이터 db에 입력\nobserveEvent(input$write,{\n    record <- list(\n      dates = input$dates,\n      cat_big = input$cat_big,\n      type = input$type,\n      cat_small = input$cat_small,\n      weight = input$weight,\n      no_rep = input$no_rep,\n      no_set = input$no_set,\n      memo = input$memo\n    )\n    if(input$cat_small==\"\" |\n       input$no_rep==0 |\n       input$no_set==0){\n      shinyWidgets::show_alert(\n        type = 'error',\n        title='Oops!!',\n        text = \"운동 일지 빈칸이 존재함.\")\n    }\n    else {\n      query <- sqlInterpolate(con,\n                     'INSERT INTO diary ([dates],[cat_big],[type],[cat_small],[weight],[no_set],[no_rep],[memo])\n                     VALUES (?dates, ?cat_big, ?type, ?cat_small, ?weight, ?no_set, ?no_rep, ?memo);',\n                     dates = input$dates,\n                     cat_big = input$cat_big,\n                     type = input$type,\n                     cat_small = input$cat_small,\n                     weight = input$weight,\n                     no_rep = input$no_rep,\n                     no_set = input$no_set,\n                     memo = input$memo\n                     )\n      dbExecute(con, query)\n      dbTrigger$trigger()\n      shinyWidgets::show_alert(\n        type='success',\n        title='Success !!',\n        text = \"운동일지 저장 완료.\")\n      Sys.sleep(2)\n      # session$reload()\n  }\n})\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\n  observeEvent(input$records_cell_edit, {\n    row  <- input$records_cell_edit$row; print(row)\n    column <- input$records_cell_edit$col; print(column)\n    value <- input$records_cell_edit$value; print(value)\n    target_id <-  dt()[row, id] # 변경id\n\n    edited_col_name <- names(dt())[column+1]\n    dt()[row, col := input$records_cell_edit$value,\n                       env= list(col = edited_col_name)]\n\n    query <- dbSendQuery(con,\n                         paste0(\"UPDATE diary SET '\",edited_col_name,\"' = ? where id = ?\"),\n                            params=c(value, target_id)\n    )\n    DBI::dbClearResult(query)\n    dbTrigger$trigger()\n  })\n\n    query <- dbSendQuery(con,\n                         paste0(\"UPDATE diary SET '\",edited_col_name,\"' = ? where id = ?\"),\n                            params=c(value, target_id)\n    )\n    DBI::dbClearResult(query)\n    dbTrigger$trigger()\n  })\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"../../../site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"../../../site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

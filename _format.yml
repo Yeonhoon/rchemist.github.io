@@ -13,7 +13,6 @@ format:
     smooth-scroll: true
     highlight-style: github
     code-copy: true
-    # code-block-border-left: '#000000'
     css: styles.css
-mainfont: Pretendard
-monofont: Fira code
+# mainfont: Pretendard
+# monofont: Fira code

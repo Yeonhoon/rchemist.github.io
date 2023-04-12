@@ -8,8 +8,13 @@
     ]
   },
   {
-    "listing": "/blog/index.html",
+    "listing": "/index.html",
     "items": [
+      "/blog/posts/mice_imputation/index.html",
+      "/blog/posts/performace_comparison/index.html",
+      "/blog/posts/mimic-iv-setting/index.html",
+      "/blog/posts/gtsummary/index.html",
+      "/blog/posts/GT/index.html",
       "/blog/posts/mlr3_hyperparameter/index.html",
       "/blog/posts/data.table_over_dplyr/index.html",
       "/blog/posts/mlr3_resampling/index.html",
@@ -18,8 +23,8 @@
       "/blog/posts/data.table_1.14.9_update/index.html",
       "/blog/posts/mlr3_basic/index.html",
       "/blog/posts/2023-02-02-imputation/index.html",
-      "/blog/posts/ggplot_axis조정/index.html",
       "/blog/posts/ggplot_ggsigfig/index.html",
+      "/blog/posts/ggplot_axis조정/index.html",
       "/blog/posts/2023-02-09-EDA/index.html",
       "/blog/posts/2023-02-13-dplyr_pivot/index.html",
       "/blog/posts/2023-01-26-dplyr_colwise/index.html",
@@ -27,17 +32,23 @@
       "/blog/posts/2023-01-25-dplyr_basic/index.html",
       "/blog/posts/2023-01-26-dplyr_groupby/index.html",
       "/blog/posts/2023-01-25-colors/index.html",
-      "/blog/posts/2023-01-19-quarto-intro/index.html",
-      "/blog/posts/2023-01-27-Rbase/index.html",
-      "/blog/posts/2023-02-01-boxplot/index.html",
       "/blog/posts/data.table_advanced/index.html",
+      "/blog/posts/2023-02-01-boxplot/index.html",
+      "/blog/posts/2023-01-27-Rbase/index.html",
+      "/blog/posts/2023-01-19-quarto-intro/index.html",
       "/blog/posts/data.table_basic/index.html",
-      "/blog/posts/2023-01-19-ojs/index.html"
+      "/blog/posts/2023-01-19-ojs/index.html",
+      "/blog/posts/db in shiny/index.html"
     ]
   },
   {
-    "listing": "/index.html",
+    "listing": "/blog/index.html",
     "items": [
+      "/blog/posts/mice_imputation/index.html",
+      "/blog/posts/performace_comparison/index.html",
+      "/blog/posts/mimic-iv-setting/index.html",
+      "/blog/posts/gtsummary/index.html",
+      "/blog/posts/GT/index.html",
       "/blog/posts/mlr3_hyperparameter/index.html",
       "/blog/posts/data.table_over_dplyr/index.html",
       "/blog/posts/mlr3_resampling/index.html",
@@ -46,8 +57,8 @@
       "/blog/posts/data.table_1.14.9_update/index.html",
       "/blog/posts/mlr3_basic/index.html",
       "/blog/posts/2023-02-02-imputation/index.html",
-      "/blog/posts/ggplot_axis조정/index.html",
       "/blog/posts/ggplot_ggsigfig/index.html",
+      "/blog/posts/ggplot_axis조정/index.html",
       "/blog/posts/2023-02-09-EDA/index.html",
       "/blog/posts/2023-02-13-dplyr_pivot/index.html",
       "/blog/posts/2023-01-26-dplyr_colwise/index.html",
@@ -55,12 +66,13 @@
       "/blog/posts/2023-01-25-dplyr_basic/index.html",
       "/blog/posts/2023-01-26-dplyr_groupby/index.html",
       "/blog/posts/2023-01-25-colors/index.html",
-      "/blog/posts/2023-01-19-quarto-intro/index.html",
-      "/blog/posts/2023-01-27-Rbase/index.html",
-      "/blog/posts/2023-02-01-boxplot/index.html",
       "/blog/posts/data.table_advanced/index.html",
+      "/blog/posts/2023-02-01-boxplot/index.html",
+      "/blog/posts/2023-01-27-Rbase/index.html",
+      "/blog/posts/2023-01-19-quarto-intro/index.html",
       "/blog/posts/data.table_basic/index.html",
-      "/blog/posts/2023-01-19-ojs/index.html"
+      "/blog/posts/2023-01-19-ojs/index.html",
+      "/blog/posts/db in shiny/index.html"
     ]
   }
 ]

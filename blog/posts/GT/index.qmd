@@ -1,6 +1,8 @@
 ---
 title: "GT"
+description: "원하는대로 테이블 꾸며주는 패키지"
 author: "JYH"
+date: "2023-04-01"
 categories: [R, table, gt]
 image: "https://gt.rstudio.com/reference/figures/logo.svg"
 ---
@@ -17,13 +19,19 @@ image: "https://gt.rstudio.com/reference/figures/logo.svg"
 ![](https://gt.rstudio.com/reference/figures/gt_parts_of_a_table.svg){fig-align="center"}
 
 ```{r}
+#| echo: false
+
+library(data.table)
+library(gt)
+```
+
+```{r}
 #| output-location: column-fragment
 #| echo: true
 library(gt)
 gtcar_dt <- as.data.table(gtcars)[,.(ctry_origin, mfr, model,year, trim, msrp)]
 gtcar_dt <- gtcar_dt[gtcar_dt[,.I[1:2],by=.(ctry_origin)]$V1]
 gtcar_dt[,id := seq_len(.N)]
-gtcar_dt
 gtcar_dt |> 
   gt(rowname_col = "id") |> 
   tab_header(
@@ -110,8 +118,7 @@ air_tbl <- air_dt |>
     label="Time",
     columns = c(Month, Day)
   )
-
-air_tbl |> as_raw_html()
+air_tbl
 ```
 
 ## Column 이동 및 이름 수정
@@ -130,7 +137,7 @@ air_tbl <- air_tbl |>
     Temp = html("Temp,<br>&deg;F")
   )
 
-air_tbl |> as_raw_html()
+air_tbl
 ```
 
 ## Column 정렬
@@ -179,10 +186,10 @@ air_dt |>
 air_dt |> 
   gt() |> 
   data_color(Wind,
-             scales::col_numeric(
-               palette=c("red","white","blue"),
-               domain= c(7,21)
-             ))
+             direction = "column",
+             palette=c("red","white","blue"),
+             domain=c(7,25)
+             )
 ```
 
 ```{r}

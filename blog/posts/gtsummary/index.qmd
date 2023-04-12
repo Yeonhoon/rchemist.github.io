@@ -1,6 +1,8 @@
 ---
-title: "통계 table 끝판왕 gtsummary"
+title: "통계 테이블 끝판왕 gtsummary"
+description: "분석결과 보고를 위한 최고의 테이블 패키지"
 author: "JYH"
+date: "2023-04-03"
 categories: [R, table, gtsummary]
 image: "https://www.danieldsjoberg.com/gtsummary/logo.png"
 ---
@@ -16,8 +18,6 @@ image: "https://www.danieldsjoberg.com/gtsummary/logo.png"
 ```{r}
 #| eval: false
 #| echo: true
-pkgs <- c("gtsummary","gt")
-install.packages(pkgs)
 library(gtsummary)
 library(gt)
 ```
@@ -26,6 +26,7 @@ library(gt)
 #| echo: false
 library(gtsummary)
 library(gt)
+library(data.table)
 ```
 
 ## 1. Baseline characteristics
@@ -41,13 +42,14 @@ library(gt)
 #| output-location: column-fragment
 library(gtsummary)
 library(gt)
+library(survival)
+library(flextable)
 tbl_summary(
-  data = dt_imp,
-  by = HeartDisease
+  data = trial,
+  by = trt
 ) |> 
   add_overall() |> 
-  as_gt() |> 
-  as_raw_html()
+  as_flex_table()
 ```
 
 ### 통계량 변경 {.smaller}
@@ -60,11 +62,11 @@ tbl_summary(
 #| code-line-numbers: "|4|5-7|8-11|12-15|16|"
 #| output-location: column-fragment
 tbl_summary(
-  data = dt_imp,
-  by = HeartDisease,
-  include = c(Sex, BMI, Smoking, AlcoholDrinking, Stroke, Diabetic),
+  data = trial,
+  by = trt,
+  include = c(age, marker, stage, grade, response, death, ttdeath),
   type = list(
-    c(Smoking, AlcoholDrinking, Stroke, Diabetic)~ "categorical"
+    c(stage, grade)~ "categorical"
   ),
   statistic = list(
     all_continuous() ~"{mean} ± {sd}",
@@ -77,8 +79,7 @@ tbl_summary(
   missing = "no",
 ) |> 
   add_overall() |> 
-  as_gt() |> 
-  as_raw_html()
+  as_flex_table()
 ```
 
 ### P-value {.smaller}
@@ -87,9 +88,9 @@ tbl_summary(
 #| code-line-numbers: "|17-24|"
 #| output-location: column-fragment
 tbl_summary(
-   data = dt_imp,
-    by = HeartDisease,
-    include = c(Sex, BMI, Smoking, AlcoholDrinking, Stroke, Diabetic),
+   data = trial,
+  by = trt,
+  include = c(age, marker, stage, grade, response, death, ttdeath),
   statistic = list(
     all_continuous() ~"{mean} ± {sd}",
     # statistic = "{median} ({p25}-{p75})",
@@ -109,8 +110,7 @@ tbl_summary(
     ),
     pvalue_fun = ~style_pvalue(., digits = 3)
   ) |> 
-  as_gt() |> 
-  as_raw_html()
+    as_flex_table()
 ```
 
 ## 2. Regression table 만들기 {.smaller}
@@ -121,25 +121,16 @@ tbl_summary(
 
 ```{r}
 #| echo: true
-#| eval: false
+library(survival)
 uni_tbl <- tbl_uvregression(
-  data = dt_imp[,.(HeartDisease, Sex, BMI, Smoking, AlcoholDrinking, Stroke, Diabetic)],
-  method = glm,
-  method.args = list(family = binomial),
-  y = HeartDisease,
+  data = trial |> select(age, marker, stage, grade, response, death, ttdeath),
+  method = coxph,
+  y = Surv(ttdeath, death),
   exponentiate = T,
   hide_n = T
   ) |> 
   modify_footnote(everything() ~ NA)
-uni_tbl
-```
-
-```{r}
-#| echo: false
-#| eval: true
-uni_tbl |> 
-  as_gt() |> 
-  as_raw_html()
+uni_tbl |> as_flex_table()
 ```
 
 ### 다변량 회귀분석(Multivariable regression)
@@ -147,7 +138,7 @@ uni_tbl |>
 다중 회귀분석 테이블을 만드는 함수는 `tbl_regression()`입니다. 단순 회귀분석을 만드는 `tbl_uvregression()`과 다르게, 먼저 회귀식을 작성한 뒤에 `tbl_regression()`의 인자로 사용해야 합니다.
 
 ```{r}
-fit <- glm(HeartDisease ~ Sex +  BMI + Smoking + AlcoholDrinking + Stroke + Diabetic, family=binomial, data = dt_imp)
+fit <- coxph(Surv(ttdeath, death) ~ age +  marker + stage + grade + response, data = trial)
 mult_tbl <- tbl_regression(
   x = fit,
   exponentiate = T,
@@ -164,31 +155,21 @@ mult_tbl <- tbl_regression(
     p.value = "**P value**"
   ) |> 
   modify_footnote(everything() ~ NA)
-mult_tbl
+mult_tbl |> as_flex_table()
 ```
 
-```{r}
-#| eval: true
-#| echo: false
-mult_tbl |> 
-  as_gt() |> 
-  as_raw_html()
-```
 
 ### 두 개의 테이블 합치기
 
 이제 단순 회귀분석 테이블과 다중 회귀분석 테이블을 합쳐보도록 하겠습니다.
 
 ```{r}
-#| code-line-numbers: "|2|3-4|"
-#| output-location: column-fragment
 tbl_merge(
   list(uni_tbl, mult_tbl),
   tab_spanner = 
     c("**Univariable**", "**Multivariable**")
 ) |> 
-  as_gt() |> 
-  as_raw_html()
+  as_flex_table()
 ```
 
 ## 참고자료

@@ -12,21 +12,24 @@ code {
   border-radius: 5px;
 }
 
+.thumnail-image{
+  width: 200px !important;
+  margin: auto;
+}
+
 .navbar-title {
   font-family: cursive;
   font-weight: bold;
 }
 
 .quarto-post {
-  text-transform: capitalize !important;
   font-size: 0.9em !important;
   padding: 0.2em 0.5em 0.5em 0.2em !important;
 }
 
 .quarto-category .listing-categories .listing-category {
-  text-transform: capitalize !important;
   font-size: 0.8em !important;
-
+}
 /*Nav bar*/
 
 /* Header , footer color*/
@@ -65,13 +68,11 @@ h3 {
 .quarto-listing-category{
   font-size: 0.8rem;
   line-height: 2em;
-  font-family: 'Roboto', sans-serif !important;
 }
 
 /* right-sidebar CATEGORY WORD */
 .quarto-listing-category-title{
   text-transform: uppercase;
-  font-family: 'Roboto', sans-serif;
   line-height: 2em;
   text-align: center;
 }

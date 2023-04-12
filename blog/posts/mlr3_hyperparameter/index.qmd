@@ -1,7 +1,7 @@
 ---
 title: "mlr3 하이퍼파라미터 최적화"
 description: "mlr3를 이용한 하이퍼파라미터 튜닝 학습"
-date: ""
+date: "2023-03-01"
 categories: [R, mlr3, machine learning]
 image: "https://mlr3proba.mlr-org.com/logo.svg"
 ---

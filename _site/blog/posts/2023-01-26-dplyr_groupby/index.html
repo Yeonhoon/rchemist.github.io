@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2023-02-01">
-<meta name="description" content="dplyr를 활용한 그룹별 데이터 처리">
+<meta name="description" content="dplyr를 활용한 그룹 별 계산">
 
-<title>Rchemist - dplyr group_by</title>
+<title>Rchemist - dplyr group_by()</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -161,11 +161,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html"><i class="bi bi-newspaper" role="img">
-</i> 
- <span class="menu-text">Posts</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../../../gallery/index.html"><i class="bi bi-sliders2" role="img">
 </i> 
  <span class="menu-text">Gallery</span></a>
@@ -183,10 +178,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">dplyr group_by</h1>
+      <h1 class="title">dplyr <code>group_by()</code></h1>
                   <div>
         <div class="description">
-          dplyr를 활용한 그룹별 데이터 처리
+          dplyr를 활용한 그룹 별 계산
         </div>
       </div>
                           <div class="quarto-categories">
@@ -219,11 +214,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#group_by-그룹별-계산" id="toc-group_by-그룹별-계산" class="nav-link active" data-scroll-target="#group_by-그룹별-계산"><code>group_by()</code> : 그룹별 계산</a></li>
+  <li><a href="#group_by-란" id="toc-group_by-란" class="nav-link active" data-scroll-target="#group_by-란"><code>group_by()</code> 란?</a></li>
   <li><a href="#그룹-변수-정보-확인" id="toc-그룹-변수-정보-확인" class="nav-link" data-scroll-target="#그룹-변수-정보-확인">그룹 변수 정보 확인</a></li>
   <li><a href="#그룹-변수-변경-및-추가" id="toc-그룹-변수-변경-및-추가" class="nav-link" data-scroll-target="#그룹-변수-변경-및-추가">그룹 변수 변경 및 추가</a></li>
   <li><a href="#그룹-변수-제거" id="toc-그룹-변수-제거" class="nav-link" data-scroll-target="#그룹-변수-제거">그룹 변수 제거</a></li>
-  <li><a href="#group_by와-함께-쓰는-동사" id="toc-group_by와-함께-쓰는-동사" class="nav-link" data-scroll-target="#group_by와-함께-쓰는-동사"><code>group_by()</code>와 함께 쓰는 동사</a></li>
+  <li><a href="#group_by와-함께-쓰는-동사" id="toc-group_by와-함께-쓰는-동사" class="nav-link" data-scroll-target="#group_by와-함께-쓰는-동사"><code>group_by()</code>와 함께 쓰는 동사</a>
+  <ul class="collapse">
+  <li><a href="#summarise-summarize" id="toc-summarise-summarize" class="nav-link" data-scroll-target="#summarise-summarize">1. <code>summarise()</code>, <code>summarize()</code></a></li>
+  <li><a href="#select-rename-relocate" id="toc-select-rename-relocate" class="nav-link" data-scroll-target="#select-rename-relocate">2. <code>select()</code>, <code>rename()</code>, <code>relocate()</code></a></li>
+  <li><a href="#arrange" id="toc-arrange" class="nav-link" data-scroll-target="#arrange">3. <code>arrange()</code></a></li>
+  <li><a href="#mutate-transmute" id="toc-mutate-transmute" class="nav-link" data-scroll-target="#mutate-transmute">4. <code>mutate()</code>, <code>transmute()</code></a></li>
+  <li><a href="#filter" id="toc-filter" class="nav-link" data-scroll-target="#filter">5. <code>filter()</code></a></li>
+  <li><a href="#slice" id="toc-slice" class="nav-link" data-scroll-target="#slice">6. <code>slice()</code></a></li>
+  </ul></li>
+  <li><a href="#update-dplyr-1.1.0" id="toc-update-dplyr-1.1.0" class="nav-link" data-scroll-target="#update-dplyr-1.1.0">Update: dplyr 1.1.0</a></li>
   </ul>
 </nav>
     </div>
@@ -233,14 +237,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<section id="group_by-그룹별-계산" class="level3">
-<h3 class="anchored" data-anchor-id="group_by-그룹별-계산"><code>group_by()</code> : 그룹별 계산</h3>
+<section id="group_by-란" class="level2">
+<h2 class="anchored" data-anchor-id="group_by-란"><code>group_by()</code> 란?</h2>
 <p><code>group_by()</code>는 특정 집단의 범주별로 어떤 값들을 요약하거나 계산할 때 많이 활용되는 함수입니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species, sex) <span class="sc">%&gt;%</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(height, mass) <span class="sc">%&gt;%</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species, sex) <span class="sc">|&gt;</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(height, mass) <span class="sc">|&gt;</span> </span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">height =</span> <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">mass =</span> <span class="fu">mean</span>(mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
@@ -259,6 +263,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>by_sex_gender <span class="ot">&lt;-</span> starwars <span class="sc">|&gt;</span> <span class="fu">group_by</span>(sex,gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>출력했을 때, 데이터가 그룹으로 묶인 것을 알 수 있습니다.</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">By species</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">By sex gender</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>by_species</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -269,6 +277,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </script>
 </div>
 </div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>by_sex_gender</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
@@ -279,7 +291,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<p><code>tally()</code> 를 이용해 그룹별 n수를 파악할 수도 있습니다.</p>
+</div>
+</div>
+</div>
+<p><code>tally()</code> 또는 <code>count()</code>를 이용해 그룹별 n수를 파악할 수도 있습니다.</p>
 <p><code>sort</code> 인자를 통해서 그룹 수가 많은 순서대로 정렬할 수 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> <span class="fu">tally</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -302,7 +317,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<p><code>group_by()</code> 안에서 새로운 변수를 만들어 그룹별 계산을 진행할 수도 있습니다.</p>
+<p>또한 <code>group_by()</code> 안에서 새로운 변수를 만들어 그 변수에 따른 계산을 할 수도 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">bmi_cat =</span> <span class="fu">cut</span>(mass<span class="sc">/</span>(height<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span>, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">18</span>,<span class="dv">23</span>,<span class="dv">25</span>,<span class="dv">30</span>,<span class="cn">Inf</span>))) <span class="sc">|&gt;</span> </span>
@@ -317,9 +332,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="그룹-변수-정보-확인" class="level3">
-<h3 class="anchored" data-anchor-id="그룹-변수-정보-확인">그룹 변수 정보 확인</h3>
-<p>그룹 변수를 지정해준 경우, <code>group_keys()</code> 를 통해 그룹 변수의 범주를 확인할 수 있습니다.</p>
+<section id="그룹-변수-정보-확인" class="level2">
+<h2 class="anchored" data-anchor-id="그룹-변수-정보-확인">그룹 변수 정보 확인</h2>
+<p>그룹 변수를 지정해준 경우, <code>group_keys()</code> 를 통해 그룹 변수의 범주(종류)를 확인할 수 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> <span class="fu">group_keys</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -331,7 +346,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<p>그룹 변수의 이름만 확인할 때는 <code>group_vars()</code> 를 사용합니다.</p>
+<p>한편 <code>group_vars()</code> 는 <code>group_by()</code> 에 사용된 변수의 이름을 확인할 때 사용할 수 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>by_sex_gender <span class="sc">|&gt;</span> <span class="fu">group_vars</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -339,9 +354,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="그룹-변수-변경-및-추가" class="level3">
-<h3 class="anchored" data-anchor-id="그룹-변수-변경-및-추가">그룹 변수 변경 및 추가</h3>
+<section id="그룹-변수-변경-및-추가" class="level2">
+<h2 class="anchored" data-anchor-id="그룹-변수-변경-및-추가">그룹 변수 변경 및 추가</h2>
 <p>기존의 그룹처리 되어있는 데이터에 <code>group_by()</code> 를 진행할 시, 새로운 그룹 변수로 덮어씌워집니다.</p>
+<p><code>by_species</code>는 앞서 <code>group_by(species)</code>를 통해 <code>species</code>별로 묶은 데이터죠. 여기서 <code>group_by(homeworld)</code>를 추가한다면 기존의 <code>species</code>에서 <code>homeworld</code>를 기준으로 그룹이 묶이게 됩니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(homeworld) <span class="sc">|&gt;</span> </span>
@@ -355,7 +371,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<p><code>.add=T</code> 인자를 추가할 경우, 새로운 그룹 변수를 추가할 수도 있습니다.</p>
+<p>만약 기존의 그룹을 대체하는 것이 아니라 추가를 할 수도 있을텐데요. <code>group_by()</code>에 <code>.add=T</code> 인자를 추가할 경우, 기존에 있던 그룹 변수에 새로운 그룹 변수를 추가할 수도 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(homeworld, <span class="at">.add=</span>T) <span class="sc">|&gt;</span> </span>
@@ -370,8 +386,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="그룹-변수-제거" class="level3">
-<h3 class="anchored" data-anchor-id="그룹-변수-제거">그룹 변수 제거</h3>
+<section id="그룹-변수-제거" class="level2">
+<h2 class="anchored" data-anchor-id="그룹-변수-제거">그룹 변수 제거</h2>
 <p>그룹 처리된 데이터를 제거하고 싶은 경우, <code>ungroup()</code> 을 사용합니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
@@ -386,7 +402,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<p>물론 특정 그룹 변수만 제외할 수도 있습니다.</p>
+<p>물론 특정 그룹 변수만 제외할 수도 있습니다. <code>by_sex_gender</code>에서 <code>sex</code>와 <code>gender</code>로 묶여있던 것을 <code>ungroup()</code>을 통해 <code>sex</code>만 제거하여 <code>gender</code>만 그룹으로 남아있게 되었습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>by_sex_gender <span class="sc">|&gt;</span> </span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>(sex) <span class="sc">|&gt;</span> </span>
@@ -401,11 +417,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="group_by와-함께-쓰는-동사" class="level3">
-<h3 class="anchored" data-anchor-id="group_by와-함께-쓰는-동사"><code>group_by()</code>와 함께 쓰는 동사</h3>
-<section id="summarise" class="level4">
-<h4 class="anchored" data-anchor-id="summarise">1. <code>summarise()</code></h4>
-<p><code>summarise()</code>와 <code>group_by()</code>가 함께 사용될 경우, 그룹별로 요약 계산을 수행합니다.</p>
+<section id="group_by와-함께-쓰는-동사" class="level2">
+<h2 class="anchored" data-anchor-id="group_by와-함께-쓰는-동사"><code>group_by()</code>와 함께 쓰는 동사</h2>
+<p>다음으로 <code>dplyr</code>에서 <code>group_by()</code>와 자주 쓰이는 함수들을 알아보겠습니다.</p>
+<section id="summarise-summarize" class="level3">
+<h3 class="anchored" data-anchor-id="summarise-summarize">1. <code>summarise()</code>, <code>summarize()</code></h3>
+<p><code>summarise()</code>와 <code>group_by()</code>가 함께 사용될 경우, 그룹별로 요약 계산을 수행합니다. 평균, 표준편차, 중앙값, 최소, 최대값과 같은 값을 출력할 수 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
@@ -421,7 +438,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<p>.groups= 인자는 출력되는 결과의 그룹 구조를 다루는 인자입니다.</p>
+<p><code>.groups</code>인자는 출력되는 결과의 그룹 구조를 다루는 인자입니다. <code>keep</code>은 그룹으로 묶인 상태를 유지하는 반면, <code>drop</code>은 그룹으로 묶인 상태를 해제합니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>by_sex_gender <span class="sc">|&gt;</span> </span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n=</span><span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">'keep'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -445,8 +462,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="select-rename-relocate" class="level4">
-<h4 class="anchored" data-anchor-id="select-rename-relocate">2. <code>select()</code>, <code>rename()</code>, <code>relocate()</code></h4>
+<section id="select-rename-relocate" class="level3">
+<h3 class="anchored" data-anchor-id="select-rename-relocate">2. <code>select()</code>, <code>rename()</code>, <code>relocate()</code></h3>
 <p><code>rename()</code>과 <code>relocate()</code>는 <code>group_by()</code>와 관계없이 동일한 작업을 수행합니다. 각각 열의 이름과 위치에만 영향을 미치게 때문입니다.</p>
 <p><code>select()</code>가 <code>group_by()</code>와 함께 쓰이면 그룹 변수가 항상 함께 선택됩니다.</p>
 <div class="cell">
@@ -473,8 +490,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="arrange" class="level4">
-<h4 class="anchored" data-anchor-id="arrange">3. <code>arrange()</code></h4>
+<section id="arrange" class="level3">
+<h3 class="anchored" data-anchor-id="arrange">3. <code>arrange()</code></h3>
 <p><code>arrange()</code>가 <code>group_by()</code>와 함께 쓰일 경우, 그냥 사용하게 되면 <code>group_by()</code> 가 없을 때와 동일합니다. 그러나 <code>.by_group=T</code> 인자를 통해 그룹 변수를 기준으로 정렬되어 결과가 출력됩니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
@@ -501,18 +518,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="mutate-transmute" class="level4">
-<h4 class="anchored" data-anchor-id="mutate-transmute">4. <code>mutate()</code>, <code>transmute()</code></h4>
-<p>group_by()와 함께 새로운 변수를 생성할 경우, 같은 그룹의 경우 동일한 값이 들어가게 됩니다.</p>
+<section id="mutate-transmute" class="level3">
+<h3 class="anchored" data-anchor-id="mutate-transmute">4. <code>mutate()</code>, <code>transmute()</code></h3>
+<p><code>group_by()</code>와 함께 새로운 변수를 생성할 경우, 그룹 별로 동일한 값이 들어가게 됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_height =</span> <span class="fu">mean</span>(height, <span class="at">na.rm=</span>T)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(species)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(species, height, mean_height)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["int"],"align":["right"]},{"label":["mean_height"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"Zabrak","2":"175","3":"173.0000"},{"1":"Zabrak","2":"171","3":"173.0000"},{"1":"Yoda's species","2":"66","3":"66.0000"},{"1":"Xexto","2":"122","3":"122.0000"},{"1":"Wookiee","2":"228","3":"231.0000"},{"1":"Wookiee","2":"234","3":"231.0000"},{"1":"Vulptereen","2":"94","3":"94.0000"},{"1":"Twi'lek","2":"180","3":"179.0000"},{"1":"Twi'lek","2":"178","3":"179.0000"},{"1":"Trandoshan","2":"190","3":"190.0000"},{"1":"Toydarian","2":"137","3":"137.0000"},{"1":"Toong","2":"163","3":"163.0000"},{"1":"Togruta","2":"178","3":"178.0000"},{"1":"Tholothian","2":"184","3":"184.0000"},{"1":"Sullustan","2":"160","3":"160.0000"},{"1":"Skakoan","2":"193","3":"193.0000"},{"1":"Rodian","2":"173","3":"173.0000"},{"1":"Quermian","2":"264","3":"264.0000"},{"1":"Pau'an","2":"206","3":"206.0000"},{"1":"Neimodian","2":"191","3":"191.0000"},{"1":"Nautolan","2":"196","3":"196.0000"},{"1":"Muun","2":"191","3":"191.0000"},{"1":"Mon Calamari","2":"180","3":"180.0000"},{"1":"Mirialan","2":"170","3":"168.0000"},{"1":"Mirialan","2":"166","3":"168.0000"},{"1":"Kel Dor","2":"188","3":"188.0000"},{"1":"Kaminoan","2":"229","3":"221.0000"},{"1":"Kaminoan","2":"213","3":"221.0000"},{"1":"Kaleesh","2":"216","3":"216.0000"},{"1":"Iktotchi","2":"188","3":"188.0000"},{"1":"Hutt","2":"175","3":"175.0000"},{"1":"Human","2":"172","3":"176.6452"},{"1":"Human","2":"202","3":"176.6452"},{"1":"Human","2":"150","3":"176.6452"},{"1":"Human","2":"178","3":"176.6452"},{"1":"Human","2":"165","3":"176.6452"},{"1":"Human","2":"183","3":"176.6452"},{"1":"Human","2":"182","3":"176.6452"},{"1":"Human","2":"188","3":"176.6452"},{"1":"Human","2":"180","3":"176.6452"},{"1":"Human","2":"180","3":"176.6452"},{"1":"Human","2":"170","3":"176.6452"},{"1":"Human","2":"180","3":"176.6452"},{"1":"Human","2":"170","3":"176.6452"},{"1":"Human","2":"183","3":"176.6452"},{"1":"Human","2":"177","3":"176.6452"},{"1":"Human","2":"175","3":"176.6452"},{"1":"Human","2":"150","3":"176.6452"},{"1":"Human","2":"NA","3":"176.6452"},{"1":"Human","2":"193","3":"176.6452"},{"1":"Human","2":"170","3":"176.6452"},{"1":"Human","2":"163","3":"176.6452"},{"1":"Human","2":"188","3":"176.6452"},{"1":"Human","2":"185","3":"176.6452"},{"1":"Human","2":"157","3":"176.6452"},{"1":"Human","2":"183","3":"176.6452"},{"1":"Human","2":"165","3":"176.6452"},{"1":"Human","2":"193","3":"176.6452"},{"1":"Human","2":"191","3":"176.6452"},{"1":"Human","2":"183","3":"176.6452"},{"1":"Human","2":"167","3":"176.6452"},{"1":"Human","2":"188","3":"176.6452"},{"1":"Human","2":"NA","3":"176.6452"},{"1":"Human","2":"NA","3":"176.6452"},{"1":"Human","2":"NA","3":"176.6452"},{"1":"Human","2":"165","3":"176.6452"},{"1":"Gungan","2":"196","3":"208.6667"},{"1":"Gungan","2":"224","3":"208.6667"},{"1":"Gungan","2":"206","3":"208.6667"},{"1":"Geonosian","2":"183","3":"183.0000"},{"1":"Ewok","2":"88","3":"88.0000"},{"1":"Dug","2":"112","3":"112.0000"},{"1":"Droid","2":"167","3":"131.2000"},{"1":"Droid","2":"96","3":"131.2000"},{"1":"Droid","2":"97","3":"131.2000"},{"1":"Droid","2":"200","3":"131.2000"},{"1":"Droid","2":"96","3":"131.2000"},{"1":"Droid","2":"NA","3":"131.2000"},{"1":"Clawdite","2":"168","3":"168.0000"},{"1":"Chagrian","2":"196","3":"196.0000"},{"1":"Cerean","2":"198","3":"198.0000"},{"1":"Besalisk","2":"198","3":"198.0000"},{"1":"Aleena","2":"79","3":"79.0000"},{"1":"NA","2":"183","3":"181.3333"},{"1":"NA","2":"183","3":"181.3333"},{"1":"NA","2":"178","3":"181.3333"},{"1":"NA","2":"NA","3":"181.3333"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
 </section>
-<section id="filter" class="level4">
-<h4 class="anchored" data-anchor-id="filter">5. <code>filter()</code></h4>
+<section id="filter" class="level3">
+<h3 class="anchored" data-anchor-id="filter">5. <code>filter()</code></h3>
 <p><code>filter()</code>와 <code>group_by()</code>를 함께 사용하여, 특정 그룹의 수를 기준으로 선택할 때 사용할 수 있습니다.</p>
 <p>아래의 예시에서는 그룹 별 수가 1인 경우를 모두 제외하고 선택한 결과입니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>()<span class="sc">!=</span><span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>()<span class="sc">!=</span><span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
@@ -523,13 +555,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="slice" class="level4">
-<h4 class="anchored" data-anchor-id="slice">6. <code>slice()</code></h4>
-<p>slice()와 slice() 계열 함수들이 group_by() 와 함께 사용될 경우, 그룹별로 해당되는 값이 출력됩니다.</p>
+<section id="slice" class="level3">
+<h3 class="anchored" data-anchor-id="slice">6. <code>slice()</code></h3>
+<p><code>slice()</code>와 <code>slice()</code> 계열 함수들이 <code>group_by()</code> 와 함께 사용될 경우, 그룹별로 해당되는 값이 출력됩니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 그룹별 첫번째 값 </span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 그룹별 첫번째 값 </span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
@@ -538,9 +570,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </script>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(height)) <span class="sc">|&gt;</span> </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(height,<span class="at">n=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>by_species <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(height)) <span class="sc">|&gt;</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(height,<span class="at">n=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
@@ -550,9 +582,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="update-dplyr-1.1.0" class="level2">
+<h2 class="anchored" data-anchor-id="update-dplyr-1.1.0">Update: dplyr 1.1.0</h2>
+<p>dplyr 1.1.0 업데이트 이후에는 <code>group_by()</code>를 사용하지 않아도 다른 함수들에서 그룹 별 계산을 수행할 수 있습니다. 바로 <code>.by</code> 인자를 통해서 말이죠.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bmi =</span> mass<span class="sc">/</span>(height<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_bmi =</span> <span class="fu">mean</span>(bmi, <span class="at">na.rm=</span>T),<span class="at">.by=</span>species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean_bmi"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"Human","2":"25.48618"},{"1":"Droid","2":"32.65613"},{"1":"Wookiee","2":"23.19128"},{"1":"Rodian","2":"24.72518"},{"1":"Hutt","2":"443.42857"},{"1":"Yoda's species","2":"39.02663"},{"1":"Trandoshan","2":"31.30194"},{"1":"Mon Calamari","2":"25.61728"},{"1":"Ewok","2":"25.82645"},{"1":"Sullustan","2":"26.56250"},{"1":"Neimodian","2":"24.67038"},{"1":"Gungan","2":"16.76141"},{"1":"NA","2":"15.14960"},{"1":"Toydarian","2":"NaN"},{"1":"Dug","2":"31.88776"},{"1":"Zabrak","2":"26.12245"},{"1":"Twi'lek","2":"17.35892"},{"1":"Vulptereen","2":"50.92802"},{"1":"Xexto","2":"NaN"},{"1":"Toong","2":"24.46460"},{"1":"Cerean","2":"20.91623"},{"1":"Nautolan","2":"22.64681"},{"1":"Tholothian","2":"14.76843"},{"1":"Iktotchi","2":"NaN"},{"1":"Quermian","2":"NaN"},{"1":"Kel Dor","2":"22.63468"},{"1":"Chagrian","2":"NaN"},{"1":"Geonosian","2":"23.88844"},{"1":"Mirialan","2":"18.79562"},{"1":"Clawdite","2":"19.48696"},{"1":"Besalisk","2":"26.01775"},{"1":"Kaminoan","2":"16.78076"},{"1":"Aleena","2":"24.03461"},{"1":"Skakoan","2":"12.88625"},{"1":"Muun","2":"NaN"},{"1":"Togruta","2":"17.99015"},{"1":"Kaleesh","2":"34.07922"},{"1":"Pau'an","2":"18.85192"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->

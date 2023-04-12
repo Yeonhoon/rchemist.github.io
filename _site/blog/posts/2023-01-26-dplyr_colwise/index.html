@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2023-02-02">
-<meta name="description" content="across()로 배우는 열 동시 처리">
+<meta name="description" content="across()로 column 동시 처리">
 
-<title>Rchemist - dplyr 심화: across()</title>
+<title>Rchemist - dplyr 심화</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -161,11 +161,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog/index.html"><i class="bi bi-newspaper" role="img">
-</i> 
- <span class="menu-text">Posts</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../../../gallery/index.html"><i class="bi bi-sliders2" role="img">
 </i> 
  <span class="menu-text">Gallery</span></a>
@@ -183,10 +178,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">dplyr 심화: across()</h1>
+      <h1 class="title">dplyr 심화</h1>
                   <div>
         <div class="description">
-          across()로 배우는 열 동시 처리
+          <code>across()</code>로 column 동시 처리
         </div>
       </div>
                           <div class="quarto-categories">
@@ -219,10 +214,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#기본-사용법" id="toc-기본-사용법" class="nav-link active" data-scroll-target="#기본-사용법">기본 사용법</a></li>
+  <li><a href="#인트로" id="toc-인트로" class="nav-link active" data-scroll-target="#인트로">인트로</a></li>
+  <li><a href="#기본-사용법" id="toc-기본-사용법" class="nav-link" data-scroll-target="#기본-사용법">기본 사용법</a></li>
   <li><a href="#여러-함수-적용하기" id="toc-여러-함수-적용하기" class="nav-link" data-scroll-target="#여러-함수-적용하기">여러 함수 적용하기</a></li>
-  <li><a href="#다른-함수와의-활용" id="toc-다른-함수와의-활용" class="nav-link" data-scroll-target="#다른-함수와의-활용">다른 함수와의 활용</a></li>
-  <li><a href="#across-vs-_if-_at-_all의-비교" id="toc-across-vs-_if-_at-_all의-비교" class="nav-link" data-scroll-target="#across-vs-_if-_at-_all의-비교"><code>across()</code> vs <code>_if()</code>, <code>_at()</code>, <code>_all()</code>의 비교</a></li>
+  <li><a href="#다른-함수와의-활용" id="toc-다른-함수와의-활용" class="nav-link" data-scroll-target="#다른-함수와의-활용">다른 함수와의 활용</a>
+  <ul class="collapse">
+  <li><a href="#mutate" id="toc-mutate" class="nav-link" data-scroll-target="#mutate">1. <code>mutate()</code></a></li>
+  <li><a href="#distinct-count" id="toc-distinct-count" class="nav-link" data-scroll-target="#distinct-count">2. <code>distinct()</code> , <code>count()</code></a></li>
+  <li><a href="#filter" id="toc-filter" class="nav-link" data-scroll-target="#filter">3. <code>filter()</code></a></li>
+  </ul></li>
+  <li><a href="#across-vs-_if-_at-_all" id="toc-across-vs-_if-_at-_all" class="nav-link" data-scroll-target="#across-vs-_if-_at-_all"><code>across()</code> vs <code>_if()</code>, <code>_at()</code>, <code>_all()</code></a></li>
   </ul>
 </nav>
     </div>
@@ -232,7 +233,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
+<section id="인트로" class="level2">
+<h2 class="anchored" data-anchor-id="인트로">인트로</h2>
 <p>데이터 분석을 수행할 때, 여러 열에 대해 동일한 작업을 해주는 경우가 종종 있습니다. 그러나 동일한 코드를 복사해서 붙여넣기 하는 것은 굉장히 번거로운 일이고, 때로는 실수의 원인이 되기도 합니다.</p>
+<p>이번 글에서는 <code>dplyr</code>에서 여러 개의 열에 대해 동일한 작업을 수행할 수 있는 <code>across()</code> 에 대해 살펴보도록 하겠습니다.</p>
+<p><code>dplyr</code>에 있는 <code>storms</code> 데이터를 통해 예시를 들어보겠습니다. 예를 들어 <code>wind</code>, <code>pressure</code>, <code>tropicalstorm_force_diameter</code>, <code>hurricane_force_diameter</code> 변수의 평균을 구한다고 해보겠습니다. 이 경우, 4가지 열에 대해 각각 <code>mean(na.rm=T)</code>를 입력해야 합니다.</p>
+<p>4개 정도면 괜찮지 않은가 생각할 수도 있지만, 만약 변수가 더 많아진다면? 훨씬 번거로울 수 밖에 없겠죠.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>storms <span class="sc">|&gt;</span> </span>
@@ -250,8 +256,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<p>이번 글에서는 여러 개의 열에 대해 동일한 작업을 수행할 수 있는 <code>across()</code> 에 대해 살펴보도록 하겠습니다.</p>
-<p><code>across()</code> 를 사용할 경우, 위의 코드는 다음과 같이 입력할 수 있습니다.</p>
+<p>하지만 <code>across()</code> 를 사용할 경우, 위의 코드는 다음과 같이 입력할 수 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>storms <span class="sc">|&gt;</span> </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(name,month) <span class="sc">|&gt;</span> </span>
@@ -265,8 +270,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<section id="기본-사용법" class="level3">
-<h3 class="anchored" data-anchor-id="기본-사용법">기본 사용법</h3>
+</section>
+<section id="기본-사용법" class="level2">
+<h2 class="anchored" data-anchor-id="기본-사용법">기본 사용법</h2>
+<p>본격적으로 <code>across()</code> 사용법에 대해 알아봅시다.</p>
 <p><code>across()</code> 에는 핵심적인 두 가지의 인자를 받을 수 있습니다.</p>
 <ul>
 <li><p><code>.cols</code>: 함수를 적용시킬 열들을 입력합니다. 열의 위치, 이름, 유형을 통해 열들을 선택할 수 있습니다.</p></li>
@@ -313,8 +320,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="여러-함수-적용하기" class="level3">
-<h3 class="anchored" data-anchor-id="여러-함수-적용하기">여러 함수 적용하기</h3>
+<section id="여러-함수-적용하기" class="level2">
+<h2 class="anchored" data-anchor-id="여러-함수-적용하기">여러 함수 적용하기</h2>
 <p><code>across()</code>를 이용해 여러 열에 두 가지 이상의 함수를 적용할 수 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>min_max <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
@@ -349,10 +356,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="다른-함수와의-활용" class="level3">
-<h3 class="anchored" data-anchor-id="다른-함수와의-활용">다른 함수와의 활용</h3>
-<section id="mutate" class="level4">
-<h4 class="anchored" data-anchor-id="mutate">1. <code>mutate()</code></h4>
+<section id="다른-함수와의-활용" class="level2">
+<h2 class="anchored" data-anchor-id="다른-함수와의-활용">다른 함수와의 활용</h2>
+<section id="mutate" class="level3">
+<h3 class="anchored" data-anchor-id="mutate">1. <code>mutate()</code></h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>min_max_scale <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">min</span>(x, <span class="at">na.rm=</span>T)</span>
@@ -368,14 +375,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.0000000","2":"0.0000000"},{"1":"0.3333333","2":"1.0000000"},{"1":"0.6666667","2":"0.4866821"},{"1":"1.0000000","2":"0.4097186"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.0000000","2":"0.1948168"},{"1":"0.3333333","2":"0.4032140"},{"1":"0.6666667","2":"0.0000000"},{"1":"1.0000000","2":"1.0000000"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
 </div>
 </section>
-<section id="distinct-count" class="level4">
-<h4 class="anchored" data-anchor-id="distinct-count">2. <code>distinct()</code> , <code>count()</code></h4>
+<section id="distinct-count" class="level3">
+<h3 class="anchored" data-anchor-id="distinct-count">2. <code>distinct()</code> , <code>count()</code></h3>
 <p><code>count()</code>, <code>distinct()</code> 와 같은 함수는 summarise() 를 생략할 수 있습니다.</p>
 <p><code>distinct()</code>: unique한 값 찾기</p>
 <div class="cell">
@@ -402,11 +409,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="filter" class="level4">
-<h4 class="anchored" data-anchor-id="filter">filter()</h4>
-<p>filter()와 across()는 바로 사용할 수 없습니다.</p>
+<section id="filter" class="level3">
+<h3 class="anchored" data-anchor-id="filter">3. <code>filter()</code></h3>
+<p><code>filter()</code>와 <code>across()</code>는 바로 사용할 수 없습니다. 사실 <code>filter()</code> 에서는 <code>across()</code>가 아닌 다른 함수를 통해 조건을 만족하는 값들을 출력해야 합니다.</p>
 <ul>
-<li><p><code>if_any()</code> : 하나만 함수 부분에 해당되더라도 선택합니다.</p>
+<li><p><code>if_any()</code> : 열들 중 하나의 열만 조건을 충족하면 선택합니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">if_any</span>(<span class="fu">everything</span>(),<span class="sc">~!</span><span class="fu">is.na</span>(.x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -419,7 +426,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div></li>
-<li><p><code>if_all()</code> : 열의 모든 값들이 함수 부분을 충족해야 선택합니다.</p></li>
+<li><p><code>if_all()</code> : 열들 중 모든 열들이 조건을 충족해야 선택합니다.</p></li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
@@ -435,17 +442,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section>
 </section>
-<section id="across-vs-_if-_at-_all의-비교" class="level3">
-<h3 class="anchored" data-anchor-id="across-vs-_if-_at-_all의-비교"><code>across()</code> vs <code>_if()</code>, <code>_at()</code>, <code>_all()</code>의 비교</h3>
-<p><code>_if()</code>, <code>_at()</code>, <code>_all()</code>은 dplyr 이전 버전에서 쓰이던 함수들로, <code>across()</code> 처럼 여러 열에 대해 동시에 작업을 하기 위해 사용하는 함수들입니다.</p>
+<section id="across-vs-_if-_at-_all" class="level2">
+<h2 class="anchored" data-anchor-id="across-vs-_if-_at-_all"><code>across()</code> vs <code>_if()</code>, <code>_at()</code>, <code>_all()</code></h2>
+<p><code>_if()</code>, <code>_at()</code>, <code>_all()</code>은 <code>dplyr</code> 이전 버전에서 쓰이던 함수들로, <code>across()</code> 처럼 여러 열에 대해 동시에 작업을 하기 위해 사용하는 함수들입니다.</p>
 <p><code>across()</code> 가 더 좋은 이유는 다음과 같습니다.</p>
 <ol type="1">
 <li>여러 열들에 대해 특정 함수를 사용하여 요약할 수 있습니다.</li>
 <li>각 함수별로 <code>_if()</code>, <code>_at()</code>, <code>_all()</code> 이 존재했습니다. <code>across()</code>는 이런 함수들의 기능을 아우르기 때문에, 사용해야 할 함수의 숫자를 줄여줍니다.</li>
 </ol>
-<p>across()와 <code>_if()</code>, <code>_at()</code>, <code>_all()</code> 을 대응시켜보면 다음과 같습니다. 만약 mutate()를 통해 column을 변화시키고자 할 경우,</p>
+<p><code>across()</code>와 <code>_if()</code>, <code>_at()</code>, <code>_all()</code> 을 대응시켜보면 다음과 같습니다. 예를 들어 <code>mutate()</code>를 통해 열들을 변화시키고자 할 경우,</p>
 <ul>
-<li><p><code>_if()</code></p>
+<li><p><code>_if()</code> numeric인 열들에 대해 평균을 계산하는 경우</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> <span class="fu">mutate_if</span>(is.numeric, mean, <span class="at">na.rm=</span>T) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -466,15 +473,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div></li>
-<li><p><code>_at()</code></p>
+<li><p><code>_at()</code> 특정한 조건 만족하는 열들</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Mode <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">which.max</span>(<span class="fu">table</span>(x)))</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(y)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="fu">ends_with</span>(<span class="st">'color'</span>)),Mode) <span class="sc">|&gt;</span> </span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">ends_with</span>(<span class="st">'color'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 최빈값 출력 사용자 지정 함수</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>Mode <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">which.max</span>(<span class="fu">table</span>(x)))</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(y)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="fu">ends_with</span>(<span class="st">'color'</span>)),Mode) <span class="sc">|&gt;</span> </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">ends_with</span>(<span class="st">'color'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
@@ -495,7 +503,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div></li>
-<li><p><code>_all()</code></p>
+<li><p><code>_all()</code> 모든 열에 대해 함수 적용</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x=</span><span class="dv">2</span>, <span class="at">y=</span><span class="dv">4</span>, <span class="at">z=</span><span class="dv">8</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> <span class="fu">mutate_all</span>(<span class="sc">~</span>.x<span class="sc">/</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -519,6 +527,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p><code>_all()</code> 함수는 <code>across()</code> 안에 <code>everything()</code>을 사용하여 구현이 가능합니다.</p></li>
 </ul>
+<p><code>_all()</code>, <code>_if()</code>, <code>_at()</code> 가 적용되던 함수들은 <code>mutate()</code> 뿐만 아니라 <code>select()</code>, <code>summarise()</code> 등에도 동일하게 적용할 수 있었습니다.</p>
+<p>이처럼 <code>across()</code> 하나만으로 <code>_all()</code>, <code>_if()</code>, <code>_at()</code> 함수들을 모두 구현 가능하기 때문에, 굳이 이전 버전의 함수들을 사용하지 않아도 될 것 같습니다.</p>
 
 
 </section>

@@ -1,9 +1,9 @@
 ---
 title: "data.table 1.14.9 업데이트"
-description: "data.table 1.14.9 버전에서 업데이트 될 내용을 살펴봅시다." 
-
+description: "data.table 1.14.9 버전 업데이트 내용 살펴보기." 
 date: '2023-02-21'
 categories: [R, data.table]
+image: "https://raw.githubusercontent.com/Rdatatable/data.table/master/.graphics/logo.png"
 ---
 
 `data.table`은 R에서 데이터를 빠르고 메모리 효율적으로 분석하도록 도와주는 패키지입니다. 현재 CRAN에 공개되어 있는 `data.table` 의 버전은 1.14.8 버전입니다 (2023-02-21 기준).

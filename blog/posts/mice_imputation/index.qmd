@@ -1,5 +1,6 @@
 ---
 title: "MICE를 이용한 multiple imputation"
+description: "multiple imputation을 활용한 분석방법"
 author: "JYH"
 date: "2023-04-11"
 categories: [R, imputation, mice]
@@ -8,18 +9,21 @@ image: "https://amices.org/mice/reference/figures/MICE_sticker_SMALL.png"
 
 ## MICE 소개
 
-multiple imputation은 평균이나 중앙값 등 하나의 값으로 결측값을 채워넣는 single imputation과 달리, 결측치(`NA`)를 여러가지 변수를 고려하여 채워넣는 방법입니다. 즉, `NA`가 있는 변수 이외의 다른 변수들까지 함께 고려하여, 채워넣을 변수를 지정하는 방법입니다.
+Multiple imputation은 평균(mean)이나 중앙값(median) 등 하나의 값으로 결측값을 채워넣는 single imputation과 달리, 결측치(`NA`)를 여러가지 변수를 고려하여 채워넣는 방법입니다. 즉, `NA`가 있는 변수 이외의 다른 변수들까지 함께 고려하여, 채워넣을 변수를 지정하는 방법입니다.
 
-R에는 multiple imputation을 도와주는 대표적인 패키지인 `mice` 가 있습니다. `mice`는 Multivariate Imputation by Chained Equations 의 약자입니다,
+R에는 multiple imputation을 도와주는 대표적인 패키지인 `mice` 가 있습니다. `mice`는 Multivariate Imputation by Chained Equations 의 약자입니다.
 
-mice를 통해 연속형, 이분형, 범주형 등 다양한 변수들의 결측값들을 채워넣을 수 있습니다.
+`mice`를 통해 연속형, 이분형, 범주형 등 다양한 변수들의 결측값들을 채워넣을 수 있습니다.
 
 ## 설치
 
 MICE 를 사용하기 위한 패키지는 아래와 같습니다. `mice` 패키지를 통해 MICE를 진행하도록 하겠습니다.
 
 ```{r}
+#| echo: false
 library(mice, warn.conflicts = F)
+library(miceadds)
+library(MKmisc)
 ```
 
 `mice`를 활용한 imputation 매커니즘은 아래의 그림과 같습니다.
@@ -70,7 +74,7 @@ md.pattern(nhanes)
 
     -   multiple imputation: pmm, rf, cart 등
 
--   `m`: `NA`를 채운 데이터셋의 수
+-   `m`: `NA`를 채운 multiple imputation 데이터셋의 수
 
 -   `maxit`: multiple imputation 값을 지정할 때 iteration 횟수
 
@@ -123,20 +127,15 @@ mice의 imputation methods는 다양합니다 (`methods(mice)` 참고).
 
 `mice()` 함수에서 method 인자를 통해 imputation 방법을 지정해줄 수도 있습니다.
 
-```{r}
-imp2 <- mice(nhanes, method = c("","pmm","logreg","pmm"), printFlag = F)
-```
-
-기본적으로 `mice()`는 연속형 변수에 대해서는 `pmm`을, 범주형 변수에 대해서는 `logreg`를 적용해 NA를 채워넣습니다.
+기본적으로 `mice()`는 연속형 변수에 대해서는 `pmm`을, 범주형 변수에 대해서는 `logreg`를 적용해 `NA`를 채워넣습니다.
 
 범주형 변수에 대해 자동으로 `logreg`를 적용하기 위해서는 해당 변수를 `character` 또는 `factor`로 변경해주어야 합니다.
 
 ```{r}
 nhanes$hyp <- as.factor(nhanes$hyp)
-imp4 <- mice(nhanes, printFlag = F)
-imp4
+imp2 <- mice(nhanes, method = c("","pmm","logreg","pmm"), printFlag = F)
+imp2
 ```
-
 
 `pmm`은 hot deck 방법 중 하나입니다. 이 때, **hot deck** 방법이란, `NA`가 아닌 데이터를 다른 변수와 매칭시켜 `NA`를 채워넣는 방법입니다. 쉽게 말해서, `NA`가 있는 행의 데이터의 다른 열을 바탕으로 `NA`의 행을 채워넣는 것을 말합니다.
 
@@ -168,7 +167,7 @@ imp4
 
 이처럼 `pmm` 알고리즘의 장점은 `NA`를 비현실적인 데이터로 채우는 것이 아니라, `NA`가 아닌 관측되는 값 중에서 채워넣는다는 것입니다.
 
-`log_reg` 방식도 `pmm`과 마찬가지로 진행이 됩니다.
+`logreg` 방식도 `pmm`과 마찬가지로 진행이 됩니다.
 
 mice로 `NA`를 채워준 이후, 원래 데이터들처럼 잘 채워졌는지 확인하기 위해서 `stripplot()` 을 통해 분포를 확인해볼 수 있습니다. 파란 점이 관측값, 붉은 점이 `NA`에서 채워진 값들입니다.
 
@@ -216,9 +215,7 @@ dt_imp <- complete(imp2, "long")
 ## 기술통계량 계산
 
 ::: callout-warning
-해당 부분은 아직까지 공부 중입니다.
-
-더 나은 함수나 패키지가 있는지 확인이 되면 수정하도록 하겠습니다.
+해당 부분은 아직까지 공부 중입니다. 확인해본 결과, 아래의 방법들로 기술통계량을 계산할 수는 있으나, 생각보다 번거롭습니다. 더 나은 함수나 패키지가 있는지 확인이 되면 수정하도록 하겠습니다!
 :::
 
 지금까지는 `mice`를 통해 회귀분석 등의 모델링을 하는 방법에 대해 살펴보았습니다.
@@ -234,7 +231,6 @@ Rubin's Rules (RR) 이란 평균, 회귀계수, 표준오차, 신뢰 구간, p-v
 multiple imputation 을 위한 t-tests는 `MKmisc` 패키지의 `mi.t.test()` 를 이용해 가능합니다. 다만 `MKmisc` 패키지를 설치하기 위해서는 `BiocMananger` 를 우선 설치해야 합니다. 그 다음 `limma`를 설치해주어야 `MKmisc`를 설치할 수 있습니다.
 
 ```{r}
-#| warning: false
 #| eval: false
 #| echo: true
 install.packages("BiocManager")
@@ -243,14 +239,13 @@ install.packages("MKmisc")
 library(MKmisc)
 ```
 
-mi.t.test()에 들어가는 값은 complete("long")을 이용해 추출한 전체 데이터를 리스트로 변환한 값, 연속형 변수 `x`, 범주형 종속형 변수 `y`입니다.
+`mi.t.test()`에 들어가는 값은 `complete("long")`을 이용해 추출한 전체 데이터를 리스트로 변환한 값, 연속형 변수 `x`, 범주형 종속형 변수 `y`입니다.
 
 ```{r}
 library(MKmisc)
 
 dt_imp_list <- split(dt_imp, dt_imp$.imp)
 MKmisc::mi.t.test(dt_imp_list, x='bmi', y="hyp")
-
 ```
 
 ### chi-square
@@ -278,7 +273,7 @@ sapply(mi_chisq, \(x) x$statistic) |> miceadds::micombine.chisquare(df=2, displa
 ANOVA 또한 `miceadds`패키지를 이용합니다. `mi.anova()`를 이용합니다.
 
 ```{r}
-mi.anova(imp4, formula = "bmi ~ age")
+mi.anova(imp2, formula = "bmi ~ age")
 ```
 
 ## 참고자료

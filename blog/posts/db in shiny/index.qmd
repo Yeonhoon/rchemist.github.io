@@ -1,8 +1,11 @@
 ---
 title: "R Shiny에서 DB 다루기"
+date: "2022-03-01"
+author: "JYH"
 ---
 
 ```{r}
+#| eval: false
 # 데이터 읽기
 dbData <- reactive({
     dbTrigger$depend()
@@ -14,6 +17,7 @@ dbData <- reactive({
 ```
 
 ```{r}
+#| eval: false
 # 데이터 db에 입력
 observeEvent(input$write,{
     record <- list(
@@ -60,6 +64,7 @@ observeEvent(input$write,{
 ```
 
 ```{r}
+#| eval: false
   observeEvent(input$records_cell_edit, {
     row  <- input$records_cell_edit$row; print(row)
     column <- input$records_cell_edit$col; print(column)

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -388,10 +388,11 @@ Note
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mlr_tasks</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;DictionaryTask&gt; with 19 stored values
+<pre><code>&lt;DictionaryTask&gt; with 20 stored values
 Keys: bike_sharing, boston_housing, breast_cancer, german_credit, ilpd,
   iris, kc_housing, moneyball, mtcars, optdigits, penguins,
-  penguins_simple, pima, sonar, spam, titanic, usarrests, wine, zoo</code></pre>
+  penguins_simple, pima, ruspini, sonar, spam, titanic, usarrests,
+  wine, zoo</code></pre>
 </div>
 </div>
 <p><code>mlr_tasks</code>에 내장된 태스크를 가져오기 위해선, <code>tsk()</code> 함수와 불러오고자 하는 태스크의 이름을 입력하면 됩니다.</p>
@@ -707,7 +708,7 @@ Mtry:                             3
 Target node size:                 10 
 Variable importance mode:         none 
 Splitrule:                        gini 
-OOB prediction error (Brier s.):  0.03533266 </code></pre>
+OOB prediction error (Brier s.):  0.03578763 </code></pre>
 </div>
 </div>
 <p>학습을 시킨 이후, $model 필드를 통해 학습된 결과를 확인할 수 있습니다. 어떤 하이퍼파라미터가 사용되었는지 등의 정보를 확인할 수 있습니다.</p>
@@ -818,13 +819,13 @@ Note
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;PredictionClassif&gt; for 62 observations:
     row_ids     truth  response prob.malignant prob.benign
-          3    benign    benign    0.000000000  1.00000000
-          6 malignant malignant    0.994350000  0.00565000
-          9    benign    benign    0.044171429  0.95582857
+          3    benign    benign     0.00000000 1.000000000
+          6 malignant malignant     0.99750556 0.002494444
+          9    benign    benign     0.07133333 0.928666667
 ---                                                       
-        204    benign    benign    0.002421429  0.99757857
-        206 malignant malignant    0.945166667  0.05483333
-        207    benign    benign    0.000000000  1.00000000</code></pre>
+        204    benign    benign     0.01348889 0.986511111
+        206 malignant malignant     0.94362302 0.056376984
+        207    benign    benign     0.00000000 1.000000000</code></pre>
 </div>
 </div>
 <p>prediction 객체에서는 <code>$confusion</code> 을 이용해 confusion matrix를 확인할 수 있습니다.</p>
@@ -833,8 +834,8 @@ Note
 <div class="cell-output cell-output-stdout">
 <pre><code>           truth
 response    malignant benign
-  malignant        27      0
-  benign            0     35</code></pre>
+  malignant        27      1
+  benign            0     34</code></pre>
 </div>
 </div>
 <p>우리가 만든 모델이 내놓은 예측값에 대한 시각화를 진행해줄 수 있습니다. <code>mlr3viz</code> 패키지의 <code>autoplot()</code> 기능을 이용해주면 됩니다.</p>
@@ -894,7 +895,7 @@ response    malignant benign
 [22] "classif.npv"         "classif.ppv"         "classif.prauc"      
 [25] "classif.precision"   "classif.recall"      "classif.sensitivity"
 [28] "classif.specificity" "classif.tn"          "classif.tnr"        
-[31] "classif.tp"          "classif.tpr"        </code></pre>
+[31] "classif.tp"          "classif.tpr"         "debug_classif"      </code></pre>
 </div>
 </div>
 <p>모델의 성능을 계산하기 위한 지표는 한 가지만 사용할 수 있고, 여러 가지를 사용할수도 있습니다.</p>
@@ -922,7 +923,7 @@ response    malignant benign
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>prediction<span class="sc">$</span><span class="fu">score</span>(measure)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>classif.acc 
-          1 </code></pre>
+   0.983871 </code></pre>
 </div>
 </div>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -945,7 +946,7 @@ Note
 <span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>prediction<span class="sc">$</span><span class="fu">score</span>(measures)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>classif.sensitivity classif.specificity 
-                  1                   1 </code></pre>
+          1.0000000           0.9714286 </code></pre>
 </div>
 </div>
 <p>뿐만 아니라, <code>mlr3</code>에서는 예측 모델의 품질을 정량화하는 지표로도 모델을 평가할 수 있습니다. 예를 들어, 학습하는 시간과 예측하는 시간을 평가하기 위해선</p>
@@ -954,7 +955,7 @@ Note
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>prediction<span class="sc">$</span><span class="fu">score</span>(measures,<span class="at">learner =</span> learner_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  time_train time_predict 
-        0.03         0.02 </code></pre>
+       0.015        0.006 </code></pre>
 </div>
 </div>
 <p>참고로, 위처럼 학습시간과 예측 시간을 평가하기 위해선 학습된 러너를 <code>$score()</code>에 입력해주어야 합니다.</p>

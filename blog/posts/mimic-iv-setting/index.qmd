@@ -1,5 +1,9 @@
 ---
 title: "MIMIC-IV 분석 준비"
+description: "MIMIC-IV 데이터 DB에 저장하기"
+date: "2023-04-05"
+author: "JYH"
+engine: "knitr"
 categories: [dataset, MIMIC-IV, PostgreSQL]
 ---
 
@@ -21,7 +25,7 @@ github에서 [mimic-code](https://github.com/MIT-LCP/mimic-code)/[mimic-iv](http
 
 에 들어가면 진행 가능.
 
-```{bash}
+```{bash eval=FALSE}
 # clone repo
 git clone https://github.com/MIT-LCP/mimic-code.git
 cd mimic-code
@@ -34,6 +38,8 @@ psql -d mimiciv -v ON_ERROR_STOP=1 -v mimic_data_dir=mimiciv/2.0 -f mimic-iv/bui
 psql -d mimiciv -v ON_ERROR_STOP=1 -v mimic_data_dir=mimiciv/2.0 -f mimic-iv/buildmimic/postgres/constraint.sql
 psql -d mimiciv -v ON_ERROR_STOP=1 -v mimic_data_dir=mimiciv/2.0 -f mimic-iv/buildmimic/postgres/index.sql
 ```
+
+## 참고자료
 
 https://physionet.org/content/mimic-iv-demo/2.2/
 
