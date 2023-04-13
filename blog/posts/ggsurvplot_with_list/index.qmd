@@ -1,0 +1,46 @@
+---
+title: "Kaplan-Meier 곡선 "
+description: "`ggsurvplot`을 통한 생존분석 시각화"
+date: "2021-01-01"
+categories: [R, survival, visualization]
+image: "https://rpkgs.datanovia.com/survminer/tools/README-ggplot2-customized-survival-plot-1.png"
+---
+
+특정 범주 변수에 따른 생존률 시각화하는 사용자지정 함수를 만들어보았습니다. `survival`의 `lung` 데이터 이용하여 예시를 보여드리겠습니다.
+
+```{r}
+library(survival)
+library(survminer)
+library(dplyr)
+df <- lung |> 
+  transmute(time,
+            status,  # censoring status 1=censored, 2=dead
+            Age = age,
+            Sex = factor(sex, labels = c("Male", "Female")),
+            ECOG = factor(ph.ecog),
+            `Meal Cal` = as.numeric(meal.cal))
+
+vars <- c("ECOG", "Sex")
+surv_plot_func <- function(df, vars, time, status) {
+
+  results_list <- lapply(vars, \(x,...){
+    # Creating a formula as a string
+    form <<- paste0("Surv(", time, ", ", status,") ~ ",x)
+    fit <- survfit(as.formula(form), data=df)
+    
+    # Plot the Kaplan-Meier curve using ggsurvplot
+    ggsurv <- ggsurvplot(fit, pval = TRUE, conf.int = TRUE,
+                         risk.table = TRUE, legend.title = "",
+                         surv.median.line = "hv", xlab = "Time", ylab = "Survival Probability")
+
+    # Return the fit and ggsurv as a list
+    list(fit = fit, ggsurv = ggsurv)
+  }) |> setNames(vars)
+
+    # Return the list of results
+  return(results_list)
+}
+res_list <- surv_plot_func(df, vars, "time", "status")
+```
+
+ggsurvplot 의 코드 문제인지 form을 `<-` 로 선언하면 에러메시지가 발생합니다. 그래서 `<<-`을 통해 권역 객체로 선언하였습니다.
