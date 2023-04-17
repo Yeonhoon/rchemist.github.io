@@ -1,0 +1,111 @@
+---
+title: "상관관계 시각화"
+description: "ggplot2, ggcorrplot 를 통해 상관관계 히트맵 만들기"
+author: "JYH"
+date: "2023-04-17"
+categories: ["ggplot2","R","visualization"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggcorrplot)
+```
+
+```{r}
+library(ggplot2)
+library(reshape2)
+library(RColorBrewer)
+
+cor_matrix <- cor(mtcars)
+cormat <- round(cor(cor_matrix),2)
+# Visualize the correlation matrix as a heatmap
+
+lower_tri <- cormat
+lower_tri[upper.tri(lower_tri)] <- NA #OR upper.tri function
+cor_melt <- melt(lower_tri, na.rm = TRUE)
+# Create a plot
+ggplot(cor_melt, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient2(low = "#abd9e9", mid = "#FFFFFF", high = "#FF0000", midpoint = 0, space = "Lab", name="Correlation") +
+  theme_minimal() +
+  theme(panel.grid.major = element_blank())+
+  geom_text(aes(Var1, Var2, label = value), color = "black", size = 4)
+  # theme(
+  #   axis.text.x = element_text(angle = 45, vjust = 1, 
+  #                                   size = 10, hjust = 1),
+  #       axis.text.y = element_text(size = 10),
+  #       axis.title.x = element_blank(),
+  #       axis.title.y = element_blank(),
+  #    panel.grid.major = element_blank(),
+  #    panel.border = element_blank(),
+  #    panel.background = element_blank(),
+  #    axis.ticks = element_blank(),
+  #    legend.justification = c(1, 0),
+  #    legend.position = c(0.6, 0.7),
+  #    legend.direction = "horizontal")+
+  #  guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
+  #                               title.position = "top", title.hjust = 0.5))
+```
+
+위에서는 ggplot 패키지를 이용해 상관관계 히트맵을 만드는 코드를 살펴보았습니다. 다만 코드가 너무 길고 복잡하게 보일 수 있다는 단점이 있습니다.
+
+이러한 단점을 보완하고자 `ggcorrplot`이라는 패키지를 이용해 correlation heatmap 을 그릴 수 있습니다.
+
+```{r}
+#| eval: false
+install.packages("ggcorrplot")
+library(ggcorrplot)
+```
+
+```{r}
+
+# p-value 유의미성 위한 계산
+p.mat <- cor_pmat(mtcars)
+
+ggcorrplot(cormat,
+          method = "square",
+          type = "lower",
+          colors = c("#6D9EC1", "white", "#E46726"),
+          ggtheme = theme_minimal,
+          lab = T,
+          lab_col = "black",
+          lab_size = 3,
+          outline.color = "white",
+          hc.order = T,
+          p.mat = p.mat,
+          insig = "blank",
+          show.diag = T,
+          legend.title = ""
+          ) +
+  theme(panel.grid.major = element_blank())
+```
+
+`ggcorrplot()` 함수를 이용해 히트맵 작성이 가능합니다.
+
+`ggcorrplot()`에 쓰이는 주요 인자들은 다음과 같습니다.
+
+-   `method`: heatmap 을 채워 줄 모양을 선택합니다. square, circle
+
+-   `type`: heatmap 모양을 설정합니다. full, lower, upper
+
+-   `ggtheme`: 그래프의 전반적인 테마. ggplot2 또는 테마 관련 패키지의 테마 함수 사용 (e.g., `theme_()`)
+
+-   `colors`: heatmap의 low, mid, high 순으로 색상을 지정합니다.
+
+-   `outline.color`: `method`에서 설정한 square 또는 circle의 테두리색상
+
+-   `lab`: 상관계수 표시 여부
+
+    -   `lab_size`: 상관계수 글자 크기
+
+    -   `lab_col`: 상관계수 글자 색상
+
+-   `hc.order`: 상관계수에 따른 정렬
+
+-   `p.mat` : 상관계수의 p-value matrix
+
+    -   `insig`: 상관계수가 유의미하지 않을 경우 표시할 방법: blank
+
+-   `show.legend`: 범례 표시 여부
+
+    -   `legend.title`: 범례 제목.
