@@ -1,0 +1,34 @@
+---
+title: "Subgroup analysis"
+description: "R을 활용한 하위그룹 분석"
+author: "JYH"
+categories: [R, Subgroup analysis]
+date: "2023-04-19"
+---
+
+
+```{r}
+install.packages("Publish")
+require(Publish)
+```
+
+
+```{r}
+
+subgroups <- c('sex','age60', 'ethnicity','cvicu','sepsis','ventil','crrt','htn')
+sub_df[,(subgroups) := lapply(.SD, as.factor), .SDcols=subgroups]
+sub_result <- subgroupAnalysis(cox_fit, data=sub_df,
+                 treatment="dex_usage",
+                 subgroups=subgroups)
+sub_result %>% as.data.table()%>% 
+  mutate(`HR (95% CI)` = paste0(format(round(HazardRatio,2),nsmall=2), 
+                                ' (', format(round(Lower,2),nsmall=2), '-', 
+                                format(round(Upper,2),nsmall=2),
+                                ')'),
+         control = paste0(event_0,'/',sample_0),
+         case = paste0(event_1,'/',sample_1)) %>% 
+  DT::datatable(options=list(dom='Bfrtip',buttons='copy'), extensions='Buttons',
+                ) %>% 
+  DT::formatRound(digit=2, columns = c('HazardRatio','Lower','Upper'))
+
+```

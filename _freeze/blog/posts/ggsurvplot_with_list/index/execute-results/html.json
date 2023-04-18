@@ -1,0 +1,18 @@
+{
+  "hash": "d26a2ea364789b4f77a32b61cfb5c74a",
+  "result": {
+    "markdown": "---\ntitle: \"Kaplan-Meier 곡선 \"\ndescription: \"`ggsurvplot`을 통한 생존분석 시각화\"\ndate: \"2021-01-01\"\ncategories: [R, survival, visualization]\nimage: \"https://rpkgs.datanovia.com/survminer/tools/README-ggplot2-customized-survival-plot-1.png\"\n---\n\n\n특정 범주 변수에 따른 생존률 시각화하는 사용자지정 함수를 만들어보았습니다. `survival`의 `lung` 데이터 이용하여 예시를 보여드리겠습니다.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(survival)\nlibrary(survminer)\nlibrary(dplyr)\ndf <- lung |> \n  transmute(time,\n            status,  # censoring status 1=censored, 2=dead\n            Age = age,\n            Sex = factor(sex, labels = c(\"Male\", \"Female\")),\n            ECOG = factor(ph.ecog),\n            `Meal Cal` = as.numeric(meal.cal))\n\nvars <- c(\"ECOG\", \"Sex\")\nsurv_plot_func <- function(df, vars, time, status) {\n\n  results_list <- lapply(vars, \\(x,...){\n    # Creating a formula as a string\n    form <<- paste0(\"Surv(\", time, \", \", status,\") ~ \",x)\n    fit <- survfit(as.formula(form), data=df)\n    \n    # Plot the Kaplan-Meier curve using ggsurvplot\n    ggsurv <- ggsurvplot(fit, pval = TRUE, conf.int = TRUE,\n                         risk.table = TRUE, legend.title = \"\",\n                         surv.median.line = \"hv\", xlab = \"Time\", ylab = \"Survival Probability\")\n\n    # Return the fit and ggsurv as a list\n    list(fit = fit, ggsurv = ggsurv)\n  }) |> setNames(vars)\n\n    # Return the list of results\n  return(results_list)\n}\nres_list <- surv_plot_func(df, vars, \"time\", \"status\")\n```\n:::\n\n\nggsurvplot 의 코드 문제인지 form을 `<-` 로 선언하면 에러메시지가 발생합니다. 그래서 `<<-`을 통해 권역 객체로 선언하였습니다.\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"../../../site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"../../../site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

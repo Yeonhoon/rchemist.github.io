@@ -1,0 +1,123 @@
+---
+title: "성향점수 매칭 (PSM)"
+description: "R을 활용한 성향점수 매칭하는 방법"
+author: "JYH"
+categories: [R, PSM, matchit]
+date: "2023-04-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(MatchIt)
+library(cobalt)
+```
+성향점수 매칭 (Propensity Score Matching,PSM) 은 관찰 연구에서 사용되는 통계기법 중 하나로서, 무작위 대조군 연구 (Randomized control trials, RCT)가 불가능할 때 치료제나 중재(intervention)의 효과를 평가하기 위해 사용됩니다. 
+
+::: {.callout-note}
+무작위 대조군 연구(RCT)란 임상 연구분야에서 자주 활용되는 실험 방법 중 하나로서 신약이나 의료기기, 치료법과 같은 중재의 안전성과 효과성을 결정하기 위해 사용되는 방법입니다.
+RCT는 관찰연구와 다르게 편향과 교란 변수들을 최소화하기 때문에, 중재와 결과의 인과관계를 평가하는 표준으로 간주됩니다.
+:::
+
+PSM은 치료제나 중재의 효과가 결과 변수(예시. 질병의 발생, 사망 등)에 미치는 영향을 확인하고자 할 때, 그 인과관계에 영향을 미칠 수 있는 변수들의 편향(bias)를 줄이는 것을 목표로 합니다. 이런 변수들을 교란 변수라고 합니다.
+
+PSM의 핵심은 성별, 나이 등과 같이 관측된 특성을 바탕으로 치료 또는 중재를 받을 확률인 성향점수(Propensity score)를 계산하는 것입니다. 이 성향점수를 계산하기 위해서는 주로 로지스틱 회귀분석이 사용됩니다. 성향점수가 계산되면, 성향점수를 바탕으로 치료를 받은 환자들과 받지 않은 환자들이 매칭되게 됩니다. 
+
+이렇게 PSM을 통해 치료를 받은 집단과 받지 않은 집단의 차이를 최대한 줄인 뒤에 치료나 중재의 인과성(causal effect)을 확인할 수 있습니다.
+
+이번 포스트에서는 R을 활용해 PSM을 수행하는 방법에 대해 살펴보도록 하겠습니다.
+
+PSM을 수행하기 위해 필요한 패키지는 `MatchIt`과 `cobalt`입니다. `MatchIt`은 PSM을 수행하기 위한 패키지, `cobalt`는 PSM 결과를 시각화하기 위한 패키지입니다.
+
+```{r}
+#| eval: false
+install.packages(c("MatchIt","cobalt"))
+library(MatchIt)
+library(cobalt)
+```
+
+PSM 설명을 위해 `MatchIt` 패키지에 있는 `lalonde` 데이터를 사용하겠습니다.
+```{r}
+lalonde
+```
+
+lalonde 데이터의 변수는 다음과 같이 구성되어있습니다.
+
+- `treat`: 치료 집단 구분 (0: 통제 집단, 1: 치료 집단)
+- `age`: 나이
+- `educ`: 교육받은 연수
+- `race`: 인종 (Black, Hispanic, White)
+- `married`: 혼인상태 (0: 미혼, 1: 기혼)
+- `nodegree`: 고등학교 미졸업 여부 (0:졸업, 1: 미졸업)
+- `re74`, `re75`, `re78`: 1974, 1975, 1978년 연간소득($)
+
+PSM은 크게 `계획 - 매칭 - 평가` 세 단계로 구분되는데, 이들 각각에 대해 살펴보도록 하겠습니다. 
+
+## 1. 계획
+계획단계는 treatment에 대해 아래의 내용을 선택하는 단계입니다.
+
+- 평가될 효과(effect)의 유형
+  - total effect
+  - conditional effect
+  - marginal effect
+- 목표 대상 (target population)
+  목표 대상이란 연구 결과를 적용하고 싶은 대상을 의미합니다. 일반적으로 랜덤 샘플링한 대상에게 연구 결과를 적용하는데, 만약 샘플이 랜덤하지 않다면 목표 대상을 설정하기 어렵습니다.
+  - Average treatment effect in the population (ATE): 목표 대상에 있는 모든 대상들에 대한 치료제의 평균 효과
+  - Average treatment effect in the treated (ATT): 치료를 실제로 받은 사람들과 비슷한 사람들에 대한 치료제의 평균 효과
+  대부분의 매칭 방법은 ATT를 평가하는 것이 더 낫지만, 일부 매칭은 ATE도 사용 가능합니다.
+- 균형을 맞출 공변량 (covariates)
+  - 공변량을 선택하는 것은 치료제의 인과관계를 타당하게 해석하기 위해 교란효과를 없애기 위한 확실한 방법이기 때문에 중요합니다. 총 인과를 평가하기 위해서 모든 공변량들은 치료제 사용 이전에 측정이 되어야 합니다.
+  이상적으로 공변량은 결측값(missingness)이 없어야 합니다.
+
+우선 매칭 이전에 기존 데이터의 불균형을 확인해보겠습니다.
+```{r}
+initial <- matchit(treat ~ age + educ + race + married + nodegree + re74 + re75, data = lalonde, method=NULL, distance = "glm")
+
+summary(initial)
+```
+
+PSM 이전의 treat과 control 간의 불균형을 확인할 수 있는 지표는 Standardized mean difference (Std. Mean Diff, SMD)입니다. SMD는 절댓값이 0에 가까우면 가까울수록 treat과 control 간의 균형이 맞는다고 이야기합니다. 통상적으로 연구에서 균형이 잡혔다고 말하는 SMD의 수준은 절댓값 기준 0.1 이하입니다.
+
+## 2. 매칭
+
+이제 매칭을 진행해보겠습니다. 매칭에는 다양한 클래스들과 방법들이 존재합니다. 여기서는 1:1 nearest neighbor (NN)매칭을 통해 성향점수를 계산해보도록 하겠습니다.
+
+NN 방법을 통해 각 treated 데이터는 가장 가까운 성향점수를 갖는 control 데이터와 짝지어게 됩니다. 짝지어지지 못한 데이터들은 매칭되지 않은 것으로 간주되어 추후 분석에서 제외됩니다.
+```{r}
+m1 <- matchit(treat ~ age + educ + race + married + nodegree + re74 + re75, data = lalonde, method="nearest", distance = "glm")
+m1
+```
+
+`matchit`을 통해 만들어진 `m1` 객체의 핵심은 weights(매칭 가중치), subclass (매칭 쌍), distance (성향점수 평가), 그리고 match.matrix (treat에 매칭된 control 데이터)입니다.
+## matching 방법 (`method`)
+- nearest
+- optimal
+
+
+## 3. 평가
+매칭 이후에는 매칭이 잘 되었는지 평가가 필요합니다. 만약 매칭을 한 이후에도 공변량의 균형이 맞지 않다면 매칭은 실패한 것으로 간주되고 다른 매칭을 시도해야 합니다.
+
+매칭 객체 평가 방법은 두 단계로 나누어볼 수 있습니다. 첫 번째는 summary를 통해 공변량들의 SMD 절댓값이 0.1 미만인지 확인하는 것입니다.
+```{r}
+summary(m1)
+```
+
+두 번째는 그래프를 이용해 매칭 전 SMD와 매칭 후의 SMD를 비교하는 것입니다. 여기서 `cobalt` 패키지를 이용하게 됩니다.
+
+```{r}
+love.plot(m1, 
+          abs=T, 
+          thresholds = 0.1,
+          drop.distance = T,
+          binary='std',
+          position='bottom',
+          var.order = 'unadjusted',
+          # var.names = new.name,
+          size = 2,
+          shapes=c('circle filled','circle')
+          )
+
+```
+
+위의 그래프를 살펴보면, 매칭을 통해 adjusted된 공변량들의 SMD가 0.1 이상인 경우가 꽤 많은 것을 알 수 있습니다. 즉 매칭이 제대로 이루어지지 않은 것이죠.
+## 참고자료
+- https://cran.r-project.org/web/packages/MatchIt/vignettes/MatchIt.html

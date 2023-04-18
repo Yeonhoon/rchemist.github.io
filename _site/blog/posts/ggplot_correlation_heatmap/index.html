@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="JYH">
-<meta name="dcterms.date" content="2023-04-05">
-<meta name="description" content="MIMIC-IV 데이터 DB에 저장하기">
+<meta name="dcterms.date" content="2023-04-17">
+<meta name="description" content="ggplot2, ggcorrplot 를 통해 상관관계 히트맵 만들기">
 
-<title>Rchemist - MIMIC-IV 분석 준비</title>
+<title>Rchemist - 상관관계 시각화</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -179,16 +179,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">MIMIC-IV 분석 준비</h1>
+      <h1 class="title">상관관계 시각화</h1>
                   <div>
         <div class="description">
-          MIMIC-IV 데이터 DB에 저장하기
+          ggplot2, ggcorrplot 를 통해 상관관계 히트맵 만들기
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">dataset</div>
-                <div class="quarto-category">MIMIC-IV</div>
-                <div class="quarto-category">PostgreSQL</div>
+                <div class="quarto-category">ggplot2</div>
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">visualization</div>
               </div>
                   </div>
   </div>
@@ -206,7 +206,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 5, 2023</p>
+        <p class="date">April 17, 2023</p>
       </div>
     </div>
     
@@ -222,9 +222,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#mimic-iv란" id="toc-mimic-iv란" class="nav-link active" data-scroll-target="#mimic-iv란">0. MIMIC-IV란?</a></li>
-  <li><a href="#데이터-다운로드" id="toc-데이터-다운로드" class="nav-link" data-scroll-target="#데이터-다운로드">1. 데이터 다운로드</a></li>
-  <li><a href="#db에-데이터-저장하기" id="toc-db에-데이터-저장하기" class="nav-link" data-scroll-target="#db에-데이터-저장하기">2. DB에 데이터 저장하기</a></li>
+  <li><a href="#ggplot2" id="toc-ggplot2" class="nav-link active" data-scroll-target="#ggplot2"><code>ggplot2</code></a></li>
+  <li><a href="#ggcorrplot" id="toc-ggcorrplot" class="nav-link" data-scroll-target="#ggcorrplot"><code>ggcorrplot</code></a></li>
   <li><a href="#참고자료" id="toc-참고자료" class="nav-link" data-scroll-target="#참고자료">참고자료</a></li>
   </ul>
 </nav>
@@ -235,44 +234,125 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<section id="mimic-iv란" class="level2">
-<h2 class="anchored" data-anchor-id="mimic-iv란">0. MIMIC-IV란?</h2>
-<p>MIMIC-IV (Medical Information Mart for Intensive Care IV)는 매사추세츠주 보스턴에 위치한 베스 이스라엘 디콘네스 메디컬 센터의 중환자실(ICU)에 입원한 환자들의 개인 식별 정보가 제거된 전자 건강 기록(EHR) 공개 데이터셋입니다. 2008년부터 2019년까지의 기간 동안 수집된 자료를 포함하며, MIMIC 데이터셋의 네 번째 버전입니다.</p>
-<p>MIMIC-IV 데이터셋은 생체 신호, 검사 결과, 약물, 진단 및 수술 등 포괄적인 임상 자료뿐만 아니라 인구통계학적 정보, 입원 및 퇴원 세부 정보, 기타 임상 문서도 포함합니다. 이 데이터셋은 380,000명 이상의 고유 환자에 대한 2,800만 건 이상의 중환자실 입원 정보를 포함하고 있어, 세계에서 가장 큰 공개적으로 이용 가능한 중환자실 데이터셋 중 하나입니다.</p>
-<p>MIMIC-IV 데이터셋은 47개 테이블과 7,000개가 넘는 변수로 구성된 관계형 데이터베이스 형식으로 구성되어 있습니다. 또한, 사망률, 패혈증, 재입원 등과 같은 유도 데이터셋도 포함되어 있으며, 이러한 데이터셋은 특정 연구 질문에 대한 사전 처리 데이터를 제공합니다. 또한 MIMIC-IV에는 개인 식별 정보가 제거된 자유 형식의 임상 노트도 포함되어 있습니다.</p>
-<p>MIMIC-IV는 패혈증, 급성 신손상, 사망률 예측 및 자연어 처리 등 다양한 의료 연구 분야에서 사용되고 있습니다. 이러한 데이터셋의 이용 가능성은 임상 의사 결정 지원, 환자 분류 및 맞춤형 의학에 대한 새로운 알고리즘, 모델 및 방법을 개발하고 시험하는 데 필수적인 기반을 제공합니다.</p>
-<p>MIMIC-IV 데이터셋에 대한 접근은 데이터 사용 계약서 작성 및 기관 검토 위원회(IRB) 승인을 받아야 합니다. 그러나 이 데이터셋은 전 세계 연구원들이 PhysioNet 저장소를 통해 무료로 접근할 수 있으며, 이 저장소는 데이터셋을 활용한 연구를 위한 튜토리얼, 코드 및 기타 자원을 제</p>
-</section>
-<section id="데이터-다운로드" class="level2">
-<h2 class="anchored" data-anchor-id="데이터-다운로드">1. 데이터 다운로드</h2>
-<p>physionet에서 MIMIC-IV 데이터 다운로드하기</p>
-</section>
-<section id="db에-데이터-저장하기" class="level2">
-<h2 class="anchored" data-anchor-id="db에-데이터-저장하기">2. DB에 데이터 저장하기</h2>
-<p>원하는 DB를 선택하여 MIMIC-IV 데이터를 저장할 수 있습니다.</p>
-<p>DB가 PC에 설치되어 있어야 합니다.</p>
-<p>PostgreSQL, mySQL, 구글 bigquery, duckdb, sqlite 중에서 선택 가능합니다.</p>
-<p>저는 PostgreSQL 으로 진행하겠습니다.</p>
-<p>github에서 <a href="https://github.com/MIT-LCP/mimic-code">mimic-code</a>/<a href="https://github.com/MIT-LCP/mimic-code/tree/main/mimic-iv">mimic-iv</a>/<a href="https://github.com/MIT-LCP/mimic-code/tree/main/mimic-iv/buildmimic">buildmimic</a>/<strong>postgres</strong>/</p>
-<p>에 들어가면 진행 가능.</p>
+<p>상관관계 히트맵 (Correlation heatmap)은 상관관계 매트릭스를 시각화한 것으로, 데이터세트에서 변수 간의 쌍(pair)별 상관관계를 시각화하는 데 사용됩니다. 상관관계 히트맵에서 각 셀은 두 변수 간의 상관계수를 나타내며 셀의 색상은 상관관계의 강도와 방향을 나타냅니다. 일반적으로 색상 그라데이션이 사용되는데, 한 색상은 양의 상관관계를 나타내고 다른 색상은 음의 상관관계를 나타냅니다. 색상의 강도는 상관관계의 강도를 나타내구요.</p>
+<p>상관관계 히트맵은 여러 경우에 쓰일 수 있습니다. 예를 들어 탐색적 데이터 분석 (EDA) 과정에서 상관관계 히트맵은 변수 간의 잠재적 관계 또는 연관성을 식별하는 데 도움이 될 수 있습니다. 추후 이 결과를 바탕으로 회귀분석 등 심화 분석을 진행할 수 있습니다.</p>
+<p>또한 머신러닝이나 통계 모델링에서 상관 히트맵을 사용하여 다중 공선성으로 이어질 수 있는 고도로 상관된 기능을 식별하고 제거하여 모델의 안정성과 해석 가능성을 향상시킬 수 있습니다.</p>
+<p>아무래도 상관계수를 숫자로 보여주는 테이블을 제시해주는 것보다는 상관관계 히트맵을 통해 각 변수 간 상관성을 보여주는 것이 더욱 직관적이고 시각적으로 매력적인 분석결과일 것입니다.</p>
+<p>그래서 이번 포스트에서는 R을 이용해 상관관계를 시각화하는 상관관계 히트맵을 만드는 방법을 살펴보겠습니다.</p>
+<section id="ggplot2" class="level2">
+<h2 class="anchored" data-anchor-id="ggplot2"><code>ggplot2</code></h2>
+<p>R에서 데이터 시각화에 가장 많이 사용되는 패키지는 단연코 <code>ggplot2</code>일 것입니다. <code>ggplot2</code>를 이용해 상관관계 히트맵을 그리려면 특정 데이터의 상관행렬을 구해야 합니다.</p>
+<p><code>mtcars</code> 데이터를 이용해 예시를 들어보겠습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># clone repo</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/MIT-LCP/mimic-code.git</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> mimic-code</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># download data</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-r</span> <span class="at">-N</span> <span class="at">-c</span> <span class="at">-np</span> <span class="at">--user</span> <span class="op">&lt;</span>USERNAME<span class="op">&gt;</span> --ask-password https://physionet.org/files/mimiciv/2.0/</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> physionet.org/files/mimiciv mimiciv <span class="kw">&amp;&amp;</span> <span class="fu">rmdir</span> physionet.org/files <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> physionet.org/robots.txt <span class="kw">&amp;&amp;</span> <span class="fu">rmdir</span> physionet.org</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ex">createdb</span> mimiciv</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-d</span> mimiciv <span class="at">-f</span> mimic-iv/buildmimic/postgres/create.sql</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-d</span> mimiciv <span class="at">-v</span> ON_ERROR_STOP=1 <span class="at">-v</span> mimic_data_dir=mimiciv/2.0 <span class="at">-f</span> mimic-iv/buildmimic/postgres/load_gz.sql</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-d</span> mimiciv <span class="at">-v</span> ON_ERROR_STOP=1 <span class="at">-v</span> mimic_data_dir=mimiciv/2.0 <span class="at">-f</span> mimic-iv/buildmimic/postgres/constraint.sql</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-d</span> mimiciv <span class="at">-v</span> ON_ERROR_STOP=1 <span class="at">-v</span> mimic_data_dir=mimiciv/2.0 <span class="at">-f</span> mimic-iv/buildmimic/postgres/index.sql</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(mtcars[<span class="dv">6</span><span class="sc">:</span><span class="dv">11</span>])</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>cormat <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(cor_matrix),<span class="dv">2</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>cor_melt <span class="ot">&lt;-</span> <span class="fu">melt</span>(cormat, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><code>cor()</code> 함수를 이용해 상관행렬을 만들었고, 각 상관계수를 소수점 둘째 자리에서 반올림해주었습니다.</p>
+<p>또한 시각화를 용이하게 하기 위해 해당 매트릭스를 <code>long</code> 형태로 변경하였습니다.</p>
+<p>이 상태로 <code>ggplot2</code>을 이용해 히트맵을 그려보면 다음과 같습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cor_melt, <span class="fu">aes</span>(<span class="at">x =</span> Var1, <span class="at">y =</span> Var2, <span class="at">fill =</span> value)) <span class="sc">+</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">"#abd9e9"</span>, <span class="at">mid =</span> <span class="st">"#FFFFFF"</span>, <span class="at">high =</span> <span class="st">"#FF0000"</span>, <span class="at">midpoint =</span> <span class="dv">0</span>, <span class="at">space =</span> <span class="st">"Lab"</span>, <span class="at">name=</span><span class="st">"Correlation"</span>) <span class="sc">+</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>그럴 듯한 상관관계 히트맵이 만들어졌습니다. 그런데 상관관계 히트맵에서는 대각행렬을 기준으로 위와 아래가 동일한 값을 갖게 됩니다. 자신과의 상관성을 나타내는 대각선의 1을 기준으로 아래와 위가 같은 것을 알 수 있습니다.</p>
+<p>따라서 대각행렬을 기준으로 위 또는 아래의 값만 시각화를 해주는 것이 더욱 깔끔한 그래프를 시각화하는 데 도움이 됩니다.</p>
+<p>아래의 예시에서는 대각선을 기준으로 아래의 값만 남겨두도록 하겠습니다. 위의 값을 없애주어야 하기 때문에 <code>upper.tri()</code> 함수를 이용합니다. (아래의 값을 없애주고 싶은 경우는 <code>lower.tri()</code> 를 사용하면 됩니다.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lower_tri <span class="ot">&lt;-</span> cormat</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>lower_tri[<span class="fu">upper.tri</span>(lower_tri)] <span class="ot">&lt;-</span> <span class="cn">NA</span> <span class="co">#OR upper.tri function</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>cor_melt_lower <span class="ot">&lt;-</span> <span class="fu">melt</span>(lower_tri, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>그런 뒤에 다시 시각화를 해보면 다음과 같은 결과가 나타납니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cor_heatmap <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(cor_melt_lower, <span class="fu">aes</span>(<span class="at">x =</span> Var1, <span class="at">y =</span> Var2, <span class="at">fill =</span> value)) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">"#abd9e9"</span>, <span class="at">mid =</span> <span class="st">"#FFFFFF"</span>, <span class="at">high =</span> <span class="st">"#FF0000"</span>, <span class="at">midpoint =</span> <span class="dv">0</span>, <span class="at">space =</span> <span class="st">"Lab"</span>, <span class="at">name=</span><span class="st">"Correlation"</span>) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>cor_heatmap</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>이제 이 그래프에 상관계수를 넣어주기만 하면 될 것 같습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cor_heatmap <span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(Var1, Var2, <span class="at">label =</span> value), <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="ggcorrplot" class="level2">
+<h2 class="anchored" data-anchor-id="ggcorrplot"><code>ggcorrplot</code></h2>
+<p>위에서는 <code>ggplot2</code> 패키지를 이용해 상관관계 히트맵을 만드는 코드를 살펴보았습니다. 다만 위의 코드가 너무 길고 복잡하여, 이해하기 힘들 수 있다는 단점이 있습니다. 아무래도 <code>ggplot2</code>를 통해 일일이 옵션을 설정해주어야 하기 때문에 어쩔 수 없습니다.</p>
+<p>이러한 단점을 보완하고자 <code>ggcorrplot</code>이라는 패키지를 이용해 correlation heatmap 을 그릴 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggcorrplot"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggcorrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># p-value 유의미성 위한 계산</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>p.mat <span class="ot">&lt;-</span> <span class="fu">cor_pmat</span>(mtcars)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggcorrplot</span>(cormat,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">method =</span> <span class="st">"square"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">type =</span> <span class="st">"lower"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">colors =</span> <span class="fu">c</span>(<span class="st">"#6D9EC1"</span>, <span class="st">"white"</span>, <span class="st">"#E46726"</span>),</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">ggtheme =</span> theme_minimal,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">lab =</span> T,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">lab_col =</span> <span class="st">"black"</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">lab_size =</span> <span class="dv">3</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">outline.color =</span> <span class="st">"white"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">hc.order =</span> T,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">p.mat =</span> p.mat,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">insig =</span> <span class="st">"blank"</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">show.diag =</span> T,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="st">""</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>          ) <span class="sc">+</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><code>ggcorrplot()</code> 함수를 이용해 히트맵 작성이 가능합니다.</p>
+<p><code>ggcorrplot()</code>에 쓰이는 주요 인자들은 다음과 같습니다.</p>
+<ul>
+<li><p><code>method</code>: heatmap 을 채워 줄 모양을 선택합니다. square, circle</p></li>
+<li><p><code>type</code>: heatmap 모양을 설정합니다. full, lower, upper</p></li>
+<li><p><code>ggtheme</code>: 그래프의 전반적인 테마. ggplot2 또는 테마 관련 패키지의 테마 함수 사용 (e.g., <code>theme_()</code>)</p></li>
+<li><p><code>colors</code>: heatmap의 low, mid, high 순으로 색상을 지정합니다.</p></li>
+<li><p><code>outline.color</code>: <code>method</code>에서 설정한 square 또는 circle의 테두리색상</p></li>
+<li><p><code>lab</code>: 상관계수 표시 여부</p>
+<ul>
+<li><p><code>lab_size</code>: 상관계수 글자 크기</p></li>
+<li><p><code>lab_col</code>: 상관계수 글자 색상</p></li>
+</ul></li>
+<li><p><code>hc.order</code>: 상관계수에 따른 정렬</p></li>
+<li><p><code>p.mat</code> : 상관계수의 p-value matrix</p>
+<ul>
+<li><code>insig</code>: 상관계수가 유의미하지 않을 경우 표시할 방법: ‘blank’</li>
+</ul></li>
+<li><p><code>show.legend</code>: 범례 표시 여부</p>
+<ul>
+<li><code>legend.title</code>: 범례 제목.</li>
+</ul></li>
+</ul>
+<p><code>ggcorrplot</code>을 통해 만들어지는 그래프 역시 <code>ggplot2</code> 기반이기 때문에, <code>ggplot()</code>에서 사용할 수 있는 옵션들을 사용할 수 있다는 장점이 있습니다.</p>
 </section>
 <section id="참고자료" class="level2">
 <h2 class="anchored" data-anchor-id="참고자료">참고자료</h2>
-<p>https://physionet.org/content/mimic-iv-demo/2.2/</p>
-<p>https://github.com/MIT-LCP/mimic-code</p>
+<p>http://www.sthda.com/english/wiki/ggcorrplot-visualization-of-a-correlation-matrix-using-ggplot2</p>
 
 
 </section>
