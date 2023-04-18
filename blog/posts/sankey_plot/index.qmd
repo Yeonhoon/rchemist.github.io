@@ -3,7 +3,8 @@ title: "Sankey plot"
 author: "JYH"
 description: "`ggalluvial`을 통한 Sankey plot 그리기"
 categories: [R, Visualization]
-date: "2021-01-01"
+date: "2023-04-18"
+image: "https://r-charts.com/en/flow/ggalluvial_files/figure-html/alluvial-plot.png"
 ---
 
 Sankey(생키) diagram라고도 하는 Sankey plot은 시스템에서 서로 다른 노드 간의 양이나 에너지 흐름을 시각화하는 다이어그램의 유형 중 하나입니다. 프로세스 또는 시스템 내에서 에너지, 재료 또는 돈과 같은 자원의 분배, 변환 또는 보존을 설명하는 데 특히 유용합니다. 다이어그램에서 노드 간 화살표 또는 링크의 너비는 흐름 양에 비례하므로 여러 흐름의 상대적 크기를 쉽게 비교할 수 있습니다.\
