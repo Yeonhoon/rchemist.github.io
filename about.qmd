@@ -19,40 +19,58 @@ about:
 comments: false
 ---
 
-헬스케어 빅데이터를 다루는 데이터사이언티스트입니다. 😃
+헬스케어 빅데이터를 다루는 데이터 사이언티스트입니다. 😃
 
 ::: panel-tabset
+
+## Data
+
+- Korean national health insurance system: NHIS-NSC, NHIS-HEALS
+- Medical information mart for intensive care-iv (MIMIC-IV)
+- Korean sepsis alliance (KSA)
+- SNUBH Clinical data warehouse (CDW)
+- Korean national health and nutrition examination survey (KNHANES)
+- Community health survey (CHS)
+
 ## Skills
 
-<img src="https://img.shields.io/badge/R-276DC3?style=for-the-badge&amp;logo=R&amp;logoColor=white"/>
+<img src="https://img.shields.io/badge/R-276DC3?style=for-the-badge&amp;logo=R&amp;logoColor=white" style="display: inline-block;"/>
 
-<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&amp;logo=Python&amp;logoColor=white"/>
+<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&amp;logo=Python&amp;logoColor=white" style="display: inline-block;"/>
 
-<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&amp;logo=PostgreSQL&amp;logoColor=white"/>
+<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&amp;logo=PostgreSQL&amp;logoColor=white" style="display: inline-block;"/>
 
-![](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white){style="display: inline-block;"}
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white" style="display: inline-block;"/>
 
-![](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white)
+<img src = "https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white" style="display: inline-block;"/>
 
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&amp;logo=JavaScript&amp;logoColor=black"/>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&amp;logo=JavaScript&amp;logoColor=black" style="display: inline-block;"/>
+
+## Papers {style="text-align: left;"}
+
+- Association of Dexmedetomidine With New-Onset Atrial Fibrillation in Patients With Critical Illness", JAMA network open , 2023
+- The Risk of Type 2 Diabetes Mellitus according to Changes in Obesity Status in Late Middle-Aged Adults: A Nationwide Cohort Study of Korea, Diabetes & Metabolism Journal, 2023
+- Jung, S. Y., Jang, Y. H., Bae, W. K., & Han, J. S. (2022). Changes of Body Mass Index and the Incidence of Hypertension in Late Middle Age: A Nationwide Cohort Study in South Korea. Korean Journal of Health Promotion, 22(4), 175–182.
+- Jang, Y., You, M., Lee, H. et al. Burnout and peritraumatic distress of healthcare workers in the COVID-19 pandemic. BMC Public Health 21, 2075 (2021). https://doi.org/10.1186/s12889-021-11978-0
+- Jang, Y., You, M., Lee, S., & Lee, W. (2021). Factors Associated With the Work Intention of Hospital Workers’ in South Korea During the Early Stages of the COVID-19 Outbreak. Disaster Medicine and Public Health Preparedness, 15(3), E23-E30. doi:10.1017/dmp.2020.221
 
 ## Languages {style="text-align: left;"}
 
--   KOR 🇰🇷: Native
+-   KOR🇰🇷: Native
 
--   ENG 🇺🇸 : Intermediate
+-   ENG🇺🇸 : Intermediate
 
--   CHN 🇨🇳: Intermediate
+-   CHN🇨🇳: Intermediate
 
--   FRE 🇫🇷: Beginner
+-   FRE🇫🇷: Beginner
 
-## Education
+## Education {style="text-align: left;"}
 
 -   MPH, Graduate School of Public Health, Seoul National University
 
 -   BS, Chinese language and literature, Konkuk University
 
-## Experience
+## Experience {style="text-align: left;"}
 
 -   **Comento** \| Mentor \| Sept 2022 - present
 

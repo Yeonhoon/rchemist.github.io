@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="JYH">
-<meta name="dcterms.date" content="2021-01-01">
+<meta name="dcterms.date" content="2023-04-18">
 <meta name="description" content="ggalluvial을 통한 Sankey plot 그리기">
 
-<title>Rchemist - Sankey plot</title>
+<title>Rchemist - Sankey plot 그리기</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -179,7 +179,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Sankey plot</h1>
+      <h1 class="title">Sankey plot 그리기</h1>
                   <div>
         <div class="description">
           <code>ggalluvial</code>을 통한 Sankey plot 그리기
@@ -205,7 +205,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 1, 2021</p>
+        <p class="date">April 18, 2023</p>
       </div>
     </div>
     
@@ -221,8 +221,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#wide" id="toc-wide" class="nav-link active" data-scroll-target="#wide">Wide</a></li>
-  <li><a href="#long" id="toc-long" class="nav-link" data-scroll-target="#long">Long</a></li>
+  <li><a href="#인트로" id="toc-인트로" class="nav-link active" data-scroll-target="#인트로">인트로</a></li>
+  <li><a href="#wide-데이터로-sankey-plot-그리기" id="toc-wide-데이터로-sankey-plot-그리기" class="nav-link" data-scroll-target="#wide-데이터로-sankey-plot-그리기">Wide 데이터로 Sankey plot 그리기</a></li>
+  <li><a href="#long-데이터로-sankey-plot-그리기" id="toc-long-데이터로-sankey-plot-그리기" class="nav-link" data-scroll-target="#long-데이터로-sankey-plot-그리기">Long 데이터로 Sankey plot 그리기</a></li>
   <li><a href="#참고자료" id="toc-참고자료" class="nav-link" data-scroll-target="#참고자료">참고자료</a></li>
   </ul>
 </nav>
@@ -233,14 +234,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<p>Sankey(생키) diagram라고도 하는 Sankey plot은 시스템에서 서로 다른 노드 간의 양이나 에너지 흐름을 시각화하는 다이어그램의 유형 중 하나입니다. 프로세스 또는 시스템 내에서 에너지, 재료 또는 돈과 같은 자원의 분배, 변환 또는 보존을 설명하는 데 특히 유용합니다. 다이어그램에서 노드 간 화살표 또는 링크의 너비는 흐름 양에 비례하므로 여러 흐름의 상대적 크기를 쉽게 비교할 수 있습니다.<br>
+<section id="인트로" class="level2">
+<h2 class="anchored" data-anchor-id="인트로">인트로</h2>
+<p>Sankey(생키) diagram라고도 하는 Sankey plot은 범주형 데이터의 분배, 변환 또는 보존을 설명하는 데 활용되는 그래프 중 하나입니다. 그래프에서 노드 간 화살표 또는 링크의 너비는 흐름 양에 비례하므로 여러 흐름의 상대적 크기를 쉽게 비교할 수 있습니다.<br>
 <br>
 쉽게 말해, Sankey plot은 데이터의 변화 양상이나 응답 빈도의 양상 등을 확인할 수 있는 그래프입니다.</p>
 <p>R에서 Sankey plot을 시각화할 수 있는 패키지 중 하나는 <code>ggalluvial</code> 입니다. <code>gg</code>가 붙은 것에서 알 수 있듯이, <code>ggplot2</code> 의 확장 패키지 중 하나입니다.</p>
 <p>저 같은 경우, 시간의 흐름에 따른 범주의 양상을 Sankey plot으로 시각화한 경험이 있습니다. 예를 들면 첫 번째 건강검진부터 세 번째 건강검진 간 비만인 사람들의 분포를 시각화하는 것이죠.</p>
 <p><code>ggalluvial</code>은 Sankey plot을 그리기 위해 wide 데이터와 long 데이터를 모두 사용할 수 있습니다.</p>
-<section id="wide" class="level2">
-<h2 class="anchored" data-anchor-id="wide">Wide</h2>
+</section>
+<section id="wide-데이터로-sankey-plot-그리기" class="level2">
+<h2 class="anchored" data-anchor-id="wide-데이터로-sankey-plot-그리기">Wide 데이터로 Sankey plot 그리기</h2>
 <p>wide 데이터는 쉽게 말해 여러 가지 column이 옆으로 붙어있는 데이터를 의미합니다.</p>
 <p>Sankey plot을 그리기 위한 wide 데이터에서는 하나의 열에 범주가 와야 하고, 범주의 조합에 해당하는 빈도(Frequency) 열이 와야 합니다.</p>
 <p>예를 들어 <code>HairEyeColor</code> 데이터를 살펴보겠습니다.</p>
@@ -274,8 +278,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><code>geom_alluvial()</code>은 Sankey plot에서 노드를 그려주고, <code>geom_stratum()</code>은 각 열의 범주를 나타내는 막대를 그려줍니다.</p>
 <p>성별 * 머리 색상 * 눈동자 색상에 따른 범주의 분포를 보여주는 그래프가 완성되었습니다.</p>
 </section>
-<section id="long" class="level2">
-<h2 class="anchored" data-anchor-id="long">Long</h2>
+<section id="long-데이터로-sankey-plot-그리기" class="level2">
+<h2 class="anchored" data-anchor-id="long-데이터로-sankey-plot-그리기">Long 데이터로 Sankey plot 그리기</h2>
 <p>이번에는 긴 데이터를 활용해 Sankey plot을 그려보겠습니다. 긴 데이터는 열들의 조합에 따른 범주를 나타내는 넓은 데이터와 달리, 하나의 행이 보통 하나의 경우를 의미합니다. 긴 데이터는 주로 공통된 ID, 그룹 별 값에 따른 데이터를 보여줍니다.</p>
 <p>예를 들어보겠습니다. <code>majors</code>라는 데이터를 보면 <code>student</code> 라고 하는 학생 ID가 1번부터 15번 까지 있습니다. 또한 <code>semester</code>는 1학기부터 15학기까지 있는데, 각 학생들의 학기별 <code>curriculum</code>에 대한 데이터를 보여주고 있습니다.</p>
 <div class="cell">

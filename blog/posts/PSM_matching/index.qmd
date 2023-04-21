@@ -2,8 +2,9 @@
 title: "성향점수 매칭 (PSM)"
 description: "R을 활용한 성향점수 매칭하는 방법"
 author: "JYH"
-categories: [R, PSM, matchit]
+categories: [R, PSM, matchit, cobalt]
 date: "2023-04-19"
+image: "https://kosukeimai.github.io/MatchIt/reference/figures/logo.png"
 ---
 
 ```{r setup, include=FALSE}
@@ -11,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(MatchIt)
 library(cobalt)
 ```
+
 성향점수 매칭 (Propensity Score Matching,PSM) 은 관찰 연구에서 사용되는 통계기법 중 하나로서, 무작위 대조군 연구 (Randomized control trials, RCT)가 불가능할 때 치료제나 중재(intervention)의 효과를 평가하기 위해 사용됩니다. 
 
 ::: {.callout-note}
@@ -50,15 +52,15 @@ lalonde 데이터의 변수는 다음과 같이 구성되어있습니다.
 - `nodegree`: 고등학교 미졸업 여부 (0:졸업, 1: 미졸업)
 - `re74`, `re75`, `re78`: 1974, 1975, 1978년 연간소득($)
 
-PSM은 크게 `계획 - 매칭 - 평가` 세 단계로 구분되는데, 이들 각각에 대해 살펴보도록 하겠습니다. 
+PSM은 크게 `계획` `매칭` `평가` 세 단계로 구분되는데, 이들 각각에 대해 살펴보도록 하겠습니다. 
 
 ## 1. 계획
 계획단계는 treatment에 대해 아래의 내용을 선택하는 단계입니다.
 
-- 평가될 효과(effect)의 유형
-  - total effect
-  - conditional effect
-  - marginal effect
+- 측정될 효과(effect)
+  어떤 변수의 효과를 평가할 것인지 결정해야 합니다. 예를 들어서 특정 약물의 사용 여부에 따른 환자들의 질병 발생이나 사망에 미치는 영향을 분석하고자 할 때, 
+  특정 약물의 사용이라는 변수를 기준으로 층화하여 매칭을 하는 것이 필요합니다.
+
 - 목표 대상 (target population)
   목표 대상이란 연구 결과를 적용하고 싶은 대상을 의미합니다. 일반적으로 랜덤 샘플링한 대상에게 연구 결과를 적용하는데, 만약 샘플이 랜덤하지 않다면 목표 대상을 설정하기 어렵습니다.
   - Average treatment effect in the population (ATE): 목표 대상에 있는 모든 대상들에 대한 치료제의 평균 효과
@@ -83,15 +85,33 @@ PSM 이전의 treat과 control 간의 불균형을 확인할 수 있는 지표�
 
 NN 방법을 통해 각 treated 데이터는 가장 가까운 성향점수를 갖는 control 데이터와 짝지어게 됩니다. 짝지어지지 못한 데이터들은 매칭되지 않은 것으로 간주되어 추후 분석에서 제외됩니다.
 ```{r}
-m1 <- matchit(treat ~ age + educ + race + married + nodegree + re74 + re75, data = lalonde, method="nearest", distance = "glm")
+m1 <- matchit(treat ~ age + educ + race + married + nodegree + re74 + re75, 
+              data = lalonde, 
+              distance = "glm",
+              method="nearest")
 m1
 ```
 
-`matchit`을 통해 만들어진 `m1` 객체의 핵심은 weights(매칭 가중치), subclass (매칭 쌍), distance (성향점수 평가), 그리고 match.matrix (treat에 매칭된 control 데이터)입니다.
-## matching 방법 (`method`)
-- nearest
-- optimal
+`matchit()` 에 사용되는 인자들은 크게 다음과 같습니다.
 
+- distance: 치료군과 대조군 간의 거리를 측정하기 위한 방법. 기본값은 `glm` 입니다. 그 외에 마할라노비스 거리(mahalanobis), 유클리드 거리 등이 올 수 있습니다.
+- methods: 매칭 방법입니다. 대표적으로 `nearest`, `optimal` 등이 있습니다. 
+- replace: 매칭 시 한 번 매칭된 대조군을 다른 치료군과의 매칭에도 사용할 지 여부를 결정합니다.
+- caliper: 치료군과 대조군 간 매칭을 할 때 허용되는 차이를 입력합니다. 통상적으로 0.2가 많이 사용됩니다.
+- ratio: 치료군과 대조군 간의 매칭 비율. 2이면 1:2 매칭, 3이면 1:3 매칭이 진행됩니다.
+
+`matchit`을 통해 만들어진 `m1` 객체의 핵심은 weights(매칭 가중치), subclass (매칭 쌍), distance (성향점수 평가), 그리고 match.matrix (treat에 매칭된 control 데이터)입니다.
+
+## matching 방법 (`method`)
+
+- nearest: 최근접 이웃 매칭은 매칭 시 가장 많이 활용되는 방법으로, greedy 매칭이라고도 불립니다. 이는 치료군과 대조군의 쌍이 어떻게 매칭됐는지 또는 어떻게 매칭 될지 참고하지 않은 채로 매칭을 진행하기 때문입니다.
+따라서 최근접 이웃 매칭은 최적화와 거리가 먼 방법입니다. 이름에서도 알 수 있듯이, 각 치료군과 가장 가까운 거리에 있는 대조군의 데이터를 짝짓게 됩니다. 이 때 거리가 가깝다는 것은 기본적으로 성향점수의 차이를 바탕으로 판단합니다. 즉 치료군과 통제군 간의 성향점수의 차이가 가장 적은 것들을 매칭하게 됩니다.
+- optimal: optimal pair 매칭은 optimal 매칭이라고 줄여서 부르는데, 각 치료군과 하나 이상의 대조군을 짝지으려 한다는 점에서 nearest neighbor 매칭과 굉장히 유사합니다. 그러나 최근접 이웃 매칭과 달리,
+greedy 하지 않고 optimal 하다는 점에서 차이가 있습니다. 이 때 optimal 하다는 것은 각 쌍의 간격의 절댓갑의 합을 최적화하는 것입니다.
+
+::: {.callout-note}
+이 외에도 `full`, `genetic`, `exact` 등의 매칭방법이 있습니다. 해당 매칭 방법들은 추후 작성할 예정입니다.
+:::
 
 ## 3. 평가
 매칭 이후에는 매칭이 잘 되었는지 평가가 필요합니다. 만약 매칭을 한 이후에도 공변량의 균형이 맞지 않다면 매칭은 실패한 것으로 간주되고 다른 매칭을 시도해야 합니다.
@@ -118,6 +138,48 @@ love.plot(m1,
 
 ```
 
-위의 그래프를 살펴보면, 매칭을 통해 adjusted된 공변량들의 SMD가 0.1 이상인 경우가 꽤 많은 것을 알 수 있습니다. 즉 매칭이 제대로 이루어지지 않은 것이죠.
+위의 그래프를 살펴보면, 매칭을 통해 adjusted된 공변량들의 SMD(검은 점)가 점선으로 나타난 0.1 이상인 경우가 꽤 많은 것을 알 수 있습니다. 즉 매칭이 제대로 이루어지지 않은 것이죠.
+이럴 경우 다른 방법으로 매칭을 시도해, 치료군과 대조군을 올바르게 매칭해주는 것이 필요합니다.
+
+```{r}
+m2 <- matchit(treat ~ age + educ + race + married + nodegree + re74 + re75, 
+              data = lalonde, 
+              distance = "glm",
+              method="nearest",
+              caliper=.2
+              )
+love.plot(m2, 
+          abs=T, 
+          thresholds = 0.1,
+          drop.distance = T,
+          binary='std',
+          position='bottom',
+          var.order = 'unadjusted',
+          # var.names = new.name,
+          size = 2,
+          shapes=c('circle filled','circle')
+          )
+```
+
+`caliper`를 0.2로 설정하여 매칭 범위를 넓혔습니다. 다시 말해 성향점수의 차이가 0.2보다 작은 경우는 매칭을 모두 허용했다는 뜻입니다.
+그 결과, 비록 일부 변수는 여전히 SMD가 0.1 이상이지만, 첫 번째 매칭보다 SMD가 많이 줄어든 것을 알 수 있습니다.
+
+
+## 활용
+`MatchIt을` 통해 매칭이 잘 이루어졌다면 `match.data()` 또는 `get_matches()`를 이용해 매칭된 데이터를 데이터프레임으로 만들어줄 수 있습니다.
+이후 회귀분석, 생존분석 등 추가 모델링 작업을 진행해주면 됩니다.
+
+::: {.callout-note}
+
+`match.data()`과 `get_matches()` 모두 매칭 이후 거리(distance), 가중치(weights), 하위그룹(subclass) 변수들이 추가된 데이터프레임을 반환합니다.\
+일반적으로 `get_matches()`는 매칭 시 대조군을 재사용했을 때(`replace=TRUE`) 활용하고, 나머지 경우에는 `match.data()`를 사용합니다.
+
+:::
+
+```{r}
+matched_df <- match.data(m1)
+```
+
 ## 참고자료
 - https://cran.r-project.org/web/packages/MatchIt/vignettes/MatchIt.html
+- https://ngreifer.github.io/cobalt/

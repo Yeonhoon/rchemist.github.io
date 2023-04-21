@@ -5,11 +5,15 @@
     font-style: normal;
 }
 
-@import url("https://fonts.googleapis.com/css?family=Fira+Code")
+@import url("https://fonts.googleapis.com/css?family=Fira+Code");
 
 code {
   color: hsl(210,8%,15%);
   border-radius: 5px;
+}
+
+div.tab-pane > p {
+  display: inline;
 }
 
 .thumnail-image{

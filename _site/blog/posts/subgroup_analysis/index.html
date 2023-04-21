@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="JYH">
+<meta name="dcterms.date" content="2023-04-22">
+<meta name="description" content="R을 활용한 하위그룹 분석">
+
+<title>Rchemist - Subgroup analysis (feat. forester)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+<link href="../../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Rchemist</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"><i class="bi bi-house" role="img">
+</i> 
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html"><i class="bi bi-file-person" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../gallery/index.html"><i class="bi bi-sliders2" role="img">
+</i> 
+ <span class="menu-text">Gallery</span></a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Subgroup analysis (feat. forester)</h1>
+                  <div>
+        <div class="description">
+          R을 활용한 하위그룹 분석
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">Subgroup analysis</div>
+                <div class="quarto-category">Publish</div>
+                <div class="quarto-category">forester</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>JYH </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 22, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#인트로" id="toc-인트로" class="nav-link active" data-scroll-target="#인트로">인트로</a></li>
+  <li><a href="#준비" id="toc-준비" class="nav-link" data-scroll-target="#준비">준비</a></li>
+  <li><a href="#회귀식-만들기" id="toc-회귀식-만들기" class="nav-link" data-scroll-target="#회귀식-만들기">회귀식 만들기</a></li>
+  <li><a href="#subgroup-analysis" id="toc-subgroup-analysis" class="nav-link" data-scroll-target="#subgroup-analysis">Subgroup analysis</a></li>
+  <li><a href="#시각화" id="toc-시각화" class="nav-link" data-scroll-target="#시각화">시각화</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="인트로" class="level2">
+<h2 class="anchored" data-anchor-id="인트로">인트로</h2>
+<p>Subgroup analysis이란 치료군-대조군 연구에서 특정 약물의 사용에 따른 임상적 결과 (질병의 발생, 사망 등)를 비교하고자 할 때, 그 효과가 과연 하위집단(e.g.&nbsp;성별, 수술 여부) 간에는 어떻게 나타나는지, 그리고 그 하위그룹 변수와 약물 사용 변수 간의 상호작용이 있는지 분석하는 방법입니다.</p>
+<p>이번 포스트에서는 R에서 하위집단 분석을 수행하는 방법에 대해 살펴보겠습니다.</p>
+</section>
+<section id="준비" class="level2">
+<h2 class="anchored" data-anchor-id="준비">준비</h2>
+<p>Subgroup analysis를 수행하기 위해 필요한 패키지는 <code>Publish</code> 입니다. Subgroup anlysis 예제는 Publish 패키지에 내장된 <code>traceR</code> 데이터를 사용하도록 하겠습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(Publish)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(survival)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(data.table)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(traceR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>traceR 의 변수는 다음과 같습니다.</p>
+<ul>
+<li><code>weight</code>: 체중(kg)</li>
+<li><code>height</code>: 키(m)</li>
+<li><code>abdominalCircumference</code>: 복부둘레(cm)</li>
+<li><code>seCreatinine</code>: 세럼 크레아티닌 (mmol/L)</li>
+<li><code>wallMotionIndex</code>: 좌심실 기능 (0: 최악, 2: 정상)</li>
+<li><code>observationTime</code>: 관찰기간</li>
+<li><code>age</code>: 나이(연)</li>
+<li><code>sex</code>: 성별(0: 여성, 1: 남성)</li>
+<li><code>smoking</code>: 흡연 (0: 핀 적 없음, 1: 과거, 2: 현재)</li>
+<li><code>dead</code>: 사망(0: 생존, 1: 사망)</li>
+<li><code>treatment</code>: 위약 또는 치료제(trandolapril: 고혈압 치료제)</li>
+</ul>
+</section>
+<section id="회귀식-만들기" class="level2">
+<h2 class="anchored" data-anchor-id="회귀식-만들기">회귀식 만들기</h2>
+<p>우선 콕스 회귀식을 하나 만들어주겠습니다.</p>
+<p>과연 치료제가 사망을 줄일 수 있는지 확인해보도록 하겠습니다. 관찰시간 변수는 <code>observationTime</code>, 결과변수는 <code>dead</code>, 그리고 중재(intervention) 변수는 <code>treatment</code> 입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(observationTime, dead<span class="sc">==</span><span class="dv">1</span>) <span class="sc">~</span> treatment, <span class="at">data=</span>traceR)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">publish</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Variable        Units HazardRatio       CI.95  p-value 
+ treatment      placebo         Ref                      
+           trandolapril        0.89 [0.79;0.99]   0.0313 </code></pre>
+</div>
+</div>
+<p>결과를 봤을 때, 치료제를 사용한 집단의 Hazard ratio (HR)가 0.887 (95% CI 0.795-0.989) 로 나타났습니다. 즉, 치료제를 투여받은 집단이 그렇지 않은 집단에 비해 사망위험이 감소하는 경향이 있다고 해석할 수 있습니다.</p>
+</section>
+<section id="subgroup-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="subgroup-analysis">Subgroup analysis</h2>
+<p>위의 결과에서 치료제가 사망률을 낮추는 효과가 있는 것으로 나타났죠. 이제 하위 집단을 대상으로, 과연 이 치료제가 하위 집단별로 상호작용을 하는지, 즉 하위집단별로 치료제의 효과가 다르게 나타나는지 확인해보겠습니다.</p>
+<p>Subgroup analysis를 위한 함수는 <code>sugroupAnalysis()</code>입니다. 이 함수는 로지스틱 회귀분석 또는 콕스 회귀분석처럼 결과가 0과 1로 나뉘는 변수를 대상으로 수행할 수 있습니다.</p>
+<p>traceR의 데이터를 바탕으로 하위 집단들을 생성해주겠습니다. 일반적으로 하위집단은 두 개의 범주를 갖습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setDT</span>(traceR) <span class="co"># data.table로 변경</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>traceR[,<span class="st">`</span><span class="at">:=</span><span class="st">`</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">age_2 =</span> <span class="fu">fifelse</span>(age <span class="sc">&lt;</span> <span class="dv">68</span>, <span class="st">"under68"</span>,<span class="st">"over68"</span>) <span class="sc">|&gt;</span> <span class="fu">as.factor</span>(),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">wmi_2 =</span> <span class="fu">fifelse</span>(wallMotionIndex <span class="sc">&lt;</span> <span class="fl">0.9</span>, <span class="st">"bad"</span>, <span class="st">"good"</span>) <span class="sc">|&gt;</span> <span class="fu">as.factor</span>(),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">abd_2 =</span> <span class="fu">fifelse</span>(abdominalCircumference <span class="sc">&gt;=</span> <span class="dv">95</span>, <span class="st">"fat"</span>, <span class="st">"slim"</span>) <span class="sc">|&gt;</span> <span class="fu">as.factor</span>(),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">sex =</span> <span class="fu">factor</span>(sex, <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"female"</span>,<span class="st">"male"</span>))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>traceR에 있는 데이터를 바탕으로 하위집단 세 가지를 추가했습니다.</p>
+<ul>
+<li><code>age_2</code>: 나이의 평균인 68세보다 낮은 경우와 그렇지 않은 경우</li>
+<li><code>wmi_2</code>: <code>wallMotionIndex</code>가 0.9 미만인 경우 bad, 그렇지 않으면 good</li>
+<li><code>abd_2</code>: 복부 둘레가 95cm 이상이면 fat, 그렇지 않으면 slim</li>
+</ul>
+<p>여기에 <code>sex</code> 까지 더해 총 4개의 하위집단을 사용하겠습니다. 이 때 주의해야 할 것은 모든 하위집단은 반드시 <strong><code>factor</code>로 되어있어야</strong> 한다는 것입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>subgroups <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sex"</span>, <span class="st">"age_2"</span>, <span class="st">"wmi_2"</span>, <span class="st">"abd_2"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sub_fit <span class="ot">&lt;-</span> <span class="fu">subgroupAnalysis</span>(fit, </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> traceR,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">treatment =</span> <span class="st">"treatment"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">subgroups =</span> subgroups)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>sub_fit_tbl <span class="ot">&lt;-</span> <span class="fu">copy</span>(sub_fit) <span class="sc">|&gt;</span> <span class="fu">as.data.table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>subgroup analysis 결과가 나왔습니다. 이제 이 표를 <code>gt()</code>를 이용해 보기 좋게끔 변경해주도록 하겠습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sub_fit_tbl[,<span class="st">`</span><span class="at">:=</span><span class="st">`</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">hr_ci =</span> <span class="fu">paste0</span>(<span class="fu">format</span>(<span class="fu">round</span>(HazardRatio,<span class="dv">2</span>),<span class="at">nsmall=</span><span class="dv">2</span>), </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                                <span class="st">' ('</span>, <span class="fu">format</span>(<span class="fu">round</span>(Lower,<span class="dv">2</span>),<span class="at">nsmall=</span><span class="dv">2</span>), <span class="st">'-'</span>, </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">format</span>(<span class="fu">round</span>(Upper,<span class="dv">2</span>),<span class="at">nsmall=</span><span class="dv">2</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                                <span class="st">')'</span>),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">control =</span> <span class="fu">paste0</span>(event_placebo,<span class="st">'/'</span>,sample_placebo),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">case =</span> <span class="fu">paste0</span>(event_trandolapril,<span class="st">'/'</span>,sample_trandolapril))]</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>sub_fit_tbl[,.(subgroups, level, case, control, hr_ci, pinteraction)] <span class="sc">|&gt;</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(subgroups) <span class="sc">|&gt;</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()  <span class="sc">|&gt;</span> </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">level =</span> <span class="fu">md</span>(<span class="st">"**Subgroup**"</span>),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">case =</span> <span class="fu">md</span>(<span class="st">"**Case**"</span>),</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">md</span>(<span class="st">"**Control**"</span>),</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">hr_ci =</span> <span class="fu">md</span>(<span class="st">"**HR (95% CI)**"</span>),</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">pinteraction =</span> <span class="fu">md</span>(<span class="st">"***P* for interaction**"</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">column =</span> pinteraction,</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimal =</span> <span class="dv">4</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_align</span>(</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">align=</span><span class="st">"center"</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="sc">-</span>level</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_align</span>(</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="st">"left"</span>,</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> level</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(<span class="fu">cell_text</span>(<span class="at">weight=</span><span class="st">"bold"</span>)),</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_row_groups</span>()</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="pcjiuomilg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#pcjiuomilg table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#pcjiuomilg thead, #pcjiuomilg tbody, #pcjiuomilg tfoot, #pcjiuomilg tr, #pcjiuomilg td, #pcjiuomilg th {
+  border-style: none;
+}
+
+#pcjiuomilg p {
+  margin: 0;
+  padding: 0;
+}
+
+#pcjiuomilg .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#pcjiuomilg .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#pcjiuomilg .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#pcjiuomilg .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#pcjiuomilg .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#pcjiuomilg .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pcjiuomilg .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#pcjiuomilg .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#pcjiuomilg .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#pcjiuomilg .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#pcjiuomilg .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#pcjiuomilg .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#pcjiuomilg .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#pcjiuomilg .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#pcjiuomilg .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#pcjiuomilg .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#pcjiuomilg .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#pcjiuomilg .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#pcjiuomilg .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pcjiuomilg .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#pcjiuomilg .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#pcjiuomilg .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#pcjiuomilg .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pcjiuomilg .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#pcjiuomilg .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#pcjiuomilg .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pcjiuomilg .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pcjiuomilg .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#pcjiuomilg .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pcjiuomilg .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#pcjiuomilg .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pcjiuomilg .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#pcjiuomilg .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pcjiuomilg .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#pcjiuomilg .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pcjiuomilg .gt_left {
+  text-align: left;
+}
+
+#pcjiuomilg .gt_center {
+  text-align: center;
+}
+
+#pcjiuomilg .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#pcjiuomilg .gt_font_normal {
+  font-weight: normal;
+}
+
+#pcjiuomilg .gt_font_bold {
+  font-weight: bold;
+}
+
+#pcjiuomilg .gt_font_italic {
+  font-style: italic;
+}
+
+#pcjiuomilg .gt_super {
+  font-size: 65%;
+}
+
+#pcjiuomilg .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#pcjiuomilg .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#pcjiuomilg .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#pcjiuomilg .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#pcjiuomilg .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#pcjiuomilg .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#pcjiuomilg .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Subgroup</strong>"><strong>Subgroup</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Case</strong>"><strong>Case</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Control</strong>"><strong>Control</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>HR (95% CI)</strong>"><strong>HR (95% CI)</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong><em>P</em> for interaction</strong>"><strong><em>P</em> for interaction</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr class="gt_group_heading_row">
+      <th colspan="5" class="gt_group_heading" style="font-weight: bold;" scope="colgroup" id="sex">sex</th>
+    </tr>
+    <tr class="gt_row_group_first"><td headers="sex  level" class="gt_row gt_left">female</td>
+<td headers="sex  case" class="gt_row gt_center">183/249</td>
+<td headers="sex  control" class="gt_row gt_center">199/252</td>
+<td headers="sex  hr_ci" class="gt_row gt_center">0.83 (0.67-1.01)</td>
+<td headers="sex  pinteraction" class="gt_row gt_center">0.4077</td></tr>
+    <tr><td headers="sex  level" class="gt_row gt_left">male</td>
+<td headers="sex  case" class="gt_row gt_center">448/627</td>
+<td headers="sex  control" class="gt_row gt_center">453/621</td>
+<td headers="sex  hr_ci" class="gt_row gt_center">0.91 (0.80-1.04)</td>
+<td headers="sex  pinteraction" class="gt_row gt_center">0.4077</td></tr>
+    <tr class="gt_group_heading_row">
+      <th colspan="5" class="gt_group_heading" style="font-weight: bold;" scope="colgroup" id="age_2">age_2</th>
+    </tr>
+    <tr class="gt_row_group_first"><td headers="age_2  level" class="gt_row gt_left">over68</td>
+<td headers="age_2  case" class="gt_row gt_center">422/493</td>
+<td headers="age_2  control" class="gt_row gt_center">427/476</td>
+<td headers="age_2  hr_ci" class="gt_row gt_center">0.87 (0.76-0.99)</td>
+<td headers="age_2  pinteraction" class="gt_row gt_center">0.9324</td></tr>
+    <tr><td headers="age_2  level" class="gt_row gt_left">under68</td>
+<td headers="age_2  case" class="gt_row gt_center">209/383</td>
+<td headers="age_2  control" class="gt_row gt_center">225/397</td>
+<td headers="age_2  hr_ci" class="gt_row gt_center">0.88 (0.73-1.06)</td>
+<td headers="age_2  pinteraction" class="gt_row gt_center">0.9324</td></tr>
+    <tr class="gt_group_heading_row">
+      <th colspan="5" class="gt_group_heading" style="font-weight: bold;" scope="colgroup" id="wmi_2">wmi_2</th>
+    </tr>
+    <tr class="gt_row_group_first"><td headers="wmi_2  level" class="gt_row gt_left">bad</td>
+<td headers="wmi_2  case" class="gt_row gt_center">133/146</td>
+<td headers="wmi_2  control" class="gt_row gt_center">148/161</td>
+<td headers="wmi_2  hr_ci" class="gt_row gt_center">0.87 (0.69-1.10)</td>
+<td headers="wmi_2  pinteraction" class="gt_row gt_center">0.8484</td></tr>
+    <tr><td headers="wmi_2  level" class="gt_row gt_left">good</td>
+<td headers="wmi_2  case" class="gt_row gt_center">498/730</td>
+<td headers="wmi_2  control" class="gt_row gt_center">504/712</td>
+<td headers="wmi_2  hr_ci" class="gt_row gt_center">0.90 (0.79-1.02)</td>
+<td headers="wmi_2  pinteraction" class="gt_row gt_center">0.8484</td></tr>
+    <tr class="gt_group_heading_row">
+      <th colspan="5" class="gt_group_heading" style="font-weight: bold;" scope="colgroup" id="abd_2">abd_2</th>
+    </tr>
+    <tr class="gt_row_group_first"><td headers="abd_2  level" class="gt_row gt_left">fat</td>
+<td headers="abd_2  case" class="gt_row gt_center">319/435</td>
+<td headers="abd_2  control" class="gt_row gt_center">296/403</td>
+<td headers="abd_2  hr_ci" class="gt_row gt_center">0.93 (0.79-1.09)</td>
+<td headers="abd_2  pinteraction" class="gt_row gt_center">0.3287</td></tr>
+    <tr><td headers="abd_2  level" class="gt_row gt_left">slim</td>
+<td headers="abd_2  case" class="gt_row gt_center">274/389</td>
+<td headers="abd_2  control" class="gt_row gt_center">324/427</td>
+<td headers="abd_2  hr_ci" class="gt_row gt_center">0.83 (0.71-0.98)</td>
+<td headers="abd_2  pinteraction" class="gt_row gt_center">0.3287</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>위의 표에서 Case와 Control은 각각 치료군과 대조군의 인원 중 사망한 사람들의 수를 나타냅니다. 또한 위험비가 95% 신뢰구간과 함께 나타나있고, 상호작용의 유의성을 알려주는 p for interaction이 있습니다.<br>
+</p>
+<p>결과를 정리해보면 다음과 같습니다.<br>
+하위집단들의 <strong>상호작용이 유의하지 않은 것</strong>으로 나타났습니다. 왜냐하면 상호작용 p-value를 의미하는 Pinteraction이 하위집단 모두에서 0.5 이상으로 나타났기 때문입니다. 즉, 남녀 할 것 없이, 68세 미만이든 이상이든, 좌심실 기능이 좋든 나쁘든, 뚱뚱하든 날씬하든 모두 치료제가 사망률을 낮춰주었다고 해석할 수 있습니다.</p>
+</section>
+<section id="시각화" class="level2">
+<h2 class="anchored" data-anchor-id="시각화">시각화</h2>
+<p>Subgroup analysis는 표 뿐만 아니라 그래프를 통해 결과를 보여줄 수 있습니다.</p>
+<p style="text-align: center">
+<img src="https://www.researchgate.net/profile/Shweta-Bansal-3/publication/305467160/figure/fig3/AS:613915083948038@1523380170283/Forest-Plot-of-Primary-Outcome-According-to-Subgroups-The-dashed-vertical-line.png" width="80%;&quot;">
+</p>
+<p>위와 같은 그림을 forest plot이라고 부릅니다. forest plot은 meta analysis에서 많이 활용되는 그래프이지만, subgroup analysis에서도 자주 활용되는 그래프입니다. Publish에서 제공되는 함수를 통해 forest plot을 그릴 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotConfidence</span>(<span class="at">x=</span>sub_fit[,<span class="fu">c</span>(<span class="st">"HazardRatio"</span>,<span class="st">"Lower"</span>,<span class="st">"Upper"</span>)],</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">label =</span> sub_fit[,<span class="fu">c</span>(<span class="st">"subgroups"</span>,<span class="st">"level"</span>)],</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">xlab =</span> <span class="st">"Hazard ratio"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">points.cex =</span> <span class="dv">2</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">points.col=</span><span class="st">"darkblue"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>              <span class="co"># arrows.col="darkblue",</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">points.pch=</span><span class="dv">15</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">cex=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>자 그런데 어디가 좀 부족해보입니다. p-value는 나오지도 않고 하니… 뭔가 아쉽죠.</p>
+<p>R에는 subgroup analysis 의 forest plot을 그리기 위한 패키지들이 몇 가지 존재합니다. 저는 그 중에서 <code>forester</code> 패키지를 사용하여 forest plot을 그려보도록 하겠습니다. 참고로 이 패키지는 CRAN에 없기 때문에, github를 통해 다운로드받아야 합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"rdboyes/forester"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(forester)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>이제 <code>forester()</code> 를 이용해 forest plot을 그려보겠습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sub_fit_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["subgroups"],"name":[1],"type":["chr"],"align":["left"]},{"label":["level"],"name":[2],"type":["fct"],"align":["left"]},{"label":["sample_placebo"],"name":[3],"type":["int"],"align":["right"]},{"label":["sample_trandolapril"],"name":[4],"type":["int"],"align":["right"]},{"label":["event_placebo"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["event_trandolapril"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["time_placebo"],"name":[7],"type":["int"],"align":["right"]},{"label":["time_trandolapril"],"name":[8],"type":["int"],"align":["right"]},{"label":["Units"],"name":[9],"type":["chr"],"align":["left"]},{"label":["HazardRatio"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Lower"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["Upper"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["Pvalue"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["pinteraction"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["Missing"],"name":[15],"type":["int"],"align":["right"]},{"label":["hr_ci"],"name":[16],"type":["chr"],"align":["left"]},{"label":["control"],"name":[17],"type":["chr"],"align":["left"]},{"label":["case"],"name":[18],"type":["chr"],"align":["left"]}],"data":[{"1":"sex","2":"female","3":"252","4":"249","5":"199","6":"183","7":"439904","8":"500893","9":"","10":"0.8250790","11":"0.6749718","12":"1.0085685","13":"0.06056075","14":"0.4076925","15":"NA","16":"0.83 (0.67-1.01)","17":"199/252","18":"183/249"},{"1":"sex","2":"male","3":"621","4":"627","5":"453","6":"448","7":"1248682","8":"1374232","9":"","10":"0.9129140","11":"0.8011296","12":"1.0402961","13":"0.17156947","14":"0.4076925","15":"NA","16":"0.91 (0.80-1.04)","17":"453/621","18":"448/627"},{"1":"age_2","2":"over68","3":"476","4":"493","5":"427","6":"422","7":"693134","8":"808488","9":"","10":"0.8675195","11":"0.7582654","12":"0.9925154","13":"0.03851259","14":"0.9324230","15":"NA","16":"0.87 (0.76-0.99)","17":"427/476","18":"422/493"},{"1":"age_2","2":"under68","3":"397","4":"383","5":"225","6":"209","7":"995452","8":"1066637","9":"","10":"0.8762499","11":"0.7258537","12":"1.0578080","13":"0.16912708","14":"0.9324230","15":"NA","16":"0.88 (0.73-1.06)","17":"225/397","18":"209/383"},{"1":"wmi_2","2":"bad","3":"161","4":"146","5":"148","6":"133","7":"183764","8":"199044","9":"","10":"0.8740633","11":"0.6914933","12":"1.1048360","13":"0.26017473","14":"0.8483905","15":"NA","16":"0.87 (0.69-1.10)","17":"148/161","18":"133/146"},{"1":"wmi_2","2":"good","3":"712","4":"730","5":"504","6":"498","7":"1504822","8":"1676081","9":"","10":"0.8969453","11":"0.7924589","12":"1.0152083","13":"0.08523111","14":"0.8483905","15":"NA","16":"0.90 (0.79-1.02)","17":"504/712","18":"498/730"},{"1":"abd_2","2":"fat","3":"403","4":"435","5":"296","6":"319","7":"791326","8":"932423","9":"","10":"0.9301404","11":"0.7940398","12":"1.0895688","13":"0.36960724","14":"0.3287261","15":"95","16":"0.93 (0.79-1.09)","17":"296/403","18":"319/435"},{"1":"abd_2","2":"slim","3":"427","4":"389","5":"324","6":"274","7":"813727","8":"842340","9":"","10":"0.8312816","11":"0.7077444","12":"0.9763822","13":"0.02437690","14":"0.3287261","15":"95","16":"0.83 (0.71-0.98)","17":"324/427","18":"274/389"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forester</span>(<span class="at">left_side_data =</span> sub_fit_tbl[,<span class="fu">c</span>(<span class="st">"subgroups"</span>,<span class="st">"level"</span>, <span class="st">"case"</span>,<span class="st">"control"</span>)],</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">estimate =</span> <span class="fu">as.numeric</span>(sub_fit_tbl[[<span class="st">'HazardRatio'</span>]]),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">ci_low =</span> <span class="fu">as.numeric</span>(sub_fit_tbl<span class="sc">$</span>Lower),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">ci_high=</span> <span class="fu">as.numeric</span>(sub_fit_tbl<span class="sc">$</span>Upper),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">estimate_col_name =</span> <span class="st">"HR (95% CI)"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">estimate_precision =</span><span class="dv">2</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">xlim=</span><span class="fu">c</span>(<span class="fl">0.6</span>,<span class="fl">1.1</span>),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">null_line_at =</span> <span class="dv">1</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">arrows =</span> T,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">arrow_labels=</span><span class="fu">c</span>(<span class="st">'Mortality ↓ '</span>, <span class="st">'Mortality ↑'</span>),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>         )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p style="text-align:center;">
+<img src="forest_plot_1.png" width="75%">
+</p>
+<p>forester()는 Hazard ratio 그래프를 기준으로 왼쪽과 오른쪽에 숫자들이 들어갈 수 있습니다.</p>
+<ul>
+<li><code>left_side_data</code>: 그래프 왼쪽에 들어갈 수치들</li>
+<li><code>right_side_data</code>: 그래프 오른쪽에 들어갈 수치들</li>
+<li><code>estimate</code>: HR 또는 OR</li>
+<li><code>ci_lower</code>: 하위 신뢰구간</li>
+<li><code>ci_upper</code>: 상위 신뢰구간</li>
+<li><code>xlim</code>: 그래프의 x축 범위</li>
+<li><code>null_line_at</code>: 신뢰구간 기준(1) 점선으로 표시</li>
+<li><code>arrows</code>: 그래프의 x축 아래에 텍스트 표시 여부</li>
+<li><code>arrow_labels</code>: 그래프의 x축 아래에 표시할 텍스트</li>
+</ul>
+<p>원래는 estimate, ci_lower, ci_upper를 입력하면 자동으로 그래프 오른쪽에 <code>HR (ci_lower to ci_upper)</code> 형태의 열이 생성됩니다, 만약, <code>right_side_data</code> 값을 입력하는 경우, 그 열이 오른쪽에 들어가게 됩니다. 물론 <code>right_side_data에</code> 값을 준다고 해도 반드시 <code>estimate</code>, <code>ci_lower</code>, <code>ci_upper</code> 값은 입력해야합니다.<br>
+또한 신뢰구간이 <code>xlim</code>에서 설정한 값을 넘어갈 경우 그래프는 화살표로 표시됩니다.</p>
+<p>더 자세한 사항은 <code>?forester</code> 를 참고하시기 바랍니다.</p>
+<p>위의 그래프를 좀더 예쁘게 그리기 위해 하위집단 분석결과 데이터를 바탕으로 직접 데이터프레임을 만들어 그래프를 그리면 더 아름다운 <code>forest plot</code>이 그려보겠습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Subgroups =</span> <span class="fu">c</span>(<span class="st">"Sex"</span>, <span class="st">"  Female"</span>, <span class="st">"  Male"</span>, <span class="st">"Age"</span>, <span class="st">"  &lt;68"</span>, <span class="st">"  ≥68"</span>, <span class="st">"WMI"</span>, <span class="st">"  Bad"</span>,<span class="st">"  Good"</span>, <span class="st">"Abdominal"</span>,<span class="st">"  Fat"</span>, <span class="st">"  Slim"</span>),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Case =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="st">"183/249"</span>, <span class="st">"448/627"</span>, <span class="cn">NA</span>, <span class="st">"422/493"</span>, <span class="st">"209/383"</span>, <span class="cn">NA</span>, <span class="st">"133/146"</span>, <span class="st">"498/730"</span>, <span class="cn">NA</span>, <span class="st">"319/435"</span>, <span class="st">"274/389"</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Control =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="st">"199/252"</span>,<span class="st">"453/621"</span>, <span class="cn">NA</span>, <span class="st">"427/476"</span>, <span class="st">"225/397"</span>, <span class="cn">NA</span>, <span class="st">"148/161   "</span>, <span class="st">"504/712"</span>, <span class="cn">NA</span>, <span class="st">"296/403"</span>, <span class="st">"324/427"</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">HR =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">0.825</span>, <span class="fl">0.913</span>, <span class="cn">NA</span>, <span class="fl">0.868</span>, <span class="fl">0.876</span>, <span class="cn">NA</span>, <span class="fl">0.874</span>, <span class="fl">0.897</span>, <span class="cn">NA</span>, <span class="fl">0.930</span>, <span class="fl">0.831</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ci_low =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">0.675</span>, <span class="fl">0.801</span>, <span class="cn">NA</span>, <span class="fl">0.758</span>, <span class="fl">0.726</span>, <span class="cn">NA</span>, <span class="fl">0.691</span>, <span class="fl">0.792</span>, <span class="cn">NA</span>, <span class="fl">0.794</span>, <span class="fl">0.708</span>),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">ci_high =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.009</span>, <span class="fl">1.040</span>, <span class="cn">NA</span>, <span class="fl">0.993</span>, <span class="fl">1.058</span>, <span class="cn">NA</span>, <span class="fl">1.105</span>, <span class="fl">1.015</span>, <span class="cn">NA</span>, <span class="fl">1.090</span>, <span class="fl">0.976</span>),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">P for interaction</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.4077</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">0.9324</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">0.8484</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">0.3287</span>, <span class="cn">NA</span>, <span class="cn">NA</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>df[<span class="sc">!</span><span class="fu">is.na</span>(HR),<span class="st">`</span><span class="at">   HR (95% CI)</span><span class="st">`</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">paste0</span>(<span class="fu">format</span>(HR,<span class="dv">2</span>), <span class="st">' ('</span>,<span class="fu">format</span>(ci_low,<span class="dv">2</span>),<span class="st">'—'</span>,<span class="fu">format</span>(ci_high,<span class="dv">2</span>),<span class="st">")"</span>)]   </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">forester</span>(</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">left_side_data =</span> df[,<span class="fu">c</span>(<span class="st">"Subgroups"</span>,<span class="st">"Case"</span>,<span class="st">"Control"</span>)],</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">right_side_data =</span> df[,<span class="fu">c</span>(<span class="st">"   HR (95% CI)"</span>,<span class="st">"P for interaction"</span>)],</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate =</span> df<span class="sc">$</span>HR,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">ci_low =</span> <span class="fu">as.numeric</span>(df<span class="sc">$</span>ci_low),</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">ci_high=</span> <span class="fu">as.numeric</span>(df<span class="sc">$</span>ci_high),</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate_precision =</span><span class="dv">2</span>,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim=</span><span class="fu">c</span>(<span class="fl">0.6</span>,<span class="fl">1.1</span>),</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">null_line_at =</span> <span class="dv">1</span>,</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">nudge_x =</span> <span class="dv">1</span>,</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">arrows =</span> T,</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">arrow_labels=</span><span class="fu">c</span>(<span class="st">'Mortality ↓ '</span>, <span class="st">'Mortality ↑'</span>),</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">justify=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>,<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p style="text-align:center;">
+<img src="forest_plot_2.png" width="75%">
+</p>
+<p>forest plot을 그리기 위한 데이터 프레임을 직접 만드는 건 굉장히 번거로운 일이지만, 그만큼 훌륭한 그래프가 그려지기 때문에 나쁘지 않은 것 같습니다. ☺️</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="rchemist0123/giscus-blog" data-repo-id="R_kgDOJBwa8Q" data-category="General" data-category-id="DIC_kwDOJBwa8c4CUbVM" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left"><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:danjang0123@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/danjang0123/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

@@ -7,9 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="JYH">
-<meta name="description" content="성향점수 매칭하는 법">
+<meta name="dcterms.date" content="2023-04-19">
+<meta name="description" content="R을 활용한 성향점수 매칭하는 방법">
 
-<title>Rchemist - PSM in R</title>
+<title>Rchemist - 성향점수 매칭 (PSM)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -178,16 +179,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">PSM in R</h1>
+      <h1 class="title">성향점수 매칭 (PSM)</h1>
                   <div>
         <div class="description">
-          성향점수 매칭하는 법
+          R을 활용한 성향점수 매칭하는 방법
         </div>
       </div>
                           <div class="quarto-categories">
                 <div class="quarto-category">R</div>
                 <div class="quarto-category">PSM</div>
                 <div class="quarto-category">matchit</div>
+                <div class="quarto-category">cobalt</div>
               </div>
                   </div>
   </div>
@@ -202,6 +204,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             </div>
     </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 19, 2023</p>
+      </div>
+    </div>
     
       
     </div>
@@ -217,7 +225,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul>
   <li><a href="#계획" id="toc-계획" class="nav-link active" data-scroll-target="#계획">1. 계획</a></li>
   <li><a href="#매칭" id="toc-매칭" class="nav-link" data-scroll-target="#매칭">2. 매칭</a></li>
+  <li><a href="#matching-방법-method" id="toc-matching-방법-method" class="nav-link" data-scroll-target="#matching-방법-method">matching 방법 (<code>method</code>)</a></li>
   <li><a href="#평가" id="toc-평가" class="nav-link" data-scroll-target="#평가">3. 평가</a></li>
+  <li><a href="#활용" id="toc-활용" class="nav-link" data-scroll-target="#활용">활용</a></li>
+  <li><a href="#참고자료" id="toc-참고자료" class="nav-link" data-scroll-target="#참고자료">참고자료</a></li>
   </ul>
 </nav>
     </div>
@@ -273,23 +284,18 @@ Note
 <li><code>nodegree</code>: 고등학교 미졸업 여부 (0:졸업, 1: 미졸업)</li>
 <li><code>re74</code>, <code>re75</code>, <code>re78</code>: 1974, 1975, 1978년 연간소득($)</li>
 </ul>
-<p>PSM은 크게 <code>계획 - 매칭 - 평가</code> 세 단계로 구분되는데, 이들 각각에 대해 살펴보도록 하겠습니다.</p>
+<p>PSM은 크게 <code>계획</code> <code>매칭</code> <code>평가</code> 세 단계로 구분되는데, 이들 각각에 대해 살펴보도록 하겠습니다.</p>
 <section id="계획" class="level2">
 <h2 class="anchored" data-anchor-id="계획">1. 계획</h2>
 <p>계획단계는 treatment에 대해 아래의 내용을 선택하는 단계입니다.</p>
 <ul>
-<li>평가될 효과(effect)의 유형
-<ul>
-<li>total effect</li>
-<li>conditional effect</li>
-<li>marginal effect</li>
-</ul></li>
-<li>목표 대상 (target population) 목표 대상이란 연구 결과를 적용하고 싶은 대상을 의미합니다. 일반적으로 랜덤 샘플링한 대상에게 연구 결과를 적용하는데, 만약 샘플이 랜덤하지 않다면 목표 대상을 설정하기 어렵습니다.
+<li><p>측정될 효과(effect) 어떤 변수의 효과를 평가할 것인지 결정해야 합니다. 예를 들어서 특정 약물의 사용 여부에 따른 환자들의 질병 발생이나 사망에 미치는 영향을 분석하고자 할 때, 특정 약물의 사용이라는 변수를 기준으로 층화하여 매칭을 하는 것이 필요합니다.</p></li>
+<li><p>목표 대상 (target population) 목표 대상이란 연구 결과를 적용하고 싶은 대상을 의미합니다. 일반적으로 랜덤 샘플링한 대상에게 연구 결과를 적용하는데, 만약 샘플이 랜덤하지 않다면 목표 대상을 설정하기 어렵습니다.</p>
 <ul>
 <li>Average treatment effect in the population (ATE): 목표 대상에 있는 모든 대상들에 대한 치료제의 평균 효과</li>
 <li>Average treatment effect in the treated (ATT): 치료를 실제로 받은 사람들과 비슷한 사람들에 대한 치료제의 평균 효과 대부분의 매칭 방법은 ATT를 평가하는 것이 더 낫지만, 일부 매칭은 ATE도 사용 가능합니다.</li>
 </ul></li>
-<li>균형을 맞출 공변량 (covariates)
+<li><p>균형을 맞출 공변량 (covariates)</p>
 <ul>
 <li>공변량을 선택하는 것은 치료제의 인과관계를 타당하게 해석하기 위해 교란효과를 없애기 위한 확실한 방법이기 때문에 중요합니다. 총 인과를 평가하기 위해서 모든 공변량들은 치료제 사용 이전에 측정이 되어야 합니다. 이상적으로 공변량은 결측값(missingness)이 없어야 합니다.</li>
 </ul></li>
@@ -344,8 +350,11 @@ Discarded       0       0</code></pre>
 <p>이제 매칭을 진행해보겠습니다. 매칭에는 다양한 클래스들과 방법들이 존재합니다. 여기서는 1:1 nearest neighbor (NN)매칭을 통해 성향점수를 계산해보도록 하겠습니다.</p>
 <p>NN 방법을 통해 각 treated 데이터는 가장 가까운 성향점수를 갖는 control 데이터와 짝지어게 됩니다. 짝지어지지 못한 데이터들은 매칭되지 않은 것으로 간주되어 추후 분석에서 제외됩니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">matchit</span>(treat <span class="sc">~</span> age <span class="sc">+</span> educ <span class="sc">+</span> race <span class="sc">+</span> married <span class="sc">+</span> nodegree <span class="sc">+</span> re74 <span class="sc">+</span> re75, <span class="at">data =</span> lalonde, <span class="at">method=</span><span class="st">"nearest"</span>, <span class="at">distance =</span> <span class="st">"glm"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>m1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">matchit</span>(treat <span class="sc">~</span> age <span class="sc">+</span> educ <span class="sc">+</span> race <span class="sc">+</span> married <span class="sc">+</span> nodegree <span class="sc">+</span> re74 <span class="sc">+</span> re75, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> lalonde, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">distance =</span> <span class="st">"glm"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">method=</span><span class="st">"nearest"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>m1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>A matchit object
  - method: 1:1 nearest neighbor matching without replacement
@@ -356,7 +365,35 @@ Discarded       0       0</code></pre>
  - covariates: age, educ, race, married, nodegree, re74, re75</code></pre>
 </div>
 </div>
-<p><code>matchit</code>을 통해 만들어진 <code>m1</code> 객체의 핵심은 weights(매칭 가중치), subclass (매칭 쌍), distance (성향점수 평가), 그리고 match.matrix (treat에 매칭된 control 데이터)입니다. ## matching 방법 (<code>method</code>) - nearest - optimal</p>
+<p><code>matchit()</code> 에 사용되는 인자들은 크게 다음과 같습니다.</p>
+<ul>
+<li>distance: 치료군과 대조군 간의 거리를 측정하기 위한 방법. 기본값은 <code>glm</code> 입니다. 그 외에 마할라노비스 거리(mahalanobis), 유클리드 거리 등이 올 수 있습니다.</li>
+<li>methods: 매칭 방법입니다. 대표적으로 <code>nearest</code>, <code>optimal</code> 등이 있습니다.</li>
+<li>replace: 매칭 시 한 번 매칭된 대조군을 다른 치료군과의 매칭에도 사용할 지 여부를 결정합니다.</li>
+<li>caliper: 치료군과 대조군 간 매칭을 할 때 허용되는 차이를 입력합니다. 통상적으로 0.2가 많이 사용됩니다.</li>
+<li>ratio: 치료군과 대조군 간의 매칭 비율. 2이면 1:2 매칭, 3이면 1:3 매칭이 진행됩니다.</li>
+</ul>
+<p><code>matchit</code>을 통해 만들어진 <code>m1</code> 객체의 핵심은 weights(매칭 가중치), subclass (매칭 쌍), distance (성향점수 평가), 그리고 match.matrix (treat에 매칭된 control 데이터)입니다.</p>
+</section>
+<section id="matching-방법-method" class="level2">
+<h2 class="anchored" data-anchor-id="matching-방법-method">matching 방법 (<code>method</code>)</h2>
+<ul>
+<li>nearest: 최근접 이웃 매칭은 매칭 시 가장 많이 활용되는 방법으로, greedy 매칭이라고도 불립니다. 이는 치료군과 대조군의 쌍이 어떻게 매칭됐는지 또는 어떻게 매칭 될지 참고하지 않은 채로 매칭을 진행하기 때문입니다. 따라서 최근접 이웃 매칭은 최적화와 거리가 먼 방법입니다. 이름에서도 알 수 있듯이, 각 치료군과 가장 가까운 거리에 있는 대조군의 데이터를 짝짓게 됩니다. 이 때 거리가 가깝다는 것은 기본적으로 성향점수의 차이를 바탕으로 판단합니다. 즉 치료군과 통제군 간의 성향점수의 차이가 가장 적은 것들을 매칭하게 됩니다.</li>
+<li>optimal: optimal pair 매칭은 optimal 매칭이라고 줄여서 부르는데, 각 치료군과 하나 이상의 대조군을 짝지으려 한다는 점에서 nearest neighbor 매칭과 굉장히 유사합니다. 그러나 최근접 이웃 매칭과 달리, greedy 하지 않고 optimal 하다는 점에서 차이가 있습니다. 이 때 optimal 하다는 것은 각 쌍의 간격의 절댓갑의 합을 최적화하는 것입니다.</li>
+</ul>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>이 외에도 <code>full</code>, <code>genetic</code>, <code>exact</code> 등의 매칭방법이 있습니다. 해당 매칭 방법들은 추후 작성할 예정입니다.</p>
+</div>
+</div>
 </section>
 <section id="평가" class="level2">
 <h2 class="anchored" data-anchor-id="평가">3. 평가</h2>
@@ -443,7 +480,58 @@ Discarded       0       0</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>위의 그래프를 살펴보면, 매칭을 통해 adjusted된 공변량들의 SMD가 0.1 이상인 경우가 꽤 많은 것을 알 수 있습니다. 즉 매칭이 제대로 이루어지지 않은 것이죠. ## 참고자료 - https://cran.r-project.org/web/packages/MatchIt/vignettes/MatchIt.html</p>
+<p>위의 그래프를 살펴보면, 매칭을 통해 adjusted된 공변량들의 SMD(검은 점)가 점선으로 나타난 0.1 이상인 경우가 꽤 많은 것을 알 수 있습니다. 즉 매칭이 제대로 이루어지지 않은 것이죠. 이럴 경우 다른 방법으로 매칭을 시도해, 치료군과 대조군을 올바르게 매칭해주는 것이 필요합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">matchit</span>(treat <span class="sc">~</span> age <span class="sc">+</span> educ <span class="sc">+</span> race <span class="sc">+</span> married <span class="sc">+</span> nodegree <span class="sc">+</span> re74 <span class="sc">+</span> re75, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> lalonde, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">distance =</span> <span class="st">"glm"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">method=</span><span class="st">"nearest"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">caliper=</span>.<span class="dv">2</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>              )</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">love.plot</span>(m2, </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">abs=</span>T, </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">thresholds =</span> <span class="fl">0.1</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">drop.distance =</span> T,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">binary=</span><span class="st">'std'</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">position=</span><span class="st">'bottom'</span>,</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">var.order =</span> <span class="st">'unadjusted'</span>,</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>          <span class="co"># var.names = new.name,</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="dv">2</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">shapes=</span><span class="fu">c</span>(<span class="st">'circle filled'</span>,<span class="st">'circle'</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>          )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><code>caliper</code>를 0.2로 설정하여 매칭 범위를 넓혔습니다. 다시 말해 성향점수의 차이가 0.2보다 작은 경우는 매칭을 모두 허용했다는 뜻입니다. 그 결과, 비록 일부 변수는 여전히 SMD가 0.1 이상이지만, 첫 번째 매칭보다 SMD가 많이 줄어든 것을 알 수 있습니다.</p>
+</section>
+<section id="활용" class="level2">
+<h2 class="anchored" data-anchor-id="활용">활용</h2>
+<p><code>MatchIt을</code> 통해 매칭이 잘 이루어졌다면 <code>match.data()</code> 또는 <code>get_matches()</code>를 이용해 매칭된 데이터를 데이터프레임으로 만들어줄 수 있습니다. 이후 회귀분석, 생존분석 등 추가 모델링 작업을 진행해주면 됩니다.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>match.data()</code>과 <code>get_matches()</code> 모두 매칭 이후 거리(distance), 가중치(weights), 하위그룹(subclass) 변수들이 추가된 데이터프레임을 반환합니다.<br>
+일반적으로 <code>get_matches()</code>는 매칭 시 대조군을 재사용했을 때(<code>replace=TRUE</code>) 활용하고, 나머지 경우에는 <code>match.data()</code>를 사용합니다.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>matched_df <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="참고자료" class="level2">
+<h2 class="anchored" data-anchor-id="참고자료">참고자료</h2>
+<ul>
+<li>https://cran.r-project.org/web/packages/MatchIt/vignettes/MatchIt.html</li>
+<li>https://ngreifer.github.io/cobalt/</li>
+</ul>
 
 
 </section>
