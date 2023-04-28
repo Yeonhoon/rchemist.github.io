@@ -10,6 +10,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/blog/posts/mlr3_feature_selection/index.html",
       "/blog/posts/subgroup_analysis/index.html",
       "/blog/posts/PSM_matching/index.html",
       "/blog/posts/sankey_plot/index.html",
@@ -43,12 +44,18 @@
       "/blog/posts/data.table_basic/index.html",
       "/blog/posts/2023-01-19-ojs/index.html",
       "/blog/posts/db in shiny/index.html",
+      "/blog/posts/seoul_r_meetup/index.html",
+      "/blog/posts/ggplot_combine_legend/index.html",
       "/blog/posts/ggsurvplot_with_list/index.html"
     ]
   },
   {
     "listing": "/blog/index.html",
     "items": [
+      "/blog/posts/mlr3_feature_selection/index.html",
+      "/blog/posts/subgroup_analysis/index.html",
+      "/blog/posts/PSM_matching/index.html",
+      "/blog/posts/sankey_plot/index.html",
       "/blog/posts/ggplot_correlation_heatmap/index.html",
       "/blog/posts/mice_imputation/index.html",
       "/blog/posts/performace_comparison/index.html",
@@ -79,8 +86,9 @@
       "/blog/posts/data.table_basic/index.html",
       "/blog/posts/2023-01-19-ojs/index.html",
       "/blog/posts/db in shiny/index.html",
-      "/blog/posts/ggsurvplot_with_list/index.html",
-      "/blog/posts/sankey_plot/index.html"
+      "/blog/posts/seoul_r_meetup/index.html",
+      "/blog/posts/ggplot_combine_legend/index.html",
+      "/blog/posts/ggsurvplot_with_list/index.html"
     ]
   }
 ]

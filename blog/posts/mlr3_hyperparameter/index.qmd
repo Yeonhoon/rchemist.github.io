@@ -39,55 +39,228 @@ autoplot(bmr)
 
 # 모델 튜닝하기
 
-mlr3tuning 패키지를 통해 mlr3 생태계에서 하이퍼파라미터 최적화를 수행할 수 있습니다.
+`mlr3tuning` 패키지를 통해 `mlr3` 생태계에서 하이퍼파라미터 최적화를 수행할 수 있습니다.
 
--   TuningInstanceSingleCrit, TuningInstanceMultiCrit: 튜닝 인스턴스를 만들 때 사용.
+-   `TuningInstanceSingleCrit`, `TuningInstanceMultiCrit`: 최적화 결과를 저장하는 튜닝 인스턴스를 만듭니다.
 
--   Tuner: 최적의 알고리즘을 불러오고 설정할 때 사용.
+-   `Tuner`: 최적의 알고리즘을 불러오고 설정할 때 사용.
 
 ## 러너의 학습공간 설정
 
-각각의 러너들은 하이퍼파라미터 세트를 갖고 있습니다.
+각각의 러너들은 search space라고 하는 학습공간을 갖습니다. 이 학습공간은 러너들의 하이퍼파라미터 세트를 설정해줄 수 있는 공간이라고 이해할 수 있습니다.
+
+`e1071` 패키지에 있는 서포트 벡터 머신(SVM)으로 예시를 들어보겠습니다. `sonar` 데이터를 태스크로 활용하여 SVM 모델을 최적화해봅시다.
 
 ```{r}
-lrn_svm <- lrn("classif.svm")
-lrn_svm$param_set
+lrn_svm <- lrn("classif.svm", type="C-classification", kernel = "radial")
 ```
 
-## Hyperparameter tuning {#sec-hyperparameter}
+러너의 파라미터 정보는 `$param_set` 필드에 저장이 됩니다. 여기에는 파라미터의 이름, 클래스의 종류, 레벨, 튜닝 범위 등이 포함되어 있습니다.
 
-```{r eval=FALSE}
-lrn_rf$param_set
-require(paradox)
-lrn_rf <- lrn('classif.ranger',
-              max.depth=to_tune(10,50),
-              mtry = to_tune(5,20),
-              num.trees = to_tune(30,100)
-              )
+```{r}
+as.data.table(lrn_svm$param_set)
+```
 
-# ti: TuningInstance
-instance <- ti(
-  task = task_sonar,
-  learner = lrn_rf,
-  resampling = rsmp('cv',folds=5),
-  measures = msrs(c('classif.sensitivity',
-                    'classif.specificity')),
-  terminator = trm('evals',n_evals=100)
+범위가 무한대인 파라미터의 경우 이론상으로는 모든 경우의 수를 고려할 수 있으나, 이는 현실적으로 불가능하죠. 여기서는 일부 하이퍼파라미터를 설정해주도록 하겠습니다.
+
+숫자형 (numeric) 하이퍼파라미터의 경우 반드시 하한과 상한의 범위를 지정해줘야 합니다. 이 때 `to_tune()` 함수를 이용해주면 됩니다.
+
+```{r}
+lrn_svm = lrn("classif.svm",
+            cost = to_tune(1e-1, 1e5),
+            gamma = to_tune(1e-1, 1),
+            type = "C-classification",
+            kernel = "radial")
+
+lrn_svm
+```
+
+학습공간은 주로 머신러닝 모델 설계자의 경험을 바탕으로 구성되는 것이 일반적입니다. 학습공간과 관련된 자세한 사항은 아래에서 추가적으로 다루도록 하겠습니다.
+
+## 터미네이터 (Terminator)
+
+앞서 말한 것처럼 이론적으로는 각 러너들의 모든 학습공간을 탐색하며 성능이 가장 뛰어난 모델을 만들 수 있습니다. 하지만 수학적으로, 그리고 현실적으로는 모든 학습공간을 탐색하기란 불가능합니다. 따라서 특정 알고리즘의 하이퍼파라미터 튜닝 과정 도중, [**언제 종료할지에 대한 기준**]{.underline} 역시 필요합니다.
+
+`mlr3tuning` 패키지에서는 이것을 `Terminator` 클래스를 통해 구현해놓았습니다. 터미네이터의 종류는 다음과 같습니다.
+
+| 종 류     | 설명                             | 사용예시와 초기 파라미터 설정                                           |
+|-------------------|-----------------------------|-------------------------|
+| 평가 횟수 | 특정 탐색횟수가 되면 종료        | `trm("evals", n_evals= 500)`                                            |
+| 구동 시간 | 특정 탐색시간이 되면 종료        | `trm("run_time", sec= 100)`                                             |
+| 성능 수준 | 특정 성능에 도달하면 종료        | `trm("perf_reached", level= .1)`                                        |
+| 시간      | 특정 현실시간이 되면 종료        | `trm("clock_time", n_evals= 500)`                                       |
+| 정체      | 특정 반복동안 개선이 없으면 종료 | `trm("stagnation", iters= 5, threshold= 1e-5)`                          |
+| 조합      | 여러 터미네이터 조합             | `trm("combo", terminators = list(run_time_100, evals_200), any = TRUE)` |
+
+: `Terminator` 종류
+
+이 중 가장 많이 활용되는 것은 `trm("evals", n_evals= 500)` 와 `trm("run_time", sec= 100)` 입니다. `trm("combo")`는 여러 가지의 터미너이터를 조합하여 종료기준을 설정합니다. `any` 또는 `all`을 통해 여러 조건을 하나만 만족해도 종료할지, 모든 기준을 만족해야 할지 설정할 수 있습니다.
+
+## `ti`: 튜닝 인스턴스
+
+튜닝 인스턴스는 어떤 모델을 최적화하기 위해 필요한 모든 정보를 갖는 일종의 환경입니다. 어떤 데이터를 어떤 알고리즘을 통해 학습시킬 건지, 어떤 검증전략을 통해 어떤 성능을 기준으로 파라미터들을 평가할 것인지 등의 정보를 담게 됩니다.
+
+이러한 튜닝 인스턴스는 `ti()` 함수를 통해 사용자가 직접 설정하거나 `tune()`을 이용해 자동으로 설정할 수 있습니다. 우선은 `ti()`를 통해 튜닝 인스턴스를 설정하는 방법부터 알아보겠습니다.
+
+튜닝 인스턴스에는 학습시킬 데이터를 갖고 있는 태스크(task), 러너(learner), 리샘플링 (resampling), 성능 측정(measure), 그리고 터미네이터(terminator)가 사용됩니다.
+
+```{r}
+resampling = rsmp("cv", folds=3)
+
+measure = msr("classif.acc")
+
+learner = lrn("classif.svm",
+  cost = to_tune(1e-1, 1e5),
+  gamma = to_tune(1e-1, 1),
+  kernel = "radial",
+  type = "C-classification"
 )
+
+terminator = trm("evals")
+
+instance = ti(
+  task = tsk("sonar"),
+  learner = learner,
+  resampling = rsmp("cv", folds=3),
+  measures = measure,
+  terminator = terminator
+)
+
 instance
-tuner = tnr('random_search')
+```
 
+## Tuner
+
+튜닝 인스턴스를 만들었다면, 이제 어떻게 튜닝을 할 것인지를 정해야 합니다. `mlr3tuning` 에는 다양한 `Tuner` 클래스가 존재합니다.
+
+| Tuner                           | Function call          | Package                                               |
+|---------------------|------------------|---------------------------------|
+| Random Search                   | `tnr("random_search")` | [`mlr3tuning`](https://mlr3tuning.mlr-org.com/)       |
+| Grid Search                     | `tnr("grid_search")`   | [`mlr3tuning`](https://mlr3tuning.mlr-org.com/)       |
+| Iterative Racing                | `tnr("irace")`         | [`mlr3tuning`](https://mlr3tuning.mlr-org.com/)       |
+| CMA-ES                          | `tnr("cmaes")`         | [`mlr3tuning`](https://mlr3tuning.mlr-org.com/)       |
+| Bayesian Optimization           | `tnr("mbo")`           | [`mlr3mbo`](https://mlr3mbo.mlr-org.com/)             |
+| Hyperband                       | `tnr("hyperband")`     | [`mlr3hyperband`](https://mlr3hyperband.mlr-org.com/) |
+| Generalized Simulated Annealing | `tnr("gensa")`         | [`mlr3tuning`](https://mlr3tuning.mlr-org.com/)       |
+| Nonlinear Optimization          | `tnr("nloptr")`        | [`mlr3tuning`](https://mlr3tuning.mlr-org.com/)       |
+
+: `mlr3tuning`에서 사용가능한 튜닝 알고리즘
+
+grid search와 random search는 가장 기본적이면서도 많이 사용되는 튜닝 알고리즘입니다. grid search는 학습공간에서 설정한 범위 내의 모든 하이퍼파라미터를 평가하는 반면, random search는 랜덤하게 학습공간을 탐색하여 하이퍼파라미터들을 평가합니다.
+
+grid search와 random search는 나이브(naive)한 알고리즘으로 평가받는데, 이는 하이퍼파라미터들을 평가할 때, 이전 평가값들을 무시하고 새롭게 하이퍼파라미터들을 구성하기 때문입니다.
+
+반면에 Covariance Matrix Adaptation Evolution Strategy (CMA-ES)나 베이지안 최적화와 같은 보다 정교한 알고리즘들은 모델 기반 최적화라고도 볼립니다. 이 알고리즘들은 하이퍼파라미터 평가 과정 중 이전의 평가된 구성으로부터 학습하여 더 좋은 하이퍼파라미터 조합을 더욱 빠르게 찾아냅니다.
+
+앞서 우리가 만들었던 SVM 알고리즘을 튜너를 활용해 하이퍼파라미터를 탐색해보도록 하겠습니다. `tnr()` 함수를 이용해 튜닝을 수행하는데, `batch_size`를 설정하여 한 번에 몇 개의 하이퍼파라미터 구성을 평가할지 설정할 수 있습니다. 이 때 설정해주는 `resolution`의 경우 하이퍼파라미터 조합의 숫자와 연관이 있습니다. 예를 들어 위의 튜닝 인스턴스에서 범위를 정해준 하이퍼파라미터는 두 개 (`cost`, `gamma`)입니다. `resolution`을 5로 설정할 경우 $5^2=25$, 즉 25번의 하이퍼파라미터 조합이 구성되는 것입니다.
+
+```{r}
+tuner = tnr("grid_search", resolution = 5, batch_size = 10)
+tuner
+```
+
+## 튜닝 수행하기
+
+이제 하이퍼파라미터 튜닝을 실시해보겠습니다. `튜너$optimize(튜닝인스턴스)`의 구조로 튜닝을 수행해줍니다.
+
+```{r}
 tuner$optimize(instance)
-
 ```
 
-```{r eval=FALSE}
-lrn_rf$param_set$values <-  instance$result_learner_param_vals[[1]]
+## `tune` 을 이용한 빠른 튜닝
 
-lrn_rf
+앞서 `ti()`를 이용해 튜닝 인스턴스를 설정하고, 터미네이터, 튜너까지 직접 설정해주었는데요. `tune()` 함수를 이용하면 이러한 튜닝 인스턴스 설정 과정을 간소화할 수 있습니다.
+
+```{r}
+learner = lrn("classif.svm",
+  cost  = to_tune(1e-5, 1e5, logscale = TRUE),
+  gamma = to_tune(1e-5, 1e5, logscale = TRUE),
+  kernel = "radial",
+  type = "C-classification"
+)
+
+instance = tune(
+  tuner = tnr("grid_search", resolution = 5, batch_size = 10),
+  task = tsk("sonar"),
+  learner = learner,
+  resampling = rsmp("cv", folds = 3),
+  measures = msr("classif.acc")
+)
+
+instance$result
 ```
 
-### AutoTuner
+## 튜닝 결과 분석하기
+
+ti이나 tune 에 관계없이 하이퍼파라미터 튜닝 이후에는 모든 파라미터 구성이 `$archive` 필드에 포함되어있습니다.
+
+```{r}
+as.data.table(instance$archive)[,.(cost, gamma, classif.acc)]
+```
+
+결과를 보면 25개의 조합별로 성능 점수(`classif.acc`, 정확도)가 나와있습니다. 또한 튜닝결과에서는 하이퍼파라미터의 조합별 성능 뿐만 아니라 에러나 경고, 학습된 시간, 모델 학습 시간 등의 정보도 확인할 수 있습니다.
+
+```{r}
+as.data.table(instance$archive)[,
+  .(timestamp, runtime_learners, errors, warnings)]
+```
+
+마지막으로 하이퍼파라미터 튜닝 결과를 `mlr3viz`를 이용해 시각화할 수 있습니다.
+
+```{r}
+autoplot(instance, type="surface")
+```
+
+cost와 gamma 의 조합에 따른 성능의 정도가 색상으로 나타났습니다. 정확도가 높을수록 히트맵의 색상이 연하다는 것을 확인할 수 있습니다.
+
+## 튜닝된 모델 활용하기
+
+튜닝인스턴스에는 튜닝된 결과에 대한 모든 정보를 포함하고 있습니다. instance에 저장된 최적의 파라미터를 활용하여 새로운 러너의 파라미터로 설정해주겠습니다.
+
+```{r}
+svm_tuned = lrn("classif.svm")
+svm_tuned$param_set$values = instance$result_learner_param_vals
+```
+
+이제 새로운 러너를 학습하고 결과를 예측할 수 있게 되었습니다.
+
+```{r}
+svm_tuned$train(tsk("sonar"))
+svm_tuned$model
+```
+
+# `AutoTuner` 로 튜닝 자동화하기
+
+`mlr3`에서 가장 유용한 기능 중 하나가 `AutoTuner` 입니다. `AutoTuner`는 러너를 통해 주어진 하이퍼파라미터를 자동으로 최적화해줌으로써 튜닝과정을 자동으로 수행합니다.
+
+AutoTuner는 러너클래스를 상속받기 때문에 다른 러너들처럼 사용할 수도 있습니다.
+
+```{r}
+learner = lrn("classif.svm",
+  cost  = to_tune(1e-5, 1e5, logscale = TRUE),
+  gamma = to_tune(1e-5, 1e5, logscale = TRUE),
+  kernel = "radial",
+  type = "C-classification"
+)
+
+at = auto_tuner(
+  tuner = tnr("grid_search", resolution = 5, batch_size = 5),
+  learner = learner,
+  resampling = rsmp("cv", folds = 3),
+  measure = msr("classif.ce")
+)
+
+at
+```
+
+이제 `at`를 활용해 새로운 데이터를 학습하고 검증 데이터를 통해 모델의 성능을 평가할 수 있습니다.
+
+```{r}
+task = tsk("sonar")
+split = partition(task)
+at$train(task, row_ids = split$train)
+at$predict(task, row_ids = split$test)$score(msr("classif.acc"))
+```
 
 ```{r eval=FALSE}
 lrn_xgb <- lrn('classif.xgboost',
@@ -108,178 +281,87 @@ at <- auto_tuner(
 at$train(task_sonar)
 ```
 
-### Nested Resampling
+# 중첩 리샘플링 Nested resampling
 
-```{r eval=FALSE}
-outer_resampling <- rsmp('cv',folds=3)
+하이퍼파라미터 최적화는 모델 성능 측정 시 발생할 수 있는 편향을 예방하기 위해 추가적인 리샘플링이 필요합니다. 만약 동일한 데이터가 최적의 하이퍼파라미터를 구성하고 모델링 결과를 평가하는 데 사용된다면 매우 심하게 편향이 있을 수 있습니다.
 
-rr <- resample(task_sonar, at, outer_resampling, store_models = T)
+중첩 리샘플링은 추가적인 리샘플링을 수행함으로써 튜닝된 모델의 성능을 평가하는 과정에서 모델 최적화를 분리시켜 놓습니다. 즉 일반적인 방법의 리샘플링 방법으로 모델의 성능을 평가하는 반면, 튜닝의 경우 리샘플링된 데이터를 다시 리샘플링하여 성능을 평가하는 것입니다.
 
-extract_inner_tuning_results(rr)
-rr$score(measures)
-rr$aggregate(measures)
-```
+![중첩 리샘플링 설명도. 초록 상자는 외부 리샘플링을 위한 3-fold 교차검증(CV), 파란색 회색 박스는 하이퍼파라미터 튜닝을 위한 4-fold 교차 검증](https://mlr3book.mlr-org.com/Figures/nested_resampling.png){fig-align="center" width="800"}
 
-## 5. Feature selection
+## AutoTuner를 활용한 중첩 리샘플링
 
-### 5.1. Introduction
+`mlr3`에선 `AutoTuner`를 활용한다면 중첩리샘플링도 쉽게 수행이 가능합니다. 코드를 통해 중첩 리샘플링을 살펴보겠습니다.
 
-feature selection의 장점
+`AutoTuner` 내부에서 수행하는 리샘플링은 inner resampling으로 4-fold 교차 검증을 수행합니다. 반면에 `at`를 대상으로 수행하는 `resample()`의 경우 outer resampling으로 3-fold 교차 검증을 수행합니다.
 
-1.  과적합(overfitting) 감소로 인한 성능 향상
-2.  불필요한 feature에 의존하지 않는 안정된(robust) 모델
-3.  간단함으로 인한 해석의 용이함
-4.  잠재적으로 값비싼 feature 수집 불필요
-
-### 5.2. Filters
-
-#### 5.2.1 Filter value 계산
-
-`mlr3filters::mlr_filters` dictionary 통해 또는 `mlr3filters::flt()` 를 이용해 filter 선택 가능.
-
-Filter 클래스에는 `$calculate()` 메소드가 존재하는데, filter value와 등수를 내림차순 정렬하여 보여준다.
-
-예를 들어 information gain filter를 이용하는 경우,
-
-```{r eval=FALSE}
-library(mlr3verse)
-filter <- flt('information_gain')
-task <- tsk('penguins')
-task
-filter$calculate(task)
-filter
-
-```
-
-일부 filter들은 hyperparameters가 존재하는데, learner에서 param_set을 변경해주는 것처럼 간단히 변경 가능합니다.
-
-```{r eval=FALSE}
-filter_cor <- flt('correlation')
-filter_cor$param_set$values <- list(method='spearman')
-filter_cor$param_set
-```
-
-#### 5.2.2. Feature importance filters
-
-importance 가 있는 모든 모델에서 사용 가능한 filter입니다. `ranger`와 같은 일부 learner에서는 learner를 만들 때 지정을 해줘야 합니다.
-
-```{r eval=FALSE}
-lrn_rf <- lrn('classif.ranger', importance='impurity')
-
-# remove missing values
-task$filter(which(complete.cases(task$data())))
-
-filter_imp <- flt('importance', learner=lrn_rf)
-filter_imp$calculate(task)
-filter_imp
-```
-
-#### 5.2.3. Embedded methods
-
-Embedded methods는 Learner들로 하여금 예측에 중요한 변수들을 선택하는 방법입니다. 많은 learner들이 이 기능을 갖고 있습니다.
-
-```{r eval=FALSE}
-task <- tsk('penguins')
-learner <- lrn('classif.rpart')
-
-stopifnot('selected_features' %in% learner$properties)
-
-learner$train(task)
-learner$selected_features()
-
-filter <- flt('selected_features', learner=learner)
-filter$calculate(task)
-filter
-```
-
-model에 의해 선택된 feature의 점수만 1, 나머지는 0 (dropped features)
-
-#### 5.2.4. Filter-based feature selection
-
-filter를 통해 각 feature들의 점수가 계산이 되었다면, 다음 모델링 단계에서 feature를 선택하여 학습을 시켜주어야 합니다.
-
-```{r eval=FALSE}
-task <- tsk('penguins')
-learner <- lrn('classif.rpart')
-filter <- flt('selected_features', learner=learner)
-filter$calculate(task)
-
-keep <- names(which(filter$scores==1))
-task$select(keep) # column을 선택하기 때문에 select
-task$feature_names
-```
-
-위의 예시에서는 selected_features를 했기 때문에 0과 1로 구분이 되었지만, 연속형 점수에 대해 filtering 을 할 때는 다음과 같은 방법이 있습니다.
-
--   위에서 top N개의 feature 선택하는 경우
-
-```{r eval=FALSE}
-task <- tsk('penguins')
-learner <- lrn('classif.rpart')
-filter <- flt('information_gain')
-filter$calculate(task)
-
-# top 3개 선택
-keep <- names(head(filter$scores,3))
-task$select(keep)
-```
-
--   score가 k 보다 큰 경우
-
-```{r eval=FALSE}
-task <- tsk('penguins')
-learner <- lrn('classif.rpart')
-filter <- flt('information_gain')
-filter$calculate(task)
-
-# information gain이 0.5보다 큰 경우
-keep <- names(which(filter$scores>0.5))
-task$select(keep)
-```
-
-### 5.3 Wrapper methods
-
-모델의 성능을 최적화하는 feature들을 반복적으로 선택합니다. feature들에 순위를 매기는 대신, 일부 feature들만을 사용하여 학습한 뒤, 선택된 성능 지표에 따라 평가하게 됩니다.
-
-#### 5.3.1. 간단한 예시
-
-mlr3에서는 `FSelector`를 이용하여 위의 방법을 수행합니다.
-
-```{r eval=FALSE}
-
-library(mlr3fselect)
-instance <- fselect(
-  method='sequential',
-  task= tsk('penguins'),
-  learner = lrn('classif.rpart'),
-  resampling = rsmp('holdout'),
-  measures = msr('classif.acc')
+```{r}
+learner = lrn("classif.svm",
+  cost  = to_tune(1e-5, 1e5, logscale = TRUE),
+  gamma = to_tune(1e-5, 1e5, logscale = TRUE),
+  kernel = "radial",
+  type = "C-classification"
 )
 
+at = auto_tuner(
+  tuner = tnr("grid_search", resolution = 5, batch_size = 10),
+  learner = learner,
+  resampling = rsmp("cv", folds = 4),
+  measure = msr("classif.ce"),
+)
+
+task = tsk("sonar")
+outer_resampling = rsmp("cv", folds = 3)
+
+rr = resample(task, at, outer_resampling, store_models = TRUE)
+
+rr
 ```
 
-성능 비교를 위한 feature들의 모든 subset을 확인하기 위해선 아래의 코드로 확인 가능합니다.
+resample()에서 store_models = TRUE 로 설정할 경우, inner tuning 된 AutoTuner 모델들이 저장됩니다. 이를 통해 inner tuning에 대한 정보를 알 수 있습니다.
 
-```{r eval=FALSE}
-as.data.table(instance$archive) 
+`extract_inner_tuning_results()`는 최적의 하이퍼파라미터 구성을 보여주고, `extract_inner_tuning_archives()`는 모든 하이퍼파리미터 기록을 보여줍니다.
+
+```{r}
+extract_inner_tuning_results(rr)
 ```
 
-최적의 feature 들을 확인하기 위해서는
-
-```{r eval=FALSE}
-instance$result_feature_set
+```{r}
+extract_inner_tuning_archives(rr)
 ```
 
-#### 5.3.2 FSelectInstance
+## 성능 비교
 
-#### 5.3.3. Fselector 클래스
+이제, inner tunning과 outer tuning 간의 성능 비교를 통해 모델 과적합 여부를 살펴보겠습니다.
 
-`mlr3fselect::FSelector`에는 다양한 종류의 feature 선택 알고리즘이 존재합니다.
+``` {r}
+extract_inner_tuning_results(rr)[,
+  .(iteration, cost, gamma, classif.ce)] # inner
+```
 
--   Random Search ([`mlr3fselect::FSelectorRandomSearch`](https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_random_search.html))
--   Exhaustive Search ([`mlr3fselect::FSelectorExhaustiveSearch`](https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_exhaustive_search.html))
--   Sequential Search ([`mlr3fselect::FSelectorSequential`](https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_sequential.html))
--   Recursive Feature Elimination ([`mlr3fselect::FSelectorRFE`](https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_rfe.html))
--   Design Points ([`mlr3fselect::FSelectorDesignPoints`](https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_design_points.html))
--   Genetic Search ([`mlr3fselect::FSelectorGeneticSearch`](https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_genetic_search.html))
--   Shadow Variable Search ([`mlr3fselect::FSelectorShadowVariableSearch`](https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_shadow_variable_search.html))
+``` {r}
+rr$score()[,.(iteration, classif.ce)] # outer
+```
+
+외부 리샘플링의 일부 결과에서 확연히 낮은 성능이 나온다는 것은 최적화된 하이퍼파라미터가 데이터에 과적합되었다는 것을 의미합니다. 따라서 튜닝된 모델은 요약계산된 성능으로 보고하는 것이 중요합니다.
+
+```{r}
+rr$aggregate()
+```
+
+마지막으로 중첩 리샘플링을 과도하게 많이 설정하는 경우, 컴퓨터 성능을 많이 필요로 하게 됩니다. 예를 들어 위의 예시에서는 내부 리샘플링 4, 외부 리샘플링 3, 하이퍼파라미터 2개, resolution 5로 인해 $3*4*5*5=300$, 즉 300번의 모델 훈련 검증을 수행하게 됩니다. 따라서 내부 리샘플링에서는 홀드아웃 등과 같은 방법을 사용하거나 병렬화를 사용하도록 하는 것을 권장합니다.
+
+| R6 Class                                                | Sugar function                    | 요약                                    |
+|------------------|------------------------|------------------------------------|
+| `Tuner`                                                 | `tnr()`                           | 최적화 알고리즘 결정                    |
+| `Terminator`                                            | `trm()`                           | 튜닝 알고리즘 종료 시점 기준 설정       |
+| `TuningInstanceSingleCrit` or `TuningInstanceMultiCrit` | `ti()`                            | 튜닝 세팅 저장 및 결과 저장             |
+| `AutoTuner`                                             | `auto_tuner()`                    | 튜닝과정 자동화                         |
+| \-                                                      | `extract_inner_tuning_results()`  | 중첩 리샘플링의 내부 튜닝결과 추출      |
+| \-                                                      | `extract_inner_tuning_archives()` | 중첩 리샘플링의 내부 튜닝 아카이브 추출 |
+
+## 클래스 함수 정리
+
+## 참고자료
+
+<https://mlr3book.mlr-org.com/optimization.html>

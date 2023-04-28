@@ -1,0 +1,20 @@
+{
+  "hash": "e817904004d439009b391c33075fba9c",
+  "result": {
+    "markdown": "---\ntitle: \"서울 R 밋업 자료\"\ndescription: \"R을 활용한 머신러닝\"\nauthor: \"JYH\"\ncategories: []\ndate: \"2022-01-01\"\n---\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\ninstall.packages(\"mlr3verse\")\ninstall.packages(\"apcluster\")\ninstall.packages(\"ranger\")\n\nlibrary(mlr3)\nlibrary(mlr3verse)\nlibrary(mlr3learners)\nlibrary(ranger)\nlibrary(xgboost)\n\n# R6 Object oriented programming\n\n# methods\ntask$print()\n\n# fields\n\ntask$negative\n\n# Dictionaries\n# key-value structure\n\ntasks, learners\n\nmlr_learners$get(\"classif.log_reg\")\nmlr_tasks\n\n\nas.data.table(mlr_tasks) |> View()\nas.data.table(mlr_learners) |> View()\nas.data.table(mlr_measures) |> View()\n\n# Helper function (sugar functions) : shortcut\n\nLearnerClassifXgboost$new()\nlrn(\"classif.xgboost\", predict_type=\"prob\")\n\nlrn(\"classif.logreg\")\nmlr_tasks$get(\"iris\")\nmlr_learners$get(\"classif.log_reg\")\n\nLearnerClassifRpart\nLearnerClassifRanger\nas.data.table(mlr_learners) |> View()\n```\n:::\n\n\n## Task\n\n\n::: {.cell}\n\n```{.r .cell-code}\ntask <- tsk(\"ilpd\")\n```\n:::\n\n\n\n## Learner\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlearner_lr <- lrn(\"classif.log_reg\", predict_type=\"prob\")\nlearner_rf <- lrn(\"classif.ranger\", predict_type=\"prob\")\n```\n:::\n\n\n\n## train & predict\n\n\n::: {.cell}\n\n```{.r .cell-code}\nsplit <- partition(task, ratio=.7, seed=2023)\n\nlr_pred <- learner_lr$\n  train(task, split$train)$\n  predict(task, split$test)\n```\n:::\n\n\n\n## Evaluation\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# msr(\"\")\n# msrs(\"\")\nmeasures_mac <- msrs(c(\"classif.acc\",\"classif.sensitivity\",\"classif.specificity\", \"classif.precision\",\"classif.fbeta\", \"classif.auc\"), average =\"macro\")\n\nmeasures_mic <- msrs(c(\"classif.acc\",\"classif.sensitivity\",\"classif.specificity\", \"classif.precision\",\"classif.fbeta\", \"classif.auc\"), average =\"micro\")\n\nlr_pred$score(measures_mac)\n```\n:::\n\n\n## Resampling\n\n\n::: {.cell}\n\n```{.r .cell-code}\nmlr_resamplings\nresample <- rsmp(\"cv\", folds=10)\n\nrr$instantiate(task)\n\nrr  <- resample(task, learner_lr, resample)\nas.data.table(rr)\n\nrr$score(measures)\nrr$aggregate(measures_mac)\nrr$aggregate(measures_mic)\n```\n:::\n\n\n\n## Visualization\n\n\n::: {.cell}\n\n```{.r .cell-code}\nrequire(mlr3viz)\nautoplot(rr, type=\"roc\")\n```\n:::\n\n\n\n## benchmarking\n\n\n::: {.cell}\n\n```{.r .cell-code}\nrequire(mlr3verse)\n\n\nilpd <- mlr3data::ilpd \nilpd$gender <- ifelse(ilpd$gender==\"Male\",1,0) |> as.numeric()\ntask <- as_task_classif(ilpd, target=\"diseased\")\n\nlearners <- list(\n  lrn(\"classif.log_reg\", predict_type=\"prob\", id=\"LR\"),\n  lrn(\"classif.rpart\", predict_type=\"prob\", id=\"DT\"),\n  lrn(\"classif.ranger\", predict_type=\"prob\", id=\"RF\"),\n  lrn(\"classif.xgboost\", predict_type=\"prob\", id=\"XGB\")\n)\nrsmp <- rsmp(\"cv\", folds=5)\n\ndesign <- benchmark_grid(task, learners, rsmp)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nbmr <- benchmark(design)\nprint(bmr)\n\nbmr$aggregate(measures)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nautoplot(bmr, \"roc\")\n```\n:::",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"../../../site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"../../../site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -48,8 +48,8 @@ comments: false
 
 ## Papers {style="text-align: left;"}
 
-- Association of Dexmedetomidine With New-Onset Atrial Fibrillation in Patients With Critical Illness", JAMA network open , 2023
-- The Risk of Type 2 Diabetes Mellitus according to Changes in Obesity Status in Late Middle-Aged Adults: A Nationwide Cohort Study of Korea, Diabetes & Metabolism Journal, 2023
+- Song MJ, Jang Y, Lee JH, et al. Association of Dexmedetomidine With New-Onset Atrial Fibrillation in Patients With Critical Illness. JAMA Netw Open. 2023;6(4):e239955. https://doi:10.1001/jamanetworkopen.2023.9955
+- Moon, J. H., Jang, Y. H., Oh, T. J., Jung, S. Y. (2023). The Risk of Type 2 Diabetes Mellitus according to Changes in Obesity Status in Late Middle-Aged Adults: A Nationwide Cohort Study of Korea. Diabetes & Metabolism Journal, https://doi.org/10.4093/dmj.2022.0159 
 - Jung, S. Y., Jang, Y. H., Bae, W. K., & Han, J. S. (2022). Changes of Body Mass Index and the Incidence of Hypertension in Late Middle Age: A Nationwide Cohort Study in South Korea. Korean Journal of Health Promotion, 22(4), 175–182.
 - Jang, Y., You, M., Lee, H. et al. Burnout and peritraumatic distress of healthcare workers in the COVID-19 pandemic. BMC Public Health 21, 2075 (2021). https://doi.org/10.1186/s12889-021-11978-0
 - Jang, Y., You, M., Lee, S., & Lee, W. (2021). Factors Associated With the Work Intention of Hospital Workers’ in South Korea During the Early Stages of the COVID-19 Outbreak. Disaster Medicine and Public Health Preparedness, 15(3), E23-E30. doi:10.1017/dmp.2020.221

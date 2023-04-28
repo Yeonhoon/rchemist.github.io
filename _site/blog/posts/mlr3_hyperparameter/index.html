@@ -130,6 +130,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="../../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
 <script src="../../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../styles.css">
 </head>
@@ -218,17 +219,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#모델-튜닝하기" id="toc-모델-튜닝하기" class="nav-link active" data-scroll-target="#모델-튜닝하기">모델 튜닝하기</a>
   <ul class="collapse">
   <li><a href="#러너의-학습공간-설정" id="toc-러너의-학습공간-설정" class="nav-link" data-scroll-target="#러너의-학습공간-설정">러너의 학습공간 설정</a></li>
-  <li><a href="#sec-hyperparameter" id="toc-sec-hyperparameter" class="nav-link" data-scroll-target="#sec-hyperparameter">Hyperparameter tuning</a>
-  <ul class="collapse">
-  <li><a href="#autotuner" id="toc-autotuner" class="nav-link" data-scroll-target="#autotuner">AutoTuner</a></li>
-  <li><a href="#nested-resampling" id="toc-nested-resampling" class="nav-link" data-scroll-target="#nested-resampling">Nested Resampling</a></li>
+  <li><a href="#터미네이터-terminator" id="toc-터미네이터-terminator" class="nav-link" data-scroll-target="#터미네이터-terminator">터미네이터 (Terminator)</a></li>
+  <li><a href="#ti-튜닝-인스턴스" id="toc-ti-튜닝-인스턴스" class="nav-link" data-scroll-target="#ti-튜닝-인스턴스"><code>ti</code>: 튜닝 인스턴스</a></li>
+  <li><a href="#tuner" id="toc-tuner" class="nav-link" data-scroll-target="#tuner">Tuner</a></li>
+  <li><a href="#튜닝-수행하기" id="toc-튜닝-수행하기" class="nav-link" data-scroll-target="#튜닝-수행하기">튜닝 수행하기</a></li>
+  <li><a href="#tune-을-이용한-빠른-튜닝" id="toc-tune-을-이용한-빠른-튜닝" class="nav-link" data-scroll-target="#tune-을-이용한-빠른-튜닝"><code>tune</code> 을 이용한 빠른 튜닝</a></li>
+  <li><a href="#튜닝-결과-분석하기" id="toc-튜닝-결과-분석하기" class="nav-link" data-scroll-target="#튜닝-결과-분석하기">튜닝 결과 분석하기</a></li>
+  <li><a href="#튜닝된-모델-활용하기" id="toc-튜닝된-모델-활용하기" class="nav-link" data-scroll-target="#튜닝된-모델-활용하기">튜닝된 모델 활용하기</a></li>
   </ul></li>
-  <li><a href="#feature-selection" id="toc-feature-selection" class="nav-link" data-scroll-target="#feature-selection">5. Feature selection</a>
+  <li><a href="#autotuner-로-튜닝-자동화하기" id="toc-autotuner-로-튜닝-자동화하기" class="nav-link" data-scroll-target="#autotuner-로-튜닝-자동화하기"><code>AutoTuner</code> 로 튜닝 자동화하기</a></li>
+  <li><a href="#중첩-리샘플링-nested-resampling" id="toc-중첩-리샘플링-nested-resampling" class="nav-link" data-scroll-target="#중첩-리샘플링-nested-resampling">중첩 리샘플링 Nested resampling</a>
   <ul class="collapse">
-  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">5.1. Introduction</a></li>
-  <li><a href="#filters" id="toc-filters" class="nav-link" data-scroll-target="#filters">5.2. Filters</a></li>
-  <li><a href="#wrapper-methods" id="toc-wrapper-methods" class="nav-link" data-scroll-target="#wrapper-methods">5.3 Wrapper methods</a></li>
-  </ul></li>
+  <li><a href="#autotuner를-활용한-중첩-리샘플링" id="toc-autotuner를-활용한-중첩-리샘플링" class="nav-link" data-scroll-target="#autotuner를-활용한-중첩-리샘플링">AutoTuner를 활용한 중첩 리샘플링</a></li>
+  <li><a href="#성능-비교" id="toc-성능-비교" class="nav-link" data-scroll-target="#성능-비교">성능 비교</a></li>
+  <li><a href="#클래스-함수-정리" id="toc-클래스-함수-정리" class="nav-link" data-scroll-target="#클래스-함수-정리">클래스 함수 정리</a></li>
+  <li><a href="#참고자료" id="toc-참고자료" class="nav-link" data-scroll-target="#참고자료">참고자료</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -279,293 +284,540 @@ Important
 <p>지금까지 개발되어온 정교한 하이퍼파라미터 최적화 방법은 종료(termination) 시점까지 반복적으로 다양한 파라미터를 검토 후, 최적의 하이퍼파라미터 구성을 내놓는 효율적이고 로버스트한 결과를 출력합니다.</p>
 <section id="모델-튜닝하기" class="level1">
 <h1>모델 튜닝하기</h1>
-<p>mlr3tuning 패키지를 통해 mlr3 생태계에서 하이퍼파라미터 최적화를 수행할 수 있습니다.</p>
+<p><code>mlr3tuning</code> 패키지를 통해 <code>mlr3</code> 생태계에서 하이퍼파라미터 최적화를 수행할 수 있습니다.</p>
 <ul>
-<li><p>TuningInstanceSingleCrit, TuningInstanceMultiCrit: 튜닝 인스턴스를 만들 때 사용.</p></li>
-<li><p>Tuner: 최적의 알고리즘을 불러오고 설정할 때 사용.</p></li>
+<li><p><code>TuningInstanceSingleCrit</code>, <code>TuningInstanceMultiCrit</code>: 최적화 결과를 저장하는 튜닝 인스턴스를 만듭니다.</p></li>
+<li><p><code>Tuner</code>: 최적의 알고리즘을 불러오고 설정할 때 사용.</p></li>
 </ul>
 <section id="러너의-학습공간-설정" class="level2">
 <h2 class="anchored" data-anchor-id="러너의-학습공간-설정">러너의 학습공간 설정</h2>
-<p>각각의 러너들은 하이퍼파라미터 세트를 갖고 있습니다.</p>
+<p>각각의 러너들은 search space라고 하는 학습공간을 갖습니다. 이 학습공간은 러너들의 하이퍼파라미터 세트를 설정해줄 수 있는 공간이라고 이해할 수 있습니다.</p>
+<p><code>e1071</code> 패키지에 있는 서포트 벡터 머신(SVM)으로 예시를 들어보겠습니다. <code>sonar</code> 데이터를 태스크로 활용하여 SVM 모델을 최적화해봅시다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>lrn_svm <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">"classif.svm"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>lrn_svm<span class="sc">$</span>param_set</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>lrn_svm <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">"classif.svm"</span>, <span class="at">type=</span><span class="st">"C-classification"</span>, <span class="at">kernel =</span> <span class="st">"radial"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>러너의 파라미터 정보는 <code>$param_set</code> 필드에 저장이 됩니다. 여기에는 파라미터의 이름, 클래스의 종류, 레벨, 튜닝 범위 등이 포함되어 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(lrn_svm<span class="sc">$</span>param_set)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["class"],"name":[2],"type":["chr"],"align":["left"]},{"label":["lower"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["upper"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["levels"],"name":[5],"type":["list"],"align":["right"]},{"label":["nlevels"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["is_bounded"],"name":[7],"type":["lgl"],"align":["right"]},{"label":["special_vals"],"name":[8],"type":["list"],"align":["right"]},{"label":["default"],"name":[9],"type":["list"],"align":["right"]},{"label":["storage_type"],"name":[10],"type":["chr"],"align":["left"]},{"label":["tags"],"name":[11],"type":["list"],"align":["right"]}],"data":[{"1":"cachesize","2":"ParamDbl","3":"-Inf","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<int [1]>","10":"numeric","11":"<chr [1]>"},{"1":"class.weights","2":"ParamUty","3":"NA","4":"NA","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<NULL>","10":"list","11":"<chr [1]>"},{"1":"coef0","2":"ParamDbl","3":"-Inf","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<dbl [1]>","10":"numeric","11":"<chr [1]>"},{"1":"cost","2":"ParamDbl","3":"0","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<dbl [1]>","10":"numeric","11":"<chr [1]>"},{"1":"cross","2":"ParamInt","3":"0","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<int [1]>","10":"integer","11":"<chr [1]>"},{"1":"decision.values","2":"ParamLgl","3":"NA","4":"NA","5":"<lgl [2]>","6":"2","7":"TRUE","8":"<list [0]>","9":"<lgl [1]>","10":"logical","11":"<chr [1]>"},{"1":"degree","2":"ParamInt","3":"1","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<int [1]>","10":"integer","11":"<chr [1]>"},{"1":"epsilon","2":"ParamDbl","3":"0","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<dbl [1]>","10":"numeric","11":"<chr [1]>"},{"1":"fitted","2":"ParamLgl","3":"NA","4":"NA","5":"<lgl [2]>","6":"2","7":"TRUE","8":"<list [0]>","9":"<lgl [1]>","10":"logical","11":"<chr [1]>"},{"1":"gamma","2":"ParamDbl","3":"0","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<S3: NoDefault>","10":"numeric","11":"<chr [1]>"},{"1":"kernel","2":"ParamFct","3":"NA","4":"NA","5":"<chr [4]>","6":"4","7":"TRUE","8":"<list [0]>","9":"<chr [1]>","10":"character","11":"<chr [1]>"},{"1":"nu","2":"ParamDbl","3":"-Inf","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<dbl [1]>","10":"numeric","11":"<chr [1]>"},{"1":"scale","2":"ParamUty","3":"NA","4":"NA","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<lgl [1]>","10":"list","11":"<chr [1]>"},{"1":"shrinking","2":"ParamLgl","3":"NA","4":"NA","5":"<lgl [2]>","6":"2","7":"TRUE","8":"<list [0]>","9":"<lgl [1]>","10":"logical","11":"<chr [1]>"},{"1":"tolerance","2":"ParamDbl","3":"0","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<dbl [1]>","10":"numeric","11":"<chr [1]>"},{"1":"type","2":"ParamFct","3":"NA","4":"NA","5":"<chr [2]>","6":"2","7":"TRUE","8":"<list [0]>","9":"<chr [1]>","10":"character","11":"<chr [1]>"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>범위가 무한대인 파라미터의 경우 이론상으로는 모든 경우의 수를 고려할 수 있으나, 이는 현실적으로 불가능하죠. 여기서는 일부 하이퍼파라미터를 설정해주도록 하겠습니다.</p>
+<p>숫자형 (numeric) 하이퍼파라미터의 경우 반드시 하한과 상한의 범위를 지정해줘야 합니다. 이 때 <code>to_tune()</code> 함수를 이용해주면 됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lrn_svm <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">"classif.svm"</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">cost =</span> <span class="fu">to_tune</span>(<span class="fl">1e-1</span>, <span class="fl">1e5</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">gamma =</span> <span class="fu">to_tune</span>(<span class="fl">1e-1</span>, <span class="dv">1</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">type =</span> <span class="st">"C-classification"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">kernel =</span> <span class="st">"radial"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>lrn_svm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;ParamSet&gt;
-Key: &lt;id&gt;
-                 id    class lower upper nlevels
-             &lt;char&gt;   &lt;char&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;
- 1:       cachesize ParamDbl  -Inf   Inf     Inf
- 2:   class.weights ParamUty    NA    NA     Inf
- 3:           coef0 ParamDbl  -Inf   Inf     Inf
- 4:            cost ParamDbl     0   Inf     Inf
- 5:           cross ParamInt     0   Inf     Inf
- 6: decision.values ParamLgl    NA    NA       2
- 7:          degree ParamInt     1   Inf     Inf
- 8:         epsilon ParamDbl     0   Inf     Inf
- 9:          fitted ParamLgl    NA    NA       2
-10:           gamma ParamDbl     0   Inf     Inf
-11:          kernel ParamFct    NA    NA       4
-12:              nu ParamDbl  -Inf   Inf     Inf
-13:           scale ParamUty    NA    NA     Inf
-14:       shrinking ParamLgl    NA    NA       2
-15:       tolerance ParamDbl     0   Inf     Inf
-16:            type ParamFct    NA    NA       2
-                                                                                      default
-                                                                                       &lt;list&gt;
- 1:                                                                                        40
- 2:                                                                                          
- 3:                                                                                         0
- 4:                                                                                         1
- 5:                                                                                         0
- 6:                                                                                     FALSE
- 7:                                                                                         3
- 8:                                                                                       0.1
- 9:                                                                                      TRUE
-10: &lt;NoDefault&gt;\n  Public:\n    clone: function (deep = FALSE) \n    initialize: function () 
-11:                                                                                    radial
-12:                                                                                       0.5
-13:                                                                                      TRUE
-14:                                                                                      TRUE
-15:                                                                                     0.001
-16:                                                                          C-classification
-    parents  value
-     &lt;list&gt; &lt;list&gt;
- 1:               
- 2:               
- 3:  kernel       
- 4:    type       
- 5:               
- 6:               
- 7:  kernel       
- 8:               
- 9:               
-10:  kernel       
-11:               
-12:    type       
-13:               
-14:               
-15:               
-16:               </code></pre>
+<pre><code>&lt;LearnerClassifSVM:classif.svm&gt;
+* Model: -
+* Parameters: cost=&lt;RangeTuneToken&gt;, gamma=&lt;RangeTuneToken&gt;,
+  type=C-classification, kernel=radial
+* Packages: mlr3, mlr3learners, e1071
+* Predict Types:  [response], prob
+* Feature Types: logical, integer, numeric
+* Properties: multiclass, twoclass</code></pre>
+</div>
+</div>
+<p>학습공간은 주로 머신러닝 모델 설계자의 경험을 바탕으로 구성되는 것이 일반적입니다. 학습공간과 관련된 자세한 사항은 아래에서 추가적으로 다루도록 하겠습니다.</p>
+</section>
+<section id="터미네이터-terminator" class="level2">
+<h2 class="anchored" data-anchor-id="터미네이터-terminator">터미네이터 (Terminator)</h2>
+<p>앞서 말한 것처럼 이론적으로는 각 러너들의 모든 학습공간을 탐색하며 성능이 가장 뛰어난 모델을 만들 수 있습니다. 하지만 수학적으로, 그리고 현실적으로는 모든 학습공간을 탐색하기란 불가능합니다. 따라서 특정 알고리즘의 하이퍼파라미터 튜닝 과정 도중, <u><strong>언제 종료할지에 대한 기준</strong></u> 역시 필요합니다.</p>
+<p><code>mlr3tuning</code> 패키지에서는 이것을 <code>Terminator</code> 클래스를 통해 구현해놓았습니다. 터미네이터의 종류는 다음과 같습니다.</p>
+<table class="table">
+<caption><code>Terminator</code> 종류</caption>
+<colgroup>
+<col style="width: 26%">
+<col style="width: 39%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>종 류</th>
+<th>설명</th>
+<th>사용예시와 초기 파라미터 설정</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>평가 횟수</td>
+<td>특정 탐색횟수가 되면 종료</td>
+<td><code>trm("evals", n_evals= 500)</code></td>
+</tr>
+<tr class="even">
+<td>구동 시간</td>
+<td>특정 탐색시간이 되면 종료</td>
+<td><code>trm("run_time", sec= 100)</code></td>
+</tr>
+<tr class="odd">
+<td>성능 수준</td>
+<td>특정 성능에 도달하면 종료</td>
+<td><code>trm("perf_reached", level= .1)</code></td>
+</tr>
+<tr class="even">
+<td>시간</td>
+<td>특정 현실시간이 되면 종료</td>
+<td><code>trm("clock_time", n_evals= 500)</code></td>
+</tr>
+<tr class="odd">
+<td>정체</td>
+<td>특정 반복동안 개선이 없으면 종료</td>
+<td><code>trm("stagnation", iters= 5, threshold= 1e-5)</code></td>
+</tr>
+<tr class="even">
+<td>조합</td>
+<td>여러 터미네이터 조합</td>
+<td><code>trm("combo", terminators = list(run_time_100, evals_200), any = TRUE)</code></td>
+</tr>
+</tbody>
+</table>
+<p>이 중 가장 많이 활용되는 것은 <code>trm("evals", n_evals= 500)</code> 와 <code>trm("run_time", sec= 100)</code> 입니다. <code>trm("combo")</code>는 여러 가지의 터미너이터를 조합하여 종료기준을 설정합니다. <code>any</code> 또는 <code>all</code>을 통해 여러 조건을 하나만 만족해도 종료할지, 모든 기준을 만족해야 할지 설정할 수 있습니다.</p>
+</section>
+<section id="ti-튜닝-인스턴스" class="level2">
+<h2 class="anchored" data-anchor-id="ti-튜닝-인스턴스"><code>ti</code>: 튜닝 인스턴스</h2>
+<p>튜닝 인스턴스는 어떤 모델을 최적화하기 위해 필요한 모든 정보를 갖는 일종의 환경입니다. 어떤 데이터를 어떤 알고리즘을 통해 학습시킬 건지, 어떤 검증전략을 통해 어떤 성능을 기준으로 파라미터들을 평가할 것인지 등의 정보를 담게 됩니다.</p>
+<p>이러한 튜닝 인스턴스는 <code>ti()</code> 함수를 통해 사용자가 직접 설정하거나 <code>tune()</code>을 이용해 자동으로 설정할 수 있습니다. 우선은 <code>ti()</code>를 통해 튜닝 인스턴스를 설정하는 방법부터 알아보겠습니다.</p>
+<p>튜닝 인스턴스에는 학습시킬 데이터를 갖고 있는 태스크(task), 러너(learner), 리샘플링 (resampling), 성능 측정(measure), 그리고 터미네이터(terminator)가 사용됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>resampling <span class="ot">=</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds=</span><span class="dv">3</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>measure <span class="ot">=</span> <span class="fu">msr</span>(<span class="st">"classif.acc"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">"classif.svm"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cost =</span> <span class="fu">to_tune</span>(<span class="fl">1e-1</span>, <span class="fl">1e5</span>),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma =</span> <span class="fu">to_tune</span>(<span class="fl">1e-1</span>, <span class="dv">1</span>),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"C-classification"</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>terminator <span class="ot">=</span> <span class="fu">trm</span>(<span class="st">"evals"</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>instance <span class="ot">=</span> <span class="fu">ti</span>(</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">task =</span> <span class="fu">tsk</span>(<span class="st">"sonar"</span>),</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> learner,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">resampling =</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds=</span><span class="dv">3</span>),</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">measures =</span> measure,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">terminator =</span> terminator</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>instance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;TuningInstanceSingleCrit&gt;
+* State:  Not optimized
+* Objective: &lt;ObjectiveTuning:classif.svm_on_sonar&gt;
+* Search Space:
+       id    class lower upper nlevels
+   &lt;char&gt;   &lt;char&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt;
+1:   cost ParamDbl   0.1 1e+05     Inf
+2:  gamma ParamDbl   0.1 1e+00     Inf
+* Terminator: &lt;TerminatorEvals&gt;</code></pre>
 </div>
 </div>
 </section>
-<section id="sec-hyperparameter" class="level2">
-<h2 class="anchored" data-anchor-id="sec-hyperparameter">Hyperparameter tuning</h2>
+<section id="tuner" class="level2">
+<h2 class="anchored" data-anchor-id="tuner">Tuner</h2>
+<p>튜닝 인스턴스를 만들었다면, 이제 어떻게 튜닝을 할 것인지를 정해야 합니다. <code>mlr3tuning</code> 에는 다양한 <code>Tuner</code> 클래스가 존재합니다.</p>
+<table class="table">
+<caption><code>mlr3tuning</code>에서 사용가능한 튜닝 알고리즘</caption>
+<thead>
+<tr class="header">
+<th>Tuner</th>
+<th>Function call</th>
+<th>Package</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Random Search</td>
+<td><code>tnr("random_search")</code></td>
+<td><a href="https://mlr3tuning.mlr-org.com/"><code>mlr3tuning</code></a></td>
+</tr>
+<tr class="even">
+<td>Grid Search</td>
+<td><code>tnr("grid_search")</code></td>
+<td><a href="https://mlr3tuning.mlr-org.com/"><code>mlr3tuning</code></a></td>
+</tr>
+<tr class="odd">
+<td>Iterative Racing</td>
+<td><code>tnr("irace")</code></td>
+<td><a href="https://mlr3tuning.mlr-org.com/"><code>mlr3tuning</code></a></td>
+</tr>
+<tr class="even">
+<td>CMA-ES</td>
+<td><code>tnr("cmaes")</code></td>
+<td><a href="https://mlr3tuning.mlr-org.com/"><code>mlr3tuning</code></a></td>
+</tr>
+<tr class="odd">
+<td>Bayesian Optimization</td>
+<td><code>tnr("mbo")</code></td>
+<td><a href="https://mlr3mbo.mlr-org.com/"><code>mlr3mbo</code></a></td>
+</tr>
+<tr class="even">
+<td>Hyperband</td>
+<td><code>tnr("hyperband")</code></td>
+<td><a href="https://mlr3hyperband.mlr-org.com/"><code>mlr3hyperband</code></a></td>
+</tr>
+<tr class="odd">
+<td>Generalized Simulated Annealing</td>
+<td><code>tnr("gensa")</code></td>
+<td><a href="https://mlr3tuning.mlr-org.com/"><code>mlr3tuning</code></a></td>
+</tr>
+<tr class="even">
+<td>Nonlinear Optimization</td>
+<td><code>tnr("nloptr")</code></td>
+<td><a href="https://mlr3tuning.mlr-org.com/"><code>mlr3tuning</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>grid search와 random search는 가장 기본적이면서도 많이 사용되는 튜닝 알고리즘입니다. grid search는 학습공간에서 설정한 범위 내의 모든 하이퍼파라미터를 평가하는 반면, random search는 랜덤하게 학습공간을 탐색하여 하이퍼파라미터들을 평가합니다.</p>
+<p>grid search와 random search는 나이브(naive)한 알고리즘으로 평가받는데, 이는 하이퍼파라미터들을 평가할 때, 이전 평가값들을 무시하고 새롭게 하이퍼파라미터들을 구성하기 때문입니다.</p>
+<p>반면에 Covariance Matrix Adaptation Evolution Strategy (CMA-ES)나 베이지안 최적화와 같은 보다 정교한 알고리즘들은 모델 기반 최적화라고도 볼립니다. 이 알고리즘들은 하이퍼파라미터 평가 과정 중 이전의 평가된 구성으로부터 학습하여 더 좋은 하이퍼파라미터 조합을 더욱 빠르게 찾아냅니다.</p>
+<p>앞서 우리가 만들었던 SVM 알고리즘을 튜너를 활용해 하이퍼파라미터를 탐색해보도록 하겠습니다. <code>tnr()</code> 함수를 이용해 튜닝을 수행하는데, <code>batch_size</code>를 설정하여 한 번에 몇 개의 하이퍼파라미터 구성을 평가할지 설정할 수 있습니다. 이 때 설정해주는 <code>resolution</code>의 경우 하이퍼파라미터 조합의 숫자와 연관이 있습니다. 예를 들어 위의 튜닝 인스턴스에서 범위를 정해준 하이퍼파라미터는 두 개 (<code>cost</code>, <code>gamma</code>)입니다. <code>resolution</code>을 5로 설정할 경우 <span class="math inline">\(5^2=25\)</span>, 즉 25번의 하이퍼파라미터 조합이 구성되는 것입니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lrn_rf<span class="sc">$</span>param_set</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(paradox)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>lrn_rf <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">'classif.ranger'</span>,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">max.depth=</span><span class="fu">to_tune</span>(<span class="dv">10</span>,<span class="dv">50</span>),</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">mtry =</span> <span class="fu">to_tune</span>(<span class="dv">5</span>,<span class="dv">20</span>),</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">num.trees =</span> <span class="fu">to_tune</span>(<span class="dv">30</span>,<span class="dv">100</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>              )</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ti: TuningInstance</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>instance <span class="ot">&lt;-</span> <span class="fu">ti</span>(</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">task =</span> task_sonar,</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> lrn_rf,</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">resampling =</span> <span class="fu">rsmp</span>(<span class="st">'cv'</span>,<span class="at">folds=</span><span class="dv">5</span>),</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">measures =</span> <span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">'classif.sensitivity'</span>,</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'classif.specificity'</span>)),</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">terminator =</span> <span class="fu">trm</span>(<span class="st">'evals'</span>,<span class="at">n_evals=</span><span class="dv">100</span>)</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>instance</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>tuner <span class="ot">=</span> <span class="fu">tnr</span>(<span class="st">'random_search'</span>)</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>tuner<span class="sc">$</span><span class="fu">optimize</span>(instance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tuner <span class="ot">=</span> <span class="fu">tnr</span>(<span class="st">"grid_search"</span>, <span class="at">resolution =</span> <span class="dv">5</span>, <span class="at">batch_size =</span> <span class="dv">10</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>tuner</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;TunerGridSearch&gt;: Grid Search
+* Parameters: resolution=5, batch_size=10
+* Parameter classes: ParamLgl, ParamInt, ParamDbl, ParamFct
+* Properties: dependencies, single-crit, multi-crit
+* Packages: mlr3tuning</code></pre>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lrn_rf<span class="sc">$</span>param_set<span class="sc">$</span>values <span class="ot">&lt;-</span>  instance<span class="sc">$</span>result_learner_param_vals[[<span class="dv">1</span>]]</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>lrn_rf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="autotuner" class="level3">
-<h3 class="anchored" data-anchor-id="autotuner">AutoTuner</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>lrn_xgb <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">'classif.xgboost'</span>,</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">eta =</span> <span class="fu">to_tune</span>(<span class="fl">1e-4</span>,<span class="fl">1e-2</span>),</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">gamma=</span><span class="fu">to_tune</span>(<span class="fl">1e-3</span>,<span class="fl">1e-2</span>),</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">max_depth=</span><span class="fu">to_tune</span>(<span class="dv">10</span>,<span class="dv">50</span>),</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">predict_type=</span><span class="st">'prob'</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>               )</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>at <span class="ot">&lt;-</span> <span class="fu">auto_tuner</span>(</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">method=</span><span class="fu">tnr</span>(<span class="st">'random_search'</span>),</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> lrn_xgb,</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">resampling =</span> <span class="fu">rsmp</span>(<span class="st">'cv'</span>,<span class="at">folds=</span><span class="dv">5</span>),</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">measure =</span> <span class="fu">msr</span>(<span class="st">'classif.auc'</span>),</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">term_evals =</span> <span class="dv">30</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>at<span class="sc">$</span><span class="fu">train</span>(task_sonar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="nested-resampling" class="level3">
-<h3 class="anchored" data-anchor-id="nested-resampling">Nested Resampling</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>outer_resampling <span class="ot">&lt;-</span> <span class="fu">rsmp</span>(<span class="st">'cv'</span>,<span class="at">folds=</span><span class="dv">3</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>rr <span class="ot">&lt;-</span> <span class="fu">resample</span>(task_sonar, at, outer_resampling, <span class="at">store_models =</span> T)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_inner_tuning_results</span>(rr)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>rr<span class="sc">$</span><span class="fu">score</span>(measures)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>rr<span class="sc">$</span><span class="fu">aggregate</span>(measures)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-</section>
-<section id="feature-selection" class="level2">
-<h2 class="anchored" data-anchor-id="feature-selection">5. Feature selection</h2>
-<section id="introduction" class="level3">
-<h3 class="anchored" data-anchor-id="introduction">5.1. Introduction</h3>
-<p>feature selection의 장점</p>
-<ol type="1">
-<li>과적합(overfitting) 감소로 인한 성능 향상</li>
-<li>불필요한 feature에 의존하지 않는 안정된(robust) 모델</li>
-<li>간단함으로 인한 해석의 용이함</li>
-<li>잠재적으로 값비싼 feature 수집 불필요</li>
-</ol>
-</section>
-<section id="filters" class="level3">
-<h3 class="anchored" data-anchor-id="filters">5.2. Filters</h3>
-<section id="filter-value-계산" class="level4">
-<h4 class="anchored" data-anchor-id="filter-value-계산">5.2.1 Filter value 계산</h4>
-<p><code>mlr3filters::mlr_filters</code> dictionary 통해 또는 <code>mlr3filters::flt()</code> 를 이용해 filter 선택 가능.</p>
-<p>Filter 클래스에는 <code>$calculate()</code> 메소드가 존재하는데, filter value와 등수를 내림차순 정렬하여 보여준다.</p>
-<p>예를 들어 information gain filter를 이용하는 경우,</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3verse)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>filter <span class="ot">&lt;-</span> <span class="fu">flt</span>(<span class="st">'information_gain'</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> <span class="fu">tsk</span>(<span class="st">'penguins'</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>task</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>filter<span class="sc">$</span><span class="fu">calculate</span>(task)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>filter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>일부 filter들은 hyperparameters가 존재하는데, learner에서 param_set을 변경해주는 것처럼 간단히 변경 가능합니다.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>filter_cor <span class="ot">&lt;-</span> <span class="fu">flt</span>(<span class="st">'correlation'</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>filter_cor<span class="sc">$</span>param_set<span class="sc">$</span>values <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">method=</span><span class="st">'spearman'</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>filter_cor<span class="sc">$</span>param_set</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="feature-importance-filters" class="level4">
-<h4 class="anchored" data-anchor-id="feature-importance-filters">5.2.2. Feature importance filters</h4>
-<p>importance 가 있는 모든 모델에서 사용 가능한 filter입니다. <code>ranger</code>와 같은 일부 learner에서는 learner를 만들 때 지정을 해줘야 합니다.</p>
+<section id="튜닝-수행하기" class="level2">
+<h2 class="anchored" data-anchor-id="튜닝-수행하기">튜닝 수행하기</h2>
+<p>이제 하이퍼파라미터 튜닝을 실시해보겠습니다. <code>튜너$optimize(튜닝인스턴스)</code>의 구조로 튜닝을 수행해줍니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>lrn_rf <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">'classif.ranger'</span>, <span class="at">importance=</span><span class="st">'impurity'</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># remove missing values</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>task<span class="sc">$</span><span class="fu">filter</span>(<span class="fu">which</span>(<span class="fu">complete.cases</span>(task<span class="sc">$</span><span class="fu">data</span>())))</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>filter_imp <span class="ot">&lt;-</span> <span class="fu">flt</span>(<span class="st">'importance'</span>, <span class="at">learner=</span>lrn_rf)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>filter_imp<span class="sc">$</span><span class="fu">calculate</span>(task)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>filter_imp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tuner<span class="sc">$</span><span class="fu">optimize</span>(instance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["cost"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["gamma"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["learner_param_vals"],"name":[3],"type":["list"],"align":["right"]},{"label":["x_domain"],"name":[4],"type":["list"],"align":["right"]},{"label":["classif.acc"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"1e+05","2":"0.1","3":"<named list [4]>","4":"<named list [2]>","5":"0.773706"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
 </div>
 </section>
-<section id="embedded-methods" class="level4">
-<h4 class="anchored" data-anchor-id="embedded-methods">5.2.3. Embedded methods</h4>
-<p>Embedded methods는 Learner들로 하여금 예측에 중요한 변수들을 선택하는 방법입니다. 많은 learner들이 이 기능을 갖고 있습니다.</p>
+<section id="tune-을-이용한-빠른-튜닝" class="level2">
+<h2 class="anchored" data-anchor-id="tune-을-이용한-빠른-튜닝"><code>tune</code> 을 이용한 빠른 튜닝</h2>
+<p>앞서 <code>ti()</code>를 이용해 튜닝 인스턴스를 설정하고, 터미네이터, 튜너까지 직접 설정해주었는데요. <code>tune()</code> 함수를 이용하면 이러한 튜닝 인스턴스 설정 과정을 간소화할 수 있습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> <span class="fu">tsk</span>(<span class="st">'penguins'</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">'classif.rpart'</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="st">'selected_features'</span> <span class="sc">%in%</span> learner<span class="sc">$</span>properties)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>learner<span class="sc">$</span><span class="fu">train</span>(task)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>learner<span class="sc">$</span><span class="fu">selected_features</span>()</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>filter <span class="ot">&lt;-</span> <span class="fu">flt</span>(<span class="st">'selected_features'</span>, <span class="at">learner=</span>learner)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>filter<span class="sc">$</span><span class="fu">calculate</span>(task)</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>filter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">"classif.svm"</span>,</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cost  =</span> <span class="fu">to_tune</span>(<span class="fl">1e-5</span>, <span class="fl">1e5</span>, <span class="at">logscale =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma =</span> <span class="fu">to_tune</span>(<span class="fl">1e-5</span>, <span class="fl">1e5</span>, <span class="at">logscale =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"C-classification"</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>instance <span class="ot">=</span> <span class="fu">tune</span>(</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuner =</span> <span class="fu">tnr</span>(<span class="st">"grid_search"</span>, <span class="at">resolution =</span> <span class="dv">5</span>, <span class="at">batch_size =</span> <span class="dv">10</span>),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">task =</span> <span class="fu">tsk</span>(<span class="st">"sonar"</span>),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> learner,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">resampling =</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds =</span> <span class="dv">3</span>),</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">measures =</span> <span class="fu">msr</span>(<span class="st">"classif.acc"</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>instance<span class="sc">$</span>result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["cost"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["gamma"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["learner_param_vals"],"name":[3],"type":["list"],"align":["right"]},{"label":["x_domain"],"name":[4],"type":["list"],"align":["right"]},{"label":["classif.acc"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"11.51293","2":"-5.756463","3":"<named list [4]>","4":"<named list [2]>","5":"0.831815"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
-<p>model에 의해 선택된 feature의 점수만 1, 나머지는 0 (dropped features)</p>
-</section>
-<section id="filter-based-feature-selection" class="level4">
-<h4 class="anchored" data-anchor-id="filter-based-feature-selection">5.2.4. Filter-based feature selection</h4>
-<p>filter를 통해 각 feature들의 점수가 계산이 되었다면, 다음 모델링 단계에서 feature를 선택하여 학습을 시켜주어야 합니다.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> <span class="fu">tsk</span>(<span class="st">'penguins'</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">'classif.rpart'</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>filter <span class="ot">&lt;-</span> <span class="fu">flt</span>(<span class="st">'selected_features'</span>, <span class="at">learner=</span>learner)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>filter<span class="sc">$</span><span class="fu">calculate</span>(task)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">which</span>(filter<span class="sc">$</span>scores<span class="sc">==</span><span class="dv">1</span>))</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>task<span class="sc">$</span><span class="fu">select</span>(keep) <span class="co"># column을 선택하기 때문에 select</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>task<span class="sc">$</span>feature_names</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>위의 예시에서는 selected_features를 했기 때문에 0과 1로 구분이 되었지만, 연속형 점수에 대해 filtering 을 할 때는 다음과 같은 방법이 있습니다.</p>
-<ul>
-<li>위에서 top N개의 feature 선택하는 경우</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> <span class="fu">tsk</span>(<span class="st">'penguins'</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">'classif.rpart'</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>filter <span class="ot">&lt;-</span> <span class="fu">flt</span>(<span class="st">'information_gain'</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>filter<span class="sc">$</span><span class="fu">calculate</span>(task)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># top 3개 선택</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">head</span>(filter<span class="sc">$</span>scores,<span class="dv">3</span>))</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>task<span class="sc">$</span><span class="fu">select</span>(keep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ul>
-<li>score가 k 보다 큰 경우</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> <span class="fu">tsk</span>(<span class="st">'penguins'</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">'classif.rpart'</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>filter <span class="ot">&lt;-</span> <span class="fu">flt</span>(<span class="st">'information_gain'</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>filter<span class="sc">$</span><span class="fu">calculate</span>(task)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># information gain이 0.5보다 큰 경우</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">which</span>(filter<span class="sc">$</span>scores<span class="sc">&gt;</span><span class="fl">0.5</span>))</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>task<span class="sc">$</span><span class="fu">select</span>(keep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-</section>
-<section id="wrapper-methods" class="level3">
-<h3 class="anchored" data-anchor-id="wrapper-methods">5.3 Wrapper methods</h3>
-<p>모델의 성능을 최적화하는 feature들을 반복적으로 선택합니다. feature들에 순위를 매기는 대신, 일부 feature들만을 사용하여 학습한 뒤, 선택된 성능 지표에 따라 평가하게 됩니다.</p>
-<section id="간단한-예시" class="level4">
-<h4 class="anchored" data-anchor-id="간단한-예시">5.3.1. 간단한 예시</h4>
-<p>mlr3에서는 <code>FSelector</code>를 이용하여 위의 방법을 수행합니다.</p>
+<section id="튜닝-결과-분석하기" class="level2">
+<h2 class="anchored" data-anchor-id="튜닝-결과-분석하기">튜닝 결과 분석하기</h2>
+<p>ti이나 tune 에 관계없이 하이퍼파라미터 튜닝 이후에는 모든 파라미터 구성이 <code>$archive</code> 필드에 포함되어있습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3fselect)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>instance <span class="ot">&lt;-</span> <span class="fu">fselect</span>(</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method=</span><span class="st">'sequential'</span>,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">task=</span> <span class="fu">tsk</span>(<span class="st">'penguins'</span>),</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="fu">lrn</span>(<span class="st">'classif.rpart'</span>),</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">resampling =</span> <span class="fu">rsmp</span>(<span class="st">'holdout'</span>),</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">measures =</span> <span class="fu">msr</span>(<span class="st">'classif.acc'</span>)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(instance<span class="sc">$</span>archive)[,.(cost, gamma, classif.acc)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["cost"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["gamma"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["classif.acc"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"-11.512925","2":"-11.512925","3":"0.5337474"},{"1":"-5.756463","2":"-11.512925","3":"0.5337474"},{"1":"-5.756463","2":"-5.756463","3":"0.5337474"},{"1":"-5.756463","2":"0.000000","3":"0.5337474"},{"1":"-5.756463","2":"11.512925","3":"0.5337474"},{"1":"0.000000","2":"5.756463","3":"0.5337474"},{"1":"5.756463","2":"11.512925","3":"0.5337474"},{"1":"11.512925","2":"-11.512925","3":"0.7550725"},{"1":"11.512925","2":"5.756463","3":"0.5337474"},{"1":"-11.512925","2":"-5.756463","3":"0.5337474"},{"1":"-11.512925","2":"0.000000","3":"0.5337474"},{"1":"0.000000","2":"-11.512925","3":"0.5337474"},{"1":"0.000000","2":"0.000000","3":"0.5337474"},{"1":"5.756463","2":"0.000000","3":"0.5337474"},{"1":"5.756463","2":"5.756463","3":"0.5337474"},{"1":"11.512925","2":"-5.756463","3":"0.8318150"},{"1":"11.512925","2":"11.512925","3":"0.5337474"},{"1":"-11.512925","2":"5.756463","3":"0.5337474"},{"1":"-11.512925","2":"11.512925","3":"0.5337474"},{"1":"-5.756463","2":"5.756463","3":"0.5337474"},{"1":"0.000000","2":"-5.756463","3":"0.7406487"},{"1":"0.000000","2":"11.512925","3":"0.5337474"},{"1":"5.756463","2":"-11.512925","3":"0.7358868"},{"1":"5.756463","2":"-5.756463","3":"0.8318150"},{"1":"11.512925","2":"0.000000","3":"0.5337474"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
-<p>성능 비교를 위한 feature들의 모든 subset을 확인하기 위해선 아래의 코드로 확인 가능합니다.</p>
+</div>
+</div>
+<p>결과를 보면 25개의 조합별로 성능 점수(<code>classif.acc</code>, 정확도)가 나와있습니다. 또한 튜닝결과에서는 하이퍼파라미터의 조합별 성능 뿐만 아니라 에러나 경고, 학습된 시간, 모델 학습 시간 등의 정보도 확인할 수 있습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(instance<span class="sc">$</span>archive) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(instance<span class="sc">$</span>archive)[,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  .(timestamp, runtime_learners, errors, warnings)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["timestamp"],"name":[1],"type":["dttm"],"align":["right"]},{"label":["runtime_learners"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["errors"],"name":[3],"type":["int"],"align":["right"]},{"label":["warnings"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"2023-04-28 15:19:04.670874","2":"0.028","3":"0","4":"0"},{"1":"2023-04-28 15:19:04.670874","2":"0.024","3":"0","4":"0"},{"1":"2023-04-28 15:19:04.670874","2":"0.031","3":"0","4":"0"},{"1":"2023-04-28 15:19:04.670874","2":"0.033","3":"0","4":"0"},{"1":"2023-04-28 15:19:04.670874","2":"0.028","3":"0","4":"0"},{"1":"2023-04-28 15:19:04.670874","2":"0.031","3":"0","4":"0"},{"1":"2023-04-28 15:19:04.670874","2":"0.032","3":"0","4":"0"},{"1":"2023-04-28 15:19:04.670874","2":"0.026","3":"0","4":"0"},{"1":"2023-04-28 15:19:04.670874","2":"0.031","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.213963","2":"0.050","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.213963","2":"0.036","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.213963","2":"0.036","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.213963","2":"0.030","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.213963","2":"0.033","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.213963","2":"0.029","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.213963","2":"0.023","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.213963","2":"0.032","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.646245","2":"0.032","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.646245","2":"0.025","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.646245","2":"0.026","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.646245","2":"0.030","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.646245","2":"0.025","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.646245","2":"0.029","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.646245","2":"0.023","3":"0","4":"0"},{"1":"2023-04-28 15:19:05.646245","2":"0.027","3":"0","4":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
-<p>최적의 feature 들을 확인하기 위해서는</p>
+</div>
+</div>
+<p>마지막으로 하이퍼파라미터 튜닝 결과를 <code>mlr3viz</code>를 이용해 시각화할 수 있습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>instance<span class="sc">$</span>result_feature_set</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(instance, <span class="at">type=</span><span class="st">"surface"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
+</div>
+<p>cost와 gamma 의 조합에 따른 성능의 정도가 색상으로 나타났습니다. 정확도가 높을수록 히트맵의 색상이 연하다는 것을 확인할 수 있습니다.</p>
 </section>
-<section id="fselectinstance" class="level4">
-<h4 class="anchored" data-anchor-id="fselectinstance">5.3.2 FSelectInstance</h4>
-</section>
-<section id="fselector-클래스" class="level4">
-<h4 class="anchored" data-anchor-id="fselector-클래스">5.3.3. Fselector 클래스</h4>
-<p><code>mlr3fselect::FSelector</code>에는 다양한 종류의 feature 선택 알고리즘이 존재합니다.</p>
-<ul>
-<li>Random Search (<a href="https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_random_search.html"><code>mlr3fselect::FSelectorRandomSearch</code></a>)</li>
-<li>Exhaustive Search (<a href="https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_exhaustive_search.html"><code>mlr3fselect::FSelectorExhaustiveSearch</code></a>)</li>
-<li>Sequential Search (<a href="https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_sequential.html"><code>mlr3fselect::FSelectorSequential</code></a>)</li>
-<li>Recursive Feature Elimination (<a href="https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_rfe.html"><code>mlr3fselect::FSelectorRFE</code></a>)</li>
-<li>Design Points (<a href="https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_design_points.html"><code>mlr3fselect::FSelectorDesignPoints</code></a>)</li>
-<li>Genetic Search (<a href="https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_genetic_search.html"><code>mlr3fselect::FSelectorGeneticSearch</code></a>)</li>
-<li>Shadow Variable Search (<a href="https://mlr3fselect.mlr-org.com/reference/mlr_fselectors_shadow_variable_search.html"><code>mlr3fselect::FSelectorShadowVariableSearch</code></a>)</li>
-</ul>
+<section id="튜닝된-모델-활용하기" class="level2">
+<h2 class="anchored" data-anchor-id="튜닝된-모델-활용하기">튜닝된 모델 활용하기</h2>
+<p>튜닝인스턴스에는 튜닝된 결과에 대한 모든 정보를 포함하고 있습니다. instance에 저장된 최적의 파라미터를 활용하여 새로운 러너의 파라미터로 설정해주겠습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>svm_tuned <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">"classif.svm"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>svm_tuned<span class="sc">$</span>param_set<span class="sc">$</span>values <span class="ot">=</span> instance<span class="sc">$</span>result_learner_param_vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>이제 새로운 러너를 학습하고 결과를 예측할 수 있게 되었습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>svm_tuned<span class="sc">$</span><span class="fu">train</span>(<span class="fu">tsk</span>(<span class="st">"sonar"</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>svm_tuned<span class="sc">$</span>model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+svm.default(x = data, y = task$truth(), type = "C-classification", 
+    kernel = "radial", gamma = 0.00316227766016838, cost = 1e+05, 
+    probability = (self$predict_type == "prob"))
 
 
+Parameters:
+   SVM-Type:  C-classification 
+ SVM-Kernel:  radial 
+       cost:  1e+05 
+
+Number of Support Vectors:  93</code></pre>
+</div>
+</div>
 </section>
 </section>
+<section id="autotuner-로-튜닝-자동화하기" class="level1">
+<h1><code>AutoTuner</code> 로 튜닝 자동화하기</h1>
+<p><code>mlr3</code>에서 가장 유용한 기능 중 하나가 <code>AutoTuner</code> 입니다. <code>AutoTuner</code>는 러너를 통해 주어진 하이퍼파라미터를 자동으로 최적화해줌으로써 튜닝과정을 자동으로 수행합니다.</p>
+<p>AutoTuner는 러너클래스를 상속받기 때문에 다른 러너들처럼 사용할 수도 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">"classif.svm"</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cost  =</span> <span class="fu">to_tune</span>(<span class="fl">1e-5</span>, <span class="fl">1e5</span>, <span class="at">logscale =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma =</span> <span class="fu">to_tune</span>(<span class="fl">1e-5</span>, <span class="fl">1e5</span>, <span class="at">logscale =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"C-classification"</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>at <span class="ot">=</span> <span class="fu">auto_tuner</span>(</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuner =</span> <span class="fu">tnr</span>(<span class="st">"grid_search"</span>, <span class="at">resolution =</span> <span class="dv">5</span>, <span class="at">batch_size =</span> <span class="dv">5</span>),</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> learner,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">resampling =</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds =</span> <span class="dv">3</span>),</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">measure =</span> <span class="fu">msr</span>(<span class="st">"classif.ce"</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>at</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;AutoTuner:classif.svm.tuned&gt;
+* Model: list
+* Search Space:
+&lt;ParamSet&gt;
+       id    class     lower    upper nlevels
+   &lt;char&gt;   &lt;char&gt;     &lt;num&gt;    &lt;num&gt;   &lt;num&gt;
+1:   cost ParamDbl -11.51293 11.51293     Inf
+2:  gamma ParamDbl -11.51293 11.51293     Inf
+                                                                                     default
+                                                                                      &lt;list&gt;
+1: &lt;NoDefault&gt;\n  Public:\n    clone: function (deep = FALSE) \n    initialize: function () 
+2: &lt;NoDefault&gt;\n  Public:\n    clone: function (deep = FALSE) \n    initialize: function () 
+    value
+   &lt;list&gt;
+1:       
+2:       
+Trafo is set.
+* Packages: mlr3, mlr3tuning, mlr3learners, e1071
+* Predict Type: response
+* Feature Types: logical, integer, numeric
+* Properties: multiclass, twoclass</code></pre>
+</div>
+</div>
+<p>이제 <code>at</code>를 활용해 새로운 데이터를 학습하고 검증 데이터를 통해 모델의 성능을 평가할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>task <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">"sonar"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>split <span class="ot">=</span> <span class="fu">partition</span>(task)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>at<span class="sc">$</span><span class="fu">train</span>(task, <span class="at">row_ids =</span> split<span class="sc">$</span>train)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>at<span class="sc">$</span><span class="fu">predict</span>(task, <span class="at">row_ids =</span> split<span class="sc">$</span>test)<span class="sc">$</span><span class="fu">score</span>(<span class="fu">msr</span>(<span class="st">"classif.acc"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>classif.acc 
+  0.8115942 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>lrn_xgb <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">'classif.xgboost'</span>,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">eta =</span> <span class="fu">to_tune</span>(<span class="fl">1e-4</span>,<span class="fl">1e-2</span>),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">gamma=</span><span class="fu">to_tune</span>(<span class="fl">1e-3</span>,<span class="fl">1e-2</span>),</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">max_depth=</span><span class="fu">to_tune</span>(<span class="dv">10</span>,<span class="dv">50</span>),</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">predict_type=</span><span class="st">'prob'</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>               )</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>at <span class="ot">&lt;-</span> <span class="fu">auto_tuner</span>(</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">method=</span><span class="fu">tnr</span>(<span class="st">'random_search'</span>),</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> lrn_xgb,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">resampling =</span> <span class="fu">rsmp</span>(<span class="st">'cv'</span>,<span class="at">folds=</span><span class="dv">5</span>),</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">measure =</span> <span class="fu">msr</span>(<span class="st">'classif.auc'</span>),</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">term_evals =</span> <span class="dv">30</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>at<span class="sc">$</span><span class="fu">train</span>(task_sonar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="중첩-리샘플링-nested-resampling" class="level1">
+<h1>중첩 리샘플링 Nested resampling</h1>
+<p>하이퍼파라미터 최적화는 모델 성능 측정 시 발생할 수 있는 편향을 예방하기 위해 추가적인 리샘플링이 필요합니다. 만약 동일한 데이터가 최적의 하이퍼파라미터를 구성하고 모델링 결과를 평가하는 데 사용된다면 매우 심하게 편향이 있을 수 있습니다.</p>
+<p>중첩 리샘플링은 추가적인 리샘플링을 수행함으로써 튜닝된 모델의 성능을 평가하는 과정에서 모델 최적화를 분리시켜 놓습니다. 즉 일반적인 방법의 리샘플링 방법으로 모델의 성능을 평가하는 반면, 튜닝의 경우 리샘플링된 데이터를 다시 리샘플링하여 성능을 평가하는 것입니다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mlr3book.mlr-org.com/Figures/nested_resampling.png" class="img-fluid figure-img" width="800"></p>
+<p></p><figcaption class="figure-caption">중첩 리샘플링 설명도. 초록 상자는 외부 리샘플링을 위한 3-fold 교차검증(CV), 파란색 회색 박스는 하이퍼파라미터 튜닝을 위한 4-fold 교차 검증</figcaption><p></p>
+</figure>
+</div>
+<section id="autotuner를-활용한-중첩-리샘플링" class="level2">
+<h2 class="anchored" data-anchor-id="autotuner를-활용한-중첩-리샘플링">AutoTuner를 활용한 중첩 리샘플링</h2>
+<p><code>mlr3</code>에선 <code>AutoTuner</code>를 활용한다면 중첩리샘플링도 쉽게 수행이 가능합니다. 코드를 통해 중첩 리샘플링을 살펴보겠습니다.</p>
+<p><code>AutoTuner</code> 내부에서 수행하는 리샘플링은 inner resampling으로 4-fold 교차 검증을 수행합니다. 반면에 <code>at</code>를 대상으로 수행하는 <code>resample()</code>의 경우 outer resampling으로 3-fold 교차 검증을 수행합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">"classif.svm"</span>,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cost  =</span> <span class="fu">to_tune</span>(<span class="fl">1e-5</span>, <span class="fl">1e5</span>, <span class="at">logscale =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma =</span> <span class="fu">to_tune</span>(<span class="fl">1e-5</span>, <span class="fl">1e5</span>, <span class="at">logscale =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"C-classification"</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>at <span class="ot">=</span> <span class="fu">auto_tuner</span>(</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuner =</span> <span class="fu">tnr</span>(<span class="st">"grid_search"</span>, <span class="at">resolution =</span> <span class="dv">5</span>, <span class="at">batch_size =</span> <span class="dv">10</span>),</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> learner,</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">resampling =</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds =</span> <span class="dv">4</span>),</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">measure =</span> <span class="fu">msr</span>(<span class="st">"classif.ce"</span>),</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>task <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">"sonar"</span>)</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>outer_resampling <span class="ot">=</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds =</span> <span class="dv">3</span>)</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>rr <span class="ot">=</span> <span class="fu">resample</span>(task, at, outer_resampling, <span class="at">store_models =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>rr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;ResampleResult&gt; with 3 resampling iterations
+ task_id        learner_id resampling_id iteration warnings errors
+   sonar classif.svm.tuned            cv         1        0      0
+   sonar classif.svm.tuned            cv         2        0      0
+   sonar classif.svm.tuned            cv         3        0      0</code></pre>
+</div>
+</div>
+<p>resample()에서 store_models = TRUE 로 설정할 경우, inner tuning 된 AutoTuner 모델들이 저장됩니다. 이를 통해 inner tuning에 대한 정보를 알 수 있습니다.</p>
+<p><code>extract_inner_tuning_results()</code>는 최적의 하이퍼파라미터 구성을 보여주고, <code>extract_inner_tuning_archives()</code>는 모든 하이퍼파리미터 기록을 보여줍니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_inner_tuning_results</span>(rr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["iteration"],"name":[1],"type":["int"],"align":["right"]},{"label":["cost"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["gamma"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["classif.ce"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["learner_param_vals"],"name":[5],"type":["list"],"align":["right"]},{"label":["x_domain"],"name":[6],"type":["list"],"align":["right"]},{"label":["task_id"],"name":[7],"type":["chr"],"align":["left"]},{"label":["learner_id"],"name":[8],"type":["chr"],"align":["left"]},{"label":["resampling_id"],"name":[9],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"0.000000","3":"-5.756463","4":"0.2384454","5":"<named list [4]>","6":"<named list [2]>","7":"sonar","8":"classif.svm.tuned","9":"cv"},{"1":"2","2":"11.512925","3":"-5.756463","4":"0.2008403","5":"<named list [4]>","6":"<named list [2]>","7":"sonar","8":"classif.svm.tuned","9":"cv"},{"1":"3","2":"5.756463","3":"-5.756463","4":"0.2443277","5":"<named list [4]>","6":"<named list [2]>","7":"sonar","8":"classif.svm.tuned","9":"cv"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_inner_tuning_archives</span>(rr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["iteration"],"name":[1],"type":["int"],"align":["right"]},{"label":["cost"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["gamma"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["classif.ce"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["x_domain_cost"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["x_domain_gamma"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["runtime_learners"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["timestamp"],"name":[8],"type":["dttm"],"align":["right"]},{"label":["batch_nr"],"name":[9],"type":["int"],"align":["right"]},{"label":["warnings"],"name":[10],"type":["int"],"align":["right"]},{"label":["errors"],"name":[11],"type":["int"],"align":["right"]},{"label":["resample_result"],"name":[12],"type":["list"],"align":["right"]},{"label":["task_id"],"name":[13],"type":["chr"],"align":["left"]},{"label":["learner_id"],"name":[14],"type":["chr"],"align":["left"]},{"label":["resampling_id"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"-11.512925","3":"-5.756463","4":"0.4493697","5":"1.000000e-05","6":"3.162278e-03","7":"0.027","8":"2023-04-28 15:19:08.127763","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-5.756463","3":"-11.512925","4":"0.4493697","5":"3.162278e-03","6":"1.000000e-05","7":"0.050","8":"2023-04-28 15:19:08.127763","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-5.756463","3":"-5.756463","4":"0.4493697","5":"3.162278e-03","6":"3.162278e-03","7":"0.026","8":"2023-04-28 15:19:08.127763","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-5.756463","3":"0.000000","4":"0.4493697","5":"3.162278e-03","6":"1.000000e+00","7":"0.031","8":"2023-04-28 15:19:08.127763","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"0.000000","3":"-11.512925","4":"0.4493697","5":"1.000000e+00","6":"1.000000e-05","7":"0.024","8":"2023-04-28 15:19:08.127763","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"0.000000","3":"11.512925","4":"0.4493697","5":"1.000000e+00","6":"1.000000e+05","7":"0.030","8":"2023-04-28 15:19:08.127763","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"5.756463","3":"-11.512925","4":"0.2752101","5":"3.162278e+02","6":"1.000000e-05","7":"0.023","8":"2023-04-28 15:19:08.127763","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"5.756463","3":"11.512925","4":"0.4493697","5":"3.162278e+02","6":"1.000000e+05","7":"0.032","8":"2023-04-28 15:19:08.127763","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"11.512925","3":"-5.756463","4":"0.2466387","5":"1.000000e+05","6":"3.162278e-03","7":"0.021","8":"2023-04-28 15:19:08.127763","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-11.512925","3":"11.512925","4":"0.4493697","5":"1.000000e-05","6":"1.000000e+05","7":"0.023","8":"2023-04-28 15:19:08.578639","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-5.756463","3":"11.512925","4":"0.4493697","5":"3.162278e-03","6":"1.000000e+05","7":"0.030","8":"2023-04-28 15:19:08.578639","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"0.000000","3":"-5.756463","4":"0.2384454","5":"1.000000e+00","6":"3.162278e-03","7":"0.024","8":"2023-04-28 15:19:08.578639","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"0.000000","3":"5.756463","4":"0.4493697","5":"1.000000e+00","6":"3.162278e+02","7":"0.031","8":"2023-04-28 15:19:08.578639","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"5.756463","3":"-5.756463","4":"0.2466387","5":"3.162278e+02","6":"3.162278e-03","7":"0.019","8":"2023-04-28 15:19:08.578639","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"5.756463","3":"0.000000","4":"0.4493697","5":"3.162278e+02","6":"1.000000e+00","7":"0.030","8":"2023-04-28 15:19:08.578639","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"11.512925","3":"-11.512925","4":"0.2901261","5":"1.000000e+05","6":"1.000000e-05","7":"0.025","8":"2023-04-28 15:19:08.578639","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"11.512925","3":"11.512925","4":"0.4493697","5":"1.000000e+05","6":"1.000000e+05","7":"0.031","8":"2023-04-28 15:19:08.578639","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-11.512925","3":"-11.512925","4":"0.4493697","5":"1.000000e-05","6":"1.000000e-05","7":"0.031","8":"2023-04-28 15:19:09.044003","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-11.512925","3":"0.000000","4":"0.4493697","5":"1.000000e-05","6":"1.000000e+00","7":"0.027","8":"2023-04-28 15:19:09.044003","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-11.512925","3":"5.756463","4":"0.4493697","5":"1.000000e-05","6":"3.162278e+02","7":"0.026","8":"2023-04-28 15:19:09.044003","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-5.756463","3":"5.756463","4":"0.4493697","5":"3.162278e-03","6":"3.162278e+02","7":"0.032","8":"2023-04-28 15:19:09.044003","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"0.000000","3":"0.000000","4":"0.4493697","5":"1.000000e+00","6":"1.000000e+00","7":"0.025","8":"2023-04-28 15:19:09.044003","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"5.756463","3":"5.756463","4":"0.4493697","5":"3.162278e+02","6":"3.162278e+02","7":"0.029","8":"2023-04-28 15:19:09.044003","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"11.512925","3":"0.000000","4":"0.4493697","5":"1.000000e+05","6":"1.000000e+00","7":"0.029","8":"2023-04-28 15:19:09.044003","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"11.512925","3":"5.756463","4":"0.4493697","5":"1.000000e+05","6":"3.162278e+02","7":"0.027","8":"2023-04-28 15:19:09.044003","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-11.512925","3":"0.000000","4":"0.5546218","5":"1.000000e-05","6":"1.000000e+00","7":"0.031","8":"2023-04-28 15:19:09.628196","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-11.512925","3":"5.756463","4":"0.5546218","5":"1.000000e-05","6":"3.162278e+02","7":"0.030","8":"2023-04-28 15:19:09.628196","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-5.756463","3":"-11.512925","4":"0.5546218","5":"3.162278e-03","6":"1.000000e-05","7":"0.026","8":"2023-04-28 15:19:09.628196","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-5.756463","3":"-5.756463","4":"0.5546218","5":"3.162278e-03","6":"3.162278e-03","7":"0.031","8":"2023-04-28 15:19:09.628196","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"0.000000","3":"-11.512925","4":"0.5546218","5":"1.000000e+00","6":"1.000000e-05","7":"0.029","8":"2023-04-28 15:19:09.628196","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"5.756463","3":"-11.512925","4":"0.2300420","5":"3.162278e+02","6":"1.000000e-05","7":"0.026","8":"2023-04-28 15:19:09.628196","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"5.756463","3":"0.000000","4":"0.5546218","5":"3.162278e+02","6":"1.000000e+00","7":"0.029","8":"2023-04-28 15:19:09.628196","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"5.756463","3":"5.756463","4":"0.5546218","5":"3.162278e+02","6":"3.162278e+02","7":"0.032","8":"2023-04-28 15:19:09.628196","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"11.512925","3":"-5.756463","4":"0.2008403","5":"1.000000e+05","6":"3.162278e-03","7":"0.023","8":"2023-04-28 15:19:09.628196","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-11.512925","3":"-5.756463","4":"0.5546218","5":"1.000000e-05","6":"3.162278e-03","7":"0.030","8":"2023-04-28 15:19:10.099026","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-11.512925","3":"11.512925","4":"0.5546218","5":"1.000000e-05","6":"1.000000e+05","7":"0.028","8":"2023-04-28 15:19:10.099026","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-5.756463","3":"0.000000","4":"0.5546218","5":"3.162278e-03","6":"1.000000e+00","7":"0.033","8":"2023-04-28 15:19:10.099026","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-5.756463","3":"5.756463","4":"0.5546218","5":"3.162278e-03","6":"3.162278e+02","7":"0.025","8":"2023-04-28 15:19:10.099026","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"0.000000","3":"0.000000","4":"0.5546218","5":"1.000000e+00","6":"1.000000e+00","7":"0.034","8":"2023-04-28 15:19:10.099026","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"0.000000","3":"5.756463","4":"0.5546218","5":"1.000000e+00","6":"3.162278e+02","7":"0.026","8":"2023-04-28 15:19:10.099026","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"11.512925","3":"-11.512925","4":"0.2441176","5":"1.000000e+05","6":"1.000000e-05","7":"0.029","8":"2023-04-28 15:19:10.099026","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"11.512925","3":"5.756463","4":"0.5546218","5":"1.000000e+05","6":"3.162278e+02","7":"0.030","8":"2023-04-28 15:19:10.099026","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-11.512925","3":"-11.512925","4":"0.5546218","5":"1.000000e-05","6":"1.000000e-05","7":"0.033","8":"2023-04-28 15:19:10.592853","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-5.756463","3":"11.512925","4":"0.5546218","5":"3.162278e-03","6":"1.000000e+05","7":"0.028","8":"2023-04-28 15:19:10.592853","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"0.000000","3":"-5.756463","4":"0.2300420","5":"1.000000e+00","6":"3.162278e-03","7":"0.026","8":"2023-04-28 15:19:10.592853","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"0.000000","3":"11.512925","4":"0.5546218","5":"1.000000e+00","6":"1.000000e+05","7":"0.029","8":"2023-04-28 15:19:10.592853","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"5.756463","3":"-5.756463","4":"0.2008403","5":"3.162278e+02","6":"3.162278e-03","7":"0.026","8":"2023-04-28 15:19:10.592853","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"5.756463","3":"11.512925","4":"0.5546218","5":"3.162278e+02","6":"1.000000e+05","7":"0.035","8":"2023-04-28 15:19:10.592853","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"11.512925","3":"0.000000","4":"0.5546218","5":"1.000000e+05","6":"1.000000e+00","7":"0.030","8":"2023-04-28 15:19:10.592853","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"11.512925","3":"11.512925","4":"0.5546218","5":"1.000000e+05","6":"1.000000e+05","7":"0.028","8":"2023-04-28 15:19:10.592853","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-11.512925","3":"-5.756463","4":"0.5607143","5":"1.000000e-05","6":"3.162278e-03","7":"0.034","8":"2023-04-28 15:19:11.205558","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-11.512925","3":"0.000000","4":"0.5607143","5":"1.000000e-05","6":"1.000000e+00","7":"0.030","8":"2023-04-28 15:19:11.205558","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-11.512925","3":"5.756463","4":"0.5607143","5":"1.000000e-05","6":"3.162278e+02","7":"0.029","8":"2023-04-28 15:19:11.205558","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-11.512925","3":"11.512925","4":"0.5607143","5":"1.000000e-05","6":"1.000000e+05","7":"0.029","8":"2023-04-28 15:19:11.205558","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-5.756463","3":"-5.756463","4":"0.5607143","5":"3.162278e-03","6":"3.162278e-03","7":"0.029","8":"2023-04-28 15:19:11.205558","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-5.756463","3":"11.512925","4":"0.5607143","5":"3.162278e-03","6":"1.000000e+05","7":"0.029","8":"2023-04-28 15:19:11.205558","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"0.000000","3":"5.756463","4":"0.5607143","5":"1.000000e+00","6":"3.162278e+02","7":"0.028","8":"2023-04-28 15:19:11.205558","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"5.756463","3":"11.512925","4":"0.5607143","5":"3.162278e+02","6":"1.000000e+05","7":"0.032","8":"2023-04-28 15:19:11.205558","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"11.512925","3":"0.000000","4":"0.5607143","5":"1.000000e+05","6":"1.000000e+00","7":"0.032","8":"2023-04-28 15:19:11.205558","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-5.756463","3":"-11.512925","4":"0.5607143","5":"3.162278e-03","6":"1.000000e-05","7":"0.035","8":"2023-04-28 15:19:11.735783","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-5.756463","3":"0.000000","4":"0.5607143","5":"3.162278e-03","6":"1.000000e+00","7":"0.043","8":"2023-04-28 15:19:11.735783","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"0.000000","3":"-11.512925","4":"0.5607143","5":"1.000000e+00","6":"1.000000e-05","7":"0.030","8":"2023-04-28 15:19:11.735783","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"0.000000","3":"-5.756463","4":"0.3600840","5":"1.000000e+00","6":"3.162278e-03","7":"0.033","8":"2023-04-28 15:19:11.735783","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"0.000000","3":"11.512925","4":"0.5607143","5":"1.000000e+00","6":"1.000000e+05","7":"0.033","8":"2023-04-28 15:19:11.735783","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"5.756463","3":"-11.512925","4":"0.3598739","5":"3.162278e+02","6":"1.000000e-05","7":"0.027","8":"2023-04-28 15:19:11.735783","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"5.756463","3":"-5.756463","4":"0.2443277","5":"3.162278e+02","6":"3.162278e-03","7":"0.029","8":"2023-04-28 15:19:11.735783","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"11.512925","3":"-11.512925","4":"0.2953782","5":"1.000000e+05","6":"1.000000e-05","7":"0.031","8":"2023-04-28 15:19:11.735783","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-11.512925","3":"-11.512925","4":"0.5607143","5":"1.000000e-05","6":"1.000000e-05","7":"0.030","8":"2023-04-28 15:19:12.335274","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-5.756463","3":"5.756463","4":"0.5607143","5":"3.162278e-03","6":"3.162278e+02","7":"0.177","8":"2023-04-28 15:19:12.335274","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"0.000000","3":"0.000000","4":"0.5607143","5":"1.000000e+00","6":"1.000000e+00","7":"0.025","8":"2023-04-28 15:19:12.335274","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"5.756463","3":"0.000000","4":"0.5607143","5":"3.162278e+02","6":"1.000000e+00","7":"0.026","8":"2023-04-28 15:19:12.335274","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"5.756463","3":"5.756463","4":"0.5607143","5":"3.162278e+02","6":"3.162278e+02","7":"0.031","8":"2023-04-28 15:19:12.335274","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"11.512925","3":"-5.756463","4":"0.2443277","5":"1.000000e+05","6":"3.162278e-03","7":"0.023","8":"2023-04-28 15:19:12.335274","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"11.512925","3":"5.756463","4":"0.5607143","5":"1.000000e+05","6":"3.162278e+02","7":"0.025","8":"2023-04-28 15:19:12.335274","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"11.512925","3":"11.512925","4":"0.5607143","5":"1.000000e+05","6":"1.000000e+05","7":"0.031","8":"2023-04-28 15:19:12.335274","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="성능-비교" class="level2">
+<h2 class="anchored" data-anchor-id="성능-비교">성능 비교</h2>
+<p>이제, inner tunning과 outer tuning 간의 성능 비교를 통해 모델 과적합 여부를 살펴보겠습니다.</p>
+<pre class="{r}"><code>extract_inner_tuning_results(rr)[,
+  .(iteration, cost, gamma, classif.ce)] # inner</code></pre>
+<pre class="{r}"><code>rr$score()[,.(iteration, classif.ce)] # outer</code></pre>
+<p>외부 리샘플링의 일부 결과에서 확연히 낮은 성능이 나온다는 것은 최적화된 하이퍼파라미터가 데이터에 과적합되었다는 것을 의미합니다. 따라서 튜닝된 모델은 요약계산된 성능으로 보고하는 것이 중요합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>rr<span class="sc">$</span><span class="fu">aggregate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>classif.ce 
+ 0.2255349 </code></pre>
+</div>
+</div>
+<p>마지막으로 중첩 리샘플링을 과도하게 많이 설정하는 경우, 컴퓨터 성능을 많이 필요로 하게 됩니다. 예를 들어 위의 예시에서는 내부 리샘플링 4, 외부 리샘플링 3, 하이퍼파라미터 2개, resolution 5로 인해 <span class="math inline">\(3*4*5*5=300\)</span>, 즉 300번의 모델 훈련 검증을 수행하게 됩니다. 따라서 내부 리샘플링에서는 홀드아웃 등과 같은 방법을 사용하거나 병렬화를 사용하도록 하는 것을 권장합니다.</p>
+<table class="table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 30%">
+<col style="width: 46%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>R6 Class</th>
+<th>Sugar function</th>
+<th>요약</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Tuner</code></td>
+<td><code>tnr()</code></td>
+<td>최적화 알고리즘 결정</td>
+</tr>
+<tr class="even">
+<td><code>Terminator</code></td>
+<td><code>trm()</code></td>
+<td>튜닝 알고리즘 종료 시점 기준 설정</td>
+</tr>
+<tr class="odd">
+<td><code>TuningInstanceSingleCrit</code>&nbsp;or&nbsp;<code>TuningInstanceMultiCrit</code></td>
+<td><code>ti()</code></td>
+<td>튜닝 세팅 저장 및 결과 저장</td>
+</tr>
+<tr class="even">
+<td><code>AutoTuner</code></td>
+<td><code>auto_tuner()</code></td>
+<td>튜닝과정 자동화</td>
+</tr>
+<tr class="odd">
+<td>-</td>
+<td><code>extract_inner_tuning_results()</code></td>
+<td>중첩 리샘플링의 내부 튜닝결과 추출</td>
+</tr>
+<tr class="even">
+<td>-</td>
+<td><code>extract_inner_tuning_archives()</code></td>
+<td>중첩 리샘플링의 내부 튜닝 아카이브 추출</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="클래스-함수-정리" class="level2">
+<h2 class="anchored" data-anchor-id="클래스-함수-정리">클래스 함수 정리</h2>
+</section>
+<section id="참고자료" class="level2">
+<h2 class="anchored" data-anchor-id="참고자료">참고자료</h2>
+<p><a href="https://mlr3book.mlr-org.com/optimization.html" class="uri">https://mlr3book.mlr-org.com/optimization.html</a></p>
+
+
 </section>
 </section>
 

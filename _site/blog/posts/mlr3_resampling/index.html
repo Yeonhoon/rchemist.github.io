@@ -229,8 +229,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#벤치마킹-실험하기" id="toc-벤치마킹-실험하기" class="nav-link" data-scroll-target="#벤치마킹-실험하기">벤치마킹 실험하기</a></li>
   <li><a href="#벤치마크결과-객체-살펴보기" id="toc-벤치마크결과-객체-살펴보기" class="nav-link" data-scroll-target="#벤치마크결과-객체-살펴보기">벤치마크결과 객체 살펴보기</a></li>
   </ul></li>
-  <li><a href="#roc-분석" id="toc-roc-분석" class="nav-link" data-scroll-target="#roc-분석">ROC 분석</a></li>
+  <li><a href="#roc-분석" id="toc-roc-분석" class="nav-link" data-scroll-target="#roc-분석">ROC 분석</a>
+  <ul class="collapse">
+  <li><a href="#클래스-함수-정리" id="toc-클래스-함수-정리" class="nav-link" data-scroll-target="#클래스-함수-정리">클래스, 함수 정리</a></li>
   <li><a href="#레퍼런스" id="toc-레퍼런스" class="nav-link" data-scroll-target="#레퍼런스">레퍼런스</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -621,14 +624,53 @@ response  M  R
 </div>
 </div>
 </div>
+<section id="클래스-함수-정리" class="level2">
+<h2 class="anchored" data-anchor-id="클래스-함수-정리">클래스, 함수 정리</h2>
+<table class="table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>R6 Class</th>
+<th>Sugar function</th>
+<th>요약</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Resampling</td>
+<td>rsmp()</td>
+<td>리샘플링을 위해 훈련, 검증 세트 배정</td>
+</tr>
+<tr class="even">
+<td>ResampleResult</td>
+<td>resample()</td>
+<td>리샘플링으로 주어진 태스크에 대한 러너 평가</td>
+</tr>
+<tr class="odd">
+<td>-</td>
+<td>benchmark_grid()</td>
+<td>러너, 태스크, 리샘플링 그리드 구성</td>
+</tr>
+<tr class="even">
+<td>BenchmarkResult</td>
+<td>benchmark()</td>
+<td>벤치마크 그리드로 러너 평가</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="레퍼런스" class="level1">
-<h1>레퍼런스</h1>
+<section id="레퍼런스" class="level2">
+<h2 class="anchored" data-anchor-id="레퍼런스">레퍼런스</h2>
 <ul>
 <li>https://mlr3book.mlr-org.com/performance.html#sec-roc</li>
 </ul>
 
 
+</section>
 </section>
 
 

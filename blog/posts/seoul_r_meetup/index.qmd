@@ -1,0 +1,170 @@
+---
+title: "서울 R 밋업 자료"
+description: "R을 활용한 머신러닝"
+author: "JYH"
+categories: []
+date: "2022-01-01"
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(mlr3)
+require(mlr3verse)
+require(mlr3learners)
+```
+
+
+```{r}
+#| eval: false
+install.packages("mlr3verse")
+install.packages("apcluster")
+install.packages("ranger")
+
+library(mlr3)
+library(mlr3verse)
+library(mlr3learners)
+library(ranger)
+library(xgboost)
+
+# R6 Object oriented programming
+
+# methods
+task$print()
+
+# fields
+
+task$negative
+
+# Dictionaries
+# key-value structure
+
+tasks, learners
+
+mlr_learners$get("classif.log_reg")
+mlr_tasks
+
+
+as.data.table(mlr_tasks) |> View()
+as.data.table(mlr_learners) |> View()
+as.data.table(mlr_measures) |> View()
+
+# Helper function (sugar functions) : shortcut
+
+LearnerClassifXgboost$new()
+lrn("classif.xgboost", predict_type="prob")
+
+lrn("classif.logreg")
+mlr_tasks$get("iris")
+mlr_learners$get("classif.log_reg")
+
+LearnerClassifRpart
+LearnerClassifRanger
+as.data.table(mlr_learners) |> View()
+```
+
+## Task
+
+```{r}
+task <- tsk("ilpd")
+```
+
+
+## Learner
+
+```{r}
+learner_lr <- lrn("classif.log_reg", predict_type="prob")
+learner_rf <- lrn("classif.ranger", predict_type="prob")
+```
+
+
+## train & predict
+
+```{r}
+split <- partition(task, ratio=.7, seed=2023)
+
+lr_pred <- learner_lr$
+  train(task, split$train)$
+  predict(task, split$test)
+
+```
+
+
+## Evaluation
+
+```{r}
+#| eval: false
+
+# msr("")
+# msrs("")
+measures_mac <- msrs(c("classif.acc","classif.sensitivity","classif.specificity", "classif.precision","classif.fbeta", "classif.auc"), average ="macro")
+
+measures_mic <- msrs(c("classif.acc","classif.sensitivity","classif.specificity", "classif.precision","classif.fbeta", "classif.auc"), average ="micro")
+
+lr_pred$score(measures_mac)
+```
+
+## Resampling
+
+```{r}
+#| eval: false
+mlr_resamplings
+resample <- rsmp("cv", folds=10)
+
+rr$instantiate(task)
+
+rr  <- resample(task, learner_lr, resample)
+as.data.table(rr)
+
+rr$score(measures)
+rr$aggregate(measures_mac)
+rr$aggregate(measures_mic)
+
+```
+
+
+## Visualization
+
+```{r}
+#| eval: false
+require(mlr3viz)
+autoplot(rr, type="roc")
+```
+
+
+## benchmarking
+
+```{r}
+#| eval: false
+require(mlr3verse)
+
+
+ilpd <- mlr3data::ilpd 
+ilpd$gender <- ifelse(ilpd$gender=="Male",1,0) |> as.numeric()
+task <- as_task_classif(ilpd, target="diseased")
+
+learners <- list(
+  lrn("classif.log_reg", predict_type="prob", id="LR"),
+  lrn("classif.rpart", predict_type="prob", id="DT"),
+  lrn("classif.ranger", predict_type="prob", id="RF"),
+  lrn("classif.xgboost", predict_type="prob", id="XGB")
+)
+rsmp <- rsmp("cv", folds=5)
+
+design <- benchmark_grid(task, learners, rsmp)
+
+```
+
+```{r}
+#| eval: false
+bmr <- benchmark(design)
+print(bmr)
+
+bmr$aggregate(measures)
+```
+
+
+```{r}
+#| eval: false
+autoplot(bmr, "roc")
+```
