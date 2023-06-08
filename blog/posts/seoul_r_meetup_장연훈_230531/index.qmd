@@ -1,0 +1,513 @@
+---
+title: "R `mlr3` w/ ChatGPT"
+subtitle: "feat. `mlr3`"
+description: "6월 R meetup에서 발표한 내용을 공유합니다."
+date: "2023-06-01"
+image: "seoul-r-meetup-june.jpg"
+author: Yeonhoon Jang
+format: 
+  html:
+    transition: fade
+    auto-stretch: false
+    df-print: kable
+    code-overflow: wrap
+    code-copy: false
+    highlight-style: github
+    fig-cap-location: bottom
+    scrollable: true
+    slide-number: true
+    css: style.css
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(mlr3)
+require(mlr3verse)
+require(mlr3learners)
+require(data.table)
+requireNamespace("bbotk")
+lgr::get_logger("mlr3")$set_threshold("warn")
+lgr::get_logger("bbotk")$set_threshold("warn")
+set.seed(7795)
+```
+
+
+
+## Contents
+
+-   Introduction
+-   Syntax
+-   Basic modeling
+-   Resampling
+-   Benchmarking
+
+# Introduction
+
+## Who am I?
+
+-   Graduate School of Public Health, SNU (2019.03 \~ 2021.02)
+-   Seoul Nastional University Bundang Hospital (2021.06 \~ )
+-   Data (NHIS, MIMIC-IV, Registry data, KNHNAES ...)
+-   Comento mentor (R for healthcare) (2022.07 \~ )
+
+## ML framework in R
+
+::: {layout="[50,50]"}
+![](https://tidymodels.tidymodels.org/logo.png){.fragment width="300px" fig-align="center"}
+
+![](https://github.com/mlr-org/mlr3/raw/main/man/figures/logo.png){.fragment width="400px" fig-align="center"}
+:::
+
+## What is `mlr3`?
+
+`mlr3`: **M**achine **L**earning in **R 3**
+
+![](mlr31.png){fig-align="center"}
+
+## `mlr3` & `mlr3verse`
+
+![source: https://mlr3.mlr-org.com](mlr3_mlr3verse.png){width="800" fig-align="center"}
+
+## Why `mlr3`? {.smaller}
+
+::: incremental
+-   National Health Insurance System Data (NHIS-HEALS, NHIS-NSC)
+
+-   `dplyr` $\rightarrow$ `data.table`
+
+-   `Python` : `scikit-learn` = `R` : `??`
+
+-   `mlr3`: `data.table` based package
+:::
+
+# Syntax
+
+## `mlr3` vs `tidymodels`
+
+![](mlr3_tidy_syntax.png)
+
+## Core 1. `R6` {.smaller}
+
+Object Oriented Programming (OOP)
+
+-   Objects: `foo = bar$new()`
+-   Methods: `$new()`
+-   Fields: `$baz`
+
+```{r}
+#| eval: false
+task = TaskClassif$new("xxx") # Objects
+task$new()  # Methods
+task$feature_names # Fields
+```
+
+<br>
+
+## Core 2. `data.table` {.smaller}
+
+![](mlr3_datatable.png){width="500px" fig-align="center"}
+
+```{r}
+#| eval: false
+DT[i >= 10] # filter rows
+DT[, .(X,Y)] # select columns
+DT[, mean(X), by=Y] # aggregate by group
+```
+
+## Utils 1. Dictionary 
+
+```{r}
+# Getting a specific object with `$get(key)`
+mlr_learners$get("regr.rpart")
+```
+
+
+```{r}
+# Searching objects with $keys()
+mlr_measures$keys() |> head()
+```
+
+
+
+```{r}
+# OR with `as.data.table()`
+as.data.table(mlr_learners) |> head()
+```
+
+## Utils 2. Sugar functions
+
+-   `R6` class $\rightarrow$ `S3` type functions
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|1-2|4-5"
+# No sugar
+LearnerClassifLogReg$new()
+
+# Sugar
+lrn("classif.log_reg")
+```
+
+## Utils 3. `mlr3viz` {.smaller}
+
+-   `autoplot()` visualization
+
+```{r}
+#| echo: false
+#| warning: false
+
+learner = lrn("classif.log_reg", predict_type="prob")
+task = tsk("sonar")
+split = partition(task, ratio = .7)
+learner$train(task, row_ids = split$train)
+pred = learner$predict(task, row_ids = split$test)
+```
+
+```{r}
+#| layout: [[50, 50]]
+#| #| fig-width: 5
+#| fig-height: 5
+#| fig-align: center
+autoplot(pred)
+autoplot(pred, type="roc")
+```
+
+# Basic modeling
+
+## Ask ChatGPT!
+
+::: {layout="[[100],[50,50]]"}
+![](mlr3_tidy_titanic_basic_ask.png){width="100%"}
+
+![](mlr3_tidy_basic_tidymodels.png){width="100%"}
+
+![](mlr3_tidy_basic_mlr3.png){width="100%"}
+:::
+
+## 1. Tasks {.smaller}
+
+::: incremental
+-   Objects with data and metadata
+-   Default datasets
+-   Dictionary: `mlr_tasks`
+-   Sugar function: `tsk()`
+:::
+
+::: fragment
+```{r}
+# R6 methods
+# mlr_tasks$get("titanic")
+
+# Sugar function
+task = tsk("german_credit")
+```
+:::
+
+Or External data as `task`
+
+-   `as_task_regr()` : regression
+-   `as_task_classif()`: classification
+-   `as_task_clust()`: clustering
+
+```{r}
+task_mtcars = as_task_regr(mtcars,
+                           target = "mpg")
+task_mtcars
+```
+
+Fields of `tasks`
+::: {.fragment}
+
+- Feature names
+```{r}
+
+task$feature_names
+```
+:::
+
+::: {.fragment}
+
+- Target names
+```{r}
+
+task$target_names
+```
+:::
+
+::: {.fragment}
+
+- Target classes
+```{r}
+task$class_names
+```
+
+:::
+
+## 2. Learners {.smaller}
+
+::: incremental
+-   ML algorithms
+-   Dictionary: `mlr_learners`
+-   Sugar function: `lrn()`
+-   regression (`regr.~`), classification(`classif.~`), and clustering (`clust.~`)
+-   `library(mlr3learners)` <br>
+:::
+
+::: fragment
+::: callout-note
+## Extra learners
+
+-   only through `github` not CRAN
+-   e.g., `lightGBM`
+
+```{r}
+#| eval: false
+# remotes::install_github("mlr-org/mlr3extralearners@*release")
+library(mlr3extralearners)
+```
+:::
+:::
+
+
+-   `$train()`, `$predict()`
+
+```{r}
+#| code-line-numbers: "|1|2|3|4|5"
+task = tsk("german_credit")
+learner_dt = lrn("classif.rpart", predict_type="prob")
+split = partition(task, ratio=.7)
+learner_dt$train(task, row_ids = split$train)
+prediction = learner_dt$predict(task, row_ids = split$test)
+```
+
+![source: mlr3books](mlr3_learner_train_test.png){fig-align="center" width="30%"}
+
+
+confusion matrix
+
+```{r}
+prediction$confusion
+```
+
+
+Or with `mlr3viz`
+```{r}
+#| fig-width: 4
+#| fig-align: center
+autoplot(prediction)
+```
+
+## Hyperparameter {.smaller auto-animate="true"}
+
+```{r}
+#| code-line-numbers: "|2|5|7"
+# with learner
+learner = lrn("classif.rpart", maxdepth = 1)
+
+# Or
+learner$param_set$set_values(xval = 2, maxdepth=3, cp=.5)
+
+learner$param_set$values
+```
+
+
+::: {.callout-note .smaller}
+## Setting hyperparameters
+
+-   `$param_set` of learners
+-   setting class, lower, upper
+
+```{r}
+as.data.table(learner$param_set) |> head()
+```
+:::
+
+## 3. Measures {.smaller}
+
+::: incremental
+-   Evaluation of performances
+-   Dictionary: `mlr_measures`
+-   Sugar function: `msr()`, `msrs()`
+-   `classif.~`, `regr.~`
+-   `$score()` <br>
+
+::: fragment
+```{r}
+as.data.table(mlr_measures) |> head()
+```
+:::
+:::
+
+
+`msr()`: a single performance
+
+```{r}
+measure = msr("classif.acc")
+prediction$score(measure)
+```
+
+<br>
+
+
+`msrs()`: multiple performances
+
+```{r}
+# Multiple measurements
+measures = msrs(c("classif.acc","classif.ppv","classif.npv","classif.auc"))
+prediction$score(measures)
+```
+
+# Resampling
+
+## Concept of Resampling {.smaller}
+
+::: {layout="[50,50]"}
+![](mlr3_resampling.png){fig-align="center" width="70%"}
+
+![](mlr3_resampling2.png){fig-align="center" width="70%"}
+:::
+
+::: incremental
+-   Split available data into multiple training and test sets
+-   **Reliable** performance
+-   Prevent **Overfitting**
+:::
+
+## `tidymodels` vs `mlr3`
+
+::: {layout="[[100],[50,50]]"}
+![](mlr3_tidy_cv_ask.png)
+
+![](mlr3_tidy_cv_tidymodels.png)
+
+![](mlr3_tidy_cv_mlr3.png)
+:::
+
+-   Dictionary: `mlr_resamplings`
+-   Sugar function: `rsmp()`
+
+```{r}
+as.data.table(mlr_resamplings)
+```
+
+-   `resample()`: initiate resampling
+-   `$aggregate()`: aggregate resampling performance
+
+```{r}
+#| code-line-numbers: "|1|2|3|4|5|6"
+task = tsk("german_credit")
+learner = lrn("classif.ranger", predict_type="prob")
+resample = rsmp("cv", folds=10)
+rr  = resample(task, learner, resample, store_model=T)
+measures = msrs(c("classif.acc","classif.ppv","classif.npv","classif.auc"))
+rr$aggregate(measures)
+```
+
+## Resampling result
+
+```{r}
+#| layout: [[50, 50]]
+autoplot(rr, type="boxplot", measure = msr("classif.acc"))
+autoplot(rr, type="histogram", measure = msr("classif.acc"))
+```
+
+# Benchmarking
+
+## `tidymodels` vs `mlr3`
+
+::: {layout="[[100],[50,50]]"}
+![](mlr3_tidy_benchmark_ask.png)
+
+![](mlr3_tidy_benchmark_tidymodels.png){width="100%"}
+
+![](mlr3_tidy_benchmark_mlr3.png)
+:::
+
+## Benchmarking {.smaller}
+
+-   Comparison of multiple learners on a single task (or multiple tasks).
+-   `benchmark_grid()`: design a benchmarking
+
+```{r}
+#| code-line-numbers: "1|3-7|9|11-14"
+tasks = tsks(c("german_credit", "sonar", "breast_cancer"))
+
+learners = list(
+  lrn("classif.log_reg", predict_type="prob", id="LR"),
+  lrn("classif.rpart", predict_type="prob", id="DT"),
+  lrn("classif.ranger", predict_type="prob", id="RF")
+)
+
+rsmp = rsmp("cv", folds=5)
+
+design = benchmark_grid(
+  tasks = tasks, 
+  learners = learners, 
+  resamplings = rsmp)
+```
+
+
+-   `benchmark()`: execute benchmarking
+
+```{r}
+bmr = benchmark(design)
+measures = msrs(c("classif.acc","classif.ppv", "classif.npv", "classif.auc"))
+as.data.table(bmr$aggregate(measures))[,-c("nr","resample_result","resampling_id","iters")] |> DT()
+```
+
+<br>
+
+## Result
+
+```{r}
+#| fig-width: 5
+#| output-location: column-fragment
+#| fig-align: center
+#| code-line-numbers: "|1|2-6|7|8-11|12|13"
+task = tsk("german_credit")
+learners = list(
+  lrn("classif.log_reg", predict_type="prob"),
+  lrn("classif.rpart", predict_type="prob"),
+  lrn("classif.ranger", predict_type="prob")
+)
+cv10 = rsmp("cv", folds=10)
+design = benchmark_grid(
+  task = task, 
+  learners = learners, 
+  resamplings = cv10)
+bmr = benchmark(design)
+autoplot(bmr, measure = msr("classif.auc"))
+```
+
+## ROC & PRC
+```{r}
+#| layout: [[50, 50]]
+#| fig-width: 5
+#| fig-height: 5
+#| fig-align: center
+autoplot(bmr, type = "roc")
+autoplot(bmr, type = "prc")
+```
+
+# More about `mlr3` {.smaller}
+
+::: incremental
+-   Hyperparameter optimization
+-   Feature selection
+-   ML pipelines
+:::
+
+# Summary {.smaller}
+
+::: incremental
+`mlr3`
+
+-   `R6`, `data.table` based ML framework
+-   Sugar function + Dictionary
+-   Task, Learner, Measure
+-   Resampling
+-   Benchmarking
+-   Still in development (ver 0.16.0)
+-   A great textbook: [**mlr3book**](https://mlr3book.mlr-org.com)
+:::
+

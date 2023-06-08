@@ -2,178 +2,182 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://rchemistblog.com/gallery/gallery/exponential graph/index.html</loc>
-    <lastmod>2023-04-28T07:04:01.460Z</lastmod>
+    <lastmod>2023-06-07T08:08:54.461Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/gallery/gallery/ggplot2_forestplot/index.html</loc>
-    <lastmod>2023-04-28T07:04:02.567Z</lastmod>
+    <lastmod>2023-06-07T08:08:55.552Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/gallery/gallery/ml_model_performance/index.html</loc>
-    <lastmod>2023-04-28T07:04:03.735Z</lastmod>
+    <lastmod>2023-06-07T08:08:56.607Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/gallery/index.html</loc>
-    <lastmod>2023-04-28T07:04:04.066Z</lastmod>
+    <lastmod>2023-06-07T08:08:57.060Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/index.html</loc>
-    <lastmod>2023-04-28T07:04:05.258Z</lastmod>
+    <lastmod>2023-06-07T08:08:59.989Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/data.table_1.14.9_update/index.html</loc>
-    <lastmod>2023-04-28T07:04:06.430Z</lastmod>
+    <lastmod>2023-06-07T08:09:01.057Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/mlr3_hyperparameter/index.html</loc>
-    <lastmod>2023-04-28T07:04:08.832Z</lastmod>
+    <lastmod>2023-06-07T08:09:03.596Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/data.table_advanced/index.html</loc>
-    <lastmod>2023-04-28T07:04:10.223Z</lastmod>
+    <lastmod>2023-06-07T08:09:05.177Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/2023-01-26-dplyr_colwise/index.html</loc>
-    <lastmod>2023-04-28T07:04:11.321Z</lastmod>
+    <lastmod>2023-06-07T08:09:06.381Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/data.table_over_dplyr/index.html</loc>
-    <lastmod>2023-04-28T07:04:12.244Z</lastmod>
+    <lastmod>2023-06-07T08:09:07.359Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/2023-01-25-colors/index.html</loc>
-    <lastmod>2023-04-28T07:04:13.399Z</lastmod>
+    <lastmod>2023-06-07T08:09:08.874Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/ggplot_combine_legend/index.html</loc>
-    <lastmod>2023-04-28T07:04:15.496Z</lastmod>
+    <lastmod>2023-06-07T08:09:09.949Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/GT/index.html</loc>
-    <lastmod>2023-04-28T07:04:18.324Z</lastmod>
+    <lastmod>2023-06-07T08:09:13.054Z</lastmod>
+  </url>
+  <url>
+    <loc>https://rchemistblog.com/blog/posts/seoul_r_meetup_장연훈_230531/index.html</loc>
+    <lastmod>2023-06-07T08:09:17.752Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/PSM_matching/index.html</loc>
-    <lastmod>2023-04-28T07:04:19.483Z</lastmod>
+    <lastmod>2023-06-07T08:09:21.617Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/2023-02-01-boxplot/index.html</loc>
-    <lastmod>2023-04-28T07:04:20.615Z</lastmod>
+    <lastmod>2023-06-07T08:09:22.889Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/performace_comparison/index.html</loc>
-    <lastmod>2023-04-28T07:04:21.777Z</lastmod>
+    <lastmod>2023-06-07T08:09:24.066Z</lastmod>
+  </url>
+  <url>
+    <loc>https://rchemistblog.com/blog/posts/mlr3_pipeline/index.html</loc>
+    <lastmod>2023-06-07T08:09:25.115Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/ggplot_ggsigfig/index.html</loc>
-    <lastmod>2023-04-28T07:04:22.821Z</lastmod>
+    <lastmod>2023-06-07T08:09:26.209Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/2023-01-27-Rbase/index.html</loc>
-    <lastmod>2023-04-28T07:04:24.168Z</lastmod>
+    <lastmod>2023-06-07T08:09:27.924Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/subgroup_analysis/index.html</loc>
-    <lastmod>2023-04-28T07:04:25.340Z</lastmod>
+    <lastmod>2023-06-07T08:09:29.299Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/mice_imputation/index.html</loc>
-    <lastmod>2023-04-28T07:04:26.574Z</lastmod>
+    <lastmod>2023-06-07T08:09:30.673Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/mlr3_resampling/index.html</loc>
-    <lastmod>2023-04-28T07:04:27.812Z</lastmod>
+    <lastmod>2023-06-07T08:09:31.976Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/ggsurvplot_with_list/index.html</loc>
-    <lastmod>2023-04-28T07:04:28.845Z</lastmod>
+    <lastmod>2023-06-07T08:09:33.043Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/2023-02-09-EDA/index.html</loc>
-    <lastmod>2023-04-28T07:04:29.928Z</lastmod>
+    <lastmod>2023-06-07T08:09:34.000Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/2023-01-25-dplyr_basic/index.html</loc>
-    <lastmod>2023-04-28T07:04:31.068Z</lastmod>
+    <lastmod>2023-06-07T08:09:35.483Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/mimic-iv-setting/index.html</loc>
-    <lastmod>2023-04-28T07:04:31.980Z</lastmod>
+    <lastmod>2023-06-07T08:09:36.625Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/regular expression/index.html</loc>
-    <lastmod>2023-04-28T07:04:33.053Z</lastmod>
+    <lastmod>2023-06-07T08:09:37.626Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/ggplot_axis조정/index.html</loc>
-    <lastmod>2023-04-28T07:04:34.162Z</lastmod>
+    <lastmod>2023-06-07T08:09:38.685Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/db in shiny/index.html</loc>
-    <lastmod>2023-04-28T07:04:35.161Z</lastmod>
+    <lastmod>2023-06-07T08:09:39.828Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/2023-01-19-quarto-intro/index.html</loc>
-    <lastmod>2023-04-28T07:04:36.240Z</lastmod>
+    <lastmod>2023-06-07T08:09:41.024Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/data.table_basic/index.html</loc>
-    <lastmod>2023-04-28T07:04:38.043Z</lastmod>
+    <lastmod>2023-06-07T08:09:43.131Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/2023-01-19-ojs/index.html</loc>
-    <lastmod>2023-04-28T07:04:39.118Z</lastmod>
+    <lastmod>2023-06-07T08:09:44.179Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/2023-02-02-imputation/index.html</loc>
-    <lastmod>2023-04-28T07:04:40.209Z</lastmod>
-  </url>
-  <url>
-    <loc>https://rchemistblog.com/blog/posts/seoul_r_meetup/index.html</loc>
-    <lastmod>2023-04-28T07:04:44.013Z</lastmod>
+    <lastmod>2023-06-07T08:09:45.334Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/mlr3_feature_selection/index.html</loc>
-    <lastmod>2023-04-28T07:04:49.738Z</lastmod>
+    <lastmod>2023-06-07T08:09:46.623Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/2023-02-02-dual-yaxis/index.html</loc>
-    <lastmod>2023-04-28T07:04:50.738Z</lastmod>
+    <lastmod>2023-06-07T08:09:47.633Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/ggplot_correlation_heatmap/index.html</loc>
-    <lastmod>2023-04-28T07:04:51.894Z</lastmod>
+    <lastmod>2023-06-07T08:09:48.684Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/sankey_plot/index.html</loc>
-    <lastmod>2023-04-28T07:04:53.034Z</lastmod>
+    <lastmod>2023-06-07T08:09:49.781Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/ggplot_facet_label/index.html</loc>
-    <lastmod>2023-04-28T07:04:54.001Z</lastmod>
+    <lastmod>2023-06-07T08:09:50.911Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/2023-01-26-dplyr_groupby/index.html</loc>
-    <lastmod>2023-04-28T07:04:55.190Z</lastmod>
+    <lastmod>2023-06-07T08:09:52.071Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/2023-02-13-dplyr_pivot/index.html</loc>
-    <lastmod>2023-04-28T07:04:56.627Z</lastmod>
+    <lastmod>2023-06-07T08:09:53.294Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/mlr3_basic/index.html</loc>
-    <lastmod>2023-04-28T07:04:58.198Z</lastmod>
+    <lastmod>2023-06-07T08:09:54.698Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/posts/gtsummary/index.html</loc>
-    <lastmod>2023-04-28T07:04:59.215Z</lastmod>
+    <lastmod>2023-06-07T08:09:55.805Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/blog/index.html</loc>
-    <lastmod>2023-04-28T07:05:00.396Z</lastmod>
+    <lastmod>2023-06-07T08:09:58.688Z</lastmod>
   </url>
   <url>
     <loc>https://rchemistblog.com/about.html</loc>
-    <lastmod>2023-04-28T07:05:00.678Z</lastmod>
+    <lastmod>2023-06-07T08:09:59.003Z</lastmod>
   </url>
 </urlset>

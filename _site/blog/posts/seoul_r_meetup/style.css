@@ -1,0 +1,23 @@
+.reveal code.sourceCode.r {
+  font-size: 1.1rem;
+  padding-bottom: 10px;
+}
+
+.reveal.smaller.slides h1 {
+  font-size: calc(2.5em / 0.8);
+}
+
+.reveal h2 {
+  padding-bottom: 50px;
+}
+
+/*Code syntax*/
+.reveal h1 > code, .reveal h2 > code, .reveal li > code, .reveal p > code {
+  background-color: #f6f6f6;
+  border-radius: 0.375rem;
+  color: #4759ab;
+}
+
+div.cell-output.cell-output-stdout {
+  font-size: 2rem;
+}

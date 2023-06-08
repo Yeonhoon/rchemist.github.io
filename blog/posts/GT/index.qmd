@@ -88,6 +88,8 @@ gtcar_dt |>
   gt(rowname_col = "id")
 ```
 
+제조사와 모델을 합쳐서 표를 만들어 보겠습니다.
+
 ```{r}
 gtcar_dt |> 
   arrange(mfr, desc(msrp)) |> 
@@ -157,7 +159,9 @@ air_tbl |>
 
 ## Column 값에 따른 스타일 변경 1
 
--   조건에 따라 색상 지정
+`gt` 의 또다른 강력함은 조건에 따라 셀의 색상을 지정할 수 있다는 데 있습니다.
+
+먼저 특정 조건에 따른 행의 색상을 지정할 수 있습니다.
 
 ```{r}
 #| output-location: column-fragment
@@ -181,7 +185,11 @@ air_dt |>
 
 ## Column 값에 따른 스타일 변경 2
 
--   범위 조건으로 색상 지정 (연속형)
+다음으로는 `data_color()` 를 이용해 팔레트 색상을 지정할 수 있습니다. `data_color()`에서 팔레트를 지정하는 방법은 다음과 같습니다.
+
+1.  원하는 색상 이름 지정
+2.  RColorBrewer 팔레트 사용
+3.  viridis 계열 팔레트 사용 (e.g., `"viridis"`, `"magma"`, `"inferno"`, etc)
 
 ```{r}
 #| output-location: column-fragment
@@ -192,7 +200,9 @@ air_dt |>
              direction = "column",
              palette=c("red","white","blue"),
              domain=c(7,25)
-             )
+             ) |> 
+  data_color(Temp, palette = "Oranges") |> 
+  data_color(Solar.R, palette = "magma", na_color = "steelblue")
 ```
 
 ```{r}

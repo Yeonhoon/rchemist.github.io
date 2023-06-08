@@ -10,6 +10,8 @@
   {
     "listing": "/index.html",
     "items": [
+      "/blog/posts/seoul_r_meetup_장연훈_230531/index.html",
+      "/blog/posts/mlr3_pipeline/index.html",
       "/blog/posts/mlr3_feature_selection/index.html",
       "/blog/posts/subgroup_analysis/index.html",
       "/blog/posts/PSM_matching/index.html",
@@ -44,7 +46,6 @@
       "/blog/posts/data.table_basic/index.html",
       "/blog/posts/2023-01-19-ojs/index.html",
       "/blog/posts/db in shiny/index.html",
-      "/blog/posts/seoul_r_meetup/index.html",
       "/blog/posts/ggplot_combine_legend/index.html",
       "/blog/posts/ggsurvplot_with_list/index.html"
     ]
@@ -52,6 +53,8 @@
   {
     "listing": "/blog/index.html",
     "items": [
+      "/blog/posts/seoul_r_meetup_장연훈_230531/index.html",
+      "/blog/posts/mlr3_pipeline/index.html",
       "/blog/posts/mlr3_feature_selection/index.html",
       "/blog/posts/subgroup_analysis/index.html",
       "/blog/posts/PSM_matching/index.html",
@@ -86,7 +89,6 @@
       "/blog/posts/data.table_basic/index.html",
       "/blog/posts/2023-01-19-ojs/index.html",
       "/blog/posts/db in shiny/index.html",
-      "/blog/posts/seoul_r_meetup/index.html",
       "/blog/posts/ggplot_combine_legend/index.html",
       "/blog/posts/ggsurvplot_with_list/index.html"
     ]

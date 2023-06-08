@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.340">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Yeonhoon Jang">
+<meta name="dcterms.date" content="2023-06-01">
+<meta name="description" content="6월 R meetup에서 발표한 내용을 공유합니다.">
+
+<title>Rchemist - R mlr3 w/ ChatGPT</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../styles.css">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Rchemist</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target=""><i class="bi bi-house" role="img">
+</i> 
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target=""><i class="bi bi-file-person" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../gallery/index.html" rel="" target=""><i class="bi bi-sliders2" role="img">
+</i> 
+ <span class="menu-text">Gallery</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">R <code>mlr3</code> w/ ChatGPT</h1>
+            <p class="subtitle lead">feat. <code>mlr3</code></p>
+                  <div>
+        <div class="description">
+          6월 R meetup에서 발표한 내용을 공유합니다.
+        </div>
+      </div>
+                </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Yeonhoon Jang </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 1, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#contents" id="toc-contents" class="nav-link active" data-scroll-target="#contents">Contents</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#who-am-i" id="toc-who-am-i" class="nav-link" data-scroll-target="#who-am-i">Who am I?</a></li>
+  <li><a href="#ml-framework-in-r" id="toc-ml-framework-in-r" class="nav-link" data-scroll-target="#ml-framework-in-r">ML framework in R</a></li>
+  <li><a href="#what-is-mlr3" id="toc-what-is-mlr3" class="nav-link" data-scroll-target="#what-is-mlr3">What is <code>mlr3</code>?</a></li>
+  <li><a href="#mlr3-mlr3verse" id="toc-mlr3-mlr3verse" class="nav-link" data-scroll-target="#mlr3-mlr3verse"><code>mlr3</code> &amp; <code>mlr3verse</code></a></li>
+  <li><a href="#why-mlr3" id="toc-why-mlr3" class="nav-link" data-scroll-target="#why-mlr3">Why <code>mlr3</code>?</a></li>
+  </ul></li>
+  <li><a href="#syntax" id="toc-syntax" class="nav-link" data-scroll-target="#syntax">Syntax</a>
+  <ul class="collapse">
+  <li><a href="#mlr3-vs-tidymodels" id="toc-mlr3-vs-tidymodels" class="nav-link" data-scroll-target="#mlr3-vs-tidymodels"><code>mlr3</code> vs <code>tidymodels</code></a></li>
+  <li><a href="#core-1.-r6" id="toc-core-1.-r6" class="nav-link" data-scroll-target="#core-1.-r6">Core 1. <code>R6</code></a></li>
+  <li><a href="#core-2.-data.table" id="toc-core-2.-data.table" class="nav-link" data-scroll-target="#core-2.-data.table">Core 2. <code>data.table</code></a></li>
+  <li><a href="#utils-1.-dictionary" id="toc-utils-1.-dictionary" class="nav-link" data-scroll-target="#utils-1.-dictionary">Utils 1. Dictionary</a></li>
+  <li><a href="#utils-2.-sugar-functions" id="toc-utils-2.-sugar-functions" class="nav-link" data-scroll-target="#utils-2.-sugar-functions">Utils 2. Sugar functions</a></li>
+  <li><a href="#utils-3.-mlr3viz" id="toc-utils-3.-mlr3viz" class="nav-link" data-scroll-target="#utils-3.-mlr3viz">Utils 3. <code>mlr3viz</code></a></li>
+  </ul></li>
+  <li><a href="#basic-modeling" id="toc-basic-modeling" class="nav-link" data-scroll-target="#basic-modeling">Basic modeling</a>
+  <ul class="collapse">
+  <li><a href="#ask-chatgpt" id="toc-ask-chatgpt" class="nav-link" data-scroll-target="#ask-chatgpt">Ask ChatGPT!</a></li>
+  <li><a href="#tasks" id="toc-tasks" class="nav-link" data-scroll-target="#tasks">1. Tasks</a></li>
+  <li><a href="#learners" id="toc-learners" class="nav-link" data-scroll-target="#learners">2. Learners</a></li>
+  <li><a href="#hyperparameter" id="toc-hyperparameter" class="nav-link" data-scroll-target="#hyperparameter">Hyperparameter</a></li>
+  <li><a href="#measures" id="toc-measures" class="nav-link" data-scroll-target="#measures">3. Measures</a></li>
+  </ul></li>
+  <li><a href="#resampling" id="toc-resampling" class="nav-link" data-scroll-target="#resampling">Resampling</a>
+  <ul class="collapse">
+  <li><a href="#concept-of-resampling" id="toc-concept-of-resampling" class="nav-link" data-scroll-target="#concept-of-resampling">Concept of Resampling</a></li>
+  <li><a href="#tidymodels-vs-mlr3" id="toc-tidymodels-vs-mlr3" class="nav-link" data-scroll-target="#tidymodels-vs-mlr3"><code>tidymodels</code> vs <code>mlr3</code></a></li>
+  <li><a href="#resampling-result" id="toc-resampling-result" class="nav-link" data-scroll-target="#resampling-result">Resampling result</a></li>
+  </ul></li>
+  <li><a href="#benchmarking" id="toc-benchmarking" class="nav-link" data-scroll-target="#benchmarking">Benchmarking</a>
+  <ul class="collapse">
+  <li><a href="#tidymodels-vs-mlr3-1" id="toc-tidymodels-vs-mlr3-1" class="nav-link" data-scroll-target="#tidymodels-vs-mlr3-1"><code>tidymodels</code> vs <code>mlr3</code></a></li>
+  <li><a href="#benchmarking-1" id="toc-benchmarking-1" class="nav-link" data-scroll-target="#benchmarking-1">Benchmarking</a></li>
+  <li><a href="#result" id="toc-result" class="nav-link" data-scroll-target="#result">Result</a></li>
+  <li><a href="#roc-prc" id="toc-roc-prc" class="nav-link" data-scroll-target="#roc-prc">ROC &amp; PRC</a></li>
+  </ul></li>
+  <li><a href="#more-about-mlr3" id="toc-more-about-mlr3" class="nav-link" data-scroll-target="#more-about-mlr3">More about <code>mlr3</code></a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="contents" class="level2">
+<h2 class="anchored" data-anchor-id="contents">Contents</h2>
+<ul>
+<li>Introduction</li>
+<li>Syntax</li>
+<li>Basic modeling</li>
+<li>Resampling</li>
+<li>Benchmarking</li>
+</ul>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<section id="who-am-i" class="level2">
+<h2 class="anchored" data-anchor-id="who-am-i">Who am I?</h2>
+<ul>
+<li>Graduate School of Public Health, SNU (2019.03 ~ 2021.02)</li>
+<li>Seoul Nastional University Bundang Hospital (2021.06 ~ )</li>
+<li>Data (NHIS, MIMIC-IV, Registry data, KNHNAES …)</li>
+<li>Comento mentor (R for healthcare) (2022.07 ~ )</li>
+</ul>
+</section>
+<section id="ml-framework-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="ml-framework-in-r">ML framework in R</h2>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://tidymodels.tidymodels.org/logo.png" class="fragment img-fluid figure-img" width="300"></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://github.com/mlr-org/mlr3/raw/main/man/figures/logo.png" class="fragment img-fluid figure-img" width="400"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="what-is-mlr3" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-mlr3">What is <code>mlr3</code>?</h2>
+<p><code>mlr3</code>: <strong>M</strong>achine <strong>L</strong>earning in <strong>R 3</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mlr31.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="mlr3-mlr3verse" class="level2">
+<h2 class="anchored" data-anchor-id="mlr3-mlr3verse"><code>mlr3</code> &amp; <code>mlr3verse</code></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mlr3_mlr3verse.png" class="img-fluid figure-img" width="800"></p>
+<figcaption class="figure-caption">source: https://mlr3.mlr-org.com</figcaption>
+</figure>
+</div>
+</section>
+<section id="why-mlr3" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="why-mlr3">Why <code>mlr3</code>?</h2>
+<div class="incremental">
+<ul class="incremental">
+<li><p>National Health Insurance System Data (NHIS-HEALS, NHIS-NSC)</p></li>
+<li><p><code>dplyr</code> <span class="math inline">\(\rightarrow\)</span> <code>data.table</code></p></li>
+<li><p><code>Python</code> : <code>scikit-learn</code> = <code>R</code> : <code>??</code></p></li>
+<li><p><code>mlr3</code>: <code>data.table</code> based package</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="syntax" class="level1">
+<h1>Syntax</h1>
+<section id="mlr3-vs-tidymodels" class="level2">
+<h2 class="anchored" data-anchor-id="mlr3-vs-tidymodels"><code>mlr3</code> vs <code>tidymodels</code></h2>
+<p><img src="mlr3_tidy_syntax.png" class="img-fluid"></p>
+</section>
+<section id="core-1.-r6" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="core-1.-r6">Core 1. <code>R6</code></h2>
+<p>Object Oriented Programming (OOP)</p>
+<ul>
+<li>Objects: <code>foo = bar$new()</code></li>
+<li>Methods: <code>$new()</code></li>
+<li>Fields: <code>$baz</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>task <span class="ot">=</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(<span class="st">"xxx"</span>) <span class="co"># Objects</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>task<span class="sc">$</span><span class="fu">new</span>()  <span class="co"># Methods</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>task<span class="sc">$</span>feature_names <span class="co"># Fields</span></span></code></pre></div>
+</div>
+<p><br></p>
+</section>
+<section id="core-2.-data.table" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="core-2.-data.table">Core 2. <code>data.table</code></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mlr3_datatable.png" class="img-fluid figure-img" width="500"></p>
+</figure>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>DT[i <span class="sc">&gt;=</span> <span class="dv">10</span>] <span class="co"># filter rows</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>DT[, .(X,Y)] <span class="co"># select columns</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>DT[, <span class="fu">mean</span>(X), by<span class="ot">=</span>Y] <span class="co"># aggregate by group</span></span></code></pre></div>
+</div>
+</section>
+<section id="utils-1.-dictionary" class="level2">
+<h2 class="anchored" data-anchor-id="utils-1.-dictionary">Utils 1. Dictionary</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting a specific object with `$get(key)`</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mlr_learners<span class="sc">$</span><span class="fu">get</span>(<span class="st">"regr.rpart"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;LearnerRegrRpart:regr.rpart&gt;: Regression Tree
+* Model: -
+* Parameters: xval=0
+* Packages: mlr3, rpart
+* Predict Types:  [response]
+* Feature Types: logical, integer, numeric, factor, ordered
+* Properties: importance, missings, selected_features, weights</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Searching objects with $keys()</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>mlr_measures<span class="sc">$</span><span class="fu">keys</span>() <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "aic"            "bic"            "classif.acc"    "classif.auc"   
+[5] "classif.bacc"   "classif.bbrier"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># OR with `as.data.table()`</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(mlr_learners) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 11%">
+<col style="width: 3%">
+<col style="width: 25%">
+<col style="width: 11%">
+<col style="width: 35%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">key</th>
+<th style="text-align: left;">label</th>
+<th style="text-align: left;">task_type</th>
+<th style="text-align: left;">feature_types</th>
+<th style="text-align: left;">packages</th>
+<th style="text-align: left;">properties</th>
+<th style="text-align: left;">predict_types</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">classif.cv_glmnet</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">classif</td>
+<td style="text-align: left;">logical, integer, numeric</td>
+<td style="text-align: left;">mlr3 , mlr3learners, glmnet</td>
+<td style="text-align: left;">multiclass , selected_features, twoclass , weights</td>
+<td style="text-align: left;">response, prob</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">classif.debug</td>
+<td style="text-align: left;">Debug Learner for Classification</td>
+<td style="text-align: left;">classif</td>
+<td style="text-align: left;">logical , integer , numeric , character, factor , ordered</td>
+<td style="text-align: left;">mlr3</td>
+<td style="text-align: left;">hotstart_forward, missings , multiclass , twoclass</td>
+<td style="text-align: left;">response, prob</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">classif.featureless</td>
+<td style="text-align: left;">Featureless Classification Learner</td>
+<td style="text-align: left;">classif</td>
+<td style="text-align: left;">logical , integer , numeric , character, factor , ordered , POSIXct</td>
+<td style="text-align: left;">mlr3</td>
+<td style="text-align: left;">featureless , importance , missings , multiclass , selected_features, twoclass</td>
+<td style="text-align: left;">response, prob</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">classif.glmnet</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">classif</td>
+<td style="text-align: left;">logical, integer, numeric</td>
+<td style="text-align: left;">mlr3 , mlr3learners, glmnet</td>
+<td style="text-align: left;">multiclass, twoclass , weights</td>
+<td style="text-align: left;">response, prob</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">classif.kknn</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">classif</td>
+<td style="text-align: left;">logical, integer, numeric, factor , ordered</td>
+<td style="text-align: left;">mlr3 , mlr3learners, kknn</td>
+<td style="text-align: left;">multiclass, twoclass</td>
+<td style="text-align: left;">response, prob</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">classif.lda</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">classif</td>
+<td style="text-align: left;">logical, integer, numeric, factor , ordered</td>
+<td style="text-align: left;">mlr3 , mlr3learners, MASS</td>
+<td style="text-align: left;">multiclass, twoclass , weights</td>
+<td style="text-align: left;">response, prob</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="utils-2.-sugar-functions" class="level2">
+<h2 class="anchored" data-anchor-id="utils-2.-sugar-functions">Utils 2. Sugar functions</h2>
+<ul>
+<li><code>R6</code> class <span class="math inline">\(\rightarrow\)</span> <code>S3</code> type functions</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># No sugar</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>LearnerClassifLogReg<span class="sc">$</span><span class="fu">new</span>()</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co"># Sugar</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="fu">lrn</span>(<span class="st">"classif.log_reg"</span>)</span></code></pre></div>
+</div>
+</section>
+<section id="utils-3.-mlr3viz" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="utils-3.-mlr3viz">Utils 3. <code>mlr3viz</code></h2>
+<ul>
+<li><code>autoplot()</code> visualization</li>
+</ul>
+<div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pred)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pred, <span class="at">type=</span><span class="st">"roc"</span>)</span></code></pre></div>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="basic-modeling" class="level1">
+<h1>Basic modeling</h1>
+<section id="ask-chatgpt" class="level2">
+<h2 class="anchored" data-anchor-id="ask-chatgpt">Ask ChatGPT!</h2>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img src="mlr3_tidy_titanic_basic_ask.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="mlr3_tidy_basic_tidymodels.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="mlr3_tidy_basic_mlr3.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="tasks" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="tasks">1. Tasks</h2>
+<div class="incremental">
+<ul class="incremental">
+<li>Objects with data and metadata</li>
+<li>Default datasets</li>
+<li>Dictionary: <code>mlr_tasks</code></li>
+<li>Sugar function: <code>tsk()</code></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R6 methods</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># mlr_tasks$get("titanic")</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sugar function</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>task <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">"german_credit"</span>)</span></code></pre></div>
+</div>
+</div>
+<p>Or External data as <code>task</code></p>
+<ul>
+<li><code>as_task_regr()</code> : regression</li>
+<li><code>as_task_classif()</code>: classification</li>
+<li><code>as_task_clust()</code>: clustering</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>task_mtcars <span class="ot">=</span> <span class="fu">as_task_regr</span>(mtcars,</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">target =</span> <span class="st">"mpg"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>task_mtcars</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;TaskRegr:mtcars&gt; (32 x 11)
+* Target: mpg
+* Properties: -
+* Features (10):
+  - dbl (10): am, carb, cyl, disp, drat, gear, hp, qsec, vs, wt</code></pre>
+</div>
+</div>
+<p>Fields of <code>tasks</code> ::: {.fragment}</p>
+<ul>
+<li>Feature names</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>task<span class="sc">$</span>feature_names</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "age"                     "amount"                 
+ [3] "credit_history"          "duration"               
+ [5] "employment_duration"     "foreign_worker"         
+ [7] "housing"                 "installment_rate"       
+ [9] "job"                     "number_credits"         
+[11] "other_debtors"           "other_installment_plans"
+[13] "people_liable"           "personal_status_sex"    
+[15] "present_residence"       "property"               
+[17] "purpose"                 "savings"                
+[19] "status"                  "telephone"              </code></pre>
+</div>
+</div>
+<p>:::</p>
+<div class="fragment">
+<ul>
+<li>Target names</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>task<span class="sc">$</span>target_names</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "credit_risk"</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li>Target classes</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>task<span class="sc">$</span>class_names</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "good" "bad" </code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="learners" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="learners">2. Learners</h2>
+<div class="incremental">
+<ul class="incremental">
+<li>ML algorithms</li>
+<li>Dictionary: <code>mlr_learners</code></li>
+<li>Sugar function: <code>lrn()</code></li>
+<li>regression (<code>regr.~</code>), classification(<code>classif.~</code>), and clustering (<code>clust.~</code>)</li>
+<li><code>library(mlr3learners)</code> <br></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Extra learners
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>only through <code>github</code> not CRAN</li>
+<li>e.g., <code>lightGBM</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github("mlr-org/mlr3extralearners@*release")</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3extralearners)</span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<ul>
+<li><code>$train()</code>, <code>$predict()</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>task <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">"german_credit"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2"></a>learner_dt <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>, <span class="at">predict_type=</span><span class="st">"prob"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3"></a>split <span class="ot">=</span> <span class="fu">partition</span>(task, <span class="at">ratio=</span>.<span class="dv">7</span>)</span>
+<span id="cb20-4"><a href="#cb20-4"></a>learner_dt<span class="sc">$</span><span class="fu">train</span>(task, <span class="at">row_ids =</span> split<span class="sc">$</span>train)</span>
+<span id="cb20-5"><a href="#cb20-5"></a>prediction <span class="ot">=</span> learner_dt<span class="sc">$</span><span class="fu">predict</span>(task, <span class="at">row_ids =</span> split<span class="sc">$</span>test)</span></code></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mlr3_learner_train_test.png" class="img-fluid figure-img" style="width:30.0%"></p>
+<figcaption class="figure-caption">source: mlr3books</figcaption>
+</figure>
+</div>
+<p>confusion matrix</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>prediction<span class="sc">$</span>confusion</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        truth
+response good bad
+    good  184  45
+    bad    26  45</code></pre>
+</div>
+</div>
+<p>Or with <code>mlr3viz</code></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(prediction)</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="hyperparameter" class="level2 smaller" data-auto-animate="true">
+<h2 class="smaller anchored" data-auto-animate="true" data-anchor-id="hyperparameter">Hyperparameter</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># with learner</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>, <span class="at">maxdepth =</span> <span class="dv">1</span>)</span>
+<span id="cb24-3"><a href="#cb24-3"></a></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="co"># Or</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a>learner<span class="sc">$</span>param_set<span class="sc">$</span><span class="fu">set_values</span>(<span class="at">xval =</span> <span class="dv">2</span>, <span class="at">maxdepth=</span><span class="dv">3</span>, <span class="at">cp=</span>.<span class="dv">5</span>)</span>
+<span id="cb24-6"><a href="#cb24-6"></a></span>
+<span id="cb24-7"><a href="#cb24-7"></a>learner<span class="sc">$</span>param_set<span class="sc">$</span>values</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$xval
+[1] 2
+
+$maxdepth
+[1] 3
+
+$cp
+[1] 0.5</code></pre>
+</div>
+</div>
+<div class="smaller callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Setting hyperparameters
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>$param_set</code> of learners</li>
+<li>setting class, lower, upper</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(learner<span class="sc">$</span>param_set) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 7%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 9%">
+<col style="width: 6%">
+<col style="width: 8%">
+<col style="width: 10%">
+<col style="width: 21%">
+<col style="width: 10%">
+<col style="width: 4%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">id</th>
+<th style="text-align: left;">class</th>
+<th style="text-align: right;">lower</th>
+<th style="text-align: right;">upper</th>
+<th style="text-align: left;">levels</th>
+<th style="text-align: right;">nlevels</th>
+<th style="text-align: left;">is_bounded</th>
+<th style="text-align: left;">special_vals</th>
+<th style="text-align: left;">default</th>
+<th style="text-align: left;">storage_type</th>
+<th style="text-align: left;">tags</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">cp</td>
+<td style="text-align: left;">ParamDbl</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: left;">0.01</td>
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">train</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">keep_model</td>
+<td style="text-align: left;">ParamLgl</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">TRUE, FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: left;">logical</td>
+<td style="text-align: left;">train</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">maxcompete</td>
+<td style="text-align: left;">ParamInt</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">train</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">maxdepth</td>
+<td style="text-align: left;">ParamInt</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: left;">30</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">train</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">maxsurrogate</td>
+<td style="text-align: left;">ParamInt</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">train</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">minbucket</td>
+<td style="text-align: left;">ParamInt</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: left;">&lt;environment: 0x10e5fea30&gt;</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">train</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="measures" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="measures">3. Measures</h2>
+<div class="incremental">
+<ul class="incremental">
+<li>Evaluation of performances</li>
+<li>Dictionary: <code>mlr_measures</code></li>
+<li>Sugar function: <code>msr()</code>, <code>msrs()</code></li>
+<li><code>classif.~</code>, <code>regr.~</code></li>
+<li><code>$score()</code> <br></li>
+</ul>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(mlr_measures) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 27%">
+<col style="width: 8%">
+<col style="width: 24%">
+<col style="width: 11%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">key</th>
+<th style="text-align: left;">label</th>
+<th style="text-align: left;">task_type</th>
+<th style="text-align: left;">packages</th>
+<th style="text-align: left;">predict_type</th>
+<th style="text-align: left;">task_properties</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">aic</td>
+<td style="text-align: left;">Akaike Information Criterion</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">mlr3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">bic</td>
+<td style="text-align: left;">Bayesian Information Criterion</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">mlr3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">classif.acc</td>
+<td style="text-align: left;">Classification Accuracy</td>
+<td style="text-align: left;">classif</td>
+<td style="text-align: left;">mlr3 , mlr3measures</td>
+<td style="text-align: left;">response</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">classif.auc</td>
+<td style="text-align: left;">Area Under the ROC Curve</td>
+<td style="text-align: left;">classif</td>
+<td style="text-align: left;">mlr3 , mlr3measures</td>
+<td style="text-align: left;">prob</td>
+<td style="text-align: left;">twoclass</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">classif.bacc</td>
+<td style="text-align: left;">Balanced Accuracy</td>
+<td style="text-align: left;">classif</td>
+<td style="text-align: left;">mlr3 , mlr3measures</td>
+<td style="text-align: left;">response</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">classif.bbrier</td>
+<td style="text-align: left;">Binary Brier Score</td>
+<td style="text-align: left;">classif</td>
+<td style="text-align: left;">mlr3 , mlr3measures</td>
+<td style="text-align: left;">prob</td>
+<td style="text-align: left;">twoclass</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><code>msr()</code>: a single performance</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>measure <span class="ot">=</span> <span class="fu">msr</span>(<span class="st">"classif.acc"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>prediction<span class="sc">$</span><span class="fu">score</span>(measure)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>classif.acc 
+  0.7633333 </code></pre>
+</div>
+</div>
+<p><br></p>
+<p><code>msrs()</code>: multiple performances</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple measurements</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>measures <span class="ot">=</span> <span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"classif.acc"</span>,<span class="st">"classif.ppv"</span>,<span class="st">"classif.npv"</span>,<span class="st">"classif.auc"</span>))</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>prediction<span class="sc">$</span><span class="fu">score</span>(measures)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>classif.acc classif.ppv classif.npv classif.auc 
+  0.7633333   0.8034934   0.6338028   0.7558730 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="resampling" class="level1">
+<h1>Resampling</h1>
+<section id="concept-of-resampling" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="concept-of-resampling">Concept of Resampling</h2>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mlr3_resampling.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mlr3_resampling2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="incremental">
+<ul class="incremental">
+<li>Split available data into multiple training and test sets</li>
+<li><strong>Reliable</strong> performance</li>
+<li>Prevent <strong>Overfitting</strong></li>
+</ul>
+</div>
+</section>
+<section id="tidymodels-vs-mlr3" class="level2">
+<h2 class="anchored" data-anchor-id="tidymodels-vs-mlr3"><code>tidymodels</code> vs <code>mlr3</code></h2>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img src="mlr3_tidy_cv_ask.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="mlr3_tidy_cv_tidymodels.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="mlr3_tidy_cv_mlr3.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<ul>
+<li>Dictionary: <code>mlr_resamplings</code></li>
+<li>Sugar function: <code>rsmp()</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(mlr_resamplings)</span></code></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">key</th>
+<th style="text-align: left;">label</th>
+<th style="text-align: left;">params</th>
+<th style="text-align: right;">iters</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">bootstrap</td>
+<td style="text-align: left;">Bootstrap</td>
+<td style="text-align: left;">ratio , repeats</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">custom</td>
+<td style="text-align: left;">Custom Splits</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">custom_cv</td>
+<td style="text-align: left;">Custom Split Cross-Validation</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">cv</td>
+<td style="text-align: left;">Cross-Validation</td>
+<td style="text-align: left;">folds</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">holdout</td>
+<td style="text-align: left;">Holdout</td>
+<td style="text-align: left;">ratio</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">insample</td>
+<td style="text-align: left;">Insample Resampling</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">loo</td>
+<td style="text-align: left;">Leave-One-Out</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">repeated_cv</td>
+<td style="text-align: left;">Repeated Cross-Validation</td>
+<td style="text-align: left;">folds , repeats</td>
+<td style="text-align: right;">100</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">subsampling</td>
+<td style="text-align: left;">Subsampling</td>
+<td style="text-align: left;">ratio , repeats</td>
+<td style="text-align: right;">30</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<ul>
+<li><code>resample()</code>: initiate resampling</li>
+<li><code>$aggregate()</code>: aggregate resampling performance</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>task <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">"german_credit"</span>)</span>
+<span id="cb33-2"><a href="#cb33-2"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">"classif.ranger"</span>, <span class="at">predict_type=</span><span class="st">"prob"</span>)</span>
+<span id="cb33-3"><a href="#cb33-3"></a>resample <span class="ot">=</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds=</span><span class="dv">10</span>)</span>
+<span id="cb33-4"><a href="#cb33-4"></a>rr  <span class="ot">=</span> <span class="fu">resample</span>(task, learner, resample, <span class="at">store_model=</span>T)</span>
+<span id="cb33-5"><a href="#cb33-5"></a>measures <span class="ot">=</span> <span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"classif.acc"</span>,<span class="st">"classif.ppv"</span>,<span class="st">"classif.npv"</span>,<span class="st">"classif.auc"</span>))</span>
+<span id="cb33-6"><a href="#cb33-6"></a>rr<span class="sc">$</span><span class="fu">aggregate</span>(measures)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>classif.acc classif.ppv classif.npv classif.auc 
+  0.7710000   0.7890524   0.6956910   0.7979774 </code></pre>
+</div>
+</div>
+</section>
+<section id="resampling-result" class="level2">
+<h2 class="anchored" data-anchor-id="resampling-result">Resampling result</h2>
+<div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(rr, <span class="at">type=</span><span class="st">"boxplot"</span>, <span class="at">measure =</span> <span class="fu">msr</span>(<span class="st">"classif.acc"</span>))</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(rr, <span class="at">type=</span><span class="st">"histogram"</span>, <span class="at">measure =</span> <span class="fu">msr</span>(<span class="st">"classif.acc"</span>))</span></code></pre></div>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="index_files/figure-html/unnamed-chunk-25-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="benchmarking" class="level1">
+<h1>Benchmarking</h1>
+<section id="tidymodels-vs-mlr3-1" class="level2">
+<h2 class="anchored" data-anchor-id="tidymodels-vs-mlr3-1"><code>tidymodels</code> vs <code>mlr3</code></h2>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img src="mlr3_tidy_benchmark_ask.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="mlr3_tidy_benchmark_tidymodels.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="mlr3_tidy_benchmark_mlr3.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="benchmarking-1" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="benchmarking-1">Benchmarking</h2>
+<ul>
+<li>Comparison of multiple learners on a single task (or multiple tasks).</li>
+<li><code>benchmark_grid()</code>: design a benchmarking</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>tasks <span class="ot">=</span> <span class="fu">tsks</span>(<span class="fu">c</span>(<span class="st">"german_credit"</span>, <span class="st">"sonar"</span>, <span class="st">"breast_cancer"</span>))</span>
+<span id="cb36-2"><a href="#cb36-2"></a></span>
+<span id="cb36-3"><a href="#cb36-3"></a>learners <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb36-4"><a href="#cb36-4"></a>  <span class="fu">lrn</span>(<span class="st">"classif.log_reg"</span>, <span class="at">predict_type=</span><span class="st">"prob"</span>, <span class="at">id=</span><span class="st">"LR"</span>),</span>
+<span id="cb36-5"><a href="#cb36-5"></a>  <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>, <span class="at">predict_type=</span><span class="st">"prob"</span>, <span class="at">id=</span><span class="st">"DT"</span>),</span>
+<span id="cb36-6"><a href="#cb36-6"></a>  <span class="fu">lrn</span>(<span class="st">"classif.ranger"</span>, <span class="at">predict_type=</span><span class="st">"prob"</span>, <span class="at">id=</span><span class="st">"RF"</span>)</span>
+<span id="cb36-7"><a href="#cb36-7"></a>)</span>
+<span id="cb36-8"><a href="#cb36-8"></a></span>
+<span id="cb36-9"><a href="#cb36-9"></a>rsmp <span class="ot">=</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds=</span><span class="dv">5</span>)</span>
+<span id="cb36-10"><a href="#cb36-10"></a></span>
+<span id="cb36-11"><a href="#cb36-11"></a>design <span class="ot">=</span> <span class="fu">benchmark_grid</span>(</span>
+<span id="cb36-12"><a href="#cb36-12"></a>  <span class="at">tasks =</span> tasks, </span>
+<span id="cb36-13"><a href="#cb36-13"></a>  <span class="at">learners =</span> learners, </span>
+<span id="cb36-14"><a href="#cb36-14"></a>  <span class="at">resamplings =</span> rsmp)</span></code></pre></div>
+</div>
+<ul>
+<li><code>benchmark()</code>: execute benchmarking</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>bmr <span class="ot">=</span> <span class="fu">benchmark</span>(design)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>measures <span class="ot">=</span> <span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"classif.acc"</span>,<span class="st">"classif.ppv"</span>, <span class="st">"classif.npv"</span>, <span class="st">"classif.auc"</span>))</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(bmr<span class="sc">$</span><span class="fu">aggregate</span>(measures))[,<span class="sc">-</span><span class="fu">c</span>(<span class="st">"nr"</span>,<span class="st">"resample_result"</span>,<span class="st">"resampling_id"</span>,<span class="st">"iters"</span>)] <span class="sc">|&gt;</span> <span class="fu">DT</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 15%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">task_id</th>
+<th style="text-align: left;">learner_id</th>
+<th style="text-align: right;">classif.acc</th>
+<th style="text-align: right;">classif.ppv</th>
+<th style="text-align: right;">classif.npv</th>
+<th style="text-align: right;">classif.auc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">german_credit</td>
+<td style="text-align: left;">LR</td>
+<td style="text-align: right;">0.7540000</td>
+<td style="text-align: right;">0.7959935</td>
+<td style="text-align: right;">0.6128794</td>
+<td style="text-align: right;">0.7682786</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">german_credit</td>
+<td style="text-align: left;">DT</td>
+<td style="text-align: right;">0.7220000</td>
+<td style="text-align: right;">0.7720000</td>
+<td style="text-align: right;">0.5715187</td>
+<td style="text-align: right;">0.7009023</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">german_credit</td>
+<td style="text-align: left;">RF</td>
+<td style="text-align: right;">0.7670000</td>
+<td style="text-align: right;">0.7866093</td>
+<td style="text-align: right;">0.6820459</td>
+<td style="text-align: right;">0.7916496</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sonar</td>
+<td style="text-align: left;">LR</td>
+<td style="text-align: right;">0.7027875</td>
+<td style="text-align: right;">0.7229497</td>
+<td style="text-align: right;">0.6805154</td>
+<td style="text-align: right;">0.7122449</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sonar</td>
+<td style="text-align: left;">DT</td>
+<td style="text-align: right;">0.7262485</td>
+<td style="text-align: right;">0.7250771</td>
+<td style="text-align: right;">0.7382659</td>
+<td style="text-align: right;">0.7524838</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sonar</td>
+<td style="text-align: left;">RF</td>
+<td style="text-align: right;">0.8174216</td>
+<td style="text-align: right;">0.8101012</td>
+<td style="text-align: right;">0.8425397</td>
+<td style="text-align: right;">0.9232502</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">breast_cancer</td>
+<td style="text-align: left;">LR</td>
+<td style="text-align: right;">0.9252791</td>
+<td style="text-align: right;">0.9361270</td>
+<td style="text-align: right;">0.9195608</td>
+<td style="text-align: right;">0.9418515</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">breast_cancer</td>
+<td style="text-align: left;">DT</td>
+<td style="text-align: right;">0.9502362</td>
+<td style="text-align: right;">0.9167371</td>
+<td style="text-align: right;">0.9675106</td>
+<td style="text-align: right;">0.9543396</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">breast_cancer</td>
+<td style="text-align: left;">RF</td>
+<td style="text-align: right;">0.9751181</td>
+<td style="text-align: right;">0.9549859</td>
+<td style="text-align: right;">0.9860113</td>
+<td style="text-align: right;">0.9938067</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p><br></p>
+</section>
+<section id="result" class="level2">
+<h2 class="anchored" data-anchor-id="result">Result</h2>
+<div class="cell" data-layout-align="center" data-output-location="column-fragment">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>task <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">"german_credit"</span>)</span>
+<span id="cb38-2"><a href="#cb38-2"></a>learners <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb38-3"><a href="#cb38-3"></a>  <span class="fu">lrn</span>(<span class="st">"classif.log_reg"</span>, <span class="at">predict_type=</span><span class="st">"prob"</span>),</span>
+<span id="cb38-4"><a href="#cb38-4"></a>  <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>, <span class="at">predict_type=</span><span class="st">"prob"</span>),</span>
+<span id="cb38-5"><a href="#cb38-5"></a>  <span class="fu">lrn</span>(<span class="st">"classif.ranger"</span>, <span class="at">predict_type=</span><span class="st">"prob"</span>)</span>
+<span id="cb38-6"><a href="#cb38-6"></a>)</span>
+<span id="cb38-7"><a href="#cb38-7"></a>cv10 <span class="ot">=</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds=</span><span class="dv">10</span>)</span>
+<span id="cb38-8"><a href="#cb38-8"></a>design <span class="ot">=</span> <span class="fu">benchmark_grid</span>(</span>
+<span id="cb38-9"><a href="#cb38-9"></a>  <span class="at">task =</span> task, </span>
+<span id="cb38-10"><a href="#cb38-10"></a>  <span class="at">learners =</span> learners, </span>
+<span id="cb38-11"><a href="#cb38-11"></a>  <span class="at">resamplings =</span> cv10)</span>
+<span id="cb38-12"><a href="#cb38-12"></a>bmr <span class="ot">=</span> <span class="fu">benchmark</span>(design)</span>
+<span id="cb38-13"><a href="#cb38-13"></a><span class="fu">autoplot</span>(bmr, <span class="at">measure =</span> <span class="fu">msr</span>(<span class="st">"classif.auc"</span>))</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="roc-prc" class="level2">
+<h2 class="anchored" data-anchor-id="roc-prc">ROC &amp; PRC</h2>
+<div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(bmr, <span class="at">type =</span> <span class="st">"roc"</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(bmr, <span class="at">type =</span> <span class="st">"prc"</span>)</span></code></pre></div>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-29-2.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="more-about-mlr3" class="level1 smaller">
+<h1 class="smaller">More about <code>mlr3</code></h1>
+<div class="incremental">
+<ul class="incremental">
+<li>Hyperparameter optimization</li>
+<li>Feature selection</li>
+<li>ML pipelines</li>
+</ul>
+</div>
+</section>
+<section id="summary" class="level1 smaller">
+<h1 class="smaller">Summary</h1>
+<div class="incremental">
+<p><code>mlr3</code></p>
+<ul class="incremental">
+<li><code>R6</code>, <code>data.table</code> based ML framework</li>
+<li>Sugar function + Dictionary</li>
+<li>Task, Learner, Measure</li>
+<li>Resampling</li>
+<li>Benchmarking</li>
+<li>Still in development (ver 0.16.0)</li>
+<li>A great textbook: <a href="https://mlr3book.mlr-org.com"><strong>mlr3book</strong></a></li>
+</ul>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="rchemist0123/giscus-blog" data-repo-id="R_kgDOJBwa8Q" data-category="General" data-category-id="DIC_kwDOJBwa8c4CUbVM" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left"><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:danjang0123@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/danjang0123/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
