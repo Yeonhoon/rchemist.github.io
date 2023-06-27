@@ -1,6 +1,6 @@
 ---
 title: 'mlr3 기초'
-description: "mlr3에 대한 소개 및 mlr3를 사용하기 위한 필수문법에 대해 소개합니다."
+description: "mlr3 소개, mlr3 필수문법, mlr3 모델링 기초에 대해 배워봅시다."
 date: '2023-02-20'
 categories: [mlr3, R, machine learning]
 image: "https://mlr3proba.mlr-org.com/logo.svg"
@@ -10,11 +10,9 @@ image: "https://mlr3proba.mlr-org.com/logo.svg"
 
 # Introduction {#sec-introduction}
 
-`mlr3` (Machine Learning in R) 패키지와 생태계는 R 언어에서 분류 (classification), 회귀 (regression), 기타 머신러닝 작업들을 수행할 수 있도록 도와주는 포괄적, 객체 지향적, 확장 가능한 프레임워크입니다.
+`mlr3` (Machine Learning in R) 패키지와 생태계는 R 언어에서 분류 (classification), 회귀 (regression), 기타 머신러닝 작업들을 수행할 수 있도록 도와주는 포괄적, 객체 지향적(Object Oriented), 확장 가능한 프레임워크입니다.
 
-`mlr3` 는 여러 머신러닝 알고리즘들을 통합하여 하나의 통일된 인터페이스로 제공함으로써 머신러닝 작업을 더 적절하게 수행할 수 있게끔 도와줍니다.
-
-`mlr3` 는 `R` 에 존재하는 `caret`, `tidymodels`, Python의 `scikit-learn`과 마찬가지로 더욱 유연한 머신러닝 플랫폼을 제공하는 것을 목표로 하고 있습니다.
+`mlr3` 는 R의 `caret`, `tidymodels`, Python의 `scikit-learn`과 마찬가지로 여러 머신러닝 알고리즘들을 통합하여 하나의 통일된 인터페이스로 제공함으로써 머신러닝 작업을 더 적절하게 수행할 수 있게끔 도와주는 패키지입니다.
 
 mlr3가 어떻게 작동하는지 빠르게 파악하고 싶으시다면, mlr3 [cheatsheets](https://cheatsheets.mlr-org.com/mlr3.pdf)을 살펴보시기 바랍니다.
 
@@ -97,17 +95,20 @@ mlr_learners$get('classif.rpart')
 
 ------------------------------------------------------------------------
 
-# Basics {#sec-basics}
+# Data & Modeling {#sec-basics}
 
 ## Tasks
 
-태스크(task)은 데이터와 머신러닝 문제들을 정의한 메타데이터를 갖고 있는 객체입니다. 예를 들면 머신러닝의 분류에서 타겟 피처의 이름이 메타 데이터 입니다.
+태스크(`task`)는 일반적으로 테이블 형태의 데이터와 머신러닝 문제들을 정의한 메타데이터를 갖고 있는 객체입니다. 예를 들면 머신러닝의 분류에서 타겟 피처(feature)의 이름이 메타 데이터 입니다.
 
 한마디로, 태스크는 우리가 활용하는 기본 데이터와 머신러닝을 위해 필요한 데이터들을 담아둔 정보 등이 포함된 객체입니다.
 
 이 메타 데이터는 사용자가 모덜이 학습될 때 예측 타겟을 다시 지정해줄 필요 없도록 태스크와 함께 작동하게 됩니다.
 
 ::: callout-note
+
+## 용어 표현
+
 Task와 Learner 등 영어로 지정된 단어들은 따로 번역하지 않고, 소리 그대로 **"태스크"**와 **"러너"**로 부르겠습니다.
 :::
 
@@ -122,113 +123,102 @@ mlr_tasks
 `mlr_tasks`에 내장된 태스크를 가져오기 위해선, `tsk()` 함수와 불러오고자 하는 태스크의 이름을 입력하면 됩니다.
 
 ```{r}
-task_mtcars <- tsk("mtcars")
+task_mtcars = tsk("mtcars")
 task_mtcars
 ```
 
-특정 태스크에 대해 보다 많은 정보가 필요하다면, `help()`메소드를 이용하시면 됩니다.
-
-```{r eval=FALSE}
-task_mtcars$help()
-```
 
 ::: callout-tip
-R을 사용하셨던 분들이라면 위와 같은 구조의 코드가 낯설 것입니다. 보통 도움말을 보기 위해선 `help()`나 `?`를 이용했을테니까요.
 
-`task_mtcars$help()` 와 같은 구조가 바로 `R6` 객체 구조입니다. [Introduction](#sec-introduction)에서 간단히 소개했었죠? 앞으로 `mlr3`를 배우며, 계속 사용하게 될 것입니다.
+## 도움말 보기
+
+일반적으로 R에서 도움말을 보기 위해선 `help()`나 `?`를 이용합니다. mlr3의 `R6` 클래스들도 마찬가지로 `?mlr_tasks_mtcars`와 같이 `?`을 이용해서 도움말을 찾아볼 수 있습니다.
+뿐만 아니라 인스턴스의 `task_mtcars$help()`와 같이 `$help()` 메소드를 이용해, 도움말 페이지로 접근할 수 있습니다.
+
 :::
 
 ```{r}
-task_sonar <- tsk('sonar')
-split <- partition(task_sonar, ratio=.7)
+task_sonar = tsk('sonar')
+split = partition(task_sonar, ratio=.7)
 ```
 
 ### 외부 데이터 태스크로 변환
 
-`mlr3`에서 제공하는 데이터가 아닌, 외부의 데이터셋을 `mlr3` 패키지와 사용하려면 아래와 같이 데이터셋을 태스크로 변환해야 합니다. 예를 들어, `survival` 패키지의 lung 데이터셋을 `mlr3`의 태스크 객체로 변환한다면, 아래와 같이 진행할 수 있습니다.
+`mlr3`에서 제공하는 데이터가 아닌, 외부의 데이터셋을 `mlr3` 태스크로 활용하려면 아래와 같이 데이터셋을 태스크로 변환하는 작업이 필요합니다. 예를 들어, `mtcars` 데이터셋을 `mlr3`의 회귀 태스크로 직접 변환하고자 할 때, `as_task_regr()` 함수를 이용합니다.
 
 ```{r}
 library(survival)
 library(data.table)
-task_lung = as_task_classif(
-  as.data.table(lung)[,.(age, sex, wt.loss, ph.ecog,status)],
-             target = "status",
-  
-             id = "lung")
-task_lung
+mtcars_subset = subset(mtcars, select = c("mpg", "cyl", "disp"))
+str(mtcars_subset)
+
+tsk_mtcars = as_task_regr(mtcars_subset, target="mpg", id="cars")
 ```
+
+태스크를 설정할 때, 반드시 `target` 인자를 지정해줌으로써 target 열을 지정합니다.  `id` 인자는 선택사항으로, 특정 태스크에 이름을 부여하는 것입니다. 
 
 ::: callout-tip
-태스크 생성자인 `as_task_regr()`과 `as_task_classif()`는 각각 머신러닝의 회귀와 분류를 수행하기 위한 태스크를 만드는 함수입니다.
 
-외부의 데이터를 태스크로 변환할 때, [UTF8 이름](https://en.wikipedia.org/wiki/UTF-8)을 따르지 않는 경우, 머신러닝 학습과정에서 오류가 발생합니다. 예를 들면,
+## UTF8 열(column)이름
 
-```         
-Task 'lung' has missing values in column(s) 'ph.ecog', 'wt.loss', but learner 'classif.ranger' does not support this
-```
+외부의 데이터를 태스크로 변환할 때, [UTF8 이름](https://en.wikipedia.org/wiki/UTF-8)을 따르지 않는 경우, 머신러닝 학습과정에서 오류가 발생합니다. 따라서 `make.names()` 함수를 이용해 데이터의 열 이름을 변경하는 것을 권장합니다.
 
-따라서 `make.names()` 함수를 이용해 데이터의 열 이름을 변경하는 것을 권장합니다.
 :::
 
 ```{r}
 #| warning: false
-
 library(mlr3viz)
-autoplot(task_lung, type = "pairs")
+autoplot(tsk_mtcars, type = "pairs")
 ```
 
 ### 데이터 살펴보기
 
 태스크 객체는 테이블 형태의 데이터와 함께, 메타 데이터를 포함하고 있습니다. 예를 들면 행과 열의 개수, 피처(feature) 변수, 타겟 변수와 각 변수의 데이터유형 등을 확인할 수 있습니다.
 
-이런 메타 데이터들은 field를 통해 확인이 가능합니다.
+이런 메타 데이터들은 각 객체의 field를 통해 확인이 가능합니다.
 
 ```{r}
-task_lung$nrow
+c(tsk_mtcars$nrow, tsk_mtcars$ncol)
+```
+
+피처와 타겟변수의 이름은 각각 `$feature_names` 와 `$target_names` 에 저장되어 있습니다. 여기서 `target`은 예측하고자 하는 변수를 의미합니다.
+
+```{r}
+tsk_mtcars$feature_names
 ```
 
 ```{r}
-task_lung$ncol
+tsk_mtcars$target_names
 ```
 
-피처와 타겟변수의 이름은 각각 `$feature_names` 와 `$target_names` 에 저장되어 있습니다. 여기서 `target` 은 머신러닝을 통해 예측하고자 하는 변수를 의미합니다.
+한편 태스크 안에 들어있는 데이터는 `data.table` 객체로, `$data()` 메소드를 통해 확인할 수 있습니다. 
 
 ```{r}
-task_lung$feature_names
-```
-
-```{r}
-task_lung$target_names
-```
-
-한편 태스크 안에 들어있는 데이터는 `data.table` 객체로, `$data()` 메소드를 통해 확인할 수 있습니다.
-
-```{r}
-task_lung$data()
+tsk_mtcars$data()
 ```
 
 `$data()` 메소드 안에서 rows와 cols를 통해 원하는 데이터를 확인할 수 있습니다.
 
 ```{r}
-task_lung$data(rows=1:10, cols="status")
+tsk_mtcars$data(rows=1:3, cols=tsk_mtcars$feature_names)
 ```
 
-태스크를 `data.table` 객체로 바꾼다면, 데이터에 있는 모든 변수를 확인할 수도 있습니다.
+태스크를 `data.table` 객체로 바꾼다면, R에서 사용되는 데이터프레임 관련 모든 함수들을 사용할 수 있습니다. 
 
 ```{r}
-summary(as.data.table(task_lung))
+summary(as.data.table(tsk_mtcars))
 ```
 
 ### 태스크 변환자(Mutators)
 
-머신러닝을 수행하며, 행과 열들을 선택하는 경우가 종종 있습니다. 예를 들면 train-test split을 위해 행을 선택하는 경우, 모델링에 넣을 피처들을 선택하는 경우가 있겠죠.
+머신러닝을 수행하며, 행과 열들을 선택하는 경우가 종종 있습니다. 예를 들면 훈련 데이터와 검증 데이터를 분리하기 위해 행을 선택하는 경우, 모델링에 넣을 피처들을 선택하는 경우가 있겠죠.
 
 `mlr3`의 태스크는 행을 선택하는 `$filter()`, 열을 선택하는 `$select()` 를 이용해 원하는 조건의 데이터를 추출할 수 있습니다.
 
-한 가지 주의해야 할 것이 있습니다. \$select()와 \$filter()는 변환자이기 때문에, 기존의 태스크를 수정하게 됩니다. 다시 말해, 처음에 있던 원래 데이터를 바꿔버리는 것이죠.
+여기서 한 가지 주의해야 할 것이 있습니다. `$select()`와 `$filter()`는 변환자이기 때문에, 기존의 태스크 객체를 수정하게 됩니다. 다시 말해, 행이나 열을 선택하게 되면 처음의 태스크 객체도 변경된다는 것이죠.
 
 ```{r}
-task_iris <- tsk("iris")
+task_iris = tsk("iris")
 task_iris$select(c("Sepal.Length","Petal.Width"))
 task_iris$filter(2:4)
 task_iris$data()
@@ -237,7 +227,7 @@ task_iris$data()
 이를 방지하기 위해서는 `$clone()` 메소드를 이용해 새로운 태스크로 복사한 뒤에 행이나 열을 선택하는 작업하시면 됩니다.
 
 ```{r}
-task_iris_copy <- task_iris$clone()
+task_iris_copy = task_iris$clone()
 task_iris_copy$filter(2)
 task_iris_copy$data()
 ```
@@ -250,30 +240,30 @@ task_iris$data()
 
 ## Learner
 
-러너는 클래스는 널리 알려진 많은 머신러닝 패키지들을 통일된 형태로 제공합니다. 태스크와 마찬가지로 `mlr_learners` dictionary를 통해 확인할 수 있습니다.
+러너 클래스는 널리 알려진 다양한 머신러닝 알고리즘들을 통일된 형태로 제공합니다. 태스크와 마찬가지로 `mlr_learners` dictionary를 통해 확인할 수 있습니다.
 
-러너는 머신러닝 모델을 학습(train)하고 예측하는 역할을 수행합니다. 태스크에서는 외부 데이터도 태스크로 만들 수 있었던 것과 달리, 러너는 `mlr3`에서 지원하는 것만 사용할 수 있습니다. mlr3에서 제공하는 러너들은 다음과 같습니다.
+러너는 머신러닝 모델을 학습(train)하고 예측하는 역할을 수행합니다. 태스크와 마찬가지로, 러너의 sugar function인 `lrn()` 을 활용해 러너를 사용할 수 있습니다.
+
+```{r}
+lrn("regr.rpart")
+```
+
+러너의 기본 형태는 `Learner`입니다. Learner로 시작하는 다양한 러너들이 존재합니다. `mlr3`의 러너들은 [`mlr3learners`](https://mlr3learners.mlr-org.com/)와 [`mlr3extralearners`](https://mlr3extralearners.mlr-org.com/)패키지를 통해 확인 가능합니다.
 
 ```{r}
 as.data.table(mlr_learners) |> head()
 ```
 
-러너의 기본 형태는 Learner입니다. Learner로 시작하는 다양한 러너들이 존재합니다. `mlr3`의 러너들은 [`mlr3learners`](https://mlr3learners.mlr-org.com/)와 [`mlr3extralearners`](https://mlr3extralearners.mlr-org.com/)패키지를 통해 확인 가능합니다.
-
-```{r}
-mlr3learners::LearnerClassifLogReg
-```
-
-러너의 sugar function은 `lrn()` 입니다.
-
 ::: callout-caution
+
+## 패키지 설치
 mlr3의 러너를 실행하기 위한 패키지가 없다면 아래와 같은 경고 메시지가 뜹니다.
 
 ```         
 Warning: Package 'ranger' required but not installed for Learner 'classif.ranger
 ```
 
-패키지를 설치해주시면 간단히 해결됩니다.
+이러한 에러는 패키지를 설치해주시면 간단히 해결됩니다.
 
 ```{r eval=FALSE}
 install.packages("ranger")
@@ -281,8 +271,8 @@ install.packages("ranger")
 :::
 
 ```{r}
-learner_rf <- lrn('classif.ranger', predict_type='prob')
-learner_rf
+lrn_rpart = lrn('regr.rpart')
+lrn_rpart
 ```
 
 각 러너들은 아래의 메타데이터를 갖고 있습니다.
@@ -293,208 +283,378 @@ learner_rf
 
 -   `$properties`: 해당 러너가 갖고 있는 추가적인 특성. 예를 들어 importance 특성이 있다면 학습 후, 각 피처들의 importance를 추출할 수 있습니다.
 
--   `$predict_types`: 해당 러너를 활용해 가능한 예측 유형입니다. 분류 유형의 러너는 response와 prob을 출력합니다.
+-   `$predict_types`: 해당 러너를 활용해 가능한 예측 유형입니다. 분류 유형의 러너는 `response`와 `prob`을 출력합니다.
+
+-   `$param_set`: 가능한 하이퍼파라미터 세트
+
+<br>
 
 모든 러너들은 두 단계에 걸쳐 진행됩니다.
 
--   학습 (Training): `$train()` 메소드를 통해 학습시키고자 하는 태스크를 전달합니다.
+-   학습 (Training): `$train()` 메소드를 통해 학습시키고자 하는 태스크를 학습합니다.
 
 -   예측 (Prediction): `$predict()` 메소드에 학습 때 사용하지 않은 데이터를 사용합니다. 학습 데이터를 기반으로 훈련된 모델이 새로운 데이터를 받아 예측값을 반환합니다.
 
 ::: callout-warning
-러너가 학습되지 않았다면 `$predict()` 실행 시 에러가 발생합니다.
+
+## 예측 전 학습
+
+러너가 학습되지 않았다면(`$train()`이 실시되지 않았다면) `$predict()` 실행 시 에러가 발생합니다.
 :::
 
-### train: 학습시키기
+### Train: 학습시키기
 
 앞서 말했듯이, `mlr3`에서는 러너에 태스크를 투입하여 모델을 학습시킵니다. 머신러닝에서는 태스크를 투입하기 전, 훈련에 사용할 데이터와 예측에 사용할 데이터를 나누는 것이 일반적입니다.
 
-`mlr3` 에서는 `$partition()` 메소드를 이용해 두 개의 데이터로 나눌 수 있습니다. 기본값은 전체 데이터의 67%를 훈련에, 나머지 33%를 예측에 사용합니다. 물론 이 비율은 ratio 인자 (범위: 0\~1)를 통해 변경 가능합니다.
+`mlr3` 에서는 `$partition()` 메소드를 이용해 두 개의 데이터로 나눌 수 있습니다. 기본값(default)은 전체 데이터의 67%를 훈련에, 나머지 33%를 예측에 사용합니다. 물론 이 비율은 ratio 인자 (범위: 0~1)를 통해 변경 가능합니다.
 
 ```{r}
-task_breast <- tsk("breast_cancer")
-splits <- partition(task_breast, ratio = 0.7)
+splits = partition(tsk_mtcars, ratio = 0.7)
+splits
 ```
 
-데이터를 나눠줬으니, 이제 모델을 학습시켜보도록 하겠습니다. 위에서 선언한 랜덤포레스트 러너에서 `$train()` 메소드를 실행시킵니다. 태스크와 `row_ids`에는 split 중 `train`에 해당하는 부분을 입력합니다.
+
+데이터를 나누었으니, 이제 모델을 학습시켜보도록 하겠습니다. 위에서 선언한 `rpart` 러너에서 `$train()` 메소드를 실행시킵니다. 태스크와 `row_ids`에는 splits 중 `train`에 해당하는 부분을 입력합니다.
 
 ```{r}
-learner_rf$train(task_breast, 
-                 row_ids = split$train)
-learner_rf$model
+lrn_rpart$train(tsk_mtcars, row_ids = splits$train)
+lrn_rpart$model
 ```
 
-학습을 시킨 이후, \$model 필드를 통해 학습된 결과를 확인할 수 있습니다. 어떤 하이퍼파라미터가 사용되었는지 등의 정보를 확인할 수 있습니다.
+학습을 시킨 이후, `$model` 필드를 통해 학습된 결과를 확인할 수 있습니다.
 
-각 러너들은 하이퍼파라미터들을 조정해줄 수 있습니다. 러너들의 파라미터를 확인하는 명령어는 다음과 같습니다.
 
-```{r eval=FALSE}
-learner_rf$param_set
-```
+### Predict: 예측하기
 
-```{r echo=FALSE}
-as.data.table(learner_rf$param_set) |> head()
-```
-
-현재 학습에 사용된 하이퍼 파라미터들은 values 필드에 저장되어있습니다.
+모델 학습이 완료되었다면, 예측값을 만들어볼 수 있습니다. splits의 test 행을 이용해 `$predict()` 메소드를 실행합니다.
 
 ```{r}
-learner_rf$param_set$values
+prediction = lrn_rpart$predict(tsk_mtcars,row_ids = splits$test)
+prediction
 ```
+
+`row_ids` 는 예측 데이터의 행의 번호와 동일합니다. `truth`는 태스크에 저장되어 있는 테스트 데이터의 실제값을 의미하고 `response`는 학습시킨 모델이 예측한 값을 의미합니다. 각각의 열은 `Prediction` 객체의 필드를 통해 확인할 수 있습니다.
+
+```{r}
+prediction$response
+```
+
+`mlr3viz`를 이용해 Prediction 객체를 시각화할 수 있습니다.
+```{r}
+autoplot(prediction)
+```
+
+만약 splits로 나눈 데이터가 아니라 데이터프레임 형태로 된 새로운 데이터를 활용해 예측값을 만들고 싶다면, `$predict_newdata()`를 사용하면 됩니다.
+
+```{r}
+mtcars_new = data.table(
+  cyl = c(5, 6), disp = c(100, 120),
+  hp = c(100, 150), drat = c(4, 3.9), wt = c(3.8, 4.1),
+  qsec = c(18, 19.5), vs = c(1, 0), am = c(1, 1),
+  gear = c(6, 4), carb = c(3, 5)
+)
+prediction = lrn_rpart$predict_newdata(mtcars_new)
+prediction
+```
+물론 새로 생성한 `mtcars_new` 데이터는 실제 값이 제공되지 않았기 때문에, `Prediction` 객체의 truth는 `NA`로 출력됩니다.
+
+일반적으로 회귀 모델에서는 타겟의 값을 예측하지만, 일부 회귀 모델은 표준 오차(standard error, SE) 또한 예측할 수 있습니다. 이를 위해서는 `$predict_type` 필드가 기본값인 `response` 에서 `se`로 변경되어야 합니다. 위에서 다루었던 의사결정나무(`regr.rpart`) 모델은 표준오차 설정이 불가능하기 때문에, 선형 회귀모형으로 예시를 들어보겠습니다.
+
+```{r}
+lrn_lm = lrn("regr.lm", predict_type = "se")
+lrn_lm$train(tsk_mtcars, splits$train)
+lrn_lm$predict(tsk_mtcars, splits$test)
+```
+
+### Hyperparameters
+
+각 러너들은 학습에 영향을 미치는 하이퍼파라미터들을 설정해줄 수 있습니다. 하이퍼라미터를 통해 모델이 어떻게 학습되는지, 또는 어떻게 예측값을 생성할지 등을 조정해줄 수 있습니다. 
+
+#### Paradox, Parameter Sets
+
+위의 예시에서 사용하던 의사결정나무 하이퍼파라미터에 접근해보겠습니다.
+```{r}
+lrn_rpart$param_set
+```
+
+위의 결과는 `paradox::ParamSet` 객체입니다. 이 객체는 하이퍼파라미터의 이름(`id`), 데이터 유형(`class`), 하이퍼파라미터의 범위(`lower`, `upper`), 범주형일 경우의 범주의 수(`nlevels`), 초기값(`default`), 그리고 최종적으로 설정된 값(`value`) 에 대한 정보를 담고 있습니다.
+
+아래의 표는 사용가능한 하이퍼파라미터 유형들에 대한 표입니다.
+
+| Hyperparameter Class | Description  |
+| -------------------- | ------------ |
+|`ParamDbl`	| Real-valued (Numeric) Parameters|
+|`ParamInt`	| Integer Parameters|
+|`ParamFct`	| Categorical (Factor) Parameters|
+|`ParamLgl`	| Logical / Boolean Parameters|
+|`ParamUty`	| Untyped Parameters|
+
+의사결정나무 예시에서, `ParamSet`을 바탕으로 다음의 내용을 추론할 수 있습니다.
+
+-   `cp` 는 반드시 0 (`lower`)과 1 (`upper`) 사이의 범위를 갖는 double (`ParamDbl`) 형태의 변수여야 하고, 초기값은 0.01 (`default`)
+-   `keep_model`은 반드시 `TRUE나` `FALSE` 값을 갖는 logical (`ParamLgl`) 형태의 값이어야 함
+-   `xval`은 0과 무한대(Inf) 범위를 갖는 정수(ParamInt)여야 하고, 초기값 10을 가지며, 현재 값이 0으로 설정되어 있음
+
+#### 하이퍼파리미터 확인 및 설정
 
 위와 같이 하이퍼 파라미터에 접근한 뒤, 기존의 값을 원하는 값으로 변경하거나, 새로운 하이퍼파라미터에 값을 설정해줄 수 있습니다.
 
 ```{r}
-learner_rf$param_set$values$num.threads = 10
-learner_rf$param_set$values$num.trees = 20
-learner_rf$param_set$values
-```
-
-또는 `lrn()` 함수로 러너를 생성할 때, 원하는 하이퍼파라미터를 설정해줄 수 있습니다.
-
-```{r}
-learner_rf <- lrn('classif.ranger', num.trees= 30)
-learner_rf$param_set$values
-
-```
-
-```{r}
-learner_rf$train(task_breast, row_ids = split$train)
-learner_rf
+lrn_rpart$param_set$values$cp = 0.2
+lrn_rpart$param_set$values
 ```
 
 변경된 파라미터가 적용된 것을 확인할 수 있습니다.
 
 ::: callout-note
-하이퍼 파라미터에 대한 자세한 설명은 하이퍼파라미터 튜닝에서 더 자세히 다루도록 하겠습니다.
+
+### 하이퍼파라미터 최적화
+하이퍼 파라미터에 대한 자세한 설명은 [mlr3 하이퍼파라미터 최적화 포스트](https://rchemistblog.com/blog/posts/mlr3_hyperparameter/)에서 더 자세히 다루도록 하겠습니다.
+
 :::
 
-### predict: 예측하기
+### Evaluation: 평가
 
-모델 학습이 완료되었다면, 예측값을 만들어볼 수 있습니다. split의 test 를 이용해 `$predict()` 메소드를 실행합니다.
+아마 머신러닝 모델링 과정에서 가장 중요한 단계가 바로 모델의 성능 평가일 것입니다. 평가를 하지 않는다면 아무리 잘 만든 모델이라도 그 성능을 알 수 없기 때문이죠. 평가에서는 앞서 만든 객체들을 바탕으로 모델의 성능을 평가해보도록 하겠습니다.
 
 ```{r}
-prediction <- learner_rf$predict(task_breast, 
-                                 row_ids = split$test)
-prediction
+lrn_rpart = lrn("regr.rpart")
+tsk_mtcars = tsk("mtcars")
+splits = partition(tsk_mtcars)
+lrn_rpart$train(tsk_mtcars, splits$train)
+prediction = lrn_rpart$predict(tsk_mtcars, splits$test)
 ```
 
-예측값을 살펴보니, 예측값이 범주로 나타났습니다. 만약 범주에 대한 예측 확률값을 구하고 싶을 경우, `lrn()`의 `predict_type`을 `prob`으로 조정해주면 됩니다.
+#### Measures
+
+예측값이 잘 예측되었는지는 데이터의 실제값과 머신러닝 모델이 예측한 예측값의 비교를 통해 평가됩니다. 태스크와 러너와 비슷하게, `mlr3`에서는 측정기준들이 `mlr_measures`라고 불리는 딕셔너리에 저장되어 있습니다. 이는 `msr()`로 사용 가능합니다.
 
 ```{r}
-learner_rf <- lrn("classif.ranger", 
-                  predict_type="prob")
-learner_rf$train(task_breast, 
-                 row_ids = split$train)
-prediction <- learner_rf$predict(task_breast, 
-                                 row_ids = split$test)
-prediction
+as.data.table(msr())
 ```
-
-prediction 객체에서는 `$confusion` 을 이용해 confusion matrix를 확인할 수 있습니다.
-
+`mlr3`에서 시행되는 모든 측정값은 다음의 세 가지 요소에 의해 정의되어있습니다.
+예를 들어 mean absolute error(MAE)를 사용한다고 가정해보죠.
 ```{r}
-prediction$confusion
-```
-
-우리가 만든 모델이 내놓은 예측값에 대한 시각화를 진행해줄 수 있습니다. `mlr3viz` 패키지의 `autoplot()` 기능을 이용해주면 됩니다.
-
-`autoplot()`에서 type을 어떻게 지정해주는지에 따라 예측값에 시각화가 다르게 나타납니다.
-
-```{r}
-library(mlr3viz)
-autoplot(prediction)
-```
-
-위의 그림은 test 데이터의 실제 target 값과 머신러닝 모델이 예측한 target을 비교한 값입니다.
-
-그 외에도 분류 계열의 모델에는 AUROC(`type="roc"` )와 AUPRC(`type="prc"`) 등을 시각화할 수 있습니다.
-
-```{r}
-#| output-location: fragment
-#| layout: [[45, -10, 45]]
-#| fig-cap: 
-#|    - "AUROC"
-#|    - "AUPRC"
-#| message: false
-#| warning: false
-
-
-# install.packages("precrec")
-autoplot(prediction, type="roc")
-autoplot(prediction, type="prc")
-```
-
-### Evaluation: 성능 평가
-
-성능 평가는 머신러닝 모델링 과정에서 중요한 단계입니다. 앞서 예측 부분에서 예측값을 시각화로 표현했습니다. 그와 더불에 `mlr3`에서는 `msr()` 함수를 이용해 다양한 성능 지표들을 계산하고 비교할 수 있습니다. `mlr_measures` 딕셔너리를 보면 계산 가능한 지표들이 나와있습니다.
-
-예를 들어, 분류(classification) 모델에 대한 지표들을 살펴보면 다음과 같습니다.
-
-```{r}
-mlr_measures$keys("classif")
-```
-
-모델의 성능을 계산하기 위한 지표는 한 가지만 사용할 수 있고, 여러 가지를 사용할수도 있습니다.
-
-```{r}
-measure <- msr("classif.auc")
-measures <- msrs(c("classif.auc","classif.auc"))
-```
-
-모든 성능 지표들은 예측값과 test 데이터의 실제 값의 차이를 통해 수치화된 값입니다. 이 말은 모델의 성능을 평가하기 위해선, 예측값을 비교하기 위한, 모델 학습에 사용되지 않은 실제값이 필요하다는 것입니다.
-
-이제, `Measure` 객체 중 하나인 `classif.acc`를 통해 위에서 만든 랜덤포레스트 모델의 성능을 평가해보도록 하겠습니다. 지표(measure)를 생성한 뒤, 모델의 예측값 객체(prediction)의 `$score()` 메소드에 넘겨주면 해당 지표의 성능이 평가됩니다.
-
-```{r}
-measure <- msr("classif.acc")
+measure = msr("regr.mae")
 measure
 ```
 
+#### 예측값 점수 매기기
+
+모델의 성능을 계산하기 위해서는 prediction 객체의 `$score()` 메소드를 이용합니다. 이 때 `$score()` 메소드에는 평가하고자 하는 측정기준을 넣어줍니다.
 ```{r}
 prediction$score(measure)
 ```
 
-::: callout-note
-`$score()`는 measure 없이 사용될 수 있습니다. 이럴 경우, 분류의 경우 기본값인 분류오차(`classif.ce`)가, 회귀는 평균제곱오차(`regr.mse`)가 적용됩니다.
-:::
-
-`$score()`를 이용해 여러 종류의 성능 지표를 한 번에 계산하는 것도 가능합니다. 예를 들어, 민감도(`classif.sensitivity`)와 특이도(`classif.specificity`)를 한번에 계산할 경우,
-
+앞서 살펴보았던 `msr()` 함수는 하나의 성능 지표만 불러오는 함수였습니다. 여러 개의 성능을 동시에 확인하기 위해서는 `msrs()`를 이용하면 됩니다.
 ```{r}
-measures <- msrs(c("classif.sensitivity","classif.specificity"))
-
+measures = msrs(c("regr.mse","regr.mae"))
 prediction$score(measures)
 ```
 
-뿐만 아니라, `mlr3`에서는 예측 모델의 품질을 정량화하는 지표로도 모델을 평가할 수 있습니다. 예를 들어, 학습하는 시간과 예측하는 시간을 평가하기 위해선
+::: callout-tip
+
+## 기타 측정값들
+mlr3에서는 모델의 예측 성능 뿐만 아니라, 모델에 대한 메타정보 또한 측정할 수 있습니다. 예를 들어
+
+-   `msr("time_train")` : 모델을 학습시키는 데 걸린 시간
+-   `msr("time_predict")`: 모델로 예측하는 데 걸린 시간
+-   `msr("time_both")` : 훈련 및 예측하는 데 걸린 시간
+-   `msr("selected_features")`: 선택된 피처의 수 (모델에 `selected_features` 속성 있어야 사용 가능)
 
 ```{r}
-measures <- msrs(c("time_train", "time_predict"))
-prediction$score(measures,learner = learner_rf)
+measures = msrs(c("time_train", "time_predict", "time_both"))
+prediction$score(measures, learner = lrn_rpart)
 ```
 
-참고로, 위처럼 학습시간과 예측 시간을 평가하기 위해선 학습된 러너를 `$score()`에 입력해주어야 합니다.
 
-한편, 일부 지표들은 스스로 하이퍼파라미터를 가지고 있습니다. 대표적인 예로 `selected_features` 지표가 있습니다. 이 지표는 "selected_features" 속성이 있는 러너에만 사용 가능한 지표로서, 모델이 학습 시 사용한 피처에 대한 정보를 제공해줍니다. 이런 지표의 경우, `$score()` 에 태스크와 러너를 추가로 입력해주어야 합니다.
+:::
+
+## 분류(Classification)
+
+분류 알고리즘은 연속적인 숫자를 예측하는 것이 아닌, 이산형(discrete), 범주형(categorical)한 값을 예측할 때 사용됩니다. 예를 들어 펭귄의 신체적인 특징을 바탕으로 어떤 종인지 분류하고자 할 때 분류 알고리즘을 사용할 수 있습니다.
+
+분류 역시 앞서 다루었던 회귀와 동일한 흐름으로 태스크, 러너를 활용한 예측, 성능 측정을 하게 됩니다. `mlr3`의 분류에 사용되는 코드의 특징들을 살펴보겠습니다.
+
+### 분류 모델 만들기
+
+위에서 언급한 것처럼, 분류와 회귀 모델을 만들 때에는 태스크, 러너, 측정이 모두 동일합니다. 다만 분류이기 때문에 `TaskClassif`, `LearnerClassif`, `MeasureClassif` 등의 객체가 각각 사용됩니다.
+
+간단하게 펭귄을 분류하는 모델을 하나 만들어보겠습니다.
+```{r}
+set.seed(2023)
+tsk_penguins = tsk("penguins")
+splits = partition(tsk_penguins, ratio=.7)
+
+# modeling
+lrn_featureless = lrn("classif.featureless")
+lrn_rpart = lrn("classif.rpart", cp=.2, maxdepth=5)
+
+measure = msr("classif.acc")
+
+# train learners
+lrn_featureless$train(tsk_penguins, splits$train)
+lrn_rpart$train(tsk_penguins, splits$train)
+
+# evaluation
+lrn_featureless$predict(tsk_penguins, splits$test)$score(measure)
+lrn_rpart$predict(tsk_penguins, splits$test)$score(measure)
+
+
+
+```
+
+위의 사례에서 `palmerpenguins` 패키지에 있는 `penguins` 데이터셋을 활용하여 분류모델을 만들었습니다. 그 다음  featureless 모델(가장 기본적인 값으로)과 의사결정나무 모형으로 학습시킨 뒤, 예측 성능을 정확도(accuracy)로 측정하였습니다. 그 결과 기본 모형에 비해 의사결정 나무의 정확도가 훨씬 높게 나타났습니다.
+
+### TaskClassif
+
+분류 태스크는 회귀 태스크와 거의 유사합니다. 다만 타겟 변수가 범주형으로 되어있다는 것이 둘의 가장 큰 차이점입니다. 
+
+`mlr3`에 포함되어있는 분류 태스크들을 보면 다음과 같습니다.
+```{r}
+as.data.table(mlr_tasks)[task_type=="classif"]
+```
+
+물론 `as_task_classif()`를 통해 외부 데이터셋으로 자신만의 분류 태스크를 만들 수도 있습니다.
+```{r}
+as_task_classif(palmerpenguins::penguins, target="species")
+```
+
+`mlr3`에는 두 가지의 분류 태스크가 있습니다. 하나는 binary 분류로, 타겟 변수가 두 가지의 범주를 갖게 됩니다. 다른 하나는 타겟 변수가 세 개 이상의 범주를 갖는 multiclass 분류입니다.
+
+예를 들어 `sonar` 태스크는 타겟이 두 가지의 범주를 갖기 때문에 binary 분류입니다. 태스크의 속성(Properties)이 twoclass인 것을 확인할 수 있습니다.
+```{r}
+tsk_sonar = tsk("sonar")
+tsk_sonar
+```
 
 ```{r}
-task_boston <- tsk("boston_housing")
-splits <- partition(task_boston)
-learner_rpart <- lrn("regr.rpart")
-
-learner_rpart$train(task_boston, splits$train)
-prediction <- learner_rpart$predict(task_boston, splits$test)
-measure <- msr("selected_features")
-prediction$score(measure, task = task_boston, learner = learner_rpart)
+tsk_sonar$class_names
 ```
 
-selected_features 는 선택된 피처의 수를 정규화해줄 수 있는 하이퍼파라미터를 설정할 수 있습니다.
+반면에 `tsk(penguins)`는 타겟의 범주가 세 개인 multiclass 분류 태스크입니다.
+```{r}
+tsk_penguins
+tsk_penguins$class_names
+```
+
+binary 태스크와 multiclass 태스크의 유일한 차이점은 **`$positive` 필드의 존재 여부**입니다. binary 태스크의 경우 예측 가능한 값이 두 가지밖에 없습니다. 따라서 어떤 값을 positive 또는 양성으로 예측할지를 지정해주어야 합니다. 나머지는 자동으로 negative 또는 음성으로 분류하게 됩니다. 만약 positive 클래스가 지정되지 않는다면, mlr3에서는 타겟 변수의 첫 번째 레벨(범주)를 positive로 간주하고 분류를 진행합니다. 이는 잘못된 예측을 하게 만드는 것이므로, 반드시 **`$positive`를 지정**해주어야 합니다.
+
+### LearnerClassif 와 MeasureClassif
+
+LeanerClassif에 내장된 분류 러너들은 회귀 러너들과 동일한 형태를 갖고 있습니다. 가장 큰 차이점은 분류 러너의 경우 예측 형태가 예측값의 클래스를 예측하는 `response` 이외에 예측값의 클래스에 속할 확률을 예측하는 `prob`도 존재한다는 것입니다.
 
 ```{r}
-measure <- msr("selected_features", normalize=T)
-prediction$score(measure, task=task_boston, learner = learner_rpart)
+lrn_rpart = lrn("classif.rpart", predict_type = "prob")
+lrn_rpart$train(tsk_penguins, splits$train)
+prediction = lrn_rpart$predict(tsk_penguins, splits$test)
+prediction
 ```
+위의 예에서 알 수 있듯이 `response`에서는 `prob`에서 확인할 수 있는 예측확률이 가장 높게 나온 범주를 기준으로 예측한 클래스의 값이 나오게 됩니다.
+
+분류 측정값도 러너와 마찬가지로 회귀의 것과 생김새는 동일하지만, `predict_type`에 따라 다른 예측성능을 측정할 수 있습니다.
+
+```{r}
+as.data.table(msr())[
+    task_type == "classif" & predict_type == "prob" &
+    task_properties != "twoclass"]
+```
+펭귄의 종을 예측하는 multiclass 분류 모델의 성능을 예측해보면 다음과 같습니다.
+```{r}
+measures = msrs(c("classif.mbrier", "classif.logloss", "classif.acc"))
+prediction$score(measures)
+```
+
+### PredictionClassif, Confusion Matrix, Thresholding
+
+PredictionClassif 객체는 회귀의 예측에는 없는 두 개의 중요한 요소가 있습니다. 첫 번째는 `$confusion` 필드이고, 두 번째는 `$set_threshold()` 메소드입니다.
+
+#### Confusion matrix
+
+혼동 행렬은 모델이 예측한 값이 잘 분류되었는지 실제 데이터와 비교하여 만들어지는 빈도 표입니다. `mlr3`에서는 `$confusion` 필드를 활용해 혼동행렬을 생성할 수 있습니다.
+```{r}
+prediction$confusion
+```
+
+가로 방향으로 읽는 `truth`는 실제 데이터의 값을, `response`는 분류 모델이 예측한 값을 의미합니다. 대각선의 값들 (45, 18, 37)은 올바르게 예측한 값의 수이고, 나머지 값들은 잘못 예측(분류)한 값을 의미합니다.
+
+또한 `autoplot()`을 이용해 혼동행렬을 시각화할 수 있습니다.
+
+```{r}
+autoplot(prediction)
+```
+binary 분류는 혼동행렬에서 좌측 상단(31)은 True positive, 우측 하단(25)는 True negative입니다. 우측 상단(7)과 좌측 하단(6)은 각각 False positive와 False negative입니다.
+
+```{r}
+set.seed(2023)
+splits = partition(tsk_sonar)
+lrn_rpart$
+  train(tsk_sonar, splits$train)$
+  predict(tsk_sonar, splits$test)$
+  confusion
+```
+
+혼동행렬에서 계산되는 다양한 binary 분류의 성능들은 `mlr3` 리샘플링에서 다루도록 하겠습니다.
+
+#### Thresholding
+
+binary 분류 모델의 중요한 요소는 바로 positive와 negative를 분류하는 기준인 threshold 를 설정하는 것입니다. multiclass 분류에서 response 값은 여러 개의 범주 중 가장 높은 확률로 예측된 범주였지만, binary 분류에서는 positive로 예측할 확률이  50% 이상이어야 positive로 분류될 수 있습니다.
+
+이처럼 threshold는 일반적으로 50%로 알려져 있습니다. 하지만 이 threshold는 예측하고자 하는 범주(클래스)의 불균형이 있는 경우 변경하여 사용할 수 있습니다.
+
+예를 들어 `german_credit` 태스크를 살펴보겠습니다. 1000명의 데이터 중에서 700명은 신용이 좋은 경우이고, 나머지 300명은 신용이 나쁜 경우입니다. 이 데이터를 활용해, 모든 사람이 좋은 신용을 가질 것이라고 예측함으로써 70%의 정확도를 보이는 예측 모델을 만들 수 있습니다.
+
+```{r}
+task_credit = tsk("german_credit")
+lrn_featureless = lrn("classif.featureless", predict_type = "prob")
+split = partition(task_credit)
+lrn_featureless$train(task_credit, split$train)
+prediction = lrn_featureless$predict(task_credit, split$test)
+prediction$score(msr("classif.acc"))
+autoplot(prediction)
+```
+언뜻 보기에는 모델의 성능이 좋아보이지만, 사실 이 경우는 신용이 나쁜 사람들을 모두 무시해버린 경우입니다. 이는 헬스케어 등과 같은 분야에서 큰 문제를 야기할 수 있습니다.
+
+Thresholding은 클래스들이 다른 확률로 설정되어 예측될 수 있게끔 해줍니다. 따라서 50%를 기준으로 신용의 좋고 나쁨을 예측하는 것이 아니라, 데이터에 맞게 70% 미만을 기준으로 분류를 할 수 있습니다.
+
+```{r}
+prediction$set_threshold(0.7)
+prediction$score(msr("classif.acc"))
+autoplot(prediction)
+```
+
+threshold를 설정하지 않았을 때보다 성능(정확도)은 나빠졌지만, 클래스 간의 관계(신용의 좋고 나쁨 간 비율)를 더욱 정확히 반영하고 있기 때문에 더 좋은 모델이라고 할 수 있습니다.
+
+### 지원되는 러너 알고리즘
+
+`mlr3`에서는 다양한 알고리즘들을 사용할 수 있습니다. `mlr3`에서 사용할 수 있는 러너들은 기본적으로 `mlr3` 이외에도 `mlr3learners`, `mlr3extralearners` 패키지를 통해 확인 가능합니다.
+
+이러한 러너들은 `mlr_learners` 딕셔너리를 통해 확인 가능합니다.
+
+```{r}
+learners_dt = as.data.table(mlr_learners)
+learners_dt
+```
+
+또한 해당 러너의 딕셔너리에서 특정 조건을 만족하는 값들만 선택하여 확인할 수 있습니다.
+```{r}
+learners_dt[task_type == "regr" &
+  sapply(predict_types, function(x) "se" %in% x)]
+```
+
+
+## 결론
+
+이번 챕터에서는 `mlr3`를 활용해 머신러닝 알고리즘을 다루는 방법에 대해 살펴보았습니다. 태스크를 이용해 학습시키고자 하는 데이터를 만들고, 러너를 이용해 모델을 학습시킨 후, 예측하였습니다. 또한 `Measure` 클래스를 이용해 모델이 예측한 값을 바탕으로 모델의 성능을 계산할 수 있었습니다.
+
+이번 챕터에서 가장 중요한 내용들을 표로 요약하면 아래와 같습니다.
+
+| Class | Constructor/function| Fields/Methods|
+|-------|---------------------|---------------|
+|`Task`   | `tsk()`/`as_task_X()`   | `$filter()`; `$data()`
+|`Learner`| `lrn()`/`lrns()`        | `$train()`; `$predict()`
+|`Prediction`| `learner$predict()`| `$score()`;
+|`Measure`| `msr()`/`msrs()`        |
 
 ------------------------------------------------------------------------
 
@@ -502,4 +662,4 @@ prediction$score(measure, task=task_boston, learner = learner_rpart)
 
 -   <https://mlr3.mlr-org.com/>
 
--   <https://mlr3book.mlr-org.com/basics.html>
+-   <https://mlr3book.mlr-org.com/chapters/chapter2/data_and_basic_modeling.html#sec-basics-regr-experiment>

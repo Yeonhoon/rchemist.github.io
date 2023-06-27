@@ -134,7 +134,7 @@ instance
 튜닝 인스턴스를 만들었다면, 이제 어떻게 튜닝을 할 것인지를 정해야 합니다. `mlr3tuning` 에는 다양한 `Tuner` 클래스가 존재합니다.
 
 | Tuner                           | Function call          | Package                                               |
-|---------------------|------------------|---------------------------------|
+|---------------------|-------------------|---------------------------------|
 | Random Search                   | `tnr("random_search")` | [`mlr3tuning`](https://mlr3tuning.mlr-org.com/)       |
 | Grid Search                     | `tnr("grid_search")`   | [`mlr3tuning`](https://mlr3tuning.mlr-org.com/)       |
 | Iterative Racing                | `tnr("irace")`         | [`mlr3tuning`](https://mlr3tuning.mlr-org.com/)       |
@@ -159,7 +159,7 @@ tuner = tnr("grid_search", resolution = 5, batch_size = 10)
 tuner
 ```
 
-## 튜닝 수행하기
+## 튜닝 수행하기 {#tuning}
 
 이제 하이퍼파라미터 튜닝을 실시해보겠습니다. `튜너$optimize(튜닝인스턴스)`의 구조로 튜닝을 수행해줍니다.
 
@@ -287,7 +287,23 @@ at$train(task_sonar)
 
 중첩 리샘플링은 추가적인 리샘플링을 수행함으로써 튜닝된 모델의 성능을 평가하는 과정에서 모델 최적화를 분리시켜 놓습니다. 즉 일반적인 방법의 리샘플링 방법으로 모델의 성능을 평가하는 반면, 튜닝의 경우 리샘플링된 데이터를 다시 리샘플링하여 성능을 평가하는 것입니다.
 
-![중첩 리샘플링 설명도. 초록 상자는 외부 리샘플링을 위한 3-fold 교차검증(CV), 파란색 회색 박스는 하이퍼파라미터 튜닝을 위한 4-fold 교차 검증](https://mlr3book.mlr-org.com/Figures/nested_resampling.png){fig-align="center" width="800"}
+![중첩 리샘플링 설명도. 초록 상자는 외부 리샘플링을 위한 3-fold 교차검증(CV), 파란색 박스는 하이퍼파라미터 튜닝을 위한 4-fold 교차 검증](https://mlr3book.mlr-org.com/chapters/chapter4/Figures/mlr3book_figures-11.svg){fig-align="center" width="800"}
+위의 그림은 중첩 리샘플링의 예시를 잘 보여주고 있습니다.
+
+1. 외부 리샘플링: 각기 다른 훈련, 검증 데이터셋을 만들기 위한 3-fold 리샘플링
+2. 내부 리샘플링: 외부 리샘플링 안에서 하이퍼파라미터 튜닝을 위한 4-fold 리샘플링
+3. 하이퍼파라미터 최적화: 내부 리샘플링 데이터를 활용한 외부 훈련 데이터셋의 하이퍼파라미터 최적화
+4. 모델 학습 (Training): 가장 하이퍼파라미터 최적화가 잘된 외부 학습 데이터셋을 활용해 모델 학습
+5. 모델 평가 (Evaluation):
+6. 교차 검증 (Cross validation): 2~5번 과정을 각 3 fold에서 반복
+7. 집계 (Aggregation): 리샘플링의 성능을 집계하여 평가
+
+:::.callout-tip
+
+중첩 리샘플링은 컴퓨팅 계산이 굉장히 많이 필요합니다. 위에서 예로 들었던 3-fold 외부 리샘플링과 4-fold 내부 리샘플링, 그리고 grid search를 통한 2가지 파라미터를 5개의 resolution 조합으로 구성할 시, $3*4*5^2 = 300$번의 모델 학습 및 검증이 이루어지게 됩니다.
+
+:::
+
 
 ## AutoTuner를 활용한 중첩 리샘플링
 
@@ -334,14 +350,9 @@ extract_inner_tuning_archives(rr)
 
 이제, inner tunning과 outer tuning 간의 성능 비교를 통해 모델 과적합 여부를 살펴보겠습니다.
 
-``` {r}
-extract_inner_tuning_results(rr)[,
-  .(iteration, cost, gamma, classif.ce)] # inner
-```
+`{r} extract_inner_tuning_results(rr)[,   .(iteration, cost, gamma, classif.ce)] # inner`
 
-``` {r}
-rr$score()[,.(iteration, classif.ce)] # outer
-```
+`{r} rr$score()[,.(iteration, classif.ce)] # outer`
 
 외부 리샘플링의 일부 결과에서 확연히 낮은 성능이 나온다는 것은 최적화된 하이퍼파라미터가 데이터에 과적합되었다는 것을 의미합니다. 따라서 튜닝된 모델은 요약계산된 성능으로 보고하는 것이 중요합니다.
 
@@ -352,7 +363,7 @@ rr$aggregate()
 마지막으로 중첩 리샘플링을 과도하게 많이 설정하는 경우, 컴퓨터 성능을 많이 필요로 하게 됩니다. 예를 들어 위의 예시에서는 내부 리샘플링 4, 외부 리샘플링 3, 하이퍼파라미터 2개, resolution 5로 인해 $3*4*5*5=300$, 즉 300번의 모델 훈련 검증을 수행하게 됩니다. 따라서 내부 리샘플링에서는 홀드아웃 등과 같은 방법을 사용하거나 병렬화를 사용하도록 하는 것을 권장합니다.
 
 | R6 Class                                                | Sugar function                    | 요약                                    |
-|------------------|------------------------|------------------------------------|
+|------------------|----------------------|--------------------------------|
 | `Tuner`                                                 | `tnr()`                           | 최적화 알고리즘 결정                    |
 | `Terminator`                                            | `trm()`                           | 튜닝 알고리즘 종료 시점 기준 설정       |
 | `TuningInstanceSingleCrit` or `TuningInstanceMultiCrit` | `ti()`                            | 튜닝 세팅 저장 및 결과 저장             |
