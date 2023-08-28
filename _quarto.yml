@@ -11,7 +11,8 @@ execute:
 metadata-files: 
   - _website.yml
   - _format.yml
-
+website:
+  google-analytics: "G-QKQJ0CJQC4"
 
 editor: visual
 comments:
