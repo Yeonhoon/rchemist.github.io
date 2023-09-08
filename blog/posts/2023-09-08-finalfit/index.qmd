@@ -1,0 +1,138 @@
+---
+title: "finalfit을 이용한 분석결과 시각화"
+description: "테이블 + forest그래프 그리기"
+author: "JYH"
+date: "2023-09-08"
+categories: [R, table, forestplot, finalfit]
+image: "https://finalfit.org/reference/figures/finalfit_hex.png"
+---
+
+
+```{r}
+# install.packages("finalfit")
+library(finalfit)
+```
+
+데이터는 `finalfit` 패키지에 포함된 `colon_s` 데이터를 사용하겠습니다.
+
+```{r}
+head(colon_s)
+```
+# 테이블
+
+## 요약 테이블
+
+데이터의 기본 특성을 알려주는 요약 테이블은 `summary_factorlist()`를 이용합니다.
+
+설명변수와 종속변수를 각각 인자에 넣어도 되고, `~`을 이용해서 식 형태로 만들어줄 수 있습니다.
+```{r}
+tbl1 = colon_s |> 
+  summary_factorlist(
+    dependent = "perfor.factor",
+    explanatory = c("age", "age.factor", "sex.factor", "obstruct.factor"),
+    # OR  formula = perfor.factor ~ age + age.factor + sex.factor + obstruct.factor,
+  p=TRUE, 
+  add_dependent_label=TRUE,
+  total_col = TRUE)
+knitr::kable(tbl1, 
+             row.names=FALSE, 
+             align=c("l", "l", "r", "r", "r"))
+```
+
+## 변수에 따른 Test 설정
+
+범주형 변수의 경우는 `p_cat`을 이용해 `chisq` 또는 `fisher`를 선택할 수 있습니다.
+
+연속형 변수의 경우, 기본적으로 `kruskal.test`가 적용됩니다. 다만 `p_cont_para='t.test'`를 적용하여 모수 분석로 가정한 p값을 산출할 수 있습니다.
+```{r}
+tbl2  = colon_s |> 
+  summary_factorlist(
+    dependent = "perfor.factor",
+    explanatory = c("age", "age.factor", "sex.factor", "obstruct.factor"),
+  p=TRUE, 
+  p_cat = "fisher",
+  p_cont_para = 't.test',
+  add_dependent_label=TRUE,
+  total_col = TRUE)
+knitr::kable(tbl2, 
+             row.names=FALSE, 
+             align=c("l", "l", "r", "r", "r"))
+```
+
+
+비모수 연속형 변수의 경우 `cont='median'`을 통해 mean(SD)가 아닌 Median(IQR)값으로 출력할 수 있습니다.
+
+```{r}
+tbl3  = colon_s |> 
+  summary_factorlist(
+    dependent = "perfor.factor",
+    explanatory = c("age", "nodes",  "age.factor", "sex.factor", "obstruct.factor"),
+  p=TRUE, 
+  cont = "median",
+  total_col = TRUE)
+knitr::kable(tbl3, 
+             row.names=FALSE, 
+             align=c("l", "l", "r", "r", "r"))
+```
+
+
+## 회귀 테이블
+regression 테이블을 만들 때, univariable과 multivariable 테이블을 함께 만들어주는 것이 좋았습니다.
+
+### Logistic regression
+
+앞선 요약 테이블과 마찬가지로, 설명변수와 종속변수를 각가 입력해주거나, formula 를 입력할 수 있습니다.
+```{r}
+lr_tbl = colon_s |> 
+  finalfit(explanatory = c("age.factor", "sex.factor", "obstruct.factor", "perfor.factor"),
+           dependent = 'mort_5yr')
+knitr::kable(lr_tbl, 
+             row.names=FALSE, 
+             align=c("l", "l", "r", "r", "r", "r"))
+```
+일반적으로 다중(multivariable) 회귀분석은 단일(univariable) 회귀분석에서 유의한 변수(*P*<0.2)만 투입하기 마련이죠. `finalfit()`에서는 `explanatory_multi` 인자를 통해, multivariable regression에 포함시킬 변수를 선택할 수 있습니다.
+
+```{r}
+lr_tbl2 = colon_s |> 
+  finalfit(explanatory = c("age.factor", "sex.factor", "obstruct.factor", "perfor.factor"),
+           explanatory_multi = c("age.factor","obstruct.factor"),
+           dependent = 'mort_5yr')
+knitr::kable(lr_tbl2, 
+             row.names=FALSE, 
+             align=c("l", "l", "r", "r", "r", "r"))
+```
+### Cox regression
+
+Cox 회귀분석을 위해서는, dependent 인자에 `Surv()`를 이용한 값을 넣어주면 됩니다.
+
+```{r}
+cox_tbl = colon_s |> 
+  finalfit(explanatory = c("age.factor", "sex.factor", "obstruct.factor", "perfor.factor"),
+           explanatory_multi = c("age.factor","obstruct.factor"),
+           dependent = "Surv(time, status)")
+knitr::kable(cox_tbl, 
+             row.names=FALSE, 
+             align=c("l", "l", "r", "r", "r", "r"))
+```
+# 그래프
+
+OR 그래프나 HR 그래프를 손쉽게 그릴 수 있습니다.
+
+```{r}
+colon_s |> 
+  or_plot(dependent = "status",
+          explanatory = c("age.factor","sex.factor","obstruct.factor","perfor.factor"))
+```
+
+```{r}
+colon_s |> 
+  hr_plot(dependent = "Surv(time, status)",
+          explanatory = c("age.factor","sex.factor","obstruct.factor","perfor.factor"))
+```
+
+개인적으로 `moonBook` 패키지의 `ORplot()`, `survminer` 패키지의 `ggforest()`보다 더 깔끔하게 표현되어 더 좋은 것 같습니다.
+
+
+레퍼런스
+[finalfit vignette](https://finalfit.org/articles/finalfit.html)
+
