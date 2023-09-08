@@ -158,7 +158,6 @@ mult_tbl <- tbl_regression(
 mult_tbl |> as_flex_table()
 ```
 
-
 ### 두 개의 테이블 합치기
 
 이제 단순 회귀분석 테이블과 다중 회귀분석 테이블을 합쳐보도록 하겠습니다.

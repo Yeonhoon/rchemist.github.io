@@ -7,6 +7,10 @@
 
 @import url("https://fonts.googleapis.com/css?family=Fira+Code");
 
+.caption {
+  text-align: center;
+}
+
 code {
   color: hsl(210,8%,15%);
   border-radius: 5px;

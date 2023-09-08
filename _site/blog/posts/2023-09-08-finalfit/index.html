@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.340">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="JYH">
+<meta name="dcterms.date" content="2023-09-08">
+<meta name="description" content="테이블 + forest그래프 그리기">
+
+<title>Rchemist - finalfit을 이용한 분석결과 시각화</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QKQJ0CJQC4"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
+</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+<link href="../../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Rchemist</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target=""><i class="bi bi-house" role="img">
+</i> 
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target=""><i class="bi bi-file-person" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../gallery/index.html" rel="" target=""><i class="bi bi-sliders2" role="img">
+</i> 
+ <span class="menu-text">Gallery</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">finalfit을 이용한 분석결과 시각화</h1>
+                  <div>
+        <div class="description">
+          테이블 + forest그래프 그리기
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">table</div>
+                <div class="quarto-category">forestplot</div>
+                <div class="quarto-category">finalfit</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>JYH </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 8, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#테이블" id="toc-테이블" class="nav-link active" data-scroll-target="#테이블">테이블</a>
+  <ul class="collapse">
+  <li><a href="#요약-테이블" id="toc-요약-테이블" class="nav-link" data-scroll-target="#요약-테이블">요약 테이블</a></li>
+  <li><a href="#변수에-따른-test-설정" id="toc-변수에-따른-test-설정" class="nav-link" data-scroll-target="#변수에-따른-test-설정">변수에 따른 Test 설정</a></li>
+  <li><a href="#회귀-테이블" id="toc-회귀-테이블" class="nav-link" data-scroll-target="#회귀-테이블">회귀 테이블</a>
+  <ul class="collapse">
+  <li><a href="#logistic-regression" id="toc-logistic-regression" class="nav-link" data-scroll-target="#logistic-regression">Logistic regression</a></li>
+  <li><a href="#cox-regression" id="toc-cox-regression" class="nav-link" data-scroll-target="#cox-regression">Cox regression</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#그래프" id="toc-그래프" class="nav-link" data-scroll-target="#그래프">그래프</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("finalfit")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(finalfit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>데이터는 <code>finalfit</code> 패키지에 포함된 <code>colon_s</code> 데이터를 사용하겠습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(colon_s)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["id"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["rx"],"name":[2],"type":["fct"],"align":["left"]},{"label":["sex"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["age"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["obstruct"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["perfor"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["adhere"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["nodes"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["status"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["differ"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["extent"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["surg"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["node4"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["time"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["sex.factor"],"name":[15],"type":["labelled"],"align":["right"]},{"label":["rx.factor"],"name":[16],"type":["labelled"],"align":["right"]},{"label":["obstruct.factor"],"name":[17],"type":["labelled"],"align":["right"]},{"label":["perfor.factor"],"name":[18],"type":["labelled"],"align":["right"]},{"label":["adhere.factor"],"name":[19],"type":["labelled"],"align":["right"]},{"label":["differ.factor"],"name":[20],"type":["labelled"],"align":["right"]},{"label":["extent.factor"],"name":[21],"type":["labelled"],"align":["right"]},{"label":["surg.factor"],"name":[22],"type":["labelled"],"align":["right"]},{"label":["node4.factor"],"name":[23],"type":["labelled"],"align":["right"]},{"label":["status.factor"],"name":[24],"type":["labelled"],"align":["right"]},{"label":["age.factor"],"name":[25],"type":["labelled"],"align":["right"]},{"label":["loccomp"],"name":[26],"type":["dbl"],"align":["right"]},{"label":["loccomp.factor"],"name":[27],"type":["labelled"],"align":["right"]},{"label":["time.years"],"name":[28],"type":["dbl"],"align":["right"]},{"label":["mort_5yr"],"name":[29],"type":["labelled"],"align":["right"]},{"label":["age.10"],"name":[30],"type":["dbl"],"align":["right"]},{"label":["mort_5yr.num"],"name":[31],"type":["dbl"],"align":["right"]},{"label":["hospital"],"name":[32],"type":["fct"],"align":["left"]}],"data":[{"1":"1","2":"Lev+5FU","3":"1","4":"43","5":"NA","6":"0","7":"0","8":"5","9":"1","10":"2","11":"3","12":"0","13":"1","14":"1521","15":"Male","16":"Lev+5FU","17":"NA","18":"No","19":"No","20":"Moderate","21":"Serosa","22":"Short","23":"Yes","24":"Died","25":"40-59 years","26":"NA","27":"NA","28":"4.1671233","29":"Died","30":"4.3","31":"2","32":"hospital_5","_rn_":"1"},{"1":"2","2":"Lev+5FU","3":"1","4":"63","5":"0","6":"0","7":"0","8":"1","9":"0","10":"2","11":"3","12":"0","13":"0","14":"3087","15":"Male","16":"Lev+5FU","17":"No","18":"No","19":"No","20":"Moderate","21":"Serosa","22":"Short","23":"No","24":"Alive","25":"60+ years","26":"0","27":"No","28":"8.4575342","29":"Alive","30":"6.3","31":"1","32":"hospital_3","_rn_":"2"},{"1":"3","2":"Obs","3":"0","4":"71","5":"0","6":"0","7":"1","8":"7","9":"1","10":"2","11":"2","12":"0","13":"1","14":"963","15":"Female","16":"Obs","17":"No","18":"No","19":"Yes","20":"Moderate","21":"Muscle","22":"Short","23":"Yes","24":"Died","25":"60+ years","26":"1","27":"Yes","28":"2.6383562","29":"Died","30":"7.1","31":"2","32":"hospital_5","_rn_":"3"},{"1":"4","2":"Lev+5FU","3":"0","4":"66","5":"1","6":"0","7":"0","8":"6","9":"1","10":"2","11":"3","12":"1","13":"1","14":"293","15":"Female","16":"Lev+5FU","17":"Yes","18":"No","19":"No","20":"Moderate","21":"Serosa","22":"Long","23":"Yes","24":"Died","25":"60+ years","26":"1","27":"Yes","28":"0.8027397","29":"Died","30":"6.6","31":"2","32":"hospital_4","_rn_":"4"},{"1":"5","2":"Obs","3":"1","4":"69","5":"0","6":"0","7":"0","8":"22","9":"1","10":"2","11":"3","12":"1","13":"1","14":"659","15":"Male","16":"Obs","17":"No","18":"No","19":"No","20":"Moderate","21":"Serosa","22":"Long","23":"Yes","24":"Died","25":"60+ years","26":"0","27":"No","28":"1.8054795","29":"Died","30":"6.9","31":"2","32":"hospital_5","_rn_":"5"},{"1":"6","2":"Lev+5FU","3":"0","4":"57","5":"0","6":"0","7":"0","8":"9","9":"1","10":"2","11":"3","12":"0","13":"1","14":"1767","15":"Female","16":"Lev+5FU","17":"No","18":"No","19":"No","20":"Moderate","21":"Serosa","22":"Short","23":"Yes","24":"Died","25":"40-59 years","26":"0","27":"No","28":"4.8410959","29":"Died","30":"5.7","31":"2","32":"hospital_4","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<section id="테이블" class="level1">
+<h1>테이블</h1>
+<section id="요약-테이블" class="level2">
+<h2 class="anchored" data-anchor-id="요약-테이블">요약 테이블</h2>
+<p>데이터의 기본 특성을 알려주는 요약 테이블은 <code>summary_factorlist()</code>를 이용합니다.</p>
+<p>설명변수와 종속변수를 각각 인자에 넣어도 되고, <code>~</code>을 이용해서 식 형태로 만들어줄 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>tbl1 <span class="ot">=</span> colon_s <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary_factorlist</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dependent =</span> <span class="st">"perfor.factor"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">explanatory =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"age.factor"</span>, <span class="st">"sex.factor"</span>, <span class="st">"obstruct.factor"</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># OR  formula = perfor.factor ~ age + age.factor + sex.factor + obstruct.factor,</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p=</span><span class="cn">TRUE</span>, </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">add_dependent_label=</span><span class="cn">TRUE</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">total_col =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tbl1, </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">row.names=</span><span class="cn">FALSE</span>, </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">align=</span><span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Dependent: Perforation</th>
+<th style="text-align: left;"></th>
+<th style="text-align: right;">No</th>
+<th style="text-align: right;">Yes</th>
+<th style="text-align: right;">Total</th>
+<th style="text-align: left;">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Age (years)</td>
+<td style="text-align: left;">Mean (SD)</td>
+<td style="text-align: right;">59.8 (11.9)</td>
+<td style="text-align: right;">58.4 (13.3)</td>
+<td style="text-align: right;">59.8 (11.9)</td>
+<td style="text-align: left;">0.542</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Age</td>
+<td style="text-align: left;">&lt;40 years</td>
+<td style="text-align: right;">68 (7.5)</td>
+<td style="text-align: right;">2 (7.4)</td>
+<td style="text-align: right;">70 (7.5)</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">40-59 years</td>
+<td style="text-align: right;">334 (37.0)</td>
+<td style="text-align: right;">10 (37.0)</td>
+<td style="text-align: right;">344 (37.0)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">60+ years</td>
+<td style="text-align: right;">500 (55.4)</td>
+<td style="text-align: right;">15 (55.6)</td>
+<td style="text-align: right;">515 (55.4)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sex</td>
+<td style="text-align: left;">Female</td>
+<td style="text-align: right;">432 (47.9)</td>
+<td style="text-align: right;">13 (48.1)</td>
+<td style="text-align: right;">445 (47.9)</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Male</td>
+<td style="text-align: right;">470 (52.1)</td>
+<td style="text-align: right;">14 (51.9)</td>
+<td style="text-align: right;">484 (52.1)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Obstruction</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: right;">715 (81.2)</td>
+<td style="text-align: right;">17 (63.0)</td>
+<td style="text-align: right;">732 (80.6)</td>
+<td style="text-align: left;">0.035</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: right;">166 (18.8)</td>
+<td style="text-align: right;">10 (37.0)</td>
+<td style="text-align: right;">176 (19.4)</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="변수에-따른-test-설정" class="level2">
+<h2 class="anchored" data-anchor-id="변수에-따른-test-설정">변수에 따른 Test 설정</h2>
+<p>범주형 변수의 경우는 <code>p_cat</code>을 이용해 <code>chisq</code> 또는 <code>fisher</code>를 선택할 수 있습니다.</p>
+<p>연속형 변수의 경우, 기본적으로 <code>kruskal.test</code>가 적용됩니다. 다만 <code>p_cont_para='t.test'</code>를 적용하여 모수 분석로 가정한 p값을 산출할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tbl2  <span class="ot">=</span> colon_s <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary_factorlist</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dependent =</span> <span class="st">"perfor.factor"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">explanatory =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"age.factor"</span>, <span class="st">"sex.factor"</span>, <span class="st">"obstruct.factor"</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">p=</span><span class="cn">TRUE</span>, </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_cat =</span> <span class="st">"fisher"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_cont_para =</span> <span class="st">'t.test'</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">add_dependent_label=</span><span class="cn">TRUE</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">total_col =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tbl2, </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">row.names=</span><span class="cn">FALSE</span>, </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">align=</span><span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Dependent: Perforation</th>
+<th style="text-align: left;"></th>
+<th style="text-align: right;">No</th>
+<th style="text-align: right;">Yes</th>
+<th style="text-align: right;">Total</th>
+<th style="text-align: left;">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Age (years)</td>
+<td style="text-align: left;">Mean (SD)</td>
+<td style="text-align: right;">59.8 (11.9)</td>
+<td style="text-align: right;">58.4 (13.3)</td>
+<td style="text-align: right;">59.8 (11.9)</td>
+<td style="text-align: left;">0.586</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Age</td>
+<td style="text-align: left;">&lt;40 years</td>
+<td style="text-align: right;">68 (7.5)</td>
+<td style="text-align: right;">2 (7.4)</td>
+<td style="text-align: right;">70 (7.5)</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">40-59 years</td>
+<td style="text-align: right;">334 (37.0)</td>
+<td style="text-align: right;">10 (37.0)</td>
+<td style="text-align: right;">344 (37.0)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">60+ years</td>
+<td style="text-align: right;">500 (55.4)</td>
+<td style="text-align: right;">15 (55.6)</td>
+<td style="text-align: right;">515 (55.4)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sex</td>
+<td style="text-align: left;">Female</td>
+<td style="text-align: right;">432 (47.9)</td>
+<td style="text-align: right;">13 (48.1)</td>
+<td style="text-align: right;">445 (47.9)</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Male</td>
+<td style="text-align: right;">470 (52.1)</td>
+<td style="text-align: right;">14 (51.9)</td>
+<td style="text-align: right;">484 (52.1)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Obstruction</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: right;">715 (81.2)</td>
+<td style="text-align: right;">17 (63.0)</td>
+<td style="text-align: right;">732 (80.6)</td>
+<td style="text-align: left;">0.026</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: right;">166 (18.8)</td>
+<td style="text-align: right;">10 (37.0)</td>
+<td style="text-align: right;">176 (19.4)</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>비모수 연속형 변수의 경우 <code>cont='median'</code>을 통해 mean(SD)가 아닌 Median(IQR)값으로 출력할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tbl3  <span class="ot">=</span> colon_s <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary_factorlist</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dependent =</span> <span class="st">"perfor.factor"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">explanatory =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"nodes"</span>,  <span class="st">"age.factor"</span>, <span class="st">"sex.factor"</span>, <span class="st">"obstruct.factor"</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">p=</span><span class="cn">TRUE</span>, </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cont =</span> <span class="st">"median"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">total_col =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tbl3, </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">row.names=</span><span class="cn">FALSE</span>, </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">align=</span><span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 14%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">label</th>
+<th style="text-align: left;">levels</th>
+<th style="text-align: right;">No</th>
+<th style="text-align: right;">Yes</th>
+<th style="text-align: right;">Total</th>
+<th style="text-align: left;">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Age (years)</td>
+<td style="text-align: left;">Median (IQR)</td>
+<td style="text-align: right;">61.0 (53.0 to 69.0)</td>
+<td style="text-align: right;">60.0 (50.0 to 68.0)</td>
+<td style="text-align: right;">61.0 (53.0 to 69.0)</td>
+<td style="text-align: left;">0.578</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">nodes</td>
+<td style="text-align: left;">Median (IQR)</td>
+<td style="text-align: right;">2.0 (1.0 to 5.0)</td>
+<td style="text-align: right;">3.0 (2.0 to 4.0)</td>
+<td style="text-align: right;">2.0 (1.0 to 5.0)</td>
+<td style="text-align: left;">0.125</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Age</td>
+<td style="text-align: left;">&lt;40 years</td>
+<td style="text-align: right;">68 (7.5)</td>
+<td style="text-align: right;">2 (7.4)</td>
+<td style="text-align: right;">70 (7.5)</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">40-59 years</td>
+<td style="text-align: right;">334 (37.0)</td>
+<td style="text-align: right;">10 (37.0)</td>
+<td style="text-align: right;">344 (37.0)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">60+ years</td>
+<td style="text-align: right;">500 (55.4)</td>
+<td style="text-align: right;">15 (55.6)</td>
+<td style="text-align: right;">515 (55.4)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sex</td>
+<td style="text-align: left;">Female</td>
+<td style="text-align: right;">432 (47.9)</td>
+<td style="text-align: right;">13 (48.1)</td>
+<td style="text-align: right;">445 (47.9)</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Male</td>
+<td style="text-align: right;">470 (52.1)</td>
+<td style="text-align: right;">14 (51.9)</td>
+<td style="text-align: right;">484 (52.1)</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Obstruction</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: right;">715 (81.2)</td>
+<td style="text-align: right;">17 (63.0)</td>
+<td style="text-align: right;">732 (80.6)</td>
+<td style="text-align: left;">0.035</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: right;">166 (18.8)</td>
+<td style="text-align: right;">10 (37.0)</td>
+<td style="text-align: right;">176 (19.4)</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="회귀-테이블" class="level2">
+<h2 class="anchored" data-anchor-id="회귀-테이블">회귀 테이블</h2>
+<p>regression 테이블을 만들 때, univariable과 multivariable 테이블을 함께 만들어주는 것이 좋았습니다.</p>
+<section id="logistic-regression" class="level3">
+<h3 class="anchored" data-anchor-id="logistic-regression">Logistic regression</h3>
+<p>앞선 요약 테이블과 마찬가지로, 설명변수와 종속변수를 각가 입력해주거나, formula 를 입력할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>lr_tbl <span class="ot">=</span> colon_s <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">finalfit</span>(<span class="at">explanatory =</span> <span class="fu">c</span>(<span class="st">"age.factor"</span>, <span class="st">"sex.factor"</span>, <span class="st">"obstruct.factor"</span>, <span class="st">"perfor.factor"</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">dependent =</span> <span class="st">'mort_5yr'</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(lr_tbl, </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">row.names=</span><span class="cn">FALSE</span>, </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">align=</span><span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 22%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Dependent: Mortality 5 year</th>
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Alive</th>
+<th style="text-align: right;">Died</th>
+<th style="text-align: right;">OR (univariable)</th>
+<th style="text-align: right;">OR (multivariable)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Age</td>
+<td style="text-align: left;">&lt;40 years</td>
+<td style="text-align: right;">31 (46.3)</td>
+<td style="text-align: right;">36 (53.7)</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">40-59 years</td>
+<td style="text-align: right;">208 (61.4)</td>
+<td style="text-align: right;">131 (38.6)</td>
+<td style="text-align: right;">0.54 (0.32-0.92, p=0.023)</td>
+<td style="text-align: right;">0.57 (0.34-0.98, p=0.041)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">60+ years</td>
+<td style="text-align: right;">272 (53.4)</td>
+<td style="text-align: right;">237 (46.6)</td>
+<td style="text-align: right;">0.75 (0.45-1.25, p=0.270)</td>
+<td style="text-align: right;">0.81 (0.48-1.36, p=0.426)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sex</td>
+<td style="text-align: left;">Female</td>
+<td style="text-align: right;">243 (55.6)</td>
+<td style="text-align: right;">194 (44.4)</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Male</td>
+<td style="text-align: right;">268 (56.1)</td>
+<td style="text-align: right;">210 (43.9)</td>
+<td style="text-align: right;">0.98 (0.76-1.27, p=0.889)</td>
+<td style="text-align: right;">0.98 (0.75-1.28, p=0.902)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Obstruction</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: right;">408 (56.7)</td>
+<td style="text-align: right;">312 (43.3)</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: right;">89 (51.1)</td>
+<td style="text-align: right;">85 (48.9)</td>
+<td style="text-align: right;">1.25 (0.90-1.74, p=0.189)</td>
+<td style="text-align: right;">1.25 (0.90-1.76, p=0.186)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Perforation</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: right;">497 (56.0)</td>
+<td style="text-align: right;">391 (44.0)</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: right;">14 (51.9)</td>
+<td style="text-align: right;">13 (48.1)</td>
+<td style="text-align: right;">1.18 (0.54-2.55, p=0.672)</td>
+<td style="text-align: right;">1.12 (0.51-2.44, p=0.770)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>일반적으로 다중(multivariable) 회귀분석은 단일(univariable) 회귀분석에서 유의한 변수(<em>P</em>&lt;0.2)만 투입하기 마련이죠. <code>finalfit()</code>에서는 <code>explanatory_multi</code> 인자를 통해, multivariable regression에 포함시킬 변수를 선택할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>lr_tbl2 <span class="ot">=</span> colon_s <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">finalfit</span>(<span class="at">explanatory =</span> <span class="fu">c</span>(<span class="st">"age.factor"</span>, <span class="st">"sex.factor"</span>, <span class="st">"obstruct.factor"</span>, <span class="st">"perfor.factor"</span>),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">explanatory_multi =</span> <span class="fu">c</span>(<span class="st">"age.factor"</span>,<span class="st">"obstruct.factor"</span>),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">dependent =</span> <span class="st">'mort_5yr'</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(lr_tbl2, </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">row.names=</span><span class="cn">FALSE</span>, </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">align=</span><span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 22%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Dependent: Mortality 5 year</th>
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Alive</th>
+<th style="text-align: right;">Died</th>
+<th style="text-align: right;">OR (univariable)</th>
+<th style="text-align: right;">OR (multivariable)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Age</td>
+<td style="text-align: left;">&lt;40 years</td>
+<td style="text-align: right;">31 (46.3)</td>
+<td style="text-align: right;">36 (53.7)</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">40-59 years</td>
+<td style="text-align: right;">208 (61.4)</td>
+<td style="text-align: right;">131 (38.6)</td>
+<td style="text-align: right;">0.54 (0.32-0.92, p=0.023)</td>
+<td style="text-align: right;">0.57 (0.34-0.98, p=0.041)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">60+ years</td>
+<td style="text-align: right;">272 (53.4)</td>
+<td style="text-align: right;">237 (46.6)</td>
+<td style="text-align: right;">0.75 (0.45-1.25, p=0.270)</td>
+<td style="text-align: right;">0.81 (0.48-1.36, p=0.424)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sex</td>
+<td style="text-align: left;">Female</td>
+<td style="text-align: right;">243 (55.6)</td>
+<td style="text-align: right;">194 (44.4)</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Male</td>
+<td style="text-align: right;">268 (56.1)</td>
+<td style="text-align: right;">210 (43.9)</td>
+<td style="text-align: right;">0.98 (0.76-1.27, p=0.889)</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Obstruction</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: right;">408 (56.7)</td>
+<td style="text-align: right;">312 (43.3)</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: right;">89 (51.1)</td>
+<td style="text-align: right;">85 (48.9)</td>
+<td style="text-align: right;">1.25 (0.90-1.74, p=0.189)</td>
+<td style="text-align: right;">1.26 (0.90-1.76, p=0.176)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Perforation</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: right;">497 (56.0)</td>
+<td style="text-align: right;">391 (44.0)</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: right;">14 (51.9)</td>
+<td style="text-align: right;">13 (48.1)</td>
+<td style="text-align: right;">1.18 (0.54-2.55, p=0.672)</td>
+<td style="text-align: right;">-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="cox-regression" class="level3">
+<h3 class="anchored" data-anchor-id="cox-regression">Cox regression</h3>
+<p>Cox 회귀분석을 위해서는, dependent 인자에 <code>Surv()</code>를 이용한 값을 넣어주면 됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cox_tbl <span class="ot">=</span> colon_s <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">finalfit</span>(<span class="at">explanatory =</span> <span class="fu">c</span>(<span class="st">"age.factor"</span>, <span class="st">"sex.factor"</span>, <span class="st">"obstruct.factor"</span>, <span class="st">"perfor.factor"</span>),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">explanatory_multi =</span> <span class="fu">c</span>(<span class="st">"age.factor"</span>,<span class="st">"obstruct.factor"</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">dependent =</span> <span class="st">"Surv(time, status)"</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(cox_tbl, </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">row.names=</span><span class="cn">FALSE</span>, </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">align=</span><span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 24%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Dependent: Surv(time, status)</th>
+<th style="text-align: left;"></th>
+<th style="text-align: right;">all</th>
+<th style="text-align: right;">HR (univariable)</th>
+<th style="text-align: right;">HR (multivariable)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Age</td>
+<td style="text-align: left;">&lt;40 years</td>
+<td style="text-align: right;">70 (7.5)</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">40-59 years</td>
+<td style="text-align: right;">344 (37.0)</td>
+<td style="text-align: right;">0.76 (0.53-1.09, p=0.132)</td>
+<td style="text-align: right;">0.79 (0.55-1.14, p=0.203)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">60+ years</td>
+<td style="text-align: right;">515 (55.4)</td>
+<td style="text-align: right;">0.93 (0.66-1.31, p=0.668)</td>
+<td style="text-align: right;">0.99 (0.70-1.40, p=0.943)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sex</td>
+<td style="text-align: left;">Female</td>
+<td style="text-align: right;">445 (47.9)</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Male</td>
+<td style="text-align: right;">484 (52.1)</td>
+<td style="text-align: right;">1.01 (0.84-1.22, p=0.888)</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Obstruction</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: right;">732 (80.6)</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: right;">176 (19.4)</td>
+<td style="text-align: right;">1.29 (1.03-1.62, p=0.028)</td>
+<td style="text-align: right;">1.31 (1.04-1.64, p=0.022)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Perforation</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: right;">902 (97.1)</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: right;">27 (2.9)</td>
+<td style="text-align: right;">1.17 (0.70-1.95, p=0.556)</td>
+<td style="text-align: right;">-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="그래프" class="level1">
+<h1>그래프</h1>
+<p>OR 그래프나 HR 그래프를 손쉽게 그릴 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>colon_s <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">or_plot</span>(<span class="at">dependent =</span> <span class="st">"status"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">explanatory =</span> <span class="fu">c</span>(<span class="st">"age.factor"</span>,<span class="st">"sex.factor"</span>,<span class="st">"obstruct.factor"</span>,<span class="st">"perfor.factor"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>colon_s <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hr_plot</span>(<span class="at">dependent =</span> <span class="st">"Surv(time, status)"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">explanatory =</span> <span class="fu">c</span>(<span class="st">"age.factor"</span>,<span class="st">"sex.factor"</span>,<span class="st">"obstruct.factor"</span>,<span class="st">"perfor.factor"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>개인적으로 <code>moonBook</code> 패키지의 <code>ORplot()</code>, <code>survminer</code> 패키지의 <code>ggforest()</code>보다 더 깔끔하게 표현되어 더 좋은 것 같습니다.</p>
+<p>레퍼런스 <a href="https://finalfit.org/articles/finalfit.html">finalfit vignette</a></p>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="rchemist0123/giscus-blog" data-repo-id="R_kgDOJBwa8Q" data-category="General" data-category-id="DIC_kwDOJBwa8c4CUbVM" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left"><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:danjang0123@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/danjang0123/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

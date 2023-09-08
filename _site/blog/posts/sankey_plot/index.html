@@ -8,9 +8,9 @@
 
 <meta name="author" content="JYH">
 <meta name="dcterms.date" content="2023-04-18">
-<meta name="description" content="ggalluvial을 통한 Sankey plot 그리기">
+<meta name="description" content="alluvial, ggalluvial을 통한 Sankey plot 그리기">
 
-<title>Rchemist - Sankey plot 그리기</title>
+<title>Rchemist - Sankey plot 그리기 (feat.Alluvial plot)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -97,6 +97,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit"
   }
 }</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QKQJ0CJQC4"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
+</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
 <link href="../../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
@@ -150,10 +159,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Sankey plot 그리기</h1>
+      <h1 class="title">Sankey plot 그리기 (feat.Alluvial plot)</h1>
                   <div>
         <div class="description">
-          <code>ggalluvial</code>을 통한 Sankey plot 그리기
+          <code>alluvial</code>, <code>ggalluvial</code>을 통한 Sankey plot 그리기
         </div>
       </div>
                           <div class="quarto-categories">
@@ -192,10 +201,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#인트로" id="toc-인트로" class="nav-link active" data-scroll-target="#인트로">인트로</a></li>
+  <li><a href="#인트로-개념의-차이" id="toc-인트로-개념의-차이" class="nav-link active" data-scroll-target="#인트로-개념의-차이">인트로: 개념의 차이</a>
+  <ul class="collapse">
+  <li><a href="#공통점" id="toc-공통점" class="nav-link" data-scroll-target="#공통점">공통점</a></li>
+  <li><a href="#alluvial-plot" id="toc-alluvial-plot" class="nav-link" data-scroll-target="#alluvial-plot"><strong>Alluvial plot</strong></a></li>
+  <li><a href="#sankey-diagram" id="toc-sankey-diagram" class="nav-link" data-scroll-target="#sankey-diagram">Sankey diagram</a></li>
+  </ul></li>
+  <li><a href="#alluvial-패키지를-이용한-시각화" id="toc-alluvial-패키지를-이용한-시각화" class="nav-link" data-scroll-target="#alluvial-패키지를-이용한-시각화"><code>alluvial</code> 패키지를 이용한 시각화</a></li>
+  <li><a href="#ggalluvial-이용" id="toc-ggalluvial-이용" class="nav-link" data-scroll-target="#ggalluvial-이용"><code>ggalluvial</code> 이용</a>
+  <ul class="collapse">
   <li><a href="#wide-데이터로-sankey-plot-그리기" id="toc-wide-데이터로-sankey-plot-그리기" class="nav-link" data-scroll-target="#wide-데이터로-sankey-plot-그리기">Wide 데이터로 Sankey plot 그리기</a></li>
   <li><a href="#long-데이터로-sankey-plot-그리기" id="toc-long-데이터로-sankey-plot-그리기" class="nav-link" data-scroll-target="#long-데이터로-sankey-plot-그리기">Long 데이터로 Sankey plot 그리기</a></li>
   <li><a href="#참고자료" id="toc-참고자료" class="nav-link" data-scroll-target="#참고자료">참고자료</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -205,22 +223,93 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="인트로" class="level2">
-<h2 class="anchored" data-anchor-id="인트로">인트로</h2>
-<p>Sankey(생키) diagram라고도 하는 Sankey plot은 범주형 데이터의 분배, 변환 또는 보존을 설명하는 데 활용되는 그래프 중 하나입니다. 그래프에서 노드 간 화살표 또는 링크의 너비는 흐름 양에 비례하므로 여러 흐름의 상대적 크기를 쉽게 비교할 수 있습니다.<br>
-<br>
-쉽게 말해, Sankey plot은 데이터의 변화 양상이나 응답 빈도의 양상 등을 확인할 수 있는 그래프입니다.</p>
+<section id="인트로-개념의-차이" class="level1">
+<h1>인트로: 개념의 차이</h1>
+<p>Alluvial plot과 Sankey plot은 데이터의 흐름을 시각화하는 데 사용되는 그래프 중 하나입니다.</p>
+<p>두 그래프는 겉으로 보기에는 비슷하면서도, 명확히 다른 점을 갖고 있습니다. 우선 두 그래프의 예시부터 살펴보도록 하겠습니다.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://www.datasmith.org/wp-content/uploads/2020/05/cran-alluvial-example.png" class="img-fluid figure-img" width="500"></p>
+<figcaption class="figure-caption">Fig1. Alluvial plot</figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://www.datasmith.org/wp-content/uploads/2020/05/d3-sankey-classic-example-1536x800.png" class="img-fluid figure-img" width="600"></p>
+<figcaption class="figure-caption">Fig2. Sankey diagram</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="공통점" class="level2">
+<h2 class="anchored" data-anchor-id="공통점">공통점</h2>
+<p>겉으로 보기에는 두 그래프가 비슷합니다. 예를 들어</p>
+<ul>
+<li>두 그래프 모두 노드와 여러 범주로 이루어진 수직 막대가 존재합니다.</li>
+<li>노드 간에 두께와 높이가 각각 다른 곡선으로 연결되어 있습니다.</li>
+</ul>
+<p>이러한 점들 때문에 두 그래프를 혼동하고는 합니다.</p>
+<p>그러나 두 그래프 간에는 명확한 차이점이 존재합니다.</p>
+</section>
+<section id="alluvial-plot" class="level2">
+<h2 class="anchored" data-anchor-id="alluvial-plot"><strong>Alluvial plot</strong></h2>
+<p>먼저 Alluvial plot의 특징은 다음과 같습니다.</p>
+<ul>
+<li>특정 집단에 소속된 사람들이 다양한 범주차원에서 어떻게 구성되는지를 보여줍니다.</li>
+<li>범주를 나타내는 막대의 위치가 크게 상관없습니다.</li>
+<li>특정 사람들이 어떤 특징을 가지고 있는지 보여주는 데 적합합니다.</li>
+</ul>
+</section>
+<section id="sankey-diagram" class="level2">
+<h2 class="anchored" data-anchor-id="sankey-diagram">Sankey diagram</h2>
+<p>반면 <strong>Sankey diagram</strong>은 다음과 같은 특징을 갖습니다.</p>
+<ul>
+<li>특정 데이터의 <strong>양</strong>이 어떻게 흐르는지, 어떻게 변화하는지를 보여줍니다.</li>
+<li>범주를 나타내는 막대의 배치에 따라 시간의 흐름을 나타냅니다.</li>
+<li>어떤 데이터의 양, 크기, 또는 사람들의 흐름이나 과정을 시각화하는 데 적합합니다.</li>
+</ul>
+<p>이렇게 두 그래프의 개념적인 차이에 대해 살펴보았습니다.</p>
+<p>우리가 다룰 패키지는 비록 alluvial이 들어가지만, <strong>어떤 데이터를 어떻게 표현는지에 따라</strong> Alluvial plot이 될 수도 있고, Sankey diagram이 될 수도 있다는 것을 말씀드리고 싶습니다.</p>
+<p>그럼 지금부터 Alluvial 또는 Sankey plot을 그리는 방법을 패키지를 통해 말씀드리겠습니다.</p>
+</section>
+</section>
+<section id="alluvial-패키지를-이용한-시각화" class="level1">
+<h1><code>alluvial</code> 패키지를 이용한 시각화</h1>
+<p><code>alluvial</code> 패키지를 이용해 시각화를 진행해보겠습니다. 해당 데이터는 제가 연구하던 패혈증 데이터입니다.<br>
+</p>
+<p>ICU에 입원한 환자들의 일자별 AKI 상태의 변화를 시각화하는 그래프입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(alluvial)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">alluvial</span>(<span class="at">TZ=</span>df<span class="sc">$</span>AKI_initial, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Day 1</span><span class="st">`</span> <span class="ot">=</span> df<span class="sc">$</span>AKI_status_day1, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Day 2</span><span class="st">`</span> <span class="ot">=</span> df<span class="sc">$</span>AKI_status_day2, </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Day 3</span><span class="st">`</span> <span class="ot">=</span> df<span class="sc">$</span>AKI_status_day3, </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Day 7</span><span class="st">`</span> <span class="ot">=</span> df<span class="sc">$</span>AKI_status_day7,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">freq=</span>df<span class="sc">$</span>N,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">ifelse</span>(df<span class="sc">$</span>AKI_stage <span class="sc">==</span> <span class="st">'Stage 1'</span>,<span class="st">'#00AFBB'</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">ifelse</span>(df<span class="sc">$</span>AKI_stage <span class="sc">==</span> <span class="st">'Stage 2'</span>,<span class="st">'#E7B800'</span>,<span class="st">"#FC4E07"</span>)),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">alpha=</span>.<span class="dv">8</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>         )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="ggalluvial-이용" class="level1">
+<h1><code>ggalluvial</code> 이용</h1>
 <p>R에서 Sankey plot을 시각화할 수 있는 패키지 중 하나는 <code>ggalluvial</code> 입니다. <code>gg</code>가 붙은 것에서 알 수 있듯이, <code>ggplot2</code> 의 확장 패키지 중 하나입니다.</p>
 <p>저 같은 경우, 시간의 흐름에 따른 범주의 양상을 Sankey plot으로 시각화한 경험이 있습니다. 예를 들면 첫 번째 건강검진부터 세 번째 건강검진 간 비만인 사람들의 분포를 시각화하는 것이죠.</p>
 <p><code>ggalluvial</code>은 Sankey plot을 그리기 위해 wide 데이터와 long 데이터를 모두 사용할 수 있습니다.</p>
-</section>
 <section id="wide-데이터로-sankey-plot-그리기" class="level2">
 <h2 class="anchored" data-anchor-id="wide-데이터로-sankey-plot-그리기">Wide 데이터로 Sankey plot 그리기</h2>
 <p>wide 데이터는 쉽게 말해 여러 가지 column이 옆으로 붙어있는 데이터를 의미합니다.</p>
 <p>Sankey plot을 그리기 위한 wide 데이터에서는 하나의 열에 범주가 와야 하고, 범주의 조합에 해당하는 빈도(Frequency) 열이 와야 합니다.</p>
 <p>예를 들어 <code>HairEyeColor</code> 데이터를 살펴보겠습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>HairEyeColor <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HairEyeColor <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
@@ -232,18 +321,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><code>HairEyeColor</code> 데이터는 성별, 머리 색상, 눈동자 색상에 따른 빈도 데이터를 담고 있습니다. 이 데이터를 활용해 Sankey plot을 작성해보도록 하겠습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggalluvial)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">as.data.frame</span>(HairEyeColor),</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y=</span>Freq, <span class="at">axis1 =</span> Hair, <span class="at">axis2 =</span> Eye, <span class="at">axis3=</span> Sex)) <span class="sc">+</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill=</span>Eye),</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">width=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>, <span class="at">knot.pos =</span> <span class="dv">0</span>, <span class="at">reverse =</span> F) <span class="sc">+</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_stratum</span>(<span class="at">alpha =</span> .<span class="dv">25</span>, <span class="at">width=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>, <span class="at">reverse=</span>F) <span class="sc">+</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">"stratum"</span>, <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), <span class="at">reverse=</span>F) <span class="sc">+</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="at">Brown=</span><span class="st">"brown"</span>, <span class="at">Hazel=</span><span class="st">"#E2AC76"</span>, <span class="at">Green=</span><span class="st">"darkgreen"</span>, <span class="at">Blue=</span><span class="st">"lightblue2"</span>)) <span class="sc">+</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggalluvial)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">as.data.frame</span>(HairEyeColor),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y=</span>Freq, <span class="at">axis1 =</span> Hair, <span class="at">axis2 =</span> Eye, <span class="at">axis3=</span> Sex)) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill=</span>Eye),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">width=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>, <span class="at">knot.pos =</span> <span class="dv">0</span>, <span class="at">reverse =</span> F) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_stratum</span>(<span class="at">alpha =</span> .<span class="dv">25</span>, <span class="at">width=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>, <span class="at">reverse=</span>F) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">"stratum"</span>, <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), <span class="at">reverse=</span>F) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="at">Brown=</span><span class="st">"brown"</span>, <span class="at">Hazel=</span><span class="st">"#E2AC76"</span>, <span class="at">Green=</span><span class="st">"darkgreen"</span>, <span class="at">Blue=</span><span class="st">"lightblue2"</span>)) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p><code>geom_alluvial()</code>은 Sankey plot에서 노드를 그려주고, <code>geom_stratum()</code>은 각 열의 범주를 나타내는 막대를 그려줍니다.</p>
@@ -254,21 +343,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>이번에는 긴 데이터를 활용해 Sankey plot을 그려보겠습니다. 긴 데이터는 열들의 조합에 따른 범주를 나타내는 넓은 데이터와 달리, 하나의 행이 보통 하나의 경우를 의미합니다. 긴 데이터는 주로 공통된 ID, 그룹 별 값에 따른 데이터를 보여줍니다.</p>
 <p>예를 들어보겠습니다. <code>majors</code>라는 데이터를 보면 <code>student</code> 라고 하는 학생 ID가 1번부터 15번 까지 있습니다. 또한 <code>semester</code>는 1학기부터 15학기까지 있는데, 각 학생들의 학기별 <code>curriculum</code>에 대한 데이터를 보여주고 있습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>majors<span class="sc">$</span>curriculum <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(majors<span class="sc">$</span>curriculum)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(majors,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>semester, <span class="at">stratum =</span> curriculum, <span class="at">alluvium=</span>student, <span class="at">fill=</span>curriculum, <span class="at">label =</span> curriculum)) <span class="sc">+</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_flow</span>(<span class="at">stat =</span> <span class="st">"alluvium"</span>, <span class="at">lode.guidance =</span> lode_frontback,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"darkgrey"</span>) <span class="sc">+</span> </span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">type=</span><span class="st">"qual"</span>, <span class="at">palette =</span> <span class="st">"Set2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>majors<span class="sc">$</span>curriculum <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(majors<span class="sc">$</span>curriculum)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(majors,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>semester, <span class="at">stratum =</span> curriculum, <span class="at">alluvium=</span>student, <span class="at">fill=</span>curriculum, <span class="at">label =</span> curriculum)) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_flow</span>(<span class="at">stat =</span> <span class="st">"alluvium"</span>, <span class="at">lode.guidance =</span> lode_frontback,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"darkgrey"</span>) <span class="sc">+</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">type=</span><span class="st">"qual"</span>, <span class="at">palette =</span> <span class="st">"Set2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>위의 그래프를 통해, 학생들이 학기별로 어떤 커리큘럼을 선택했는지 <strong>흐름과 빈도</strong>를 알 수 있습니다.</p>
 <p>물론 긴 데이터에 빈도가 있는 경우도 이를 활용할 수 있습니다. 마찬가지로 <code>ggalluvial</code> 패키지의 <code>vaccinations</code> 데이터를 이용하겠습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>vaccinations</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>vaccinations</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
@@ -280,32 +369,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><code>vaccinations</code> 데이터는 RAND American Life Panel 설문 조사 중 세 건을 합친 데이터입니다. 인플루엔자 예방을 위해 백신 접종을 할 의향을 묻고 있는 데이터입니다. Never, Sometimes, Always 등의 응답이 기록되어 있습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 그래프에서 나타나는 범주 순서 변경 위해 </span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>vaccinations<span class="sc">$</span>response <span class="ot">&lt;-</span> <span class="fu">factor</span>(vaccinations<span class="sc">$</span>response, <span class="at">levels =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(vaccinations<span class="sc">$</span>response)))</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(vaccinations,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>survey, <span class="at">y=</span>freq,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">stratum =</span> response, </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">alluvium =</span> subject,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> response,</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> response)) <span class="sc">+</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_flow</span>() <span class="sc">+</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_stratum</span>(<span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">"stratum"</span>, <span class="at">size=</span><span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="fl">0.1</span>,<span class="fl">0.1</span>)) <span class="sc">+</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 그래프에서 나타나는 범주 순서 변경 위해 </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>vaccinations<span class="sc">$</span>response <span class="ot">&lt;-</span> <span class="fu">factor</span>(vaccinations<span class="sc">$</span>response, <span class="at">levels =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(vaccinations<span class="sc">$</span>response)))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(vaccinations,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>survey, <span class="at">y=</span>freq,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">stratum =</span> response, </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">alluvium =</span> subject,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> response,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> response)) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_flow</span>() <span class="sc">+</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_stratum</span>(<span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">"stratum"</span>, <span class="at">size=</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="fl">0.1</span>,<span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>위의 그래프에서 <code>freq</code>는 <code>survey</code>와 <code>response</code>별로 합해져 그래프에 나타나는 것을 알 수 있습니다.</p>
 </section>
 <section id="참고자료" class="level2">
 <h2 class="anchored" data-anchor-id="참고자료">참고자료</h2>
-<p>https://cran.r-project.org/web/packages/ggalluvial/vignettes/ggalluvial.html</p>
+<ul>
+<li><a href="http://www.datasmith.org/2020/05/02/alluvial-plots-vs-sankey-diagrams/">Alluvial plots vs Sankey diagrams</a></li>
+<li><a href="https://github.com/mbojan/alluvial">alluvial github</a></li>
+<li><a href="https://cran.r-project.org/web/packages/ggalluvial/vignettes/ggalluvial.html">ggalluvial vignetts</a></li>
+</ul>
 
 
+</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

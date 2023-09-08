@@ -10,6 +10,9 @@
   {
     "listing": "/index.html",
     "items": [
+      "/blog/posts/2023-09-08-finalfit/index.html",
+      "/blog/posts/2023-09-08-finalfit/index.html",
+      "/blog/posts/2023-08-25-RandomCubicSpline/index.html",
       "/blog/posts/seoul_r_meetup_장연훈_230531/index.html",
       "/blog/posts/mlr3_pipeline/index.html",
       "/blog/posts/mlr3_feature_selection/index.html",
@@ -53,6 +56,8 @@
   {
     "listing": "/blog/index.html",
     "items": [
+      "/blog/posts/2023-09-08-finalfit/index.html",
+      "/blog/posts/2023-08-25-RandomCubicSpline/index.html",
       "/blog/posts/seoul_r_meetup_장연훈_230531/index.html",
       "/blog/posts/mlr3_pipeline/index.html",
       "/blog/posts/mlr3_feature_selection/index.html",

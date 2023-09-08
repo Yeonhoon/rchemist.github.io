@@ -96,6 +96,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit"
   }
 }</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QKQJ0CJQC4"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
+</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
 <link href="../../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
@@ -207,7 +216,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#train-학습시키기" id="toc-train-학습시키기" class="nav-link" data-scroll-target="#train-학습시키기">Train: 학습시키기</a></li>
   <li><a href="#predict-예측하기" id="toc-predict-예측하기" class="nav-link" data-scroll-target="#predict-예측하기">Predict: 예측하기</a></li>
   <li><a href="#hyperparameters" id="toc-hyperparameters" class="nav-link" data-scroll-target="#hyperparameters">Hyperparameters</a></li>
-  <li><a href="#evaluation-평가" id="toc-evaluation-평가" class="nav-link" data-scroll-target="#evaluation-평가">Evaluation 평가</a></li>
+  <li><a href="#evaluation-평가" id="toc-evaluation-평가" class="nav-link" data-scroll-target="#evaluation-평가">Evaluation: 평가</a></li>
   </ul></li>
   <li><a href="#분류classification" id="toc-분류classification" class="nav-link" data-scroll-target="#분류classification">분류(Classification)</a>
   <ul class="collapse">
@@ -849,13 +858,13 @@ $cp
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>하이퍼 파라미터에 대한 자세한 설명은 “<span class="citation" data-cites="tuning">@tuning</span>”에서 더 자세히 다루도록 하겠습니다.</p>
+<p>하이퍼 파라미터에 대한 자세한 설명은 <a href="https://rchemistblog.com/blog/posts/mlr3_hyperparameter/">mlr3 하이퍼파라미터 최적화 포스트</a>에서 더 자세히 다루도록 하겠습니다.</p>
 </div>
 </div>
 </section>
 </section>
 <section id="evaluation-평가" class="level3">
-<h3 class="anchored" data-anchor-id="evaluation-평가">Evaluation 평가</h3>
+<h3 class="anchored" data-anchor-id="evaluation-평가">Evaluation: 평가</h3>
 <p>아마 머신러닝 모델링 과정에서 가장 중요한 단계가 바로 모델의 성능 평가일 것입니다. 평가를 하지 않는다면 아무리 잘 만든 모델이라도 그 성능을 알 수 없기 때문이죠. 평가에서는 앞서 만든 객체들을 바탕으로 모델의 성능을 평가해보도록 하겠습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>lrn_rpart <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">"regr.rpart"</span>)</span>
@@ -878,7 +887,7 @@ $cp
 </div>
 </div>
 </div>
-<p>mlr3에서 시행되는 모든 측정값은 다음의 세 가지 요소에 의해 정의되어있습니다. 예를 들어 mean absolute error(MAE)를 사용한다고 가정해보죠.</p>
+<p><code>mlr3</code>에서 시행되는 모든 측정값은 다음의 세 가지 요소에 의해 정의되어있습니다. 예를 들어 mean absolute error(MAE)를 사용한다고 가정해보죠.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>measure <span class="ot">=</span> <span class="fu">msr</span>(<span class="st">"regr.mae"</span>)</span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>measure</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -904,7 +913,7 @@ $cp
  2.42987 </code></pre>
 </div>
 </div>
-<p>앞서 살펴보았던 <code>msr()</code> 함수는 하나의 성능 지표를 불러온느 함수였습니다. 여러 개의 성능을 동시에 확인하기 위해서는 <code>msrs()</code>를 이용하면 됩니다.</p>
+<p>앞서 살펴보았던 <code>msr()</code> 함수는 하나의 성능 지표만 불러오는 함수였습니다. 여러 개의 성능을 동시에 확인하기 위해서는 <code>msrs()</code>를 이용하면 됩니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>measures <span class="ot">=</span> <span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"regr.mse"</span>,<span class="st">"regr.mae"</span>))</span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>prediction<span class="sc">$</span><span class="fu">score</span>(measures)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -928,7 +937,7 @@ $cp
 <li><code>msr("time_train")</code> : 모델을 학습시키는 데 걸린 시간</li>
 <li><code>msr("time_predict")</code>: 모델로 예측하는 데 걸린 시간</li>
 <li><code>msr("time_both")</code> : 훈련 및 예측하는 데 걸린 시간</li>
-<li><code>msr("selected_features")</code>: 모델에 의해 선택된 피처의 수 (모델에 <code>selected_features</code> 속성이 있어야 사용 가능)</li>
+<li><code>msr("selected_features")</code>: 선택된 피처의 수 (모델에 <code>selected_features</code> 속성 있어야 사용 가능)</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>measures <span class="ot">=</span> <span class="fu">msrs</span>(<span class="fu">c</span>(<span class="st">"time_train"</span>, <span class="st">"time_predict"</span>, <span class="st">"time_both"</span>))</span>
@@ -983,7 +992,7 @@ $cp
 <section id="taskclassif" class="level3">
 <h3 class="anchored" data-anchor-id="taskclassif">TaskClassif</h3>
 <p>분류 태스크는 회귀 태스크와 거의 유사합니다. 다만 타겟 변수가 범주형으로 되어있다는 것이 둘의 가장 큰 차이점입니다.</p>
-<p>mlr3에 포함되어있는 분류 태스크들을 보면 다음과 같습니다.</p>
+<p><code>mlr3</code>에 포함되어있는 분류 태스크들을 보면 다음과 같습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(mlr_tasks)[task_type<span class="sc">==</span><span class="st">"classif"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -1008,8 +1017,8 @@ $cp
   - fct (2): island, sex</code></pre>
 </div>
 </div>
-<p>mlr3에는 두 가지의 분류 태스크가 있습니다. 하나는 binary 분류로, 타겟 변수가 두 가지의 범주를 갖게 됩니다. 다른 하나는 타겟 변수가 세 개 이상의 범주를 갖는 multiclass 분류입니다.</p>
-<p>예를 들어 sonar 태스크는 타겟이 두 가지의 범주를 갖기 때문에 binary 분류입니다. 태스크의 속성이 twoclass인 것을 확인할 수 있습니다.</p>
+<p><code>mlr3</code>에는 두 가지의 분류 태스크가 있습니다. 하나는 binary 분류로, 타겟 변수가 두 가지의 범주를 갖게 됩니다. 다른 하나는 타겟 변수가 세 개 이상의 범주를 갖는 multiclass 분류입니다.</p>
+<p>예를 들어 <code>sonar</code> 태스크는 타겟이 두 가지의 범주를 갖기 때문에 binary 분류입니다. 태스크의 속성(Properties)이 twoclass인 것을 확인할 수 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>tsk_sonar <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">"sonar"</span>)</span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>tsk_sonar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1048,7 +1057,7 @@ $cp
 <pre><code>[1] "Adelie"    "Chinstrap" "Gentoo"   </code></pre>
 </div>
 </div>
-<p>binary 태스크와 multiclass 태스크의 유일한 차이점은 <code>$positive</code> 필드의 존재 여부입니다. binary 태스크의 경우 예측 가능한 값이 두 가지밖에 없습니다. 따라서 어떤 값을 positive 또는 양성으로 예측할지를 지정해주어야 합니다. 나머지는 자동으로 negative 또는 음성으로 분류하게 됩니다. 만약 positive 클래스가 지정되지 않는다면, mlr3에서는 타겟 변수의 첫 번째 레벨(범주)를 positive로 간주하고 분류를 진행합니다. 이는 잘못된 예측을 하게 만드는 것이기 때문에, 반드시 <code>$positive</code>를 지정해주어야 합니다.</p>
+<p>binary 태스크와 multiclass 태스크의 유일한 차이점은 <strong><code>$positive</code> 필드의 존재 여부</strong>입니다. binary 태스크의 경우 예측 가능한 값이 두 가지밖에 없습니다. 따라서 어떤 값을 positive 또는 양성으로 예측할지를 지정해주어야 합니다. 나머지는 자동으로 negative 또는 음성으로 분류하게 됩니다. 만약 positive 클래스가 지정되지 않는다면, mlr3에서는 타겟 변수의 첫 번째 레벨(범주)를 positive로 간주하고 분류를 진행합니다. 이는 잘못된 예측을 하게 만드는 것이므로, 반드시 <strong><code>$positive</code>를 지정</strong>해주어야 합니다.</p>
 </section>
 <section id="learnerclassif-와-measureclassif" class="level3">
 <h3 class="anchored" data-anchor-id="learnerclassif-와-measureclassif">LearnerClassif 와 MeasureClassif</h3>
@@ -1100,7 +1109,7 @@ $cp
 <p>PredictionClassif 객체는 회귀의 예측에는 없는 두 개의 중요한 요소가 있습니다. 첫 번째는 <code>$confusion</code> 필드이고, 두 번째는 <code>$set_threshold()</code> 메소드입니다.</p>
 <section id="confusion-matrix" class="level4">
 <h4 class="anchored" data-anchor-id="confusion-matrix">Confusion matrix</h4>
-<p>혼동 행렬은 모델이 예측한 값이 잘 분류되었는지 실제 데이터와 비교하여 만들어지는 빈도 표입니다. mlr3에서는 <code>$confusion</code> 필드를 활용해 혼동행렬을 생성할 수 있습니다.</p>
+<p>혼동 행렬은 모델이 예측한 값이 잘 분류되었는지 실제 데이터와 비교하여 만들어지는 빈도 표입니다. <code>mlr3</code>에서는 <code>$confusion</code> 필드를 활용해 혼동행렬을 생성할 수 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>prediction<span class="sc">$</span>confusion</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1111,7 +1120,7 @@ response    Adelie Chinstrap Gentoo
   Gentoo         1         2     37</code></pre>
 </div>
 </div>
-<p>가로 방향으로 읽는 truth는 실제 데이터의 값을, response는 분류 모델이 예측한 값을 의미합니다. 대각선의 값들 (45, 18, 37)은 올바르게 예측한 값의 수이고, 나머지 값들은 잘못 예측(분류)한 값을 의미합니다.</p>
+<p>가로 방향으로 읽는 <code>truth</code>는 실제 데이터의 값을, <code>response</code>는 분류 모델이 예측한 값을 의미합니다. 대각선의 값들 (45, 18, 37)은 올바르게 예측한 값의 수이고, 나머지 값들은 잘못 예측(분류)한 값을 의미합니다.</p>
 <p>또한 <code>autoplot()</code>을 이용해 혼동행렬을 시각화할 수 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1171,13 +1180,13 @@ response  M  R
 <p><img src="index_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>threshold를 설정하지 않았을 때보다 성능(정확도)은 나빠졌지만, 클래스 간의 관계(신용의 좋고 나쁨 비중)를 더욱 정확히 반영하고 있기 때문에 더 좋은 모델이라고 할 수 있습니다.</p>
+<p>threshold를 설정하지 않았을 때보다 성능(정확도)은 나빠졌지만, 클래스 간의 관계(신용의 좋고 나쁨 간 비율)를 더욱 정확히 반영하고 있기 때문에 더 좋은 모델이라고 할 수 있습니다.</p>
 </section>
 </section>
 <section id="지원되는-러너-알고리즘" class="level3">
 <h3 class="anchored" data-anchor-id="지원되는-러너-알고리즘">지원되는 러너 알고리즘</h3>
 <p><code>mlr3</code>에서는 다양한 알고리즘들을 사용할 수 있습니다. <code>mlr3</code>에서 사용할 수 있는 러너들은 기본적으로 <code>mlr3</code> 이외에도 <code>mlr3learners</code>, <code>mlr3extralearners</code> 패키지를 통해 확인 가능합니다.</p>
-<p>이러한 러너들은 mlr_learners 딕셔너리를 통해 확인 가능합니다.</p>
+<p>이러한 러너들은 <code>mlr_learners</code> 딕셔너리를 통해 확인 가능합니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>learners_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(mlr_learners)</span>
 <span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>learners_dt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1190,7 +1199,7 @@ response  M  R
 </div>
 </div>
 </div>
-<p>또한 해당 러너 딕셔너리에서 특정 조건을 만족하는 값들만 선택하여 확인할 수 있습니다.</p>
+<p>또한 해당 러너의 딕셔너리에서 특정 조건을 만족하는 값들만 선택하여 확인할 수 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>learners_dt[task_type <span class="sc">==</span> <span class="st">"regr"</span> <span class="sc">&amp;</span></span>
 <span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sapply</span>(predict_types, <span class="cf">function</span>(x) <span class="st">"se"</span> <span class="sc">%in%</span> x)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1207,7 +1216,7 @@ response  M  R
 </section>
 <section id="결론" class="level2">
 <h2 class="anchored" data-anchor-id="결론">결론</h2>
-<p>이번 챕터에서는 mlr3를 활용해 머신러닝 알고리즘을 다루는 방법에 대해 살펴보았습니다. 태스크를 이용해 학습시키고자 하는 데이터를 만들고, 러너를 이용해 모델을 학습시킨 후, 예측하였습니다. 또한 Measure 클래스를 이용해 모델이 예측한 값을 바탕으로 모델의 성능을 계산할 수도 있었습니다.</p>
+<p>이번 챕터에서는 <code>mlr3</code>를 활용해 머신러닝 알고리즘을 다루는 방법에 대해 살펴보았습니다. 태스크를 이용해 학습시키고자 하는 데이터를 만들고, 러너를 이용해 모델을 학습시킨 후, 예측하였습니다. 또한 <code>Measure</code> 클래스를 이용해 모델이 예측한 값을 바탕으로 모델의 성능을 계산할 수 있었습니다.</p>
 <p>이번 챕터에서 가장 중요한 내용들을 표로 요약하면 아래와 같습니다.</p>
 <table class="table">
 <thead>

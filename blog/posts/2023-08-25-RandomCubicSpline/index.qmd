@@ -4,6 +4,7 @@ description: "RCS curve 그리기 (feat. `plotRCS`)"
 date: "2023-08-25"
 author: "JYH"
 categories: [R, logistic, Cox, RCS, Spline]
+image: "https://github.com/KunHuo/plotRCS/raw/master/README-files/README_unnamed-chunk-7-1.png"
 ---
 
 헬스케어 분야에서 연구를 하다보면, 특정 변수의 변화에 따라 결과가 어떻게 나타나는지 확인해야하는 경우가 있습니다.

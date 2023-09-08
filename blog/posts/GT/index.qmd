@@ -1,6 +1,6 @@
 ---
 title: "GT"
-description: "원하는대로 테이블 꾸며주는 패키지"
+description: "GT로 아름다운 테이블 만들기"
 author: "JYH"
 date: "2023-04-01"
 categories: [R, table, gt]
