@@ -1,8 +1,8 @@
 ---
-title: "Sankey plot 그리기 (feat.alluvial plot)"
+title: "Sankey plot 그리기 (feat.Alluvial plot)"
 author: "JYH"
 description: "`alluvial`, `ggalluvial`을 통한 Sankey plot 그리기"
-categories: [R, Visualization]
+categories: [R, Visualization, alluvial, sankey]
 date: "2023-04-18"
 image: "https://r-charts.com/en/flow/ggalluvial_files/figure-html/alluvial-plot.png"
 ---
@@ -14,13 +14,21 @@ Alluvial plot과 Sankey plot은 데이터의 흐름을 시각화하는 데 사�
 두 그래프는 겉으로 보기에는 비슷하면서도, 명확히 다른 점을 갖고 있습니다.
 우선 두 그래프의 예시부터 살펴보도록 하겠습니다.
 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![Fig1. Alluvial plot](http://www.datasmith.org/wp-content/uploads/2020/05/cran-alluvial-example.png){width=500}
 :::
 
-<img src="http://www.datasmith.org/wp-content/uploads/2020/05/cran-alluvial-example.png" alt="alluvial"/>
-
-<img src="http://www.datasmith.org/wp-content/uploads/2020/05/d3-sankey-classic-example-1536x800.png" alt="sankey"/>
+::: {.column width="50%"}
+![Fig2. Sankey diagram](http://www.datasmith.org/wp-content/uploads/2020/05/d3-sankey-classic-example-1536x800.png){width=600}
 
 :::
+
+::::
+
+## 공통점
 
 겉으로 보기에는 두 그래프가 비슷합니다. 예를 들어
 
@@ -31,12 +39,18 @@ Alluvial plot과 Sankey plot은 데이터의 흐름을 시각화하는 데 사�
 
 그러나 두 그래프 간에는 명확한 차이점이 존재합니다.
 
+## **Alluvial plot**
+
 먼저 Alluvial plot의 특징은 다음과 같습니다.
+
 - 특정 집단에 소속된 사람들이 다양한 범주차원에서 어떻게 구성되는지를 보여줍니다.
 - 범주를 나타내는 막대의 위치가 크게 상관없습니다.
 - 특정 사람들이 어떤 특징을 가지고 있는지 보여주는 데 적합합니다.
 
-반면 Sankey diagram은 다음과 같은 특징을 갖습니다.
+## Sankey diagram
+
+반면 **Sankey diagram**은 다음과 같은 특징을 갖습니다.
+
 - 특정 데이터의 **양**이 어떻게 흐르는지, 어떻게 변화하는지를 보여줍니다.
 - 범주를 나타내는 막대의 배치에 따라 시간의 흐름을 나타냅니다.
 - 어떤 데이터의 양, 크기, 또는 사람들의 흐름이나 과정을 시각화하는 데 적합합니다.
@@ -44,13 +58,12 @@ Alluvial plot과 Sankey plot은 데이터의 흐름을 시각화하는 데 사�
 
 이렇게 두 그래프의 개념적인 차이에 대해 살펴보았습니다.
 
-우리가 다룰 패키지는 비록 alluvial이 들어가지만, 어떤 데이터를 어떻게 표현는지에 따라 Alluvial plot이 될 수도 있고, Sankey diagram이 될 수도 있다는 것을 말씀드리고 싶습니다.
+우리가 다룰 패키지는 비록 alluvial이 들어가지만, **어떤 데이터를 어떻게 표현는지에 따라** Alluvial plot이 될 수도 있고, Sankey diagram이 될 수도 있다는 것을 말씀드리고 싶습니다.
 
 그럼 지금부터 Alluvial 또는 Sankey plot을 그리는 방법을 패키지를 통해 말씀드리겠습니다.
 
-# `alluvial` 이용
+# `alluvial` 패키지를 이용한 시각화
 
-allu
 ```{r}
 #| echo: false
 df = structure(list(AKI_stage = c("Stage 3", "Stage 3", "Stage 3", 
