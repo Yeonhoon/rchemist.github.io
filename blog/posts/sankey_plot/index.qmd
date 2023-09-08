@@ -1,23 +1,169 @@
 ---
-title: "Sankey plot 그리기"
+title: "Sankey plot 그리기 (feat.alluvial plot)"
 author: "JYH"
-description: "`ggalluvial`을 통한 Sankey plot 그리기"
+description: "`alluvial`, `ggalluvial`을 통한 Sankey plot 그리기"
 categories: [R, Visualization]
 date: "2023-04-18"
 image: "https://r-charts.com/en/flow/ggalluvial_files/figure-html/alluvial-plot.png"
 ---
 
-## 인트로
+# 인트로: 개념의 차이
 
-Sankey(생키) diagram라고도 하는 Sankey plot은 범주형 데이터의 분배, 변환 또는 보존을 설명하는 데 활용되는 그래프 중 하나입니다. 그래프에서 노드 간 화살표 또는 링크의 너비는 흐름 양에 비례하므로 여러 흐름의 상대적 크기를 쉽게 비교할 수 있습니다.\
-\
-쉽게 말해, Sankey plot은 데이터의 변화 양상이나 응답 빈도의 양상 등을 확인할 수 있는 그래프입니다.
+Alluvial plot과 Sankey plot은 데이터의 흐름을 시각화하는 데 사용되는 그래프 중 하나입니다.
+
+두 그래프는 겉으로 보기에는 비슷하면서도, 명확히 다른 점을 갖고 있습니다.
+우선 두 그래프의 예시부터 살펴보도록 하겠습니다.
+
+:::
+
+<img src="http://www.datasmith.org/wp-content/uploads/2020/05/cran-alluvial-example.png" alt="alluvial"/>
+
+<img src="http://www.datasmith.org/wp-content/uploads/2020/05/d3-sankey-classic-example-1536x800.png" alt="sankey"/>
+
+:::
+
+겉으로 보기에는 두 그래프가 비슷합니다. 예를 들어
+
+- 두 그래프 모두 노드와 여러 범주로 이루어진 수직 막대가 존재합니다.
+- 노드 간에 두께와 높이가 각각 다른 곡선으로 연결되어 있습니다.
+
+이러한 점들 때문에 두 그래프를 혼동하고는 합니다.
+
+그러나 두 그래프 간에는 명확한 차이점이 존재합니다.
+
+먼저 Alluvial plot의 특징은 다음과 같습니다.
+- 특정 집단에 소속된 사람들이 다양한 범주차원에서 어떻게 구성되는지를 보여줍니다.
+- 범주를 나타내는 막대의 위치가 크게 상관없습니다.
+- 특정 사람들이 어떤 특징을 가지고 있는지 보여주는 데 적합합니다.
+
+반면 Sankey diagram은 다음과 같은 특징을 갖습니다.
+- 특정 데이터의 **양**이 어떻게 흐르는지, 어떻게 변화하는지를 보여줍니다.
+- 범주를 나타내는 막대의 배치에 따라 시간의 흐름을 나타냅니다.
+- 어떤 데이터의 양, 크기, 또는 사람들의 흐름이나 과정을 시각화하는 데 적합합니다.
+
+
+이렇게 두 그래프의 개념적인 차이에 대해 살펴보았습니다.
+
+우리가 다룰 패키지는 비록 alluvial이 들어가지만, 어떤 데이터를 어떻게 표현는지에 따라 Alluvial plot이 될 수도 있고, Sankey diagram이 될 수도 있다는 것을 말씀드리고 싶습니다.
+
+그럼 지금부터 Alluvial 또는 Sankey plot을 그리는 방법을 패키지를 통해 말씀드리겠습니다.
+
+# `alluvial` 이용
+
+allu
+```{r}
+#| echo: false
+df = structure(list(AKI_stage = c("Stage 3", "Stage 3", "Stage 3", 
+"Stage 3", "Stage 3", "Stage 2", "Stage 3", "Stage 3", "Stage 3", 
+"Stage 2", "Stage 3", "Stage 3", "Stage 3", "Stage 3", "Stage 3", 
+"Stage 3", "Stage 3", "Stage 1", "Stage 3", "Stage 3", "Stage 2", 
+"Stage 2", "Stage 3", "Stage 2", "Stage 1", "Stage 3", "Stage 1", 
+"Stage 3", "Stage 2", "Stage 3", "Stage 3", "Stage 3", "Stage 3", 
+"Stage 3", "Stage 2", "Stage 3", "Stage 3", "Stage 2", "Stage 3", 
+"Stage 3", "Stage 3", "Stage 3", "Stage 3", "Stage 3", "Stage 1", 
+"Stage 3", "Stage 3", "Stage 2", "Stage 3", "Stage 3", "Stage 2", 
+"Stage 3", "Stage 2", "Stage 3", "Stage 2", "Stage 2", "Stage 3", 
+"Stage 2", "Stage 3", "Stage 3", "Stage 3", "Stage 1", "Stage 3", 
+"Stage 3", "Stage 2", "Stage 2", "Stage 3", "Stage 3", "Stage 3", 
+"Stage 2", "Stage 3", "Stage 3", "Stage 2", "Stage 3", "Stage 3", 
+"Stage 3", "Stage 2", "Stage 3", "Stage 2", "Stage 3", "Stage 3", 
+"Stage 3", "Stage 3", "Stage 3", "Stage 3", "Stage 3", "Stage 3", 
+"Stage 2", "Stage 3", "Stage 3", "Stage 1", "Stage 3", "Stage 3", 
+"Stage 2", "Stage 2", "Stage 3", "Stage 3", "Stage 3", "Stage 2", 
+"Stage 3", "Stage 2", "Stage 3", "Stage 3", "Stage 3", "Stage 2", 
+"Stage 3", "Stage 3", "Stage 3", "Stage 3", "Stage 3", "Stage 2", 
+"Stage 3", "Stage 2", "Stage 3", "Stage 3", "Stage 3", "Stage 2", 
+"Stage 3", "Stage 2", "Stage 3", "Stage 3", "Stage 3", "Stage 2", 
+"Stage 3", "Stage 3", "Stage 2", "Stage 2", "Stage 3", "Stage 3", 
+"Stage 3", "Stage 3", "Stage 2", "Stage 2", "Stage 3", "Stage 2", 
+"Stage 3", "Stage 2", "Stage 3"), AKI_initial = c(1, 3, 3, 3, 
+1, 2, 3, 3, 3, 2, 3, 3, 2, 2, 3, 2, 3, 1, 2, 3, 2, 2, 3, 2, 1, 
+3, 1, 2, 2, 1, 1, 2, 1, 3, 2, 3, 2, 2, 1, 2, 1, 2, 2, 2, 1, 3, 
+1, 2, 1, 2, 2, 2, 2, 2, 1, 2, 3, 2, 1, 1, 1, 1, 3, 2, 1, 1, 3, 
+1, 2, 2, 3, 3, 1, 3, 1, 1, 1, 3, 1, 3, 1, 2, 3, 3, 1, 2, 1, 2, 
+2, 3, 1, 1, 1, 1, 1, 2, 1, 2, 2, 2, 1, 1, 3, 3, 1, 3, 3, 2, 3, 
+2, 2, 2, 1, 3, 3, 2, 2, 1, 1, 1, 1, 1, 2, 2, 3, 2, 1, 2, 3, 3, 
+3, 1, 1, 1, 2, 3, 2, 1), AKI_status_day1 = structure(c(4L, 6L, 
+6L, 6L, 4L, 5L, 6L, 6L, 6L, 5L, 6L, 6L, 5L, 6L, 6L, 5L, 6L, 4L, 
+6L, 6L, 5L, 5L, 6L, 5L, 4L, 5L, 4L, 5L, 4L, 6L, 6L, 5L, 6L, 5L, 
+4L, 6L, 6L, 5L, 5L, 6L, 4L, 5L, 6L, 6L, 4L, 5L, 4L, 5L, 4L, 5L, 
+4L, 5L, 4L, 5L, 4L, 5L, 6L, 5L, 6L, 4L, 6L, 4L, 6L, 5L, 5L, 5L, 
+6L, 5L, 5L, 1L, 5L, 6L, 5L, 1L, 4L, 5L, 4L, 4L, 4L, 5L, 4L, 6L, 
+5L, 6L, 6L, 6L, 6L, 5L, 5L, 6L, 4L, 4L, 4L, 4L, 5L, 6L, 4L, 6L, 
+5L, 5L, 5L, 5L, 5L, 4L, 4L, 6L, 5L, 6L, 5L, 5L, 5L, 5L, 4L, 4L, 
+5L, 5L, 4L, 5L, 4L, 4L, 4L, 6L, 5L, 5L, 6L, 5L, 5L, 6L, 5L, 6L, 
+5L, 4L, 5L, 5L, 5L, 6L, 5L, 4L), levels = c("Dead", "Alive", 
+"0", "1", "2", "3"), class = "factor"), AKI_status_day2 = structure(c(5L, 
+1L, 5L, 5L, 5L, 5L, 4L, 6L, 6L, 1L, 5L, 6L, 6L, 6L, 6L, 5L, 6L, 
+4L, 6L, 2L, 4L, 5L, 6L, 5L, 4L, 5L, 1L, 6L, 2L, 6L, 6L, 1L, 1L, 
+2L, 1L, 5L, 5L, 5L, 6L, 1L, 1L, 6L, 6L, 6L, 2L, 1L, 6L, 4L, 4L, 
+5L, 4L, 6L, 4L, 4L, 5L, 2L, 6L, 4L, 6L, 4L, 6L, 4L, 6L, 5L, 4L, 
+5L, 5L, 1L, 5L, 1L, 5L, 6L, 4L, 1L, 5L, 5L, 4L, 4L, 1L, 5L, 6L, 
+6L, 6L, 5L, 6L, 6L, 2L, 4L, 6L, 4L, 4L, 6L, 5L, 5L, 1L, 6L, 4L, 
+6L, 5L, 6L, 5L, 6L, 4L, 2L, 5L, 4L, 6L, 6L, 5L, 5L, 5L, 5L, 2L, 
+5L, 5L, 6L, 5L, 5L, 5L, 5L, 5L, 6L, 5L, 2L, 6L, 5L, 5L, 6L, 6L, 
+6L, 4L, 5L, 2L, 5L, 4L, 6L, 4L, 6L), levels = c("Dead", "Alive", 
+"0", "1", "2", "3"), class = "factor"), AKI_status_day3 = structure(c(5L, 
+1L, 5L, 2L, 1L, 2L, 2L, 6L, 6L, 1L, 1L, 1L, 6L, 2L, 2L, 6L, 6L, 
+1L, 6L, 2L, 2L, 1L, 6L, 5L, 2L, 2L, 1L, 6L, 2L, 1L, 6L, 1L, 1L, 
+2L, 1L, 6L, 2L, 5L, 1L, 1L, 1L, 2L, 6L, 1L, 2L, 1L, 1L, 4L, 5L, 
+4L, 2L, 6L, 4L, 6L, 2L, 2L, 5L, 4L, 2L, 6L, 6L, 4L, 5L, 1L, 1L, 
+5L, 4L, 1L, 5L, 1L, 4L, 6L, 2L, 1L, 2L, 4L, 5L, 2L, 1L, 5L, 6L, 
+6L, 2L, 6L, 6L, 6L, 2L, 5L, 6L, 4L, 4L, 6L, 6L, 1L, 1L, 5L, 4L, 
+4L, 4L, 1L, 2L, 6L, 2L, 2L, 5L, 1L, 6L, 5L, 5L, 5L, 5L, 2L, 2L, 
+2L, 6L, 5L, 5L, 5L, 5L, 4L, 5L, 6L, 4L, 2L, 5L, 4L, 1L, 6L, 6L, 
+4L, 4L, 5L, 2L, 6L, 1L, 4L, 4L, 2L), levels = c("Dead", "Alive", 
+"0", "1", "2", "3"), class = "factor"), AKI_status_day7 = structure(c(6L, 
+1L, 4L, 2L, 1L, 2L, 2L, 6L, 2L, 1L, 1L, 1L, 6L, 2L, 2L, 6L, 5L, 
+1L, 6L, 2L, 2L, 1L, 1L, 5L, 2L, 2L, 1L, 4L, 2L, 1L, 6L, 1L, 1L, 
+2L, 1L, 6L, 2L, 2L, 1L, 1L, 1L, 2L, 4L, 1L, 2L, 1L, 1L, 4L, 1L, 
+1L, 2L, 2L, 4L, 6L, 2L, 2L, 6L, 2L, 2L, 6L, 4L, 2L, 2L, 1L, 1L, 
+5L, 1L, 1L, 6L, 1L, 4L, 4L, 2L, 1L, 2L, 6L, 5L, 2L, 1L, 4L, 6L, 
+5L, 2L, 5L, 2L, 2L, 2L, 2L, 5L, 4L, 4L, 2L, 2L, 1L, 1L, 5L, 6L, 
+6L, 4L, 1L, 2L, 6L, 2L, 2L, 4L, 1L, 2L, 2L, 6L, 1L, 4L, 2L, 2L, 
+2L, 6L, 2L, 4L, 6L, 2L, 1L, 1L, 1L, 2L, 2L, 4L, 1L, 1L, 1L, 1L, 
+5L, 2L, 1L, 2L, 6L, 1L, 2L, 1L, 2L), levels = c("Dead", "Alive", 
+"0", "1", "2", "3"), class = "factor"), N = c(1L, 123L, 2L, 34L, 
+2L, 62L, 5L, 194L, 60L, 26L, 2L, 102L, 18L, 27L, 241L, 8L, 22L, 
+3L, 53L, 39L, 43L, 5L, 7L, 9L, 29L, 11L, 13L, 1L, 17L, 9L, 24L, 
+12L, 23L, 8L, 1L, 1L, 3L, 7L, 2L, 40L, 1L, 8L, 4L, 25L, 30L, 
+3L, 8L, 1L, 1L, 1L, 8L, 4L, 2L, 1L, 5L, 36L, 3L, 2L, 7L, 3L, 
+2L, 4L, 6L, 4L, 1L, 1L, 2L, 2L, 5L, 1L, 1L, 16L, 6L, 2L, 1L, 
+1L, 2L, 2L, 5L, 1L, 9L, 8L, 1L, 1L, 2L, 9L, 1L, 1L, 4L, 1L, 2L, 
+1L, 1L, 3L, 3L, 1L, 2L, 1L, 2L, 4L, 5L, 2L, 3L, 1L, 1L, 1L, 1L, 
+1L, 1L, 1L, 4L, 2L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 
+1L, 1L, 1L, 1L, 2L, 2L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 2L)), row.names = c(NA, 
+-138L), class = c("data.table", "data.frame"))
+```
+
+
+`alluvial` 패키지를 이용해 시각화를 진행해보겠습니다.
+해당 데이터는 제가 연구하던 패혈증 데이터입니다.\
+
+ICU에 입원한 환자들의 일자별 AKI 상태의 변화를 시각화하는 그래프입니다.
+```{r}
+library(alluvial)
+alluvial(TZ=df$AKI_initial, 
+         `Day 1` = df$AKI_status_day1, 
+         `Day 2` = df$AKI_status_day2, 
+         `Day 3` = df$AKI_status_day3, 
+         `Day 7` = df$AKI_status_day7,
+         freq=df$N,
+         col = ifelse(df$AKI_stage == 'Stage 1','#00AFBB',
+                             ifelse(df$AKI_stage == 'Stage 2','#E7B800',"#FC4E07")),
+         alpha=.8
+         )
+```
+
+
+# `ggalluvial` 이용
 
 R에서 Sankey plot을 시각화할 수 있는 패키지 중 하나는 `ggalluvial` 입니다. `gg`가 붙은 것에서 알 수 있듯이, `ggplot2` 의 확장 패키지 중 하나입니다.
 
 저 같은 경우, 시간의 흐름에 따른 범주의 양상을 Sankey plot으로 시각화한 경험이 있습니다. 예를 들면 첫 번째 건강검진부터 세 번째 건강검진 간 비만인 사람들의 분포를 시각화하는 것이죠.
 
 `ggalluvial`은 Sankey plot을 그리기 위해 wide 데이터와 long 데이터를 모두 사용할 수 있습니다.
+
 
 ## Wide 데이터로 Sankey plot 그리기
 
@@ -97,5 +243,6 @@ ggplot(vaccinations,
 위의 그래프에서 `freq`는 `survey`와 `response`별로 합해져 그래프에 나타나는 것을 알 수 있습니다.
 
 ## 참고자료
-
-https://cran.r-project.org/web/packages/ggalluvial/vignettes/ggalluvial.html
+- [Alluvial plots vs Sankey diagrams](http://www.datasmith.org/2020/05/02/alluvial-plots-vs-sankey-diagrams/)
+- [alluvial github](https://github.com/mbojan/alluvial)
+- [ggalluvial vignetts](https://cran.r-project.org/web/packages/ggalluvial/vignettes/ggalluvial.html)
