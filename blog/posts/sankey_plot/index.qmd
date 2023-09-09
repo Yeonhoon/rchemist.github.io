@@ -153,7 +153,13 @@ df = structure(list(AKI_stage = c("Stage 3", "Stage 3", "Stage 3",
 `alluvial` 패키지를 이용해 시각화를 진행해보겠습니다.
 해당 데이터는 제가 연구하던 패혈증 데이터입니다.\
 
-ICU에 입원한 환자들의 일자별 AKI 상태의 변화를 시각화하는 그래프입니다.
+```{r}
+head(df)
+```
+
+
+ICU에 입원한 환자들의 일자별 AKI stage 상태의 변화를 시각화하는 그래프입니다.
+
 ```{r}
 library(alluvial)
 alluvial(TZ=df$AKI_initial, 
@@ -167,11 +173,16 @@ alluvial(TZ=df$AKI_initial,
          alpha=.8
          )
 ```
+이 그래프는 일자별로 환자들의 상태가 어떻게 변화되는지를 나타내기 때문에, Sankey diagram으로 분류됩니다.
 
+`alluvial()`사용법은 굉장히 간단합니다.
+막대별로 들어갈 변수를 입력해준 뒤, 각 경우별 빈도를 뜻하는 column을 `freq`에 넣어주면 됩니다.
+
+색상은 `col`에서 설정 가능합니다.
 
 # `ggalluvial` 이용
 
-R에서 Sankey plot을 시각화할 수 있는 패키지 중 하나는 `ggalluvial` 입니다. `gg`가 붙은 것에서 알 수 있듯이, `ggplot2` 의 확장 패키지 중 하나입니다.
+R에서 Sankey plot을 시각화할 수 있는 패키지 중 또 다른 하나는 `ggalluvial` 입니다. `gg`가 붙은 것에서 알 수 있듯이, `ggplot2` 의 확장 패키지 중 하나입니다.
 
 저 같은 경우, 시간의 흐름에 따른 범주의 양상을 Sankey plot으로 시각화한 경험이 있습니다. 예를 들면 첫 번째 건강검진부터 세 번째 건강검진 간 비만인 사람들의 분포를 시각화하는 것이죠.
 
