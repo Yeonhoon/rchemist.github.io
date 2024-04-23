@@ -65,3 +65,18 @@ rcsplot(
   covariates=c('sex','race','size', 'metastasis')
 )
 ```
+
+## 그룹별 RCS curve
+
+`rcsplot()` 함수 내에 `group` 인자를 추가하면, 그룹에 따른 그래프가 그려집니다.
+
+```{r}
+rcsplot(
+  data=cancer,
+  outcome='status',
+  exposure='age',
+  time='time',
+  group='metastasis',
+  covariates=c('sex', 'race','size', 'metastasis')
+)
+```

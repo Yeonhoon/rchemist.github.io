@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="JYH">
-<meta name="dcterms.date" content="2023-04-28">
-<meta name="description" content="그래프를 통한 데이터 핸들링">
+<meta name="dcterms.date" content="2023-12-15">
+<meta name="description" content="그래프를 활용해 데이터 전처리 수행방법 익히기">
 
 <title>Rchemist - mlr3 파이프라인</title>
 <style>
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -84,7 +84,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -93,8 +98,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QKQJ0CJQC4"></script>
@@ -107,7 +114,6 @@ gtag('js', new Date());
 gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 </script>
 <style>html{ scroll-behavior: smooth; }</style>
-
 <link href="../../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
 <script src="../../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
@@ -118,10 +124,10 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">Rchemist</span>
     </a>
@@ -133,25 +139,25 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html" rel="" target=""><i class="bi bi-house" role="img">
+    <a class="nav-link" href="../../../index.html"> <i class="bi bi-house" role="img">
 </i> 
- <span class="menu-text">Home</span></a>
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../about.html" rel="" target=""><i class="bi bi-file-person" role="img">
+    <a class="nav-link" href="../../../about.html"> <i class="bi bi-file-person" role="img">
 </i> 
- <span class="menu-text">About</span></a>
+<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../gallery/index.html" rel="" target=""><i class="bi bi-sliders2" role="img">
+    <a class="nav-link" href="../../../gallery/index.html"> <i class="bi bi-sliders2" role="img">
 </i> 
- <span class="menu-text">Gallery</span></a>
+<span class="menu-text">Gallery</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -162,7 +168,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
       <h1 class="title">mlr3 파이프라인</h1>
                   <div>
         <div class="description">
-          그래프를 통한 데이터 핸들링
+          그래프를 활용해 데이터 전처리 수행방법 익히기
         </div>
       </div>
                           <div class="quarto-categories">
@@ -186,7 +192,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 28, 2023</p>
+        <p class="date">December 15, 2023</p>
       </div>
     </div>
     
@@ -203,15 +209,16 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
    
   <ul>
   <li><a href="#인트로" id="toc-인트로" class="nav-link active" data-scroll-target="#인트로">0. 인트로</a></li>
-  <li><a href="#block-만들기" id="toc-block-만들기" class="nav-link" data-scroll-target="#block-만들기">1.Block 만들기</a></li>
-  <li><a href="#pipe-operator" id="toc-pipe-operator" class="nav-link" data-scroll-target="#pipe-operator">2. <code>%&gt;&gt;%</code>: pipe operator</a></li>
-  <li><a href="#노드-엣지-그래프" id="toc-노드-엣지-그래프" class="nav-link" data-scroll-target="#노드-엣지-그래프">3. 노드, 엣지, 그래프</a></li>
-  <li><a href="#모델링" id="toc-모델링" class="nav-link" data-scroll-target="#모델링">4. 모델링</a></li>
+  <li><a href="#pipeop-pipeline-연산자" id="toc-pipeop-pipeline-연산자" class="nav-link" data-scroll-target="#pipeop-pipeline-연산자">1. PipeOp: Pipeline 연산자</a></li>
+  <li><a href="#그래프-pipeops의-네트워크" id="toc-그래프-pipeops의-네트워크" class="nav-link" data-scroll-target="#그래프-pipeops의-네트워크">2. 그래프: PipeOps의 네트워크</a></li>
+  <li><a href="#double-arrow-연산자-단축키-설정" id="toc-double-arrow-연산자-단축키-설정" class="nav-link" data-scroll-target="#double-arrow-연산자-단축키-설정">Double arrow 연산자 단축키 설정</a></li>
+  <li><a href="#순서가-있는-learner-파이프라인" id="toc-순서가-있는-learner-파이프라인" class="nav-link" data-scroll-target="#순서가-있는-learner-파이프라인">3. 순서가 있는 Learner 파이프라인</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
+
 
 
 
@@ -222,118 +229,228 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Important
+안내사항
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>이 글은 <a href="https://mlr3book.mlr-org.com/">mlr3book</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>을 참고하여 작성되었습니다. 국내 R 사용자들에게 잘 알려지지 않은 <code>mlr3</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> 패키지를 통해, R에서도 손쉽게 머신러닝을 수행할 수 있다는 것을 보여드리고자 합니다.</p>
+<p>이 글은 <a href="https://mlr3book.mlr-org.com/">mlr3book</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>을 참고하여 작성되었습니다. 국내 R 사용자들에게 잘 알려지지 않은 <code>mlr3</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> 패키지를 활용하여 R에서도 손쉽게 머신러닝을 수행할 수 있다는 것을 보여드리고자 합니다.</p>
 </div>
 </div>
 <section id="인트로" class="level2">
 <h2 class="anchored" data-anchor-id="인트로">0. 인트로</h2>
-<p>전처리를 수행할 수도 있고, 태스크 일부분 선택, 러너 생성 후 예측, 앙상블 등</p>
-<p>tidymodels의 recipe 와 비슷한 패키지</p>
+<p>전처리를 수행할 수도 있고, 태스크 일부분 선택, 러너 생성 후 예측, 앙상블 등의 작업을 수행할 수 있습니다.</p>
 </section>
-<section id="block-만들기" class="level2">
-<h2 class="anchored" data-anchor-id="block-만들기">1.Block 만들기</h2>
+<section id="pipeop-pipeline-연산자" class="level2">
+<h2 class="anchored" data-anchor-id="pipeop-pipeline-연산자">1. PipeOp: Pipeline 연산자</h2>
+<p><code>mlr3pipelines</code>의 기본 클래스는 <code>PipeOp</code>로, pipeline operator의 줄임말입니다. <code>Task</code>를 훈련하는 것과 같이 변화를 주는 작업을 수행하고 결과를 출력합니다.</p>
+<p><code>PipeOp</code>는 러너와 같이 <code>$train()</code>, <code>$predict()</code> 메서드를 포함하고 있습니다. 또한 <code>Learner</code>처럼 파라미터 뿐만 아니라 하이퍼파라미터를 갖고 있어, 사용자들이 <code>PipeOp</code>을 만들 때, <code>$param_set</code>을 통해 확인 후 파라미터들을 설정할 수 있습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3pipelines)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(mlr_pipeops)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3verse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3pipelines)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3pipelines)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(mlr_pipeops)[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":["key"],"name":[1],"type":["chr"],"align":["left"]},{"label":["label"],"name":[2],"type":["chr"],"align":["left"]},{"label":["packages"],"name":[3],"type":["list"],"align":["right"]},{"label":["tags"],"name":[4],"type":["list"],"align":["right"]},{"label":["feature_types"],"name":[5],"type":["list"],"align":["right"]},{"label":["input.num"],"name":[6],"type":["int"],"align":["right"]},{"label":["output.num"],"name":[7],"type":["int"],"align":["right"]},{"label":["input.type.train"],"name":[8],"type":["list"],"align":["right"]},{"label":["input.type.predict"],"name":[9],"type":["list"],"align":["right"]},{"label":["output.type.train"],"name":[10],"type":["list"],"align":["right"]},{"label":["output.type.predict"],"name":[11],"type":["list"],"align":["right"]}],"data":[{"1":"boxcox","2":"Box-Cox Transformation of Numeric Features","3":"<chr [2]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"branch","2":"Path Branching","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"1","7":"NA","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"chunk","2":"Chunk Input into Multiple Outputs","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"1","7":"NA","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"classbalancing","2":"Class Balancing","3":"<chr [1]>","4":"<chr [2]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"classifavg","2":"Majority Vote Prediction","3":"<chr [2]>","4":"<chr [1]>","5":"<lgl [1]>","6":"NA","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"classweights","2":"Class Weights for Sample Weighting","3":"<chr [1]>","4":"<chr [2]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"colapply","2":"Apply a Function to each Column of a Task","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"collapsefactors","2":"Collapse Factors","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"colroles","2":"Change Column Roles of a Task","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"copy","2":"Copy Input Multiple Times","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"1","7":"NA","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"datefeatures","2":"Preprocess Date Features","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [1]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"encode","2":"Factor Encoding","3":"<chr [2]>","4":"<chr [2]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"encodeimpact","2":"Conditional Target Value Impact Encoding","3":"<chr [1]>","4":"<chr [2]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"encodelmer","2":"Impact Encoding with Random Intercept Models","3":"<chr [3]>","4":"<chr [2]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"featureunion","2":"Aggregate Features from Multiple Inputs","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"NA","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"filter","2":"Feature Filtering","3":"<chr [1]>","4":"<chr [2]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"fixfactors","2":"Fix Factor Levels","3":"<chr [1]>","4":"<chr [2]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"histbin","2":"Split Numeric Features into Equally Spaced Bins","3":"<chr [2]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"ica","2":"Independent Component Analysis","3":"<chr [2]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"imputeconstant","2":"Impute Features by a Constant","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"imputehist","2":"Impute Numerical Features by Histogram","3":"<chr [2]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"imputelearner","2":"Impute Features by Fitting a Learner","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [3]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"imputemean","2":"Impute Numerical Features by their Mean","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"imputemedian","2":"Impute Numerical Features by their Median","3":"<chr [2]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"imputemode","2":"Impute Features by their Mode","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [5]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"imputeoor","2":"Out of Range Imputation","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [5]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"imputesample","2":"Impute Features by Sampling","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [5]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"kernelpca","2":"Kernelized Principle Component Analysis","3":"<chr [2]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"learner","2":"Wrap a Learner into a PipeOp","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"learner_cv","2":"Wrap a Learner into a PipeOp with Cross-validated Predictions as Features","3":"<chr [1]>","4":"<chr [3]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"missind","2":"Add Missing Indicator Columns","3":"<chr [1]>","4":"<chr [2]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"modelmatrix","2":"Transform Columns by Constructing a Model Matrix","3":"<chr [2]>","4":"<chr [1]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"multiplicityexply","2":"Explicate a Multiplicity","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"1","7":"NA","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"multiplicityimply","2":"Implicate a Multiplicity","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"NA","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"mutate","2":"Add Features According to Expressions","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"nmf","2":"Non-negative Matrix Factorization","3":"<chr [3]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"nop","2":"Simply Push Input Forward","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"ovrsplit","2":"Split a Classification Task into Binary Classification Tasks","3":"<chr [1]>","4":"<chr [2]>","5":"<lgl [1]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"ovrunite","2":"Unite Binary Classification Tasks","3":"<chr [1]>","4":"<chr [2]>","5":"<lgl [1]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"pca","2":"Principle Component Analysis","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"proxy","2":"Wrap another PipeOp or Graph as a Hyperparameter","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"NA","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"quantilebin","2":"Split Numeric Features into Quantile Bins","3":"<chr [2]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"randomprojection","2":"Project Numeric Features onto a Randomly Sampled Subspace","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"randomresponse","2":"Generate a Randomized Response Prediction","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"regravg","2":"Weighted Prediction Averaging","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"NA","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"removeconstants","2":"Remove Constant Features","3":"<chr [1]>","4":"<chr [2]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"renamecolumns","2":"Rename Columns","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"replicate","2":"Replicate the Input as a Multiplicity","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"scale","2":"Center and Scale Numeric Features","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"scalemaxabs","2":"Scale Numeric Features with Respect to their Maximum Absolute Value","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"scalerange","2":"Linearly Transform Numeric Features to Match Given Boundaries","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"select","2":"Remove Features Depending on a Selector","3":"<chr [1]>","4":"<chr [2]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"smote","2":"SMOTE Balancing","3":"<chr [2]>","4":"<chr [2]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"spatialsign","2":"Normalize Data Row-wise","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"subsample","2":"Subsampling","3":"<chr [1]>","4":"<chr [1]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"targetinvert","2":"Invert Target Transformations","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"2","7":"1","8":"<chr [2]>","9":"<chr [2]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"targetmutate","2":"Transform a Target by a Function","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"1","7":"2","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [2]>","11":"<chr [2]>"},{"1":"targettrafoscalerange","2":"Linearly Transform a Numeric Target to Match Given Boundaries","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"1","7":"2","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [2]>","11":"<chr [2]>"},{"1":"textvectorizer","2":"Bag-of-word Representation of Character Features","3":"<chr [3]>","4":"<chr [1]>","5":"<chr [1]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"threshold","2":"Change the Threshold of a Classification Prediction","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"tunethreshold","2":"Tune the Threshold of a Classification Prediction","3":"<chr [2]>","4":"<chr [1]>","5":"<lgl [1]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"unbranch","2":"Unbranch Different Paths","3":"<chr [1]>","4":"<chr [1]>","5":"<lgl [1]>","6":"NA","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"vtreat","2":"Interface to the vtreat Package","3":"<chr [2]>","4":"<chr [3]>","5":"<chr [7]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"},{"1":"yeojohnson","2":"Yeo-Johnson Transformation of Numeric Features","3":"<chr [2]>","4":"<chr [1]>","5":"<chr [2]>","6":"1","7":"1","8":"<chr [1]>","9":"<chr [1]>","10":"<chr [1]>","11":"<chr [1]>"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["key"],"name":[1],"type":["chr"],"align":["left"]},{"label":["label"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"boxcox","2":"Box-Cox Transformation of Numeric Features"},{"1":"branch","2":"Path Branching"},{"1":"chunk","2":"Chunk Input into Multiple Outputs"},{"1":"classbalancing","2":"Class Balancing"},{"1":"classifavg","2":"Majority Vote Prediction"},{"1":"classweights","2":"Class Weights for Sample Weighting"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
 </div>
+<p>PipeOp 역시 다른 클래스와 마찬가지로 <code>po()</code>라는 sugar function을 통해 만들 수 있습니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pca <span class="ot">=</span> mlr_pipeops<span class="sc">$</span><span class="fu">get</span>(<span class="st">"pca"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>pca <span class="ot">=</span> <span class="fu">po</span>(<span class="st">"pca"</span>) <span class="co"># sugar function</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>po_onehot <span class="ot">=</span> <span class="fu">po</span>(<span class="st">'encode'</span>, <span class="at">method=</span><span class="st">"one-hot"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>po_onehot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>PipeOp: &lt;pca&gt; (not trained)
-values: &lt;list()&gt;
+<pre><code>PipeOp: &lt;encode&gt; (not trained)
+values: &lt;method=one-hot&gt;
 Input channels &lt;name [train type, predict type]&gt;:
   input [Task,Task]
 Output channels &lt;name [train type, predict type]&gt;:
   output [Task,Task]</code></pre>
 </div>
 </div>
+<p><code>PipeOp</code> 객체를 살펴보면, 아직 훈련되지 않은 것을 알 수 있습니다 (not trained).</p>
+<p>또한 Input channels와 Output channels 값은 해당 <code>PipeOp</code>의 입력, 출력 유형을 알려줍니다. 예를 들어, 위의 <code>PipeOp</code>는 Task를 입력받아 Task 형태로 출력하게 됩니다.</p>
+<p>이 부분이 <code>Learner</code> 클래스와의 차이점입니다. 러너는 학습 후 아무런 결과를 출력하지 않기 때문입니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">po</span>(<span class="st">"learner"</span>, <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="pipe-operator" class="level2">
-<h2 class="anchored" data-anchor-id="pipe-operator">2. <code>%&gt;&gt;%</code>: pipe operator</h2>
-<p>%&gt;&gt;% 파이프 연산자를 이용해 파이프옵스(PipeOps) 객체 연결</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>gr <span class="ot">=</span> <span class="fu">po</span>(<span class="st">"scale"</span>) <span class="sc">%&gt;&gt;%</span> <span class="fu">po</span>(<span class="st">"pca"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>gr<span class="sc">$</span><span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="노드-엣지-그래프" class="level2">
-<h2 class="anchored" data-anchor-id="노드-엣지-그래프">3. 노드, 엣지, 그래프</h2>
-<p>POs는 그래프로 결합될 수 있습니다.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mutate <span class="ot">=</span> <span class="fu">po</span>(<span class="st">"mutate"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>filter <span class="ot">=</span> <span class="fu">po</span>(<span class="st">"filter"</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">filter =</span> mlr3filters<span class="sc">::</span><span class="fu">flt</span>(<span class="st">"variance"</span>),</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">param_vals =</span> <span class="fu">list</span>(<span class="at">filter.frac =</span> .<span class="dv">5</span>)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">=</span> Graph<span class="sc">$</span><span class="fu">new</span>()<span class="sc">$</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>          <span class="fu">add_pipeop</span>(mutate)<span class="sc">$</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>          <span class="fu">add_pipeop</span>(filter)<span class="sc">$</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>          <span class="fu">add_edge</span>(<span class="st">"mutate"</span>,<span class="st">"variance"</span>)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>graph<span class="sc">$</span><span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="모델링" class="level2">
-<h2 class="anchored" data-anchor-id="모델링">4. 모델링</h2>
-<p>그래프의 주 목적은 전처리와 모델링을 결합한 파이프라인을 만들어 이 과정을 한꺼번에 진행하는 것이라 할 수 있습니다.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mutate <span class="ot">=</span> <span class="fu">po</span>(<span class="st">"mutate"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>filter <span class="ot">=</span> <span class="fu">po</span>(<span class="st">"filter"</span>,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">filter =</span> mlr3filters<span class="sc">::</span><span class="fu">flt</span>(<span class="st">"variance"</span>),</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">param_vals =</span> <span class="fu">list</span>(<span class="at">filter.frac =</span> .<span class="dv">5</span>))</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>leaner <span class="ot">=</span> <span class="fu">po</span>(<span class="st">"learner"</span>, <span class="fu">lrn</span>(<span class="st">"classif.rpart"</span>))</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">=</span> mutate <span class="sc">%&gt;&gt;%</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        filter <span class="sc">%&gt;&gt;%</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        learner</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>task <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">"iris"</span>)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>graph<span class="sc">$</span><span class="fu">train</span>(task)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>task <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">"penguins"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>po_onehot_in <span class="ot">=</span> <span class="fu">list</span>(task<span class="sc">$</span><span class="fu">clone</span>()<span class="sc">$</span><span class="fu">select</span>(<span class="fu">c</span>(<span class="st">"island"</span>,<span class="st">"sex"</span>))<span class="sc">$</span><span class="fu">filter</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>po_onehot_out <span class="ot">=</span> po_onehot<span class="sc">$</span><span class="fu">train</span>(po_onehot_in)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>po_onehot_out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>$classif.rpart.output
-NULL</code></pre>
+<pre><code>$output
+&lt;TaskClassif:penguins&gt; (10 x 6): Palmer Penguins
+* Target: species
+* Properties: multiclass
+* Features (5):
+  - dbl (5): island.Biscoe, island.Dream, island.Torgersen, sex.female,
+    sex.male</code></pre>
+</div>
+</div>
+<p>출력 객체에서 메서드를 통해 <code>PipeOp</code> 작업이 수행된 데이터를 확인할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>po_onehot_out<span class="sc">$</span>output<span class="sc">$</span><span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["fct"],"align":["left"]},{"label":["island.Biscoe"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["island.Dream"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["island.Torgersen"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["sex.female"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["sex.male"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"Adelie","2":"0","3":"0","4":"1","5":"0","6":"1"},{"1":"Adelie","2":"0","3":"0","4":"1","5":"1","6":"0"},{"1":"Adelie","2":"0","3":"0","4":"1","5":"1","6":"0"},{"1":"Adelie","2":"0","3":"0","4":"1","5":"NA","6":"NA"},{"1":"Adelie","2":"0","3":"0","4":"1","5":"1","6":"0"},{"1":"Adelie","2":"0","3":"0","4":"1","5":"0","6":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>학습이 됐다면, <code>$predict()</code> 메서드를 통해 테스트 데이터를 넣어 결과를 확인할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>task_onepenguin <span class="ot">=</span> task<span class="sc">$</span><span class="fu">clone</span>()<span class="sc">$</span><span class="fu">select</span>(<span class="fu">c</span>(<span class="st">'island'</span>,<span class="st">'sex'</span>))<span class="sc">$</span><span class="fu">filter</span>(<span class="dv">50</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>poin <span class="ot">=</span> <span class="fu">list</span>(task_onepenguin)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>poout <span class="ot">=</span> po_onehot<span class="sc">$</span><span class="fu">predict</span>(poin)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>poout<span class="sc">$</span>output<span class="sc">$</span><span class="fu">data</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["fct"],"align":["left"]},{"label":["island.Biscoe"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["island.Dream"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["island.Torgersen"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["sex.female"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["sex.male"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"Adelie","2":"0","3":"1","4":"0","5":"0","6":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="그래프-pipeops의-네트워크" class="level2">
+<h2 class="anchored" data-anchor-id="그래프-pipeops의-네트워크">2. 그래프: PipeOps의 네트워크</h2>
+<p><code>PipeOp</code>는 머신러닝 파이프라인에서 개별 단위의 계산들을 대표합니다. 이러한 파이프라인은 <code>Graph</code> (<code>PipeOp</code>들이 연결되어 데이터의 흐름을 나타내는 객체에 의해 정의될 수 있습니다.</p>
+<p><code>Graph</code>를 만드는 가장 편리한 방법은 <code>%&gt;&gt;%</code> (double-arrow) 연산자를 이용해 <code>PipeOp</code>들을 연결하는 것입니다. <code>PipeOp</code>의 연결은 아래와 같이 수행됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>po_mutate <span class="ot">=</span> <span class="fu">po</span>(<span class="st">"mutate"</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">mutation =</span> <span class="fu">list</span>(<span class="at">bill_ratio =</span> <span class="sc">~</span>bill_length <span class="sc">/</span> bill_depth))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>po_scale <span class="ot">=</span> <span class="fu">po</span>(<span class="st">"scale"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">=</span> po_mutate <span class="sc">%&gt;&gt;%</span> po_scale</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Graph with 2 PipeOps:
+     ID         State sccssors prdcssors
+ &lt;char&gt;        &lt;char&gt;   &lt;char&gt;    &lt;char&gt;
+ mutate &lt;&lt;UNTRAINED&gt;&gt;    scale          
+  scale &lt;&lt;UNTRAINED&gt;&gt;             mutate</code></pre>
+</div>
+</div>
+<p>출력결과는 그래프의 레이아웃에 대한 정보를 보여줍니다.</p>
+</section>
+<section id="double-arrow-연산자-단축키-설정" class="level2 .callout-note">
+<h2 class="anchored" data-anchor-id="double-arrow-연산자-단축키-설정">Double arrow 연산자 단축키 설정</h2>
+<p>arrow 연산자 (<code>%&gt;%</code> 또는 <code>|&gt;</code>)의 단축키는 <code>ctrl+shift+m</code>이지만, double-arrow 연산자는 단축키가 없으므로, snippet 설정을 통해 단축키를 만들어줄 수 있습니다!</p>
+</section>
+<p>그래프 객체는 <code>$plot()</code> 메서드를 통해 그래프를 시각화할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>graph<span class="sc">$</span><span class="fu">plot</span>(<span class="at">horizontal =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><code>$pipeops</code> 필드를 통해서 그래프에 포함된 각각의 Pipeop 객체의 정보를 확인할 수 있고,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>graph<span class="sc">$</span>pipeops</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$mutate
+PipeOp: &lt;mutate&gt; (not trained)
+values: &lt;mutation=&lt;list&gt;, delete_originals=FALSE&gt;
+Input channels &lt;name [train type, predict type]&gt;:
+  input [Task,Task]
+Output channels &lt;name [train type, predict type]&gt;:
+  output [Task,Task]
+
+$scale
+PipeOp: &lt;scale&gt; (not trained)
+values: &lt;robust=FALSE&gt;
+Input channels &lt;name [train type, predict type]&gt;:
+  input [Task,Task]
+Output channels &lt;name [train type, predict type]&gt;:
+  output [Task,Task]</code></pre>
+</div>
+</div>
+<p>그래프가 연결된 edge에 대해 접근할 수도 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>graph<span class="sc">$</span>edges</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["src_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["src_channel"],"name":[2],"type":["chr"],"align":["left"]},{"label":["dst_id"],"name":[3],"type":["chr"],"align":["left"]},{"label":["dst_channel"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"mutate","2":"output","3":"scale","4":"input"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p><code>%&gt;&gt;%</code> 대신<code>$add_pipe()</code>와 <code>$add_edge()</code> 메서드를 이용해 그래프를 만들어줄 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">=</span> Graph<span class="sc">$</span><span class="fu">new</span>()<span class="sc">$</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_pipeop</span>(po_mutate)<span class="sc">$</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_pipeop</span>(po_scale)<span class="sc">$</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_edge</span>(<span class="st">"mutate"</span>, <span class="st">"scale"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Graph를 만든 뒤에는, Learner처럼 <code>$train()</code>, <code>$predict()</code>를 이용해 PipeOp들을 적용한 값을 출력할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">=</span> graph<span class="sc">$</span><span class="fu">train</span>(task<span class="sc">$</span><span class="fu">clone</span>()<span class="sc">$</span><span class="fu">filter</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>scale.output<span class="sc">$</span><span class="fu">data</span>()[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["fct"],"align":["left"]},{"label":["island"],"name":[2],"type":["fct"],"align":["left"]},{"label":["sex"],"name":[3],"type":["fct"],"align":["left"]},{"label":["bill_depth"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["bill_length"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["bill_ratio"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["body_mass"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["flipper_length"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["year"],"name":[9],"type":["dbl"],"align":["right"]}],"data":[{"1":"Adelie","2":"Torgersen","3":"male","4":"0.1875640","5":"0.1501137","6":"-0.05156323","7":"0.06776998","8":"-1.2140079","9":"-0.9949874"},{"1":"Adelie","2":"Torgersen","3":"female","4":"-0.9047204","5":"0.2968915","6":"1.10889548","7":"0.17866631","8":"-0.4396085","9":"-0.9949874"},{"1":"Adelie","2":"Torgersen","3":"female","4":"-0.4005892","5":"0.5904472","6":"0.90668922","7":"-1.04119333","8":"0.9543104","9":"-0.9949874"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>graph<span class="sc">$</span><span class="fu">predict</span>(task)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$classif.rpart.output
-&lt;PredictionClassif&gt; for 150 observations:
-    row_ids     truth  response
-          1    setosa    setosa
-          2    setosa    setosa
-          3    setosa    setosa
----                            
-        148 virginica virginica
-        149 virginica virginica
-        150 virginica virginica</code></pre>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">=</span> graph<span class="sc">$</span><span class="fu">predict</span>(task<span class="sc">$</span><span class="fu">clone</span>()<span class="sc">$</span><span class="fu">filter</span>(<span class="dv">101</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>scale.output<span class="sc">$</span><span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["fct"],"align":["left"]},{"label":["island"],"name":[2],"type":["fct"],"align":["left"]},{"label":["sex"],"name":[3],"type":["fct"],"align":["left"]},{"label":["bill_depth"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["bill_length"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["bill_ratio"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["body_mass"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["flipper_length"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["year"],"name":[9],"type":["dbl"],"align":["right"]}],"data":[{"1":"Adelie","2":"Biscoe","3":"female","4":"-0.484611","5":"-1.354359","6":"-0.9296614","7":"0.01232181","8":"0.4896707","9":"2.984962"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
 </div>
+</div>
+<section id="순서가-있는-learner-파이프라인" class="level2">
+<h2 class="anchored" data-anchor-id="순서가-있는-learner-파이프라인">3. 순서가 있는 Learner 파이프라인</h2>
+<p><code>mlr3pipelines</code>은 주로 머신러닝에서 결측치(<code>NA</code>) 대체, 범주 인코딩과 같은 데이터 전처리를 할 때 사용될 것입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>lrn_logreg <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">"classif.log_reg"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">=</span> <span class="fu">po</span>(<span class="st">"imputesample"</span>) <span class="sc">%&gt;&gt;%</span> lrn_logreg</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>graph<span class="sc">$</span><span class="fu">plot</span>(<span class="at">horizontal =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>graph를 learner로 활용하기 위해서 <code>as_learner()</code> 함수를 이용합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>glrn_sample <span class="ot">=</span> <span class="fu">as_learner</span>(graph)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>glrn_mode <span class="ot">=</span> <span class="fu">as_learner</span>(<span class="fu">po</span>(<span class="st">"imputemode"</span>) <span class="sc">%&gt;&gt;%</span> lrn_logreg)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>design <span class="ot">=</span> <span class="fu">benchmark_grid</span>(</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">tasks =</span> <span class="fu">tsk</span>(<span class="st">"pima"</span>),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">learners =</span> <span class="fu">list</span>(glrn_sample, glrn_mode),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">resamplings =</span> <span class="fu">rsmp</span>(<span class="st">"cv"</span>, <span class="at">folds=</span><span class="dv">5</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>bmr <span class="ot">=</span> <span class="fu">benchmark</span>(design)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>aggr <span class="ot">=</span> bmr<span class="sc">$</span><span class="fu">aggregate</span>()[,.(learner_id, classif.ce)]</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>aggr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["learner_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["classif.ce"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"imputesample.classif.log_reg","2":"0.2343944"},{"1":"imputemode.classif.log_reg","2":"0.2330957"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>성능 확인 결과, sampling imputation을 통한 결과가 약간 더 좋게 나오는 것을 알 수 있습니다.</p>
 
 
 </section>
@@ -387,6 +504,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -455,13 +599,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -540,10 +686,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/rchemistblog\.com");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -553,8 +716,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -566,7 +738,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -610,6 +905,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -635,6 +931,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -696,10 +1018,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <script src="https://giscus.app/client.js" data-repo="rchemist0123/giscus-blog" data-repo-id="R_kgDOJBwa8Q" data-category="General" data-category-id="DIC_kwDOJBwa8c4CUbVM" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
 </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left"><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-left">
+<p><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
@@ -721,6 +1047,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 

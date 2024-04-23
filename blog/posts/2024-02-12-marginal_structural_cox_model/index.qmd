@@ -1,0 +1,144 @@
+---
+title: "Marginal Structural Cox Model"
+author: "JYH"
+description: "시간에 따라 변동하는 변수를 보정한 Cox regression을 원리와 함께 R 로 수행하는 방법에 대해 배워봅니다."
+categories: [R, Cox regression, Statistics]
+date: "2023-12-07"
+---
+
+# 소개
+
+Marginal Structural Cox regression은 고급통계 기법으로, 생존분석에서 [시간이 지남에 따라 변화하는 공변량(covariates) 또는 교란변수(confounders)]{.underline}를 통제/보정하기 위해 사용합니다.
+
+예를 들어, 수혈이 중환자실에 입실한 환자들의 원내 사망(in-hospital mortality) 위험에 어떤 영향을 미치는지 파악한다고 해보겠습니다.
+
+이 때, 중환자실에 입실해 있는 첫째날부터 셋째 날까지 반복적으로 측정된 항목의 수치, 수혈 시행 여부 등을 보정할 필요가 있습니다.
+
+이럴 때 활용할 수 있는 것이 **Marginal Structural Cox regression**입니다.
+
+# 원리
+
+Marginal Structural Cox regression은 다음과 같은 특징을 갖습니다.
+
+## 1. Cox regression Model
+
+생존분석이기 때문에, 관찰기간과 임상 결과 등의 변수가 활용됩니다. (e.g. 입원 기간 내 사망 여부)
+
+## 2. Time-varying 변수
+
+실제 임상 환경에서 환자가 입원한 기간동안 환자에게 사용하는 약물이나 치료 등으로 인해 환자의 생존률이 달라질 수 있습니다.
+
+따라서 Marginal Structural Cox regression은 시간이 지나도 변하지 않는 고정된(Time-fixed) 변수 뿐만 아니라, 기존의 전통적인 통계분석 방법으로는 다루기 어려운 **시간에 따라 변화(Time-varying)하는 변수**까지 보정하게 됩니다.
+
+## 3. Marginal Structural Models (MSMs)
+
+Marginal Structural Cox regression은 MSM의 방식에서 착안하여 [IPTW(Inverse Probability of Treatment weighting)]{.underline}을 계산합니다. 이후 이 가중치를 Cox regression 분석에 적용합니다.
+
+# 분석 사례
+
+ICU에 입원한 환자가 수혈을 받은 뒤 3일정도 입원했을 때, 병원 내 사망률이 어떻게 나타나는지 확인하기
+
+- Time-fixed 변수: AGE, SEX, BMI, Charlson Comorbidity Index, Hb ICU Day 1, SOFA ICU Day 1, SAPS3 ICU Day 1
+- Time-varying 변수: ICU 입실 후 1~3일 간 Hb 
+- Outcome: `inhos_mortality`
+- Time: `inhos_mortality`
+
+모델링은 다음과 같은 순서로 진행됩니다.
+
+```{r}
+#| echo: false
+
+library(data.table)
+library(survival)
+data = fread("df_transfusion_sample.csv")
+```
+
+
+## 1. 변수 나누기
+
+시간에 관계없는 변수와 시간에 따라 변하는 변수, 즉 Time-fixed 변수와 Time-varying 변수를 나눠줍니다.
+
+```{r}
+time_varying_vars = c("Hb","Transfusion")
+
+time_fix_vars = c("SubjectNo", 'AGE',"SEX", 'BMI', 'CFScore', 'Charlson_Comorbidity_index_total',
+                  'Comorbidity_MOSIAC_SMT','CRRT_within_3days', 'input_preICU_to_ICUD1_quartile','SOFA_ICUD1','SAPS3_ICUD1', 'Septic_shock_ICUD1', 's_pulmonary', 's_abdominal', 's_urinary','TypeOfInfection')
+
+outcome = "inhos_mortality"
+time = "inhos_duration"
+
+id.vars = c(time_fix_vars, outcome, time)
+```
+
+
+## 2. 데이터 변환
+
+Time varying 변수들이 있기 때문에, 긴 데이터의 형태로 변환합니다.
+`melt()` 함수의 measure.vars 인자에 길게 변환시킬 Time varying 변수들의 이름 또는 이름의 규칙을 넣어줍니다.
+```{r}
+data_melt = melt.data.table(data = data,
+                   id.vars= c('inhos_mortality','inhos_duration', time_fix_vars),
+                   measure.vars = patterns("Transfusion_ICUD"),
+                   value.name = 'treatment')
+head(data_melt)
+```
+
+`variable`이라는 열에 반복 측정된 값의 이름(Transfusion)과 일자(ICUD1~3)이 포함되어 있으므로, 두 개를 나누어 각각의 column을 구성합니다.
+
+이 때 새롭게 만들어지는 `treatment`은 time varying 변수인 수혈 변수의 이름, `time`은 Cox regression에서 time으로 들어갈 변수입니다.
+
+```{r}
+# 시간(Day 1,2,3 column 만들기)
+data_melt[,c("v","time") := tstrsplit(variable,"_ICUD",2)]
+data_melt[,c("v",'variable') := NULL]
+setorder(data_melt, 'SubjectNo', 'time')
+data_melt
+```
+
+반복 측정되는 값이 `treatment` (수혈 여부) 뿐만 아니라 여러 개인 경우, 해당 변수에 대해 `melt()`를 진행한 후, `merge()`를 통해 데이터를 합쳐줍니다.
+
+```{r}
+data_melt_hb = melt.data.table(data = data,
+                   id.vars= c('inhos_mortality','inhos_duration', time_fix_vars),
+                   measure.vars = patterns("Hb"),
+                   value.name = 'Hb')
+data_melt_hb[,c("v","time") := tstrsplit(variable,"_ICUD",2)]
+data_melt_hb[,c("v",'variable') := NULL]
+data_melt_final = merge(data_melt, data_melt_hb[,.(SubjectNo, time, Hb)], by=c("SubjectNo","time"))
+data_melt_final
+```
+
+## 3. IPTW 계산하기
+
+`treatment`(수혈)에 Time-fixed, Time-varying 변수들이 미치는 영향력 확인하여 가중치를 계산합니다.
+
+```{r}
+covars = c(setdiff(time_fix_vars, c('SubjectNo','hospital')), c('Hb'))
+form = sprintf("treatment ~ factor(time) + %s", paste0(covars, collapse="+"))
+
+lr = glm(as.formula(form), family=binomial,  data = data_melt_final)
+  
+lr_numer = glm(treatment ~ factor(time), family=binomial, data=data_melt_final)
+  
+data_melt_final[, wt := predict(lr_numer, type="response", newdata = data_melt_final)/ predict(lr, type="response", newdata = data_melt_final)]
+```
+
+
+## 4. Cox regression 수행
+
+가중치(`wt`)를 적용하여 Cox regression을 수행합니다.
+`robust = TRUE`를 통해 가중치를 적용했을 때, 추가로 발생할 수 있는 변동성을 설명합니다.
+```{r}
+form = sprintf("Surv(inhos_duration, inhos_mortality==1) ~ treatment + %s", paste0(covars, collapse="+"))
+fit = coxph(as.formula(form),   
+            data = data_melt_final,
+            weights = wt,
+            robust = TRUE
+            )
+summary(fit)
+```
+
+## 참고자료
+- https://rpubs.com/mbounthavong/IPTW_MSM_Tutorial
+- [Marginal structural models to estimate the causal effect of zidovudine on the survival of HIV-positive men](https://pubmed.ncbi.nlm.nih.gov/10955409/)
+- [Transfusion practice in patients receiving VV ECMO (PROTECMO): a prospective, multicentre, observational study](https://pubmed.ncbi.nlm.nih.gov/36240836/)

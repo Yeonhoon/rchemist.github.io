@@ -111,9 +111,8 @@ m1
 
     위의 코드를 예시로 들면 `treat ~ age + educ + race + married + nodegree + re74 + re75`는 `treat`를 기준으로 `age` \~ `re75` 간 변수가 비슷한 항목들을 매칭한다는 의미입니다.
 
-```{=html}
 <!-- -->
-```
+
 -   `distance`: 치료군과 대조군 간의 거리를 측정하기 위한 방법으로, 기본값은 `glm` 입니다. 그 외에 마할라노비스 거리(mahalanobis), 유클리드 거리 등이 올 수 있습니다.
 -   `methods`: 매칭 방법입니다. 대표적으로 `nearest`, `optimal` 등이 있습니다.
 -   `replace`: 매칭 시 한 번 매칭된 대조군을 다른 치료군과의 매칭에도 사용할 지 여부를 결정합니다(`TRUE`/`FALSE`).

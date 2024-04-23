@@ -1,0 +1,28 @@
+---
+title: "공변량 효과를 고려한 Cox regression(feat. Cox proportional hazard)"
+description: "Subdimensional Hazard Ratio 계산하기." 
+date: '2021-04-22'
+categories: [R, data.table, Cox regression, survival]
+---
+
+## 0. 배경
+
+Competing risk
+
+
+ Cox ph: Cause-specific hazard regression
+ - 이벤트 발생으로 인한 탈락,
+ - 다른 원인(사망 등)으로 인한 탈락
+
+ SH: sub-distribution hazards (SHs) model (=Fine-Gray model)
+ 원인-특정 위험함수에 미치는 공변량의 효과는 CIF(Cumulative Incidence Function)에 미치는 공변량의 효과와 다를 것이다.
+ 다시 말해 공변량은 원인특정 위험함수에 큰 영향 but CIF는 영향 x
+ Cause-specific 은 competing risk(outcome of interest가 아닌 다른 event로 인해 제외됨)를 non-informative censoring으로 간주
+ SH는 informative nature of competing risk events 고려
+
+ Cause-specific hazard는 생존해있는 환자들 중 단위시간 당 이벤트 발생 비율
+ SH 는 생존 혹은 다른 원인으로 탈락한 환자들까지 포함하여 단위시간 당 이벤트 발생 비율 고려
+이미 관찰에서 탈락한 사람들도 risk set에 포함되어 있는 것.
+
+## 레퍼런스
+-   [sHR](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5326634/)[^1]

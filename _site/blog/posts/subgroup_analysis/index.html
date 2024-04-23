@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -84,7 +84,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -93,8 +98,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QKQJ0CJQC4"></script>
@@ -107,7 +114,6 @@ gtag('js', new Date());
 gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 </script>
 <style>html{ scroll-behavior: smooth; }</style>
-
 <link href="../../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
 <script src="../../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
@@ -118,10 +124,10 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">Rchemist</span>
     </a>
@@ -133,25 +139,25 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html" rel="" target=""><i class="bi bi-house" role="img">
+    <a class="nav-link" href="../../../index.html"> <i class="bi bi-house" role="img">
 </i> 
- <span class="menu-text">Home</span></a>
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../about.html" rel="" target=""><i class="bi bi-file-person" role="img">
+    <a class="nav-link" href="../../../about.html"> <i class="bi bi-file-person" role="img">
 </i> 
- <span class="menu-text">About</span></a>
+<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../gallery/index.html" rel="" target=""><i class="bi bi-sliders2" role="img">
+    <a class="nav-link" href="../../../gallery/index.html"> <i class="bi bi-sliders2" role="img">
 </i> 
- <span class="menu-text">Gallery</span></a>
+<span class="menu-text">Gallery</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -213,6 +219,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
+
 
 
 
@@ -330,24 +337,24 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_row_groups</span>()</span>
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
-<div id="uhlwhrblhs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#uhlwhrblhs table {
+<div>
+<div id="dmqcwjgfkn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dmqcwjgfkn table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#uhlwhrblhs thead, #uhlwhrblhs tbody, #uhlwhrblhs tfoot, #uhlwhrblhs tr, #uhlwhrblhs td, #uhlwhrblhs th {
+#dmqcwjgfkn thead, #dmqcwjgfkn tbody, #dmqcwjgfkn tfoot, #dmqcwjgfkn tr, #dmqcwjgfkn td, #dmqcwjgfkn th {
   border-style: none;
 }
 
-#uhlwhrblhs p {
+#dmqcwjgfkn p {
   margin: 0;
   padding: 0;
 }
 
-#uhlwhrblhs .gt_table {
+#dmqcwjgfkn .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -373,12 +380,12 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   border-left-color: #D3D3D3;
 }
 
-#uhlwhrblhs .gt_caption {
+#dmqcwjgfkn .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#uhlwhrblhs .gt_title {
+#dmqcwjgfkn .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -390,7 +397,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   border-bottom-width: 0;
 }
 
-#uhlwhrblhs .gt_subtitle {
+#dmqcwjgfkn .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -402,7 +409,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   border-top-width: 0;
 }
 
-#uhlwhrblhs .gt_heading {
+#dmqcwjgfkn .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -414,13 +421,13 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   border-right-color: #D3D3D3;
 }
 
-#uhlwhrblhs .gt_bottom_border {
+#dmqcwjgfkn .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#uhlwhrblhs .gt_col_headings {
+#dmqcwjgfkn .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -435,7 +442,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   border-right-color: #D3D3D3;
 }
 
-#uhlwhrblhs .gt_col_heading {
+#dmqcwjgfkn .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -455,7 +462,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   overflow-x: hidden;
 }
 
-#uhlwhrblhs .gt_column_spanner_outer {
+#dmqcwjgfkn .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -467,15 +474,15 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   padding-right: 4px;
 }
 
-#uhlwhrblhs .gt_column_spanner_outer:first-child {
+#dmqcwjgfkn .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#uhlwhrblhs .gt_column_spanner_outer:last-child {
+#dmqcwjgfkn .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#uhlwhrblhs .gt_column_spanner {
+#dmqcwjgfkn .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -487,11 +494,11 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   width: 100%;
 }
 
-#uhlwhrblhs .gt_spanner_row {
+#dmqcwjgfkn .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#uhlwhrblhs .gt_group_heading {
+#dmqcwjgfkn .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -517,7 +524,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   text-align: left;
 }
 
-#uhlwhrblhs .gt_empty_group_heading {
+#dmqcwjgfkn .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -532,15 +539,15 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   vertical-align: middle;
 }
 
-#uhlwhrblhs .gt_from_md > :first-child {
+#dmqcwjgfkn .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#uhlwhrblhs .gt_from_md > :last-child {
+#dmqcwjgfkn .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#uhlwhrblhs .gt_row {
+#dmqcwjgfkn .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -559,7 +566,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   overflow-x: hidden;
 }
 
-#uhlwhrblhs .gt_stub {
+#dmqcwjgfkn .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -572,7 +579,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   padding-right: 5px;
 }
 
-#uhlwhrblhs .gt_stub_row_group {
+#dmqcwjgfkn .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -586,15 +593,15 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   vertical-align: top;
 }
 
-#uhlwhrblhs .gt_row_group_first td {
+#dmqcwjgfkn .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#uhlwhrblhs .gt_row_group_first th {
+#dmqcwjgfkn .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#uhlwhrblhs .gt_summary_row {
+#dmqcwjgfkn .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -604,16 +611,16 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   padding-right: 5px;
 }
 
-#uhlwhrblhs .gt_first_summary_row {
+#dmqcwjgfkn .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#uhlwhrblhs .gt_first_summary_row.thick {
+#dmqcwjgfkn .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#uhlwhrblhs .gt_last_summary_row {
+#dmqcwjgfkn .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -623,7 +630,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   border-bottom-color: #D3D3D3;
 }
 
-#uhlwhrblhs .gt_grand_summary_row {
+#dmqcwjgfkn .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -633,7 +640,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   padding-right: 5px;
 }
 
-#uhlwhrblhs .gt_first_grand_summary_row {
+#dmqcwjgfkn .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -643,7 +650,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   border-top-color: #D3D3D3;
 }
 
-#uhlwhrblhs .gt_last_grand_summary_row_top {
+#dmqcwjgfkn .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -653,11 +660,11 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   border-bottom-color: #D3D3D3;
 }
 
-#uhlwhrblhs .gt_striped {
+#dmqcwjgfkn .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#uhlwhrblhs .gt_table_body {
+#dmqcwjgfkn .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -666,7 +673,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   border-bottom-color: #D3D3D3;
 }
 
-#uhlwhrblhs .gt_footnotes {
+#dmqcwjgfkn .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -680,7 +687,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   border-right-color: #D3D3D3;
 }
 
-#uhlwhrblhs .gt_footnote {
+#dmqcwjgfkn .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -689,7 +696,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   padding-right: 5px;
 }
 
-#uhlwhrblhs .gt_sourcenotes {
+#dmqcwjgfkn .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -703,7 +710,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   border-right-color: #D3D3D3;
 }
 
-#uhlwhrblhs .gt_sourcenote {
+#dmqcwjgfkn .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -711,134 +718,150 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   padding-right: 5px;
 }
 
-#uhlwhrblhs .gt_left {
+#dmqcwjgfkn .gt_left {
   text-align: left;
 }
 
-#uhlwhrblhs .gt_center {
+#dmqcwjgfkn .gt_center {
   text-align: center;
 }
 
-#uhlwhrblhs .gt_right {
+#dmqcwjgfkn .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#uhlwhrblhs .gt_font_normal {
+#dmqcwjgfkn .gt_font_normal {
   font-weight: normal;
 }
 
-#uhlwhrblhs .gt_font_bold {
+#dmqcwjgfkn .gt_font_bold {
   font-weight: bold;
 }
 
-#uhlwhrblhs .gt_font_italic {
+#dmqcwjgfkn .gt_font_italic {
   font-style: italic;
 }
 
-#uhlwhrblhs .gt_super {
+#dmqcwjgfkn .gt_super {
   font-size: 65%;
 }
 
-#uhlwhrblhs .gt_footnote_marks {
+#dmqcwjgfkn .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#uhlwhrblhs .gt_asterisk {
+#dmqcwjgfkn .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#uhlwhrblhs .gt_indent_1 {
+#dmqcwjgfkn .gt_indent_1 {
   text-indent: 5px;
 }
 
-#uhlwhrblhs .gt_indent_2 {
+#dmqcwjgfkn .gt_indent_2 {
   text-indent: 10px;
 }
 
-#uhlwhrblhs .gt_indent_3 {
+#dmqcwjgfkn .gt_indent_3 {
   text-indent: 15px;
 }
 
-#uhlwhrblhs .gt_indent_4 {
+#dmqcwjgfkn .gt_indent_4 {
   text-indent: 20px;
 }
 
-#uhlwhrblhs .gt_indent_5 {
+#dmqcwjgfkn .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Subgroup</strong>"><strong>Subgroup</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Case</strong>"><strong>Case</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Control</strong>"><strong>Control</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>HR (95% CI)</strong>"><strong>HR (95% CI)</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong><em>P</em> for interaction</strong>"><strong><em>P</em> for interaction</strong></th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr class="gt_group_heading_row">
-      <th colspan="5" class="gt_group_heading" style="font-weight: bold;" scope="colgroup" id="sex">sex</th>
-    </tr>
-    <tr class="gt_row_group_first"><td headers="sex  level" class="gt_row gt_left">female</td>
-<td headers="sex  case" class="gt_row gt_center">183/249</td>
-<td headers="sex  control" class="gt_row gt_center">199/252</td>
-<td headers="sex  hr_ci" class="gt_row gt_center">0.83 (0.67-1.01)</td>
-<td headers="sex  pinteraction" class="gt_row gt_center">0.4077</td></tr>
-    <tr><td headers="sex  level" class="gt_row gt_left">male</td>
-<td headers="sex  case" class="gt_row gt_center">448/627</td>
-<td headers="sex  control" class="gt_row gt_center">453/621</td>
-<td headers="sex  hr_ci" class="gt_row gt_center">0.91 (0.80-1.04)</td>
-<td headers="sex  pinteraction" class="gt_row gt_center">0.4077</td></tr>
-    <tr class="gt_group_heading_row">
-      <th colspan="5" class="gt_group_heading" style="font-weight: bold;" scope="colgroup" id="age_2">age_2</th>
-    </tr>
-    <tr class="gt_row_group_first"><td headers="age_2  level" class="gt_row gt_left">over68</td>
-<td headers="age_2  case" class="gt_row gt_center">422/493</td>
-<td headers="age_2  control" class="gt_row gt_center">427/476</td>
-<td headers="age_2  hr_ci" class="gt_row gt_center">0.87 (0.76-0.99)</td>
-<td headers="age_2  pinteraction" class="gt_row gt_center">0.9324</td></tr>
-    <tr><td headers="age_2  level" class="gt_row gt_left">under68</td>
-<td headers="age_2  case" class="gt_row gt_center">209/383</td>
-<td headers="age_2  control" class="gt_row gt_center">225/397</td>
-<td headers="age_2  hr_ci" class="gt_row gt_center">0.88 (0.73-1.06)</td>
-<td headers="age_2  pinteraction" class="gt_row gt_center">0.9324</td></tr>
-    <tr class="gt_group_heading_row">
-      <th colspan="5" class="gt_group_heading" style="font-weight: bold;" scope="colgroup" id="wmi_2">wmi_2</th>
-    </tr>
-    <tr class="gt_row_group_first"><td headers="wmi_2  level" class="gt_row gt_left">bad</td>
-<td headers="wmi_2  case" class="gt_row gt_center">133/146</td>
-<td headers="wmi_2  control" class="gt_row gt_center">148/161</td>
-<td headers="wmi_2  hr_ci" class="gt_row gt_center">0.87 (0.69-1.10)</td>
-<td headers="wmi_2  pinteraction" class="gt_row gt_center">0.8484</td></tr>
-    <tr><td headers="wmi_2  level" class="gt_row gt_left">good</td>
-<td headers="wmi_2  case" class="gt_row gt_center">498/730</td>
-<td headers="wmi_2  control" class="gt_row gt_center">504/712</td>
-<td headers="wmi_2  hr_ci" class="gt_row gt_center">0.90 (0.79-1.02)</td>
-<td headers="wmi_2  pinteraction" class="gt_row gt_center">0.8484</td></tr>
-    <tr class="gt_group_heading_row">
-      <th colspan="5" class="gt_group_heading" style="font-weight: bold;" scope="colgroup" id="abd_2">abd_2</th>
-    </tr>
-    <tr class="gt_row_group_first"><td headers="abd_2  level" class="gt_row gt_left">fat</td>
-<td headers="abd_2  case" class="gt_row gt_center">319/435</td>
-<td headers="abd_2  control" class="gt_row gt_center">296/403</td>
-<td headers="abd_2  hr_ci" class="gt_row gt_center">0.93 (0.79-1.09)</td>
-<td headers="abd_2  pinteraction" class="gt_row gt_center">0.3287</td></tr>
-    <tr><td headers="abd_2  level" class="gt_row gt_left">slim</td>
-<td headers="abd_2  case" class="gt_row gt_center">274/389</td>
-<td headers="abd_2  control" class="gt_row gt_center">324/427</td>
-<td headers="abd_2  hr_ci" class="gt_row gt_center">0.83 (0.71-0.98)</td>
-<td headers="abd_2  pinteraction" class="gt_row gt_center">0.3287</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="<strong>Subgroup</strong>" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Subgroup</strong></th>
+<th id="<strong>Case</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>Case</strong></th>
+<th id="<strong>Control</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>Control</strong></th>
+<th id="<strong>HR (95% CI)</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>HR (95% CI)</strong></th>
+<th id="<strong><em>P</em> for interaction</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong><em>P</em> for interaction</strong></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd gt_group_heading_row">
+<td colspan="5" id="sex" class="gt_group_heading" data-quarto-table-cell-role="th" style="font-weight: bold" scope="colgroup">sex</td>
+</tr>
+<tr class="even gt_row_group_first">
+<td class="gt_row gt_left" headers="sex  level">female</td>
+<td class="gt_row gt_center" headers="sex  case">183/249</td>
+<td class="gt_row gt_center" headers="sex  control">199/252</td>
+<td class="gt_row gt_center" headers="sex  hr_ci">0.83 (0.67-1.01)</td>
+<td class="gt_row gt_center" headers="sex  pinteraction">0.4077</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="sex  level">male</td>
+<td class="gt_row gt_center" headers="sex  case">448/627</td>
+<td class="gt_row gt_center" headers="sex  control">453/621</td>
+<td class="gt_row gt_center" headers="sex  hr_ci">0.91 (0.80-1.04)</td>
+<td class="gt_row gt_center" headers="sex  pinteraction">0.4077</td>
+</tr>
+<tr class="even gt_group_heading_row">
+<td colspan="5" id="age_2" class="gt_group_heading" data-quarto-table-cell-role="th" style="font-weight: bold" scope="colgroup">age_2</td>
+</tr>
+<tr class="odd gt_row_group_first">
+<td class="gt_row gt_left" headers="age_2  level">over68</td>
+<td class="gt_row gt_center" headers="age_2  case">422/493</td>
+<td class="gt_row gt_center" headers="age_2  control">427/476</td>
+<td class="gt_row gt_center" headers="age_2  hr_ci">0.87 (0.76-0.99)</td>
+<td class="gt_row gt_center" headers="age_2  pinteraction">0.9324</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="age_2  level">under68</td>
+<td class="gt_row gt_center" headers="age_2  case">209/383</td>
+<td class="gt_row gt_center" headers="age_2  control">225/397</td>
+<td class="gt_row gt_center" headers="age_2  hr_ci">0.88 (0.73-1.06)</td>
+<td class="gt_row gt_center" headers="age_2  pinteraction">0.9324</td>
+</tr>
+<tr class="odd gt_group_heading_row">
+<td colspan="5" id="wmi_2" class="gt_group_heading" data-quarto-table-cell-role="th" style="font-weight: bold" scope="colgroup">wmi_2</td>
+</tr>
+<tr class="even gt_row_group_first">
+<td class="gt_row gt_left" headers="wmi_2  level">bad</td>
+<td class="gt_row gt_center" headers="wmi_2  case">133/146</td>
+<td class="gt_row gt_center" headers="wmi_2  control">148/161</td>
+<td class="gt_row gt_center" headers="wmi_2  hr_ci">0.87 (0.69-1.10)</td>
+<td class="gt_row gt_center" headers="wmi_2  pinteraction">0.8484</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="wmi_2  level">good</td>
+<td class="gt_row gt_center" headers="wmi_2  case">498/730</td>
+<td class="gt_row gt_center" headers="wmi_2  control">504/712</td>
+<td class="gt_row gt_center" headers="wmi_2  hr_ci">0.90 (0.79-1.02)</td>
+<td class="gt_row gt_center" headers="wmi_2  pinteraction">0.8484</td>
+</tr>
+<tr class="even gt_group_heading_row">
+<td colspan="5" id="abd_2" class="gt_group_heading" data-quarto-table-cell-role="th" style="font-weight: bold" scope="colgroup">abd_2</td>
+</tr>
+<tr class="odd gt_row_group_first">
+<td class="gt_row gt_left" headers="abd_2  level">fat</td>
+<td class="gt_row gt_center" headers="abd_2  case">319/435</td>
+<td class="gt_row gt_center" headers="abd_2  control">296/403</td>
+<td class="gt_row gt_center" headers="abd_2  hr_ci">0.93 (0.79-1.09)</td>
+<td class="gt_row gt_center" headers="abd_2  pinteraction">0.3287</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="abd_2  level">slim</td>
+<td class="gt_row gt_center" headers="abd_2  case">274/389</td>
+<td class="gt_row gt_center" headers="abd_2  control">324/427</td>
+<td class="gt_row gt_center" headers="abd_2  hr_ci">0.83 (0.71-0.98)</td>
+<td class="gt_row gt_center" headers="abd_2  pinteraction">0.3287</td>
+</tr>
+</tbody>
 </table>
+
+</div>
 </div>
 </div>
 </div>
@@ -851,8 +874,8 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <h2 class="anchored" data-anchor-id="시각화">시각화</h2>
 <p>Subgroup analysis는 표 뿐만 아니라 그래프를 통해 결과를 보여줄 수 있습니다.</p>
 <p style="text-align: center">
-<img src="https://www.researchgate.net/profile/Shweta-Bansal-3/publication/305467160/figure/fig3/AS:613915083948038@1523380170283/Forest-Plot-of-Primary-Outcome-According-to-Subgroups-The-dashed-vertical-line.png" width="80%;&quot;">
-</p>
+</p><p><img src="https://www.researchgate.net/profile/Shweta-Bansal-3/publication/305467160/figure/fig3/AS:613915083948038@1523380170283/Forest-Plot-of-Primary-Outcome-According-to-Subgroups-The-dashed-vertical-line.png" width="80%;&quot;"></p>
+<p></p>
 <p>위와 같은 그림을 <strong>forest plot</strong>이라고 부릅니다. forest plot은 메타 분석 (meta analysis)에서 많이 활용되는 그래프이지만, subgroup analysis에서도 자주 활용되는 그래프입니다. <code>Publish</code>에서 제공되는 함수를 통해 forest plot을 그릴 수 있습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotConfidence</span>(<span class="at">x=</span>sub_fit[,<span class="fu">c</span>(<span class="st">"HazardRatio"</span>,<span class="st">"Lower"</span>,<span class="st">"Upper"</span>)],</span>
@@ -864,20 +887,23 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">points.pch=</span><span class="dv">15</span>,</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">cex=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>자 그런데 어디가 좀 부족해보입니다. <code>p-value</code>는 나오지도 않고 하니… 뭔가 아쉽죠.</p>
 <p>R에는 subgroup analysis 의 forest plot을 그리기 위한 패키지들이 몇 가지 존재합니다. 저는 그 중에서 <code>forester</code> 패키지를 사용하여 forest plot을 그려보도록 하겠습니다. 참고로 이 패키지는 CRAN에 없기 때문에, github를 통해 다운로드받아야 합니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"rdboyes/forester"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(forester)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forester)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>이제 <code>forester()</code> 를 이용해 forest plot을 그려보겠습니다.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sub_fit_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
 {"columns":[{"label":["subgroups"],"name":[1],"type":["chr"],"align":["left"]},{"label":["level"],"name":[2],"type":["fct"],"align":["left"]},{"label":["sample_placebo"],"name":[3],"type":["int"],"align":["right"]},{"label":["sample_trandolapril"],"name":[4],"type":["int"],"align":["right"]},{"label":["event_placebo"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["event_trandolapril"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["time_placebo"],"name":[7],"type":["int"],"align":["right"]},{"label":["time_trandolapril"],"name":[8],"type":["int"],"align":["right"]},{"label":["Units"],"name":[9],"type":["chr"],"align":["left"]},{"label":["HazardRatio"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Lower"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["Upper"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["Pvalue"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["pinteraction"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["Missing"],"name":[15],"type":["int"],"align":["right"]},{"label":["hr_ci"],"name":[16],"type":["chr"],"align":["left"]},{"label":["control"],"name":[17],"type":["chr"],"align":["left"]},{"label":["case"],"name":[18],"type":["chr"],"align":["left"]}],"data":[{"1":"sex","2":"female","3":"252","4":"249","5":"199","6":"183","7":"439904","8":"500893","9":"","10":"0.8250790","11":"0.6749718","12":"1.0085685","13":"0.06056075","14":"0.4076925","15":"NA","16":"0.83 (0.67-1.01)","17":"199/252","18":"183/249"},{"1":"sex","2":"male","3":"621","4":"627","5":"453","6":"448","7":"1248682","8":"1374232","9":"","10":"0.9129140","11":"0.8011296","12":"1.0402961","13":"0.17156947","14":"0.4076925","15":"NA","16":"0.91 (0.80-1.04)","17":"453/621","18":"448/627"},{"1":"age_2","2":"over68","3":"476","4":"493","5":"427","6":"422","7":"693134","8":"808488","9":"","10":"0.8675195","11":"0.7582654","12":"0.9925154","13":"0.03851259","14":"0.9324230","15":"NA","16":"0.87 (0.76-0.99)","17":"427/476","18":"422/493"},{"1":"age_2","2":"under68","3":"397","4":"383","5":"225","6":"209","7":"995452","8":"1066637","9":"","10":"0.8762499","11":"0.7258537","12":"1.0578080","13":"0.16912708","14":"0.9324230","15":"NA","16":"0.88 (0.73-1.06)","17":"225/397","18":"209/383"},{"1":"wmi_2","2":"bad","3":"161","4":"146","5":"148","6":"133","7":"183764","8":"199044","9":"","10":"0.8740633","11":"0.6914933","12":"1.1048360","13":"0.26017473","14":"0.8483905","15":"NA","16":"0.87 (0.69-1.10)","17":"148/161","18":"133/146"},{"1":"wmi_2","2":"good","3":"712","4":"730","5":"504","6":"498","7":"1504822","8":"1676081","9":"","10":"0.8969453","11":"0.7924589","12":"1.0152083","13":"0.08523111","14":"0.8483905","15":"NA","16":"0.90 (0.79-1.02)","17":"504/712","18":"498/730"},{"1":"abd_2","2":"fat","3":"403","4":"435","5":"296","6":"319","7":"791326","8":"932423","9":"","10":"0.9301404","11":"0.7940398","12":"1.0895688","13":"0.36960724","14":"0.3287261","15":"95","16":"0.93 (0.79-1.09)","17":"296/403","18":"319/435"},{"1":"abd_2","2":"slim","3":"427","4":"389","5":"324","6":"274","7":"813727","8":"842340","9":"","10":"0.8312816","11":"0.7077444","12":"0.9763822","13":"0.02437690","14":"0.3287261","15":"95","16":"0.83 (0.71-0.98)","17":"324/427","18":"274/389"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -893,13 +919,13 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">xlim=</span><span class="fu">c</span>(<span class="fl">0.6</span>,<span class="fl">1.1</span>),</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">null_line_at =</span> <span class="dv">1</span>,</span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">arrows =</span> T,</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">arrow_labels=</span><span class="fu">c</span>(<span class="st">'Mortality ↓ '</span>, <span class="st">'Mortality ↑'</span>),</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">arrow_labels=</span><span class="fu">c</span>(<span class="st">'Mortality ↓ '</span>, <span class="st">'Mortality ↑'</span>)</span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>         )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p style="text-align:center;">
-<img src="forest_plot_1.png" width="75%">
-</p>
-<p>forester()는 Hazard ratio 그래프를 기준으로 왼쪽과 오른쪽에 숫자들이 들어갈 수 있습니다.</p>
+</p><p><img src="forest_plot1.png" width="75%"></p>
+<p></p>
+<p><code>forester()</code>는 Hazard ratio 그래프를 기준으로 왼쪽과 오른쪽에 숫자들이 들어갈 수 있습니다.</p>
 <ul>
 <li><code>left_side_data</code>: 그래프 왼쪽에 들어갈 수치들</li>
 <li><code>right_side_data</code>: 그래프 오른쪽에 들어갈 수치들</li>
@@ -942,8 +968,8 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p style="text-align:center;">
-<img src="forest_plot_2.png" width="75%">
-</p>
+</p><p><img src="forest_plot_2.png" width="75%"></p>
+<p></p>
 <p>forest plot을 그리기 위한 데이터 프레임을 직접 만드는 건 굉장히 번거로운 일이지만, 그만큼 훌륭한 그래프가 그려지기 때문에 나쁘지 않은 것 같습니다. ☺️</p>
 
 
@@ -991,6 +1017,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -1059,13 +1112,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1144,10 +1199,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/rchemistblog\.com");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1157,8 +1229,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1170,7 +1251,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1214,6 +1418,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1239,6 +1444,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1300,10 +1531,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <script src="https://giscus.app/client.js" data-repo="rchemist0123/giscus-blog" data-repo-id="R_kgDOJBwa8Q" data-category="General" data-category-id="DIC_kwDOJBwa8c4CUbVM" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
 </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left"><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-left">
+<p><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
@@ -1325,6 +1560,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 

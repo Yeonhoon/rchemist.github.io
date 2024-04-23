@@ -14,18 +14,20 @@ require(data.table)
 require(forester)
 require(gt)
 require(dplyr)
+require(ggplot2)
 data(traceR)
 ```
-## 인트로
-Subgroup analysis이란 치료군-대조군 연구에서 특정 약물의 사용에 따른 임상적 결과 (질병의 발생, 사망 등)를 비교하고자 할 때, 그 효과가 과연 하위집단(e.g. 성별, 수술 여부) 간에는 어떻게 나타나는지, 그리고 그 하위그룹 변수와 약물 사용 변수 간의 상호작용이 있는지 분석하는 방법입니다.
 
+## 인트로
+
+Subgroup analysis이란 치료군-대조군 연구에서 특정 약물의 사용에 따른 임상적 결과 (질병의 발생, 사망 등)를 비교하고자 할 때, 그 효과가 과연 하위집단(e.g. 성별, 수술 여부) 간에는 어떻게 나타나는지, 그리고 그 하위그룹 변수와 약물 사용 변수 간의 상호작용이 있는지 분석하는 방법입니다.
 
 이번 포스트에서는 R에서 하위집단 분석을 수행하는 방법에 대해 살펴보겠습니다.
 
 ## 준비
 
-Subgroup analysis를 수행하기 위해 필요한 패키지는 `Publish` 입니다.
-Subgroup anlysis 예제는 Publish 패키지에 내장된 `traceR` 데이터를 사용하도록 하겠습니다.
+Subgroup analysis를 수행하기 위해 필요한 패키지는 `Publish` 입니다. Subgroup anlysis 예제는 Publish 패키지에 내장된 `traceR` 데이터를 사용하도록 하겠습니다.
+
 ```{r}
 #| eval: false
 require(Publish)
@@ -36,17 +38,17 @@ data(traceR)
 
 traceR 의 변수는 다음과 같습니다.
 
-- `weight`: 체중(kg)
-- `height`: 키(m)
-- `abdominalCircumference`: 복부둘레(cm)
-- `seCreatinine`: 세럼 크레아티닌 (mmol/L)
-- `wallMotionIndex`: 좌심실 기능 (0: 최악, 2: 정상)
-- `observationTime`: 관찰기간
-- `age`: 나이(연)
-- `sex`: 성별(0: 여성, 1: 남성)
-- `smoking`: 흡연 (0: 핀 적 없음, 1: 과거, 2: 현재)
-- `dead`: 사망(0: 생존, 1: 사망)
-- `treatment`: 위약 또는 치료제(trandolapril: 고혈압 치료제) 
+-   `weight`: 체중(kg)
+-   `height`: 키(m)
+-   `abdominalCircumference`: 복부둘레(cm)
+-   `seCreatinine`: 세럼 크레아티닌 (mmol/L)
+-   `wallMotionIndex`: 좌심실 기능 (0: 최악, 2: 정상)
+-   `observationTime`: 관찰기간
+-   `age`: 나이(연)
+-   `sex`: 성별(0: 여성, 1: 남성)
+-   `smoking`: 흡연 (0: 핀 적 없음, 1: 과거, 2: 현재)
+-   `dead`: 사망(0: 생존, 1: 사망)
+-   `treatment`: 위약 또는 치료제(trandolapril: 고혈압 치료제)
 
 ## 회귀식 만들기
 
@@ -66,7 +68,7 @@ publish(fit)
 
 위의 결과에서 치료제가 사망률을 낮추는 효과가 있는 것으로 나타났죠. 이제 하위 집단을 대상으로, 과연 이 치료제가 하위 집단별로 상호작용을 하는지, 즉 하위집단별로 치료제의 효과가 다르게 나타나는지 확인해보겠습니다.
 
-Subgroup analysis를 위한 함수는 `sugroupAnalysis()`입니다. 이 함수는 로지스틱 회귀분석 또는 콕스 회귀분석처럼 결과가 0과 1로 나뉘는 변수를 대상으로 수행할 수 있습니다. 
+Subgroup analysis를 위한 함수는 `sugroupAnalysis()`입니다. 이 함수는 로지스틱 회귀분석 또는 콕스 회귀분석처럼 결과가 0과 1로 나뉘는 변수를 대상으로 수행할 수 있습니다.
 
 traceR의 데이터를 바탕으로 하위 집단들을 생성해주겠습니다. 일반적으로 하위집단은 두 개의 범주를 갖습니다.
 
@@ -83,9 +85,9 @@ traceR[,`:=`(
 
 traceR에 있는 데이터를 바탕으로 하위집단 세 가지를 추가했습니다.
 
-- `age_2`: 나이의 평균인 68세보다 낮은 경우와 그렇지 않은 경우
-- `wmi_2`: `wallMotionIndex`가 0.9 미만인 경우 bad, 그렇지 않으면 good
-- `abd_2`: 복부 둘레가 95cm 이상이면 fat, 그렇지 않으면 slim
+-   `age_2`: 나이의 평균인 68세보다 낮은 경우와 그렇지 않은 경우
+-   `wmi_2`: `wallMotionIndex`가 0.9 미만인 경우 bad, 그렇지 않으면 good
+-   `abd_2`: 복부 둘레가 95cm 이상이면 fat, 그렇지 않으면 slim
 
 여기에 `sex` 까지 더해 총 4개의 하위집단을 사용하겠습니다. 이 때 주의해야 할 것은 모든 하위집단은 반드시 **`factor`로 되어있어야** 한다는 것입니다.
 
@@ -148,7 +150,9 @@ sub_fit_tbl[,.(subgroups, level, case, control, hr_ci, pinteraction)] |>
 Subgroup analysis는 표 뿐만 아니라 그래프를 통해 결과를 보여줄 수 있습니다.
 
 <p style="text-align: center">
-  <img src="https://www.researchgate.net/profile/Shweta-Bansal-3/publication/305467160/figure/fig3/AS:613915083948038@1523380170283/Forest-Plot-of-Primary-Outcome-According-to-Subgroups-The-dashed-vertical-line.png" width= 80%;" />
+
+<img src="https://www.researchgate.net/profile/Shweta-Bansal-3/publication/305467160/figure/fig3/AS:613915083948038@1523380170283/Forest-Plot-of-Primary-Outcome-According-to-Subgroups-The-dashed-vertical-line.png" width="80%;&quot;"/>
+
 </p>
 
 위와 같은 그림을 **forest plot**이라고 부릅니다. forest plot은 메타 분석 (meta analysis)에서 많이 활용되는 그래프이지만, subgroup analysis에서도 자주 활용되는 그래프입니다. `Publish`에서 제공되는 함수를 통해 forest plot을 그릴 수 있습니다.
@@ -166,16 +170,16 @@ plotConfidence(x=sub_fit[,c("HazardRatio","Lower","Upper")],
 
 자 그런데 어디가 좀 부족해보입니다. `p-value`는 나오지도 않고 하니... 뭔가 아쉽죠.
 
-R에는 subgroup analysis 의 forest plot을 그리기 위한 패키지들이 몇 가지 존재합니다. 저는 그 중에서 `forester` 패키지를 사용하여 forest plot을 그려보도록 하겠습니다. 참고로 이 패키지는 CRAN에 없기 때문에, github를 통해 다운로드받아야 합니다. 
+R에는 subgroup analysis 의 forest plot을 그리기 위한 패키지들이 몇 가지 존재합니다. 저는 그 중에서 `forester` 패키지를 사용하여 forest plot을 그려보도록 하겠습니다. 참고로 이 패키지는 CRAN에 없기 때문에, github를 통해 다운로드받아야 합니다.
 
 ```{r}
 #| eval: false
 devtools::install_github("rdboyes/forester")
-require(forester)
+library(forester)
 ```
 
-
 이제 `forester()` 를 이용해 forest plot을 그려보겠습니다.
+
 ```{r}
 sub_fit_tbl
 forester(left_side_data = sub_fit_tbl[,c("subgroups","level", "case","control")],
@@ -187,25 +191,27 @@ forester(left_side_data = sub_fit_tbl[,c("subgroups","level", "case","control")]
          xlim=c(0.6,1.1),
          null_line_at = 1,
          arrows = T,
-         arrow_labels=c('Mortality ↓ ', 'Mortality ↑'),
+         arrow_labels=c('Mortality ↓ ', 'Mortality ↑')
          )
 ```
 
 <p style="text-align:center;">
-  <img src="forest_plot_1.png" width="75%">
+
+<img src="forest_plot1.png" width="75%"/>
+
 </p>
 
-forester()는 Hazard ratio 그래프를 기준으로 왼쪽과 오른쪽에 숫자들이 들어갈 수 있습니다.
+`forester()`는 Hazard ratio 그래프를 기준으로 왼쪽과 오른쪽에 숫자들이 들어갈 수 있습니다.
 
-- `left_side_data`: 그래프 왼쪽에 들어갈 수치들
-- `right_side_data`: 그래프 오른쪽에 들어갈 수치들
-- `estimate`: HR 또는 OR 
-- `ci_lower`: 하위 신뢰구간
-- `ci_upper`: 상위 신뢰구간
-- `xlim`: 그래프의 x축 범위
-- `null_line_at`: 신뢰구간 기준(1) 점선으로 표시
-- `arrows`: 그래프의 x축 아래에 텍스트 표시 여부 
-- `arrow_labels`: 그래프의 x축 아래에 표시할 텍스트
+-   `left_side_data`: 그래프 왼쪽에 들어갈 수치들
+-   `right_side_data`: 그래프 오른쪽에 들어갈 수치들
+-   `estimate`: HR 또는 OR
+-   `ci_lower`: 하위 신뢰구간
+-   `ci_upper`: 상위 신뢰구간
+-   `xlim`: 그래프의 x축 범위
+-   `null_line_at`: 신뢰구간 기준(1) 점선으로 표시
+-   `arrows`: 그래프의 x축 아래에 텍스트 표시 여부
+-   `arrow_labels`: 그래프의 x축 아래에 표시할 텍스트
 
 원래는 estimate, ci_lower, ci_upper를 입력하면 자동으로 그래프 오른쪽에 `HR (ci_lower to ci_upper)` 형태의 열이 생성됩니다, 만약, `right_side_data` 값을 입력하는 경우, 그 열이 오른쪽에 들어가게 됩니다. 물론 `right_side_data에` 값을 준다고 해도 반드시 `estimate`, `ci_lower`, `ci_upper` 값은 입력해야합니다.\
 또한 신뢰구간이 `xlim`에서 설정한 값을 넘어갈 경우 그래프는 화살표로 표시됩니다.
@@ -213,6 +219,7 @@ forester()는 Hazard ratio 그래프를 기준으로 왼쪽과 오른쪽에 숫�
 더 자세한 사항은 `?forester` 를 참고하시기 바랍니다.
 
 위의 그래프를 좀더 예쁘게 그리기 위해 하위집단 분석결과 데이터를 바탕으로 직접 데이터프레임을 만들어 그래프를 그리면 더 아름다운 `forest plot`이 그려보겠습니다.
+
 ```{r}
 df <- data.table(
   Subgroups = c("Sex", "  Female", "  Male", "Age", "  <68", "  ≥68", "WMI", "  Bad","  Good", "Abdominal","  Fat", "  Slim"),
@@ -241,7 +248,9 @@ forester(
 ```
 
 <p style="text-align:center;">
-  <img src="forest_plot_2.png" width="75%">
+
+<img src="forest_plot_2.png" width="75%"/>
+
 </p>
 
 forest plot을 그리기 위한 데이터 프레임을 직접 만드는 건 굉장히 번거로운 일이지만, 그만큼 훌륭한 그래프가 그려지기 때문에 나쁘지 않은 것 같습니다. ☺️

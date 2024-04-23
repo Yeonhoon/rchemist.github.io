@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -83,7 +83,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -92,8 +97,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QKQJ0CJQC4"></script>
@@ -106,12 +113,38 @@ gtag('js', new Date());
 gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 </script>
 <style>html{ scroll-behavior: smooth; }</style>
-
 <link href="../../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
 <script src="../../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 </head>
@@ -119,10 +152,10 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">Rchemist</span>
     </a>
@@ -134,25 +167,25 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html" rel="" target=""><i class="bi bi-house" role="img">
+    <a class="nav-link" href="../../../index.html"> <i class="bi bi-house" role="img">
 </i> 
- <span class="menu-text">Home</span></a>
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../about.html" rel="" target=""><i class="bi bi-file-person" role="img">
+    <a class="nav-link" href="../../../about.html"> <i class="bi bi-file-person" role="img">
 </i> 
- <span class="menu-text">About</span></a>
+<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../gallery/index.html" rel="" target=""><i class="bi bi-sliders2" role="img">
+    <a class="nav-link" href="../../../gallery/index.html"> <i class="bi bi-sliders2" role="img">
 </i> 
- <span class="menu-text">Gallery</span></a>
+<span class="menu-text">Gallery</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -225,6 +258,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 
 
 
+
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -258,7 +292,11 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(bmr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>결과를 봤을 때, 나무가 100개로 구성된 랜덤포레스트 모델의 성능이 가장 좋은 것으로 나타났습니다. 다만 이렇게 임의적으로 시행착오를 거쳐 하이퍼파라미터를 조정해주는 것은 많은 시간이 필요한 것은 물론, 종종 편향되고 재생산성이 떨어집니다.</p>
@@ -281,7 +319,6 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(lrn_svm<span class="sc">$</span>param_set)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
 {"columns":[{"label":["id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["class"],"name":[2],"type":["chr"],"align":["left"]},{"label":["lower"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["upper"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["levels"],"name":[5],"type":["list"],"align":["right"]},{"label":["nlevels"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["is_bounded"],"name":[7],"type":["lgl"],"align":["right"]},{"label":["special_vals"],"name":[8],"type":["list"],"align":["right"]},{"label":["default"],"name":[9],"type":["list"],"align":["right"]},{"label":["storage_type"],"name":[10],"type":["chr"],"align":["left"]},{"label":["tags"],"name":[11],"type":["list"],"align":["right"]}],"data":[{"1":"cachesize","2":"ParamDbl","3":"-Inf","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<int [1]>","10":"numeric","11":"<chr [1]>"},{"1":"class.weights","2":"ParamUty","3":"NA","4":"NA","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<NULL>","10":"list","11":"<chr [1]>"},{"1":"coef0","2":"ParamDbl","3":"-Inf","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<dbl [1]>","10":"numeric","11":"<chr [1]>"},{"1":"cost","2":"ParamDbl","3":"0","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<dbl [1]>","10":"numeric","11":"<chr [1]>"},{"1":"cross","2":"ParamInt","3":"0","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<int [1]>","10":"integer","11":"<chr [1]>"},{"1":"decision.values","2":"ParamLgl","3":"NA","4":"NA","5":"<lgl [2]>","6":"2","7":"TRUE","8":"<list [0]>","9":"<lgl [1]>","10":"logical","11":"<chr [1]>"},{"1":"degree","2":"ParamInt","3":"1","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<int [1]>","10":"integer","11":"<chr [1]>"},{"1":"epsilon","2":"ParamDbl","3":"0","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<dbl [1]>","10":"numeric","11":"<chr [1]>"},{"1":"fitted","2":"ParamLgl","3":"NA","4":"NA","5":"<lgl [2]>","6":"2","7":"TRUE","8":"<list [0]>","9":"<lgl [1]>","10":"logical","11":"<chr [1]>"},{"1":"gamma","2":"ParamDbl","3":"0","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<S3: NoDefault>","10":"numeric","11":"<chr [1]>"},{"1":"kernel","2":"ParamFct","3":"NA","4":"NA","5":"<chr [4]>","6":"4","7":"TRUE","8":"<list [0]>","9":"<chr [1]>","10":"character","11":"<chr [1]>"},{"1":"nu","2":"ParamDbl","3":"-Inf","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<dbl [1]>","10":"numeric","11":"<chr [1]>"},{"1":"scale","2":"ParamUty","3":"NA","4":"NA","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<lgl [1]>","10":"list","11":"<chr [1]>"},{"1":"shrinking","2":"ParamLgl","3":"NA","4":"NA","5":"<lgl [2]>","6":"2","7":"TRUE","8":"<list [0]>","9":"<lgl [1]>","10":"logical","11":"<chr [1]>"},{"1":"tolerance","2":"ParamDbl","3":"0","4":"Inf","5":"<NULL>","6":"Inf","7":"FALSE","8":"<list [0]>","9":"<dbl [1]>","10":"numeric","11":"<chr [1]>"},{"1":"type","2":"ParamFct","3":"NA","4":"NA","5":"<chr [2]>","6":"2","7":"TRUE","8":"<list [0]>","9":"<chr [1]>","10":"character","11":"<chr [1]>"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -483,7 +520,6 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tuner<span class="sc">$</span><span class="fu">optimize</span>(instance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
 {"columns":[{"label":["cost"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["gamma"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["learner_param_vals"],"name":[3],"type":["list"],"align":["right"]},{"label":["x_domain"],"name":[4],"type":["list"],"align":["right"]},{"label":["classif.acc"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"1e+05","2":"0.1","3":"<named list [4]>","4":"<named list [2]>","5":"0.773706"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -513,7 +549,6 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>instance<span class="sc">$</span>result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
 {"columns":[{"label":["cost"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["gamma"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["learner_param_vals"],"name":[3],"type":["list"],"align":["right"]},{"label":["x_domain"],"name":[4],"type":["list"],"align":["right"]},{"label":["classif.acc"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"11.51293","2":"-5.756463","3":"<named list [4]>","4":"<named list [2]>","5":"0.831815"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -528,7 +563,6 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(instance<span class="sc">$</span>archive)[,.(cost, gamma, classif.acc)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
 {"columns":[{"label":["cost"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["gamma"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["classif.acc"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"-11.512925","2":"-11.512925","3":"0.5337474"},{"1":"-5.756463","2":"-11.512925","3":"0.5337474"},{"1":"-5.756463","2":"-5.756463","3":"0.5337474"},{"1":"-5.756463","2":"0.000000","3":"0.5337474"},{"1":"-5.756463","2":"11.512925","3":"0.5337474"},{"1":"0.000000","2":"5.756463","3":"0.5337474"},{"1":"5.756463","2":"11.512925","3":"0.5337474"},{"1":"11.512925","2":"-11.512925","3":"0.7550725"},{"1":"11.512925","2":"5.756463","3":"0.5337474"},{"1":"-11.512925","2":"-5.756463","3":"0.5337474"},{"1":"-11.512925","2":"0.000000","3":"0.5337474"},{"1":"0.000000","2":"-11.512925","3":"0.5337474"},{"1":"0.000000","2":"0.000000","3":"0.5337474"},{"1":"5.756463","2":"0.000000","3":"0.5337474"},{"1":"5.756463","2":"5.756463","3":"0.5337474"},{"1":"11.512925","2":"-5.756463","3":"0.8318150"},{"1":"11.512925","2":"11.512925","3":"0.5337474"},{"1":"-11.512925","2":"5.756463","3":"0.5337474"},{"1":"-11.512925","2":"11.512925","3":"0.5337474"},{"1":"-5.756463","2":"5.756463","3":"0.5337474"},{"1":"0.000000","2":"-5.756463","3":"0.7406487"},{"1":"0.000000","2":"11.512925","3":"0.5337474"},{"1":"5.756463","2":"-11.512925","3":"0.7358868"},{"1":"5.756463","2":"-5.756463","3":"0.8318150"},{"1":"11.512925","2":"0.000000","3":"0.5337474"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -541,7 +575,6 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.table</span>(instance<span class="sc">$</span>archive)[,</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  .(timestamp, runtime_learners, errors, warnings)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
 {"columns":[{"label":["timestamp"],"name":[1],"type":["dttm"],"align":["right"]},{"label":["runtime_learners"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["errors"],"name":[3],"type":["int"],"align":["right"]},{"label":["warnings"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"2023-06-27 16:12:01.749255","2":"0.046","3":"0","4":"0"},{"1":"2023-06-27 16:12:01.749255","2":"0.025","3":"0","4":"0"},{"1":"2023-06-27 16:12:01.749255","2":"0.031","3":"0","4":"0"},{"1":"2023-06-27 16:12:01.749255","2":"0.028","3":"0","4":"0"},{"1":"2023-06-27 16:12:01.749255","2":"0.026","3":"0","4":"0"},{"1":"2023-06-27 16:12:01.749255","2":"0.027","3":"0","4":"0"},{"1":"2023-06-27 16:12:01.749255","2":"0.025","3":"0","4":"0"},{"1":"2023-06-27 16:12:01.749255","2":"0.027","3":"0","4":"0"},{"1":"2023-06-27 16:12:01.749255","2":"0.029","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.187478","2":"0.037","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.187478","2":"0.028","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.187478","2":"0.027","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.187478","2":"0.024","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.187478","2":"0.032","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.187478","2":"0.030","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.187478","2":"0.021","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.187478","2":"0.028","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.735246","2":"0.034","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.735246","2":"0.024","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.735246","2":"0.030","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.735246","2":"0.029","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.735246","2":"0.030","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.735246","2":"0.025","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.735246","2":"0.154","3":"0","4":"0"},{"1":"2023-06-27 16:12:02.735246","2":"0.025","3":"0","4":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -553,7 +586,11 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(instance, <span class="at">type=</span><span class="st">"surface"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>cost와 gamma 의 조합에 따른 성능의 정도가 색상으로 나타났습니다. 정확도가 높을수록 히트맵의 색상이 연하다는 것을 확인할 수 있습니다.</p>
@@ -665,7 +702,7 @@ Trafo is set.
 <h1>중첩 리샘플링 Nested resampling</h1>
 <p>하이퍼파라미터 최적화는 모델 성능 측정 시 발생할 수 있는 편향을 예방하기 위해 추가적인 리샘플링이 필요합니다. 만약 동일한 데이터가 최적의 하이퍼파라미터를 구성하고 모델링 결과를 평가하는 데 사용된다면 매우 심하게 편향이 있을 수 있습니다.</p>
 <p>중첩 리샘플링은 추가적인 리샘플링을 수행함으로써 튜닝된 모델의 성능을 평가하는 과정에서 모델 최적화를 분리시켜 놓습니다. 즉 일반적인 방법의 리샘플링 방법으로 모델의 성능을 평가하는 반면, 튜닝의 경우 리샘플링된 데이터를 다시 리샘플링하여 성능을 평가하는 것입니다.</p>
-<p><img src="https://mlr3book.mlr-org.com/chapters/chapter4/Figures/mlr3book_figures-11.svg" class="img-fluid" data-fig-align="center" width="800" alt="중첩 리샘플링 설명도. 초록 상자는 외부 리샘플링을 위한 3-fold 교차검증(CV), 파란색 박스는 하이퍼파라미터 튜닝을 위한 4-fold 교차 검증"> 위의 그림은 중첩 리샘플링의 예시를 잘 보여주고 있습니다.</p>
+<p><img src="https://mlr3book.mlr-org.com/chapters/chapter4/Figures/mlr3book_figures-11.svg" class="img-fluid quarto-figure quarto-figure-center" width="800" alt="중첩 리샘플링 설명도. 초록 상자는 외부 리샘플링을 위한 3-fold 교차검증(CV), 파란색 박스는 하이퍼파라미터 튜닝을 위한 4-fold 교차 검증"> 위의 그림은 중첩 리샘플링의 예시를 잘 보여주고 있습니다.</p>
 <ol type="1">
 <li>외부 리샘플링: 각기 다른 훈련, 검증 데이터셋을 만들기 위한 3-fold 리샘플링</li>
 <li>내부 리샘플링: 외부 리샘플링 안에서 하이퍼파라미터 튜닝을 위한 4-fold 리샘플링</li>
@@ -716,7 +753,6 @@ Trafo is set.
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_inner_tuning_results</span>(rr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
 {"columns":[{"label":["iteration"],"name":[1],"type":["int"],"align":["right"]},{"label":["cost"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["gamma"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["classif.ce"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["learner_param_vals"],"name":[5],"type":["list"],"align":["right"]},{"label":["x_domain"],"name":[6],"type":["list"],"align":["right"]},{"label":["task_id"],"name":[7],"type":["chr"],"align":["left"]},{"label":["learner_id"],"name":[8],"type":["chr"],"align":["left"]},{"label":["resampling_id"],"name":[9],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"0.000000","3":"-5.756463","4":"0.2384454","5":"<named list [4]>","6":"<named list [2]>","7":"sonar","8":"classif.svm.tuned","9":"cv"},{"1":"2","2":"11.512925","3":"-5.756463","4":"0.2008403","5":"<named list [4]>","6":"<named list [2]>","7":"sonar","8":"classif.svm.tuned","9":"cv"},{"1":"3","2":"5.756463","3":"-5.756463","4":"0.2443277","5":"<named list [4]>","6":"<named list [2]>","7":"sonar","8":"classif.svm.tuned","9":"cv"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -727,7 +763,6 @@ Trafo is set.
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_inner_tuning_archives</span>(rr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
 {"columns":[{"label":["iteration"],"name":[1],"type":["int"],"align":["right"]},{"label":["cost"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["gamma"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["classif.ce"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["x_domain_cost"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["x_domain_gamma"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["runtime_learners"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["timestamp"],"name":[8],"type":["dttm"],"align":["right"]},{"label":["batch_nr"],"name":[9],"type":["int"],"align":["right"]},{"label":["warnings"],"name":[10],"type":["int"],"align":["right"]},{"label":["errors"],"name":[11],"type":["int"],"align":["right"]},{"label":["resample_result"],"name":[12],"type":["list"],"align":["right"]},{"label":["task_id"],"name":[13],"type":["chr"],"align":["left"]},{"label":["learner_id"],"name":[14],"type":["chr"],"align":["left"]},{"label":["resampling_id"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"-11.512925","3":"-5.756463","4":"0.4493697","5":"1.000000e-05","6":"3.162278e-03","7":"0.025","8":"2023-06-27 16:12:05.104240","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-5.756463","3":"-11.512925","4":"0.4493697","5":"3.162278e-03","6":"1.000000e-05","7":"0.032","8":"2023-06-27 16:12:05.104240","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-5.756463","3":"-5.756463","4":"0.4493697","5":"3.162278e-03","6":"3.162278e-03","7":"0.030","8":"2023-06-27 16:12:05.104240","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-5.756463","3":"0.000000","4":"0.4493697","5":"3.162278e-03","6":"1.000000e+00","7":"0.027","8":"2023-06-27 16:12:05.104240","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"0.000000","3":"-11.512925","4":"0.4493697","5":"1.000000e+00","6":"1.000000e-05","7":"0.030","8":"2023-06-27 16:12:05.104240","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"0.000000","3":"11.512925","4":"0.4493697","5":"1.000000e+00","6":"1.000000e+05","7":"0.029","8":"2023-06-27 16:12:05.104240","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"5.756463","3":"-11.512925","4":"0.2752101","5":"3.162278e+02","6":"1.000000e-05","7":"0.023","8":"2023-06-27 16:12:05.104240","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"5.756463","3":"11.512925","4":"0.4493697","5":"3.162278e+02","6":"1.000000e+05","7":"0.062","8":"2023-06-27 16:12:05.104240","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"11.512925","3":"-5.756463","4":"0.2466387","5":"1.000000e+05","6":"3.162278e-03","7":"0.023","8":"2023-06-27 16:12:05.104240","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-11.512925","3":"11.512925","4":"0.4493697","5":"1.000000e-05","6":"1.000000e+05","7":"0.026","8":"2023-06-27 16:12:05.575669","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-5.756463","3":"11.512925","4":"0.4493697","5":"3.162278e-03","6":"1.000000e+05","7":"0.030","8":"2023-06-27 16:12:05.575669","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"0.000000","3":"-5.756463","4":"0.2384454","5":"1.000000e+00","6":"3.162278e-03","7":"0.029","8":"2023-06-27 16:12:05.575669","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"0.000000","3":"5.756463","4":"0.4493697","5":"1.000000e+00","6":"3.162278e+02","7":"0.028","8":"2023-06-27 16:12:05.575669","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"5.756463","3":"-5.756463","4":"0.2466387","5":"3.162278e+02","6":"3.162278e-03","7":"0.029","8":"2023-06-27 16:12:05.575669","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"5.756463","3":"0.000000","4":"0.4493697","5":"3.162278e+02","6":"1.000000e+00","7":"0.029","8":"2023-06-27 16:12:05.575669","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"11.512925","3":"-11.512925","4":"0.2901261","5":"1.000000e+05","6":"1.000000e-05","7":"0.030","8":"2023-06-27 16:12:05.575669","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"11.512925","3":"11.512925","4":"0.4493697","5":"1.000000e+05","6":"1.000000e+05","7":"0.025","8":"2023-06-27 16:12:05.575669","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-11.512925","3":"-11.512925","4":"0.4493697","5":"1.000000e-05","6":"1.000000e-05","7":"0.026","8":"2023-06-27 16:12:06.063838","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-11.512925","3":"0.000000","4":"0.4493697","5":"1.000000e-05","6":"1.000000e+00","7":"0.032","8":"2023-06-27 16:12:06.063838","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-11.512925","3":"5.756463","4":"0.4493697","5":"1.000000e-05","6":"3.162278e+02","7":"0.030","8":"2023-06-27 16:12:06.063838","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"-5.756463","3":"5.756463","4":"0.4493697","5":"3.162278e-03","6":"3.162278e+02","7":"0.027","8":"2023-06-27 16:12:06.063838","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"0.000000","3":"0.000000","4":"0.4493697","5":"1.000000e+00","6":"1.000000e+00","7":"0.034","8":"2023-06-27 16:12:06.063838","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"5.756463","3":"5.756463","4":"0.4493697","5":"3.162278e+02","6":"3.162278e+02","7":"0.027","8":"2023-06-27 16:12:06.063838","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"11.512925","3":"0.000000","4":"0.4493697","5":"1.000000e+05","6":"1.000000e+00","7":"0.033","8":"2023-06-27 16:12:06.063838","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"1","2":"11.512925","3":"5.756463","4":"0.4493697","5":"1.000000e+05","6":"3.162278e+02","7":"0.028","8":"2023-06-27 16:12:06.063838","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-11.512925","3":"0.000000","4":"0.5546218","5":"1.000000e-05","6":"1.000000e+00","7":"0.028","8":"2023-06-27 16:12:06.684684","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-11.512925","3":"5.756463","4":"0.5546218","5":"1.000000e-05","6":"3.162278e+02","7":"0.031","8":"2023-06-27 16:12:06.684684","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-5.756463","3":"-11.512925","4":"0.5546218","5":"3.162278e-03","6":"1.000000e-05","7":"0.027","8":"2023-06-27 16:12:06.684684","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-5.756463","3":"-5.756463","4":"0.5546218","5":"3.162278e-03","6":"3.162278e-03","7":"0.031","8":"2023-06-27 16:12:06.684684","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"0.000000","3":"-11.512925","4":"0.5546218","5":"1.000000e+00","6":"1.000000e-05","7":"0.025","8":"2023-06-27 16:12:06.684684","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"5.756463","3":"-11.512925","4":"0.2300420","5":"3.162278e+02","6":"1.000000e-05","7":"0.028","8":"2023-06-27 16:12:06.684684","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"5.756463","3":"0.000000","4":"0.5546218","5":"3.162278e+02","6":"1.000000e+00","7":"0.033","8":"2023-06-27 16:12:06.684684","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"5.756463","3":"5.756463","4":"0.5546218","5":"3.162278e+02","6":"3.162278e+02","7":"0.027","8":"2023-06-27 16:12:06.684684","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"11.512925","3":"-5.756463","4":"0.2008403","5":"1.000000e+05","6":"3.162278e-03","7":"0.030","8":"2023-06-27 16:12:06.684684","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-11.512925","3":"-5.756463","4":"0.5546218","5":"1.000000e-05","6":"3.162278e-03","7":"0.029","8":"2023-06-27 16:12:07.205681","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-11.512925","3":"11.512925","4":"0.5546218","5":"1.000000e-05","6":"1.000000e+05","7":"0.033","8":"2023-06-27 16:12:07.205681","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-5.756463","3":"0.000000","4":"0.5546218","5":"3.162278e-03","6":"1.000000e+00","7":"0.028","8":"2023-06-27 16:12:07.205681","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-5.756463","3":"5.756463","4":"0.5546218","5":"3.162278e-03","6":"3.162278e+02","7":"0.034","8":"2023-06-27 16:12:07.205681","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"0.000000","3":"0.000000","4":"0.5546218","5":"1.000000e+00","6":"1.000000e+00","7":"0.031","8":"2023-06-27 16:12:07.205681","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"0.000000","3":"5.756463","4":"0.5546218","5":"1.000000e+00","6":"3.162278e+02","7":"0.027","8":"2023-06-27 16:12:07.205681","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"11.512925","3":"-11.512925","4":"0.2441176","5":"1.000000e+05","6":"1.000000e-05","7":"0.043","8":"2023-06-27 16:12:07.205681","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"11.512925","3":"5.756463","4":"0.5546218","5":"1.000000e+05","6":"3.162278e+02","7":"0.026","8":"2023-06-27 16:12:07.205681","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-11.512925","3":"-11.512925","4":"0.5546218","5":"1.000000e-05","6":"1.000000e-05","7":"0.034","8":"2023-06-27 16:12:07.835025","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"-5.756463","3":"11.512925","4":"0.5546218","5":"3.162278e-03","6":"1.000000e+05","7":"0.030","8":"2023-06-27 16:12:07.835025","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"0.000000","3":"-5.756463","4":"0.2300420","5":"1.000000e+00","6":"3.162278e-03","7":"0.047","8":"2023-06-27 16:12:07.835025","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"0.000000","3":"11.512925","4":"0.5546218","5":"1.000000e+00","6":"1.000000e+05","7":"0.040","8":"2023-06-27 16:12:07.835025","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"5.756463","3":"-5.756463","4":"0.2008403","5":"3.162278e+02","6":"3.162278e-03","7":"0.034","8":"2023-06-27 16:12:07.835025","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"5.756463","3":"11.512925","4":"0.5546218","5":"3.162278e+02","6":"1.000000e+05","7":"0.049","8":"2023-06-27 16:12:07.835025","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"11.512925","3":"0.000000","4":"0.5546218","5":"1.000000e+05","6":"1.000000e+00","7":"0.036","8":"2023-06-27 16:12:07.835025","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"2","2":"11.512925","3":"11.512925","4":"0.5546218","5":"1.000000e+05","6":"1.000000e+05","7":"0.029","8":"2023-06-27 16:12:07.835025","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-11.512925","3":"-5.756463","4":"0.5607143","5":"1.000000e-05","6":"3.162278e-03","7":"0.035","8":"2023-06-27 16:12:08.555843","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-11.512925","3":"0.000000","4":"0.5607143","5":"1.000000e-05","6":"1.000000e+00","7":"0.046","8":"2023-06-27 16:12:08.555843","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-11.512925","3":"5.756463","4":"0.5607143","5":"1.000000e-05","6":"3.162278e+02","7":"0.031","8":"2023-06-27 16:12:08.555843","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-11.512925","3":"11.512925","4":"0.5607143","5":"1.000000e-05","6":"1.000000e+05","7":"0.032","8":"2023-06-27 16:12:08.555843","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-5.756463","3":"-5.756463","4":"0.5607143","5":"3.162278e-03","6":"3.162278e-03","7":"0.041","8":"2023-06-27 16:12:08.555843","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-5.756463","3":"11.512925","4":"0.5607143","5":"3.162278e-03","6":"1.000000e+05","7":"0.040","8":"2023-06-27 16:12:08.555843","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"0.000000","3":"5.756463","4":"0.5607143","5":"1.000000e+00","6":"3.162278e+02","7":"0.035","8":"2023-06-27 16:12:08.555843","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"5.756463","3":"11.512925","4":"0.5607143","5":"3.162278e+02","6":"1.000000e+05","7":"0.041","8":"2023-06-27 16:12:08.555843","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"11.512925","3":"0.000000","4":"0.5607143","5":"1.000000e+05","6":"1.000000e+00","7":"0.035","8":"2023-06-27 16:12:08.555843","9":"1","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-5.756463","3":"-11.512925","4":"0.5607143","5":"3.162278e-03","6":"1.000000e-05","7":"0.047","8":"2023-06-27 16:12:09.350941","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-5.756463","3":"0.000000","4":"0.5607143","5":"3.162278e-03","6":"1.000000e+00","7":"0.031","8":"2023-06-27 16:12:09.350941","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"0.000000","3":"-11.512925","4":"0.5607143","5":"1.000000e+00","6":"1.000000e-05","7":"0.039","8":"2023-06-27 16:12:09.350941","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"0.000000","3":"-5.756463","4":"0.3600840","5":"1.000000e+00","6":"3.162278e-03","7":"0.037","8":"2023-06-27 16:12:09.350941","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"0.000000","3":"11.512925","4":"0.5607143","5":"1.000000e+00","6":"1.000000e+05","7":"0.034","8":"2023-06-27 16:12:09.350941","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"5.756463","3":"-11.512925","4":"0.3598739","5":"3.162278e+02","6":"1.000000e-05","7":"0.040","8":"2023-06-27 16:12:09.350941","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"5.756463","3":"-5.756463","4":"0.2443277","5":"3.162278e+02","6":"3.162278e-03","7":"0.049","8":"2023-06-27 16:12:09.350941","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"11.512925","3":"-11.512925","4":"0.2953782","5":"1.000000e+05","6":"1.000000e-05","7":"0.213","8":"2023-06-27 16:12:09.350941","9":"2","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-11.512925","3":"-11.512925","4":"0.5607143","5":"1.000000e-05","6":"1.000000e-05","7":"0.029","8":"2023-06-27 16:12:09.921782","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"-5.756463","3":"5.756463","4":"0.5607143","5":"3.162278e-03","6":"3.162278e+02","7":"0.038","8":"2023-06-27 16:12:09.921782","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"0.000000","3":"0.000000","4":"0.5607143","5":"1.000000e+00","6":"1.000000e+00","7":"0.030","8":"2023-06-27 16:12:09.921782","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"5.756463","3":"0.000000","4":"0.5607143","5":"3.162278e+02","6":"1.000000e+00","7":"0.031","8":"2023-06-27 16:12:09.921782","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"5.756463","3":"5.756463","4":"0.5607143","5":"3.162278e+02","6":"3.162278e+02","7":"0.036","8":"2023-06-27 16:12:09.921782","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"11.512925","3":"-5.756463","4":"0.2443277","5":"1.000000e+05","6":"3.162278e-03","7":"0.035","8":"2023-06-27 16:12:09.921782","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"11.512925","3":"5.756463","4":"0.5607143","5":"1.000000e+05","6":"3.162278e+02","7":"0.049","8":"2023-06-27 16:12:09.921782","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"},{"1":"3","2":"11.512925","3":"11.512925","4":"0.5607143","5":"1.000000e+05","6":"1.000000e+05","7":"0.030","8":"2023-06-27 16:12:09.921782","9":"3","10":"0","11":"0","12":"<S3: ResampleResult>","13":"sonar","14":"classif.svm.tuned","15":"cv"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -859,6 +894,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
   }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
   const toggleColorMode = (alternate) => {
     // Switch the stylesheets
     const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
@@ -925,13 +987,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1010,10 +1074,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/rchemistblog\.com");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1023,8 +1104,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1036,7 +1126,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1080,6 +1293,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1105,6 +1319,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1166,10 +1406,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <script src="https://giscus.app/client.js" data-repo="rchemist0123/giscus-blog" data-repo-id="R_kgDOJBwa8Q" data-category="General" data-category-id="DIC_kwDOJBwa8c4CUbVM" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
 </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left"><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-left">
+<p><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
@@ -1191,6 +1435,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 

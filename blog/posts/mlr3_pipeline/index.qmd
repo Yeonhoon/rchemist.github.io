@@ -1,8 +1,8 @@
 ---
 title: "mlr3 파이프라인"
-description: "그래프를 통한 데이터 핸들링"
+description: "그래프를 활용해 데이터 전처리 수행방법 익히기"
 author: "JYH"
-date: "2023-04-28"
+date: "2023-12-15"
 categories: [R, mlr3, machine learning]
 image: "https://mlr3proba.mlr-org.com/logo.svg"
 ---
@@ -11,76 +11,139 @@ image: "https://mlr3proba.mlr-org.com/logo.svg"
 
 ## 0. 인트로
 
-전처리를 수행할 수도 있고, 태스크 일부분 선택, 러너 생성 후 예측, 앙상블 등
+전처리를 수행할 수도 있고, 태스크 일부분 선택, 러너 생성 후 예측, 앙상블 등의 작업을 수행할 수 있습니다.
 
-tidymodels의 recipe 와 비슷한 패키지
+## 1. PipeOp: Pipeline 연산자
+`mlr3pipelines`의 기본 클래스는 `PipeOp`로, pipeline operator의 줄임말입니다. `Task`를 훈련하는 것과 같이 변화를 주는 작업을 수행하고 결과를 출력합니다.
 
-## 1.Block 만들기
+`PipeOp`는 러너와 같이 `$train()`, `$predict()` 메서드를 포함하고 있습니다.  또한 `Learner`처럼 파라미터 뿐만 아니라 하이퍼파라미터를 갖고 있어, 사용자들이 `PipeOp`을 만들 때, `$param_set`을 통해 확인 후 파라미터들을 설정할 수 있습니다.
 
 ```{r}
-library(mlr3pipelines)
-library(mlr3learners)
 library(data.table)
-as.data.table(mlr_pipeops)
+library(mlr3verse)
+library(mlr3pipelines)
+library(mlr3pipelines)
+as.data.table(mlr_pipeops)[1:6,1:2]
+
 ```
 
+PipeOp 역시 다른 클래스와 마찬가지로 `po()`라는 sugar function을 통해 만들 수 있습니다.
+
 ```{r}
-pca = mlr_pipeops$get("pca")
-pca = po("pca") # sugar function
-pca
+po_onehot = po('encode', method="one-hot")
+po_onehot
 ```
 
+`PipeOp` 객체를 살펴보면, 아직 훈련되지 않은 것을 알 수 있습니다 (not trained).
+
+또한 Input channels와 Output channels 값은 해당 `PipeOp`의 입력, 출력 유형을 알려줍니다. 예를 들어, 위의 `PipeOp`는 Task를 입력받아 Task 형태로 출력하게 됩니다.
+
+이 부분이 `Learner` 클래스와의 차이점입니다. 러너는 학습 후 아무런 결과를 출력하지 않기 때문입니다.
+
 ```{r}
-learner = po("learner", lrn("classif.rpart"))
+task = tsk("penguins")
+po_onehot_in = list(task$clone()$select(c("island","sex"))$filter(1:10))
+po_onehot_out = po_onehot$train(po_onehot_in)
+po_onehot_out
 ```
 
-## 2. `%>>%`: pipe operator
-
-%\>\>% 파이프 연산자를 이용해 파이프옵스(PipeOps) 객체 연결
+출력 객체에서 메서드를 통해 `PipeOp` 작업이 수행된 데이터를 확인할 수 있습니다.
+```{r}
+po_onehot_out$output$head()
+```
+학습이 됐다면, `$predict()` 메서드를 통해 테스트 데이터를 넣어 결과를 확인할 수 있습니다.
 
 ```{r}
-gr = po("scale") %>>% po("pca")
-
-gr$plot()
+task_onepenguin = task$clone()$select(c('island','sex'))$filter(50)
+poin = list(task_onepenguin)
+poout = po_onehot$predict(poin)
+poout$output$data()
 ```
 
-## 3. 노드, 엣지, 그래프
 
-POs는 그래프로 결합될 수 있습니다.
+## 2. 그래프: PipeOps의 네트워크
+
+`PipeOp`는 머신러닝 파이프라인에서 개별 단위의 계산들을 대표합니다. 이러한 파이프라인은 `Graph` (`PipeOp`들이 연결되어 데이터의 흐름을 나타내는 객체에 의해 정의될 수 있습니다.
+
+`Graph`를 만드는 가장 편리한 방법은 `%>>%` (double-arrow) 연산자를 이용해 `PipeOp`들을 연결하는 것입니다. `PipeOp`의 연결은 아래와 같이 수행됩니다.
+
 
 ```{r}
+po_mutate = po("mutate",
+               mutation = list(bill_ratio = ~bill_length / bill_depth))
+po_scale = po("scale")
 
-mutate = po("mutate")
-filter = po("filter",
-            filter = mlr3filters::flt("variance"),
-            param_vals = list(filter.frac = .5)
-        )
+graph = po_mutate %>>% po_scale
+graph
+```
+출력결과는 그래프의 레이아웃에 대한 정보를 보여줍니다. 
 
+::: .callout-note
+
+## Double arrow 연산자 단축키 설정
+
+arrow 연산자 (`%>%` 또는 `|>`)의 단축키는 `ctrl+shift+m`이지만, double-arrow 연산자는 단축키가 없으므로, snippet 설정을 통해 단축키를 만들어줄 수 있습니다!
+
+:::
+
+그래프 객체는 `$plot()` 메서드를 통해 그래프를 시각화할 수 있습니다.
+
+```{r}
+graph$plot(horizontal = TRUE)
+```
+`$pipeops` 필드를 통해서 그래프에 포함된 각각의 Pipeop 객체의 정보를 확인할 수 있고,
+```{r}
+graph$pipeops
+```
+
+그래프가 연결된 edge에 대해 접근할 수도 있습니다.
+```{r}
+graph$edges
+```
+
+`%>>%` 대신` $add_pipe()`와 `$add_edge()` 메서드를 이용해 그래프를 만들어줄 수 있습니다.
+```{r}
 graph = Graph$new()$
-          add_pipeop(mutate)$
-          add_pipeop(filter)$
-          add_edge("mutate","variance")
-graph$plot()
+  add_pipeop(po_mutate)$
+  add_pipeop(po_scale)$
+  add_edge("mutate", "scale")
 ```
 
-## 4. 모델링
 
-그래프의 주 목적은 전처리와 모델링을 결합한 파이프라인을 만들어 이 과정을 한꺼번에 진행하는 것이라 할 수 있습니다.
+Graph를 만든 뒤에는, Learner처럼 `$train()`, `$predict()`를 이용해 PipeOp들을 적용한 값을 출력할 수 있습니다.
 
 ```{r}
-mutate = po("mutate")
-filter = po("filter",
-            filter = mlr3filters::flt("variance"),
-            param_vals = list(filter.frac = .5))
-leaner = po("learner", lrn("classif.rpart"))
-graph = mutate %>>%
-        filter %>>%
-        learner
-
-task = tsk("iris")
-graph$train(task)
+result = graph$train(task$clone()$filter(1:100))
+result$scale.output$data()[1:3]
 ```
+```{r}
+result = graph$predict(task$clone()$filter(101))
+result$scale.output$head()
+```
+
+
+## 3. 순서가 있는 Learner 파이프라인
+
+`mlr3pipelines`은 주로 머신러닝에서 결측치(`NA`) 대체, 범주 인코딩과 같은 데이터 전처리를 할 때 사용될 것입니다.
 
 ```{r}
-graph$predict(task)
+lrn_logreg = lrn("classif.log_reg")
+graph = po("imputesample") %>>% lrn_logreg
+graph$plot(horizontal = TRUE)
 ```
+graph를 learner로 활용하기 위해서 `as_learner()` 함수를 이용합니다.
+```{r}
+glrn_sample = as_learner(graph)
+glrn_mode = as_learner(po("imputemode") %>>% lrn_logreg)
+
+design = benchmark_grid(
+  tasks = tsk("pima"),
+  learners = list(glrn_sample, glrn_mode),
+  resamplings = rsmp("cv", folds=5)
+)
+
+bmr = benchmark(design)
+aggr = bmr$aggregate()[,.(learner_id, classif.ce)]
+aggr
+```
+성능 확인 결과, sampling imputation을 통한 결과가 약간 더 좋게 나오는 것을 알 수 있습니다.

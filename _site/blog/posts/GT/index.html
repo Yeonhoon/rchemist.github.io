@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -84,7 +84,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -93,8 +98,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-QKQJ0CJQC4"></script>
@@ -107,7 +114,6 @@ gtag('js', new Date());
 gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 </script>
 <style>html{ scroll-behavior: smooth; }</style>
-
 <link href="../../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
 <script src="../../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
@@ -118,10 +124,10 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">Rchemist</span>
     </a>
@@ -133,25 +139,25 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html" rel="" target=""><i class="bi bi-house" role="img">
+    <a class="nav-link" href="../../../index.html"> <i class="bi bi-house" role="img">
 </i> 
- <span class="menu-text">Home</span></a>
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../about.html" rel="" target=""><i class="bi bi-file-person" role="img">
+    <a class="nav-link" href="../../../about.html"> <i class="bi bi-file-person" role="img">
 </i> 
- <span class="menu-text">About</span></a>
+<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../gallery/index.html" rel="" target=""><i class="bi bi-sliders2" role="img">
+    <a class="nav-link" href="../../../gallery/index.html"> <i class="bi bi-sliders2" role="img">
 </i> 
- <span class="menu-text">Gallery</span></a>
+<span class="menu-text">Gallery</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -219,11 +225,12 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 
 
 
+
 <section id="패키지-소개" class="level2">
 <h2 class="anchored" data-anchor-id="패키지-소개">패키지 소개</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://gt.rstudio.com/reference/figures/logo.svg" width="350" height="350" class="figure-img"></p>
+<p><img src="https://gt.rstudio.com/reference/figures/logo.svg" class="quarto-figure quarto-figure-center figure-img" width="350" height="350"></p>
 </figure>
 </div>
 <ul>
@@ -236,7 +243,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <p><code>gt</code>에서의 테이블 구조는 다음과 같습니다.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://gt.rstudio.com/reference/figures/gt_parts_of_a_table.svg" class="img-fluid figure-img"></p>
+<p><img src="https://gt.rstudio.com/reference/figures/gt_parts_of_a_table.svg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 <p><code>gt</code> 로 테이블을 만들기 위해 <code>gt</code> 패키지 내부에 있는 <code>gtcars</code> 데이터를 활용하도록 하겠습니다.</p>
@@ -264,7 +271,6 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">source_note =</span> <span class="fu">md</span>(<span class="st">"URL: https://gt.rstudio.com/articles/intro-creating-gt-tables.html"</span>)</span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
 <div id="rbbjufmbes" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rbbjufmbes table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -829,106 +835,126 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">rows =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">4</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span>  <span class="fu">as_raw_html</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
+<div>
 <div id="huqzcdwbld" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
   
-  <table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false" style="-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 16px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3;" bgcolor="#FFFFFF">
-  <thead style="border-style: none;">
-    
-    <tr class="gt_col_headings" style="border-style: none; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3;">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="No" style="border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; text-align: left;" bgcolor="#FFFFFF" valign="bottom" align="left">No</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="ctry_origin" style="border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; text-align: left;" bgcolor="#FFFFFF" valign="bottom" align="left">ctry_origin</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="mfr" style="border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; text-align: left;" bgcolor="#FFFFFF" valign="bottom" align="left">mfr</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="model" style="border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; text-align: left;" bgcolor="#FFFFFF" valign="bottom" align="left">model</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="year" style="border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" bgcolor="#FFFFFF" valign="bottom" align="right">year</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="trim" style="border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; text-align: left;" bgcolor="#FFFFFF" valign="bottom" align="left">trim</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="msrp" style="border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" bgcolor="#FFFFFF" valign="bottom" align="right">msrp</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body" style="border-style: none; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3;">
-    <tr class="gt_group_heading_row" style="border-style: none;">
-      <th colspan="7" class="gt_group_heading" scope="colgroup" id="Italy" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; text-align: left;" bgcolor="#FFFFFF" valign="middle" align="left">Italy</th>
-    </tr>
-    <tr class="gt_row_group_first" style="border-style: none;"><th id="stub_1_1" scope="row" class="gt_row gt_right gt_stub" style="border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; text-align: right; font-variant-numeric: tabular-nums; border-top-width: 2px;" valign="middle" bgcolor="#FFFFFF" align="right">3</th>
-<td headers="Italy stub_1_1 ctry_origin" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; border-top-width: 2px;" valign="middle" align="left">Italy</td>
-<td headers="Italy stub_1_1 mfr" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; border-top-width: 2px;" valign="middle" align="left">Ferrari</td>
-<td headers="Italy stub_1_1 model" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; border-top-width: 2px;" valign="middle" align="left">458 Speciale</td>
-<td headers="Italy stub_1_1 year" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums; border-top-width: 2px;" valign="middle" align="right">2015</td>
-<td headers="Italy stub_1_1 trim" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; border-top-width: 2px;" valign="middle" align="left">Base Coupe</td>
-<td headers="Italy stub_1_1 msrp" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums; border-top-width: 2px;" valign="middle" align="right">291744</td></tr>
-    <tr style="border-style: none;"><th id="stub_1_2" scope="row" class="gt_row gt_right gt_stub" style="border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" bgcolor="#FFFFFF" align="right">4</th>
-<td headers="Italy stub_1_2 ctry_origin" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Italy</td>
-<td headers="Italy stub_1_2 mfr" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Ferrari</td>
-<td headers="Italy stub_1_2 model" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">458 Spider</td>
-<td headers="Italy stub_1_2 year" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">2015</td>
-<td headers="Italy stub_1_2 trim" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Base</td>
-<td headers="Italy stub_1_2 msrp" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">263553</td></tr>
-    <tr class="gt_group_heading_row" style="border-style: none;">
-      <th colspan="7" class="gt_group_heading" scope="colgroup" id="USA" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; text-align: left;" bgcolor="#FFFFFF" valign="middle" align="left">USA</th>
-    </tr>
-    <tr class="gt_row_group_first" style="border-style: none;"><th id="stub_1_3" scope="row" class="gt_row gt_right gt_stub" style="border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; text-align: right; font-variant-numeric: tabular-nums; border-top-width: 2px;" valign="middle" bgcolor="#FFFFFF" align="right">1</th>
-<td headers="USA stub_1_3 ctry_origin" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; border-top-width: 2px;" valign="middle" align="left">United States</td>
-<td headers="USA stub_1_3 mfr" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; border-top-width: 2px;" valign="middle" align="left">Ford</td>
-<td headers="USA stub_1_3 model" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; border-top-width: 2px;" valign="middle" align="left">GT</td>
-<td headers="USA stub_1_3 year" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums; border-top-width: 2px;" valign="middle" align="right">2017</td>
-<td headers="USA stub_1_3 trim" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; border-top-width: 2px;" valign="middle" align="left">Base Coupe</td>
-<td headers="USA stub_1_3 msrp" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums; border-top-width: 2px;" valign="middle" align="right">447000</td></tr>
-    <tr style="border-style: none;"><th id="stub_1_4" scope="row" class="gt_row gt_right gt_stub" style="border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" bgcolor="#FFFFFF" align="right">2</th>
-<td headers="USA stub_1_4 ctry_origin" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">United States</td>
-<td headers="USA stub_1_4 mfr" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Chevrolet</td>
-<td headers="USA stub_1_4 model" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Corvette</td>
-<td headers="USA stub_1_4 year" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">2016</td>
-<td headers="USA stub_1_4 trim" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Z06 Coupe</td>
-<td headers="USA stub_1_4 msrp" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">88345</td></tr>
-    <tr class="gt_group_heading_row" style="border-style: none;">
-      <th colspan="7" class="gt_empty_group_heading" scope="colgroup" id="" style="border-style: none; padding: 0.5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: middle;" bgcolor="#FFFFFF" valign="middle"></th>
-    </tr>
-    <tr class="gt_row_group_first" style="border-style: none;"><th id="stub_1_5" scope="row" class="gt_row gt_right gt_stub" style="border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; text-align: right; font-variant-numeric: tabular-nums; border-top-width: 2px;" valign="middle" bgcolor="#FFFFFF" align="right">5</th>
-<td headers="NA stub_1_5 ctry_origin" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; border-top-width: 2px;" valign="middle" align="left">Japan</td>
-<td headers="NA stub_1_5 mfr" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; border-top-width: 2px;" valign="middle" align="left">Acura</td>
-<td headers="NA stub_1_5 model" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; border-top-width: 2px;" valign="middle" align="left">NSX</td>
-<td headers="NA stub_1_5 year" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums; border-top-width: 2px;" valign="middle" align="right">2017</td>
-<td headers="NA stub_1_5 trim" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left; border-top-width: 2px;" valign="middle" align="left">Base Coupe</td>
-<td headers="NA stub_1_5 msrp" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums; border-top-width: 2px;" valign="middle" align="right">156000</td></tr>
-    <tr style="border-style: none;"><th id="stub_1_6" scope="row" class="gt_row gt_right gt_stub" style="border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" bgcolor="#FFFFFF" align="right">6</th>
-<td headers="NA stub_1_6 ctry_origin" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Japan</td>
-<td headers="NA stub_1_6 mfr" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Nissan</td>
-<td headers="NA stub_1_6 model" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">GT-R</td>
-<td headers="NA stub_1_6 year" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">2016</td>
-<td headers="NA stub_1_6 trim" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Premium Coupe</td>
-<td headers="NA stub_1_6 msrp" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">101770</td></tr>
-    <tr style="border-style: none;"><th id="stub_1_7" scope="row" class="gt_row gt_right gt_stub" style="border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" bgcolor="#FFFFFF" align="right">7</th>
-<td headers="NA stub_1_7 ctry_origin" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">United Kingdom</td>
-<td headers="NA stub_1_7 mfr" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Bentley</td>
-<td headers="NA stub_1_7 model" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Continental GT</td>
-<td headers="NA stub_1_7 year" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">2016</td>
-<td headers="NA stub_1_7 trim" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">V8 Coupe</td>
-<td headers="NA stub_1_7 msrp" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">198500</td></tr>
-    <tr style="border-style: none;"><th id="stub_1_8" scope="row" class="gt_row gt_right gt_stub" style="border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" bgcolor="#FFFFFF" align="right">8</th>
-<td headers="NA stub_1_8 ctry_origin" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">United Kingdom</td>
-<td headers="NA stub_1_8 mfr" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Aston Martin</td>
-<td headers="NA stub_1_8 model" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">DB11</td>
-<td headers="NA stub_1_8 year" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">2017</td>
-<td headers="NA stub_1_8 trim" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Base Coupe</td>
-<td headers="NA stub_1_8 msrp" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">211195</td></tr>
-    <tr style="border-style: none;"><th id="stub_1_9" scope="row" class="gt_row gt_right gt_stub" style="border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" bgcolor="#FFFFFF" align="right">9</th>
-<td headers="NA stub_1_9 ctry_origin" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Germany</td>
-<td headers="NA stub_1_9 mfr" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">BMW</td>
-<td headers="NA stub_1_9 model" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">6-Series</td>
-<td headers="NA stub_1_9 year" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">2016</td>
-<td headers="NA stub_1_9 trim" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">640 I Coupe</td>
-<td headers="NA stub_1_9 msrp" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">77300</td></tr>
-    <tr style="border-style: none;"><th id="stub_1_10" scope="row" class="gt_row gt_right gt_stub" style="border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" bgcolor="#FFFFFF" align="right">10</th>
-<td headers="NA stub_1_10 ctry_origin" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Germany</td>
-<td headers="NA stub_1_10 mfr" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">BMW</td>
-<td headers="NA stub_1_10 model" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">i8</td>
-<td headers="NA stub_1_10 year" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">2016</td>
-<td headers="NA stub_1_10 trim" class="gt_row gt_left" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: left;" valign="middle" align="left">Mega World Coupe</td>
-<td headers="NA stub_1_10 msrp" class="gt_row gt_right" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: right; font-variant-numeric: tabular-nums;" valign="middle" align="right">140700</td></tr>
-  </tbody>
   
-  
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false" data-bgcolor="#FFFFFF">
+<thead style="border-style: none;">
+<tr class="header gt_col_headings" style="border-style: none; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3;">
+<th id="No" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col" style="text-align: left; border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden;" data-bgcolor="#FFFFFF" data-valign="bottom">No</th>
+<th id="ctry_origin" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col" style="text-align: left; border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden;" data-bgcolor="#FFFFFF" data-valign="bottom">ctry_origin</th>
+<th id="mfr" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col" style="text-align: left; border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden;" data-bgcolor="#FFFFFF" data-valign="bottom">mfr</th>
+<th id="model" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col" style="text-align: left; border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden;" data-bgcolor="#FFFFFF" data-valign="bottom">model</th>
+<th id="year" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col" style="text-align: right; border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-bgcolor="#FFFFFF" data-valign="bottom">year</th>
+<th id="trim" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col" style="text-align: left; border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden;" data-bgcolor="#FFFFFF" data-valign="bottom">trim</th>
+<th id="msrp" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col" style="text-align: right; border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-bgcolor="#FFFFFF" data-valign="bottom">msrp</th>
+</tr>
+</thead>
+<tbody class="gt_table_body" style="border-style: none; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3;">
+<tr class="odd gt_group_heading_row" style="border-style: none;">
+<td colspan="7" id="Italy" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle;" data-bgcolor="#FFFFFF" data-valign="middle">Italy</td>
+</tr>
+<tr class="even gt_row_group_first" style="border-style: none;">
+<td id="stub_1_1" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; font-variant-numeric: tabular-nums; border-top-width: 2px;" data-valign="middle" data-bgcolor="#FFFFFF">3</td>
+<td class="gt_row gt_left" headers="Italy stub_1_1 ctry_origin" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; border-top-width: 2px;" data-valign="middle">Italy</td>
+<td class="gt_row gt_left" headers="Italy stub_1_1 mfr" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; border-top-width: 2px;" data-valign="middle">Ferrari</td>
+<td class="gt_row gt_left" headers="Italy stub_1_1 model" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; border-top-width: 2px;" data-valign="middle">458 Speciale</td>
+<td class="gt_row gt_right" headers="Italy stub_1_1 year" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums; border-top-width: 2px;" data-valign="middle">2015</td>
+<td class="gt_row gt_left" headers="Italy stub_1_1 trim" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; border-top-width: 2px;" data-valign="middle">Base Coupe</td>
+<td class="gt_row gt_right" headers="Italy stub_1_1 msrp" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums; border-top-width: 2px;" data-valign="middle">291744</td>
+</tr>
+<tr class="odd" style="border-style: none;">
+<td id="stub_1_2" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; font-variant-numeric: tabular-nums;" data-valign="middle" data-bgcolor="#FFFFFF">4</td>
+<td class="gt_row gt_left" headers="Italy stub_1_2 ctry_origin" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Italy</td>
+<td class="gt_row gt_left" headers="Italy stub_1_2 mfr" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Ferrari</td>
+<td class="gt_row gt_left" headers="Italy stub_1_2 model" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">458 Spider</td>
+<td class="gt_row gt_right" headers="Italy stub_1_2 year" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">2015</td>
+<td class="gt_row gt_left" headers="Italy stub_1_2 trim" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Base</td>
+<td class="gt_row gt_right" headers="Italy stub_1_2 msrp" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">263553</td>
+</tr>
+<tr class="even gt_group_heading_row" style="border-style: none;">
+<td colspan="7" id="USA" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle;" data-bgcolor="#FFFFFF" data-valign="middle">USA</td>
+</tr>
+<tr class="odd gt_row_group_first" style="border-style: none;">
+<td id="stub_1_3" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; font-variant-numeric: tabular-nums; border-top-width: 2px;" data-valign="middle" data-bgcolor="#FFFFFF">1</td>
+<td class="gt_row gt_left" headers="USA stub_1_3 ctry_origin" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; border-top-width: 2px;" data-valign="middle">United States</td>
+<td class="gt_row gt_left" headers="USA stub_1_3 mfr" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; border-top-width: 2px;" data-valign="middle">Ford</td>
+<td class="gt_row gt_left" headers="USA stub_1_3 model" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; border-top-width: 2px;" data-valign="middle">GT</td>
+<td class="gt_row gt_right" headers="USA stub_1_3 year" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums; border-top-width: 2px;" data-valign="middle">2017</td>
+<td class="gt_row gt_left" headers="USA stub_1_3 trim" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; border-top-width: 2px;" data-valign="middle">Base Coupe</td>
+<td class="gt_row gt_right" headers="USA stub_1_3 msrp" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums; border-top-width: 2px;" data-valign="middle">447000</td>
+</tr>
+<tr class="even" style="border-style: none;">
+<td id="stub_1_4" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; font-variant-numeric: tabular-nums;" data-valign="middle" data-bgcolor="#FFFFFF">2</td>
+<td class="gt_row gt_left" headers="USA stub_1_4 ctry_origin" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">United States</td>
+<td class="gt_row gt_left" headers="USA stub_1_4 mfr" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Chevrolet</td>
+<td class="gt_row gt_left" headers="USA stub_1_4 model" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Corvette</td>
+<td class="gt_row gt_right" headers="USA stub_1_4 year" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">2016</td>
+<td class="gt_row gt_left" headers="USA stub_1_4 trim" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Z06 Coupe</td>
+<td class="gt_row gt_right" headers="USA stub_1_4 msrp" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">88345</td>
+</tr>
+<tr class="odd gt_group_heading_row" style="border-style: none;">
+<td colspan="7" class="gt_empty_group_heading" data-quarto-table-cell-role="th" scope="colgroup" style="text-align: left; border-style: none; padding: 0.5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: middle;" data-bgcolor="#FFFFFF" data-valign="middle"></td>
+</tr>
+<tr class="even gt_row_group_first" style="border-style: none;">
+<td id="stub_1_5" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; font-variant-numeric: tabular-nums; border-top-width: 2px;" data-valign="middle" data-bgcolor="#FFFFFF">5</td>
+<td class="gt_row gt_left" headers="NA stub_1_5 ctry_origin" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; border-top-width: 2px;" data-valign="middle">Japan</td>
+<td class="gt_row gt_left" headers="NA stub_1_5 mfr" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; border-top-width: 2px;" data-valign="middle">Acura</td>
+<td class="gt_row gt_left" headers="NA stub_1_5 model" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; border-top-width: 2px;" data-valign="middle">NSX</td>
+<td class="gt_row gt_right" headers="NA stub_1_5 year" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums; border-top-width: 2px;" data-valign="middle">2017</td>
+<td class="gt_row gt_left" headers="NA stub_1_5 trim" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; border-top-width: 2px;" data-valign="middle">Base Coupe</td>
+<td class="gt_row gt_right" headers="NA stub_1_5 msrp" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums; border-top-width: 2px;" data-valign="middle">156000</td>
+</tr>
+<tr class="odd" style="border-style: none;">
+<td id="stub_1_6" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; font-variant-numeric: tabular-nums;" data-valign="middle" data-bgcolor="#FFFFFF">6</td>
+<td class="gt_row gt_left" headers="NA stub_1_6 ctry_origin" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Japan</td>
+<td class="gt_row gt_left" headers="NA stub_1_6 mfr" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Nissan</td>
+<td class="gt_row gt_left" headers="NA stub_1_6 model" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">GT-R</td>
+<td class="gt_row gt_right" headers="NA stub_1_6 year" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">2016</td>
+<td class="gt_row gt_left" headers="NA stub_1_6 trim" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Premium Coupe</td>
+<td class="gt_row gt_right" headers="NA stub_1_6 msrp" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">101770</td>
+</tr>
+<tr class="even" style="border-style: none;">
+<td id="stub_1_7" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; font-variant-numeric: tabular-nums;" data-valign="middle" data-bgcolor="#FFFFFF">7</td>
+<td class="gt_row gt_left" headers="NA stub_1_7 ctry_origin" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">United Kingdom</td>
+<td class="gt_row gt_left" headers="NA stub_1_7 mfr" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Bentley</td>
+<td class="gt_row gt_left" headers="NA stub_1_7 model" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Continental GT</td>
+<td class="gt_row gt_right" headers="NA stub_1_7 year" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">2016</td>
+<td class="gt_row gt_left" headers="NA stub_1_7 trim" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">V8 Coupe</td>
+<td class="gt_row gt_right" headers="NA stub_1_7 msrp" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">198500</td>
+</tr>
+<tr class="odd" style="border-style: none;">
+<td id="stub_1_8" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; font-variant-numeric: tabular-nums;" data-valign="middle" data-bgcolor="#FFFFFF">8</td>
+<td class="gt_row gt_left" headers="NA stub_1_8 ctry_origin" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">United Kingdom</td>
+<td class="gt_row gt_left" headers="NA stub_1_8 mfr" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Aston Martin</td>
+<td class="gt_row gt_left" headers="NA stub_1_8 model" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">DB11</td>
+<td class="gt_row gt_right" headers="NA stub_1_8 year" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">2017</td>
+<td class="gt_row gt_left" headers="NA stub_1_8 trim" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Base Coupe</td>
+<td class="gt_row gt_right" headers="NA stub_1_8 msrp" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">211195</td>
+</tr>
+<tr class="even" style="border-style: none;">
+<td id="stub_1_9" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; font-variant-numeric: tabular-nums;" data-valign="middle" data-bgcolor="#FFFFFF">9</td>
+<td class="gt_row gt_left" headers="NA stub_1_9 ctry_origin" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Germany</td>
+<td class="gt_row gt_left" headers="NA stub_1_9 mfr" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">BMW</td>
+<td class="gt_row gt_left" headers="NA stub_1_9 model" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">6-Series</td>
+<td class="gt_row gt_right" headers="NA stub_1_9 year" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">2016</td>
+<td class="gt_row gt_left" headers="NA stub_1_9 trim" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">640 I Coupe</td>
+<td class="gt_row gt_right" headers="NA stub_1_9 msrp" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">77300</td>
+</tr>
+<tr class="odd" style="border-style: none;">
+<td id="stub_1_10" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; font-variant-numeric: tabular-nums;" data-valign="middle" data-bgcolor="#FFFFFF">10</td>
+<td class="gt_row gt_left" headers="NA stub_1_10 ctry_origin" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Germany</td>
+<td class="gt_row gt_left" headers="NA stub_1_10 mfr" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">BMW</td>
+<td class="gt_row gt_left" headers="NA stub_1_10 model" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">i8</td>
+<td class="gt_row gt_right" headers="NA stub_1_10 year" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">2016</td>
+<td class="gt_row gt_left" headers="NA stub_1_10 trim" style="text-align: left; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden;" data-valign="middle">Mega World Coupe</td>
+<td class="gt_row gt_right" headers="NA stub_1_10 msrp" style="text-align: right; border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; font-variant-numeric: tabular-nums;" data-valign="middle">140700</td>
+</tr>
+</tbody>
 </table>
+
+</div>
 </div>
 </div>
 </div>
@@ -940,7 +966,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mfr, <span class="fu">desc</span>(msrp)) <span class="sc">|&gt;</span> </span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rowname_col =</span> <span class="st">"id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
+<div>
 <div id="pbsxdeuxij" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#pbsxdeuxij table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1381,98 +1407,118 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="mfr">mfr</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="model">model</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="year">year</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="trim">trim</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="msrp">msrp</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr class="gt_group_heading_row">
-      <th colspan="6" class="gt_group_heading" scope="colgroup" id="Japan">Japan</th>
-    </tr>
-    <tr class="gt_row_group_first"><th id="stub_1_1" scope="row" class="gt_row gt_right gt_stub">5</th>
-<td headers="Japan stub_1_1 mfr" class="gt_row gt_left">Acura</td>
-<td headers="Japan stub_1_1 model" class="gt_row gt_left">NSX</td>
-<td headers="Japan stub_1_1 year" class="gt_row gt_right">2017</td>
-<td headers="Japan stub_1_1 trim" class="gt_row gt_left">Base Coupe</td>
-<td headers="Japan stub_1_1 msrp" class="gt_row gt_right">156000</td></tr>
-    <tr><th id="stub_1_2" scope="row" class="gt_row gt_right gt_stub">6</th>
-<td headers="Japan stub_1_2 mfr" class="gt_row gt_left">Nissan</td>
-<td headers="Japan stub_1_2 model" class="gt_row gt_left">GT-R</td>
-<td headers="Japan stub_1_2 year" class="gt_row gt_right">2016</td>
-<td headers="Japan stub_1_2 trim" class="gt_row gt_left">Premium Coupe</td>
-<td headers="Japan stub_1_2 msrp" class="gt_row gt_right">101770</td></tr>
-    <tr class="gt_group_heading_row">
-      <th colspan="6" class="gt_group_heading" scope="colgroup" id="United Kingdom">United Kingdom</th>
-    </tr>
-    <tr class="gt_row_group_first"><th id="stub_1_3" scope="row" class="gt_row gt_right gt_stub">8</th>
-<td headers="United Kingdom stub_1_3 mfr" class="gt_row gt_left">Aston Martin</td>
-<td headers="United Kingdom stub_1_3 model" class="gt_row gt_left">DB11</td>
-<td headers="United Kingdom stub_1_3 year" class="gt_row gt_right">2017</td>
-<td headers="United Kingdom stub_1_3 trim" class="gt_row gt_left">Base Coupe</td>
-<td headers="United Kingdom stub_1_3 msrp" class="gt_row gt_right">211195</td></tr>
-    <tr><th id="stub_1_4" scope="row" class="gt_row gt_right gt_stub">7</th>
-<td headers="United Kingdom stub_1_4 mfr" class="gt_row gt_left">Bentley</td>
-<td headers="United Kingdom stub_1_4 model" class="gt_row gt_left">Continental GT</td>
-<td headers="United Kingdom stub_1_4 year" class="gt_row gt_right">2016</td>
-<td headers="United Kingdom stub_1_4 trim" class="gt_row gt_left">V8 Coupe</td>
-<td headers="United Kingdom stub_1_4 msrp" class="gt_row gt_right">198500</td></tr>
-    <tr class="gt_group_heading_row">
-      <th colspan="6" class="gt_group_heading" scope="colgroup" id="Germany">Germany</th>
-    </tr>
-    <tr class="gt_row_group_first"><th id="stub_1_5" scope="row" class="gt_row gt_right gt_stub">10</th>
-<td headers="Germany stub_1_5 mfr" class="gt_row gt_left">BMW</td>
-<td headers="Germany stub_1_5 model" class="gt_row gt_left">i8</td>
-<td headers="Germany stub_1_5 year" class="gt_row gt_right">2016</td>
-<td headers="Germany stub_1_5 trim" class="gt_row gt_left">Mega World Coupe</td>
-<td headers="Germany stub_1_5 msrp" class="gt_row gt_right">140700</td></tr>
-    <tr><th id="stub_1_6" scope="row" class="gt_row gt_right gt_stub">9</th>
-<td headers="Germany stub_1_6 mfr" class="gt_row gt_left">BMW</td>
-<td headers="Germany stub_1_6 model" class="gt_row gt_left">6-Series</td>
-<td headers="Germany stub_1_6 year" class="gt_row gt_right">2016</td>
-<td headers="Germany stub_1_6 trim" class="gt_row gt_left">640 I Coupe</td>
-<td headers="Germany stub_1_6 msrp" class="gt_row gt_right">77300</td></tr>
-    <tr class="gt_group_heading_row">
-      <th colspan="6" class="gt_group_heading" scope="colgroup" id="United States">United States</th>
-    </tr>
-    <tr class="gt_row_group_first"><th id="stub_1_7" scope="row" class="gt_row gt_right gt_stub">2</th>
-<td headers="United States stub_1_7 mfr" class="gt_row gt_left">Chevrolet</td>
-<td headers="United States stub_1_7 model" class="gt_row gt_left">Corvette</td>
-<td headers="United States stub_1_7 year" class="gt_row gt_right">2016</td>
-<td headers="United States stub_1_7 trim" class="gt_row gt_left">Z06 Coupe</td>
-<td headers="United States stub_1_7 msrp" class="gt_row gt_right">88345</td></tr>
-    <tr><th id="stub_1_8" scope="row" class="gt_row gt_right gt_stub">1</th>
-<td headers="United States stub_1_8 mfr" class="gt_row gt_left">Ford</td>
-<td headers="United States stub_1_8 model" class="gt_row gt_left">GT</td>
-<td headers="United States stub_1_8 year" class="gt_row gt_right">2017</td>
-<td headers="United States stub_1_8 trim" class="gt_row gt_left">Base Coupe</td>
-<td headers="United States stub_1_8 msrp" class="gt_row gt_right">447000</td></tr>
-    <tr class="gt_group_heading_row">
-      <th colspan="6" class="gt_group_heading" scope="colgroup" id="Italy">Italy</th>
-    </tr>
-    <tr class="gt_row_group_first"><th id="stub_1_9" scope="row" class="gt_row gt_right gt_stub">3</th>
-<td headers="Italy stub_1_9 mfr" class="gt_row gt_left">Ferrari</td>
-<td headers="Italy stub_1_9 model" class="gt_row gt_left">458 Speciale</td>
-<td headers="Italy stub_1_9 year" class="gt_row gt_right">2015</td>
-<td headers="Italy stub_1_9 trim" class="gt_row gt_left">Base Coupe</td>
-<td headers="Italy stub_1_9 msrp" class="gt_row gt_right">291744</td></tr>
-    <tr><th id="stub_1_10" scope="row" class="gt_row gt_right gt_stub">4</th>
-<td headers="Italy stub_1_10 mfr" class="gt_row gt_left">Ferrari</td>
-<td headers="Italy stub_1_10 model" class="gt_row gt_left">458 Spider</td>
-<td headers="Italy stub_1_10 year" class="gt_row gt_right">2015</td>
-<td headers="Italy stub_1_10 trim" class="gt_row gt_left">Base</td>
-<td headers="Italy stub_1_10 msrp" class="gt_row gt_right">263553</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="mfr" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">mfr</th>
+<th id="model" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">model</th>
+<th id="year" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">year</th>
+<th id="trim" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">trim</th>
+<th id="msrp" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">msrp</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd gt_group_heading_row">
+<td colspan="6" id="Japan" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Japan</td>
+</tr>
+<tr class="even gt_row_group_first">
+<td id="stub_1_1" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row">5</td>
+<td class="gt_row gt_left" headers="Japan stub_1_1 mfr">Acura</td>
+<td class="gt_row gt_left" headers="Japan stub_1_1 model">NSX</td>
+<td class="gt_row gt_right" headers="Japan stub_1_1 year">2017</td>
+<td class="gt_row gt_left" headers="Japan stub_1_1 trim">Base Coupe</td>
+<td class="gt_row gt_right" headers="Japan stub_1_1 msrp">156000</td>
+</tr>
+<tr class="odd">
+<td id="stub_1_2" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row">6</td>
+<td class="gt_row gt_left" headers="Japan stub_1_2 mfr">Nissan</td>
+<td class="gt_row gt_left" headers="Japan stub_1_2 model">GT-R</td>
+<td class="gt_row gt_right" headers="Japan stub_1_2 year">2016</td>
+<td class="gt_row gt_left" headers="Japan stub_1_2 trim">Premium Coupe</td>
+<td class="gt_row gt_right" headers="Japan stub_1_2 msrp">101770</td>
+</tr>
+<tr class="even gt_group_heading_row">
+<td colspan="6" id="United Kingdom" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">United Kingdom</td>
+</tr>
+<tr class="odd gt_row_group_first">
+<td id="stub_1_3" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row">8</td>
+<td class="gt_row gt_left" headers="United Kingdom stub_1_3 mfr">Aston Martin</td>
+<td class="gt_row gt_left" headers="United Kingdom stub_1_3 model">DB11</td>
+<td class="gt_row gt_right" headers="United Kingdom stub_1_3 year">2017</td>
+<td class="gt_row gt_left" headers="United Kingdom stub_1_3 trim">Base Coupe</td>
+<td class="gt_row gt_right" headers="United Kingdom stub_1_3 msrp">211195</td>
+</tr>
+<tr class="even">
+<td id="stub_1_4" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row">7</td>
+<td class="gt_row gt_left" headers="United Kingdom stub_1_4 mfr">Bentley</td>
+<td class="gt_row gt_left" headers="United Kingdom stub_1_4 model">Continental GT</td>
+<td class="gt_row gt_right" headers="United Kingdom stub_1_4 year">2016</td>
+<td class="gt_row gt_left" headers="United Kingdom stub_1_4 trim">V8 Coupe</td>
+<td class="gt_row gt_right" headers="United Kingdom stub_1_4 msrp">198500</td>
+</tr>
+<tr class="odd gt_group_heading_row">
+<td colspan="6" id="Germany" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Germany</td>
+</tr>
+<tr class="even gt_row_group_first">
+<td id="stub_1_5" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row">10</td>
+<td class="gt_row gt_left" headers="Germany stub_1_5 mfr">BMW</td>
+<td class="gt_row gt_left" headers="Germany stub_1_5 model">i8</td>
+<td class="gt_row gt_right" headers="Germany stub_1_5 year">2016</td>
+<td class="gt_row gt_left" headers="Germany stub_1_5 trim">Mega World Coupe</td>
+<td class="gt_row gt_right" headers="Germany stub_1_5 msrp">140700</td>
+</tr>
+<tr class="odd">
+<td id="stub_1_6" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row">9</td>
+<td class="gt_row gt_left" headers="Germany stub_1_6 mfr">BMW</td>
+<td class="gt_row gt_left" headers="Germany stub_1_6 model">6-Series</td>
+<td class="gt_row gt_right" headers="Germany stub_1_6 year">2016</td>
+<td class="gt_row gt_left" headers="Germany stub_1_6 trim">640 I Coupe</td>
+<td class="gt_row gt_right" headers="Germany stub_1_6 msrp">77300</td>
+</tr>
+<tr class="even gt_group_heading_row">
+<td colspan="6" id="United States" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">United States</td>
+</tr>
+<tr class="odd gt_row_group_first">
+<td id="stub_1_7" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row">2</td>
+<td class="gt_row gt_left" headers="United States stub_1_7 mfr">Chevrolet</td>
+<td class="gt_row gt_left" headers="United States stub_1_7 model">Corvette</td>
+<td class="gt_row gt_right" headers="United States stub_1_7 year">2016</td>
+<td class="gt_row gt_left" headers="United States stub_1_7 trim">Z06 Coupe</td>
+<td class="gt_row gt_right" headers="United States stub_1_7 msrp">88345</td>
+</tr>
+<tr class="even">
+<td id="stub_1_8" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row">1</td>
+<td class="gt_row gt_left" headers="United States stub_1_8 mfr">Ford</td>
+<td class="gt_row gt_left" headers="United States stub_1_8 model">GT</td>
+<td class="gt_row gt_right" headers="United States stub_1_8 year">2017</td>
+<td class="gt_row gt_left" headers="United States stub_1_8 trim">Base Coupe</td>
+<td class="gt_row gt_right" headers="United States stub_1_8 msrp">447000</td>
+</tr>
+<tr class="odd gt_group_heading_row">
+<td colspan="6" id="Italy" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Italy</td>
+</tr>
+<tr class="even gt_row_group_first">
+<td id="stub_1_9" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row">3</td>
+<td class="gt_row gt_left" headers="Italy stub_1_9 mfr">Ferrari</td>
+<td class="gt_row gt_left" headers="Italy stub_1_9 model">458 Speciale</td>
+<td class="gt_row gt_right" headers="Italy stub_1_9 year">2015</td>
+<td class="gt_row gt_left" headers="Italy stub_1_9 trim">Base Coupe</td>
+<td class="gt_row gt_right" headers="Italy stub_1_9 msrp">291744</td>
+</tr>
+<tr class="odd">
+<td id="stub_1_10" class="gt_row gt_right gt_stub" data-quarto-table-cell-role="th" scope="row">4</td>
+<td class="gt_row gt_left" headers="Italy stub_1_10 mfr">Ferrari</td>
+<td class="gt_row gt_left" headers="Italy stub_1_10 model">458 Spider</td>
+<td class="gt_row gt_right" headers="Italy stub_1_10 year">2015</td>
+<td class="gt_row gt_left" headers="Italy stub_1_10 trim">Base</td>
+<td class="gt_row gt_right" headers="Italy stub_1_10 msrp">263553</td>
+</tr>
+</tbody>
 </table>
+
+</div>
 </div>
 </div>
 </div>
@@ -1485,7 +1531,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ctry_origin) <span class="sc">|&gt;</span> </span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rowname_col =</span> <span class="st">"car"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
+<div>
 <div id="qvhhgdeqps" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#qvhhgdeqps table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1926,76 +1972,96 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="year">year</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="trim">trim</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="msrp">msrp</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr class="gt_group_heading_row">
-      <th colspan="4" class="gt_group_heading" scope="colgroup" id="Japan">Japan</th>
-    </tr>
-    <tr class="gt_row_group_first"><th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub">Acura NSX</th>
-<td headers="Japan stub_1_1 year" class="gt_row gt_right">2017</td>
-<td headers="Japan stub_1_1 trim" class="gt_row gt_left">Base Coupe</td>
-<td headers="Japan stub_1_1 msrp" class="gt_row gt_right">156000</td></tr>
-    <tr><th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub">Nissan GT-R</th>
-<td headers="Japan stub_1_2 year" class="gt_row gt_right">2016</td>
-<td headers="Japan stub_1_2 trim" class="gt_row gt_left">Premium Coupe</td>
-<td headers="Japan stub_1_2 msrp" class="gt_row gt_right">101770</td></tr>
-    <tr class="gt_group_heading_row">
-      <th colspan="4" class="gt_group_heading" scope="colgroup" id="United Kingdom">United Kingdom</th>
-    </tr>
-    <tr class="gt_row_group_first"><th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub">Aston Martin DB11</th>
-<td headers="United Kingdom stub_1_3 year" class="gt_row gt_right">2017</td>
-<td headers="United Kingdom stub_1_3 trim" class="gt_row gt_left">Base Coupe</td>
-<td headers="United Kingdom stub_1_3 msrp" class="gt_row gt_right">211195</td></tr>
-    <tr><th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub">Bentley Continental GT</th>
-<td headers="United Kingdom stub_1_4 year" class="gt_row gt_right">2016</td>
-<td headers="United Kingdom stub_1_4 trim" class="gt_row gt_left">V8 Coupe</td>
-<td headers="United Kingdom stub_1_4 msrp" class="gt_row gt_right">198500</td></tr>
-    <tr class="gt_group_heading_row">
-      <th colspan="4" class="gt_group_heading" scope="colgroup" id="Germany">Germany</th>
-    </tr>
-    <tr class="gt_row_group_first"><th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub">BMW i8</th>
-<td headers="Germany stub_1_5 year" class="gt_row gt_right">2016</td>
-<td headers="Germany stub_1_5 trim" class="gt_row gt_left">Mega World Coupe</td>
-<td headers="Germany stub_1_5 msrp" class="gt_row gt_right">140700</td></tr>
-    <tr><th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub">BMW 6-Series</th>
-<td headers="Germany stub_1_6 year" class="gt_row gt_right">2016</td>
-<td headers="Germany stub_1_6 trim" class="gt_row gt_left">640 I Coupe</td>
-<td headers="Germany stub_1_6 msrp" class="gt_row gt_right">77300</td></tr>
-    <tr class="gt_group_heading_row">
-      <th colspan="4" class="gt_group_heading" scope="colgroup" id="United States">United States</th>
-    </tr>
-    <tr class="gt_row_group_first"><th id="stub_1_7" scope="row" class="gt_row gt_left gt_stub">Chevrolet Corvette</th>
-<td headers="United States stub_1_7 year" class="gt_row gt_right">2016</td>
-<td headers="United States stub_1_7 trim" class="gt_row gt_left">Z06 Coupe</td>
-<td headers="United States stub_1_7 msrp" class="gt_row gt_right">88345</td></tr>
-    <tr><th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub">Ford GT</th>
-<td headers="United States stub_1_8 year" class="gt_row gt_right">2017</td>
-<td headers="United States stub_1_8 trim" class="gt_row gt_left">Base Coupe</td>
-<td headers="United States stub_1_8 msrp" class="gt_row gt_right">447000</td></tr>
-    <tr class="gt_group_heading_row">
-      <th colspan="4" class="gt_group_heading" scope="colgroup" id="Italy">Italy</th>
-    </tr>
-    <tr class="gt_row_group_first"><th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub">Ferrari 458 Speciale</th>
-<td headers="Italy stub_1_9 year" class="gt_row gt_right">2015</td>
-<td headers="Italy stub_1_9 trim" class="gt_row gt_left">Base Coupe</td>
-<td headers="Italy stub_1_9 msrp" class="gt_row gt_right">291744</td></tr>
-    <tr><th id="stub_1_10" scope="row" class="gt_row gt_left gt_stub">Ferrari 458 Spider</th>
-<td headers="Italy stub_1_10 year" class="gt_row gt_right">2015</td>
-<td headers="Italy stub_1_10 trim" class="gt_row gt_left">Base</td>
-<td headers="Italy stub_1_10 msrp" class="gt_row gt_right">263553</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="year" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">year</th>
+<th id="trim" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">trim</th>
+<th id="msrp" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">msrp</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd gt_group_heading_row">
+<td colspan="4" id="Japan" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Japan</td>
+</tr>
+<tr class="even gt_row_group_first">
+<td id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Acura NSX</td>
+<td class="gt_row gt_right" headers="Japan stub_1_1 year">2017</td>
+<td class="gt_row gt_left" headers="Japan stub_1_1 trim">Base Coupe</td>
+<td class="gt_row gt_right" headers="Japan stub_1_1 msrp">156000</td>
+</tr>
+<tr class="odd">
+<td id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Nissan GT-R</td>
+<td class="gt_row gt_right" headers="Japan stub_1_2 year">2016</td>
+<td class="gt_row gt_left" headers="Japan stub_1_2 trim">Premium Coupe</td>
+<td class="gt_row gt_right" headers="Japan stub_1_2 msrp">101770</td>
+</tr>
+<tr class="even gt_group_heading_row">
+<td colspan="4" id="United Kingdom" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">United Kingdom</td>
+</tr>
+<tr class="odd gt_row_group_first">
+<td id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Aston Martin DB11</td>
+<td class="gt_row gt_right" headers="United Kingdom stub_1_3 year">2017</td>
+<td class="gt_row gt_left" headers="United Kingdom stub_1_3 trim">Base Coupe</td>
+<td class="gt_row gt_right" headers="United Kingdom stub_1_3 msrp">211195</td>
+</tr>
+<tr class="even">
+<td id="stub_1_4" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Bentley Continental GT</td>
+<td class="gt_row gt_right" headers="United Kingdom stub_1_4 year">2016</td>
+<td class="gt_row gt_left" headers="United Kingdom stub_1_4 trim">V8 Coupe</td>
+<td class="gt_row gt_right" headers="United Kingdom stub_1_4 msrp">198500</td>
+</tr>
+<tr class="odd gt_group_heading_row">
+<td colspan="4" id="Germany" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Germany</td>
+</tr>
+<tr class="even gt_row_group_first">
+<td id="stub_1_5" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">BMW i8</td>
+<td class="gt_row gt_right" headers="Germany stub_1_5 year">2016</td>
+<td class="gt_row gt_left" headers="Germany stub_1_5 trim">Mega World Coupe</td>
+<td class="gt_row gt_right" headers="Germany stub_1_5 msrp">140700</td>
+</tr>
+<tr class="odd">
+<td id="stub_1_6" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">BMW 6-Series</td>
+<td class="gt_row gt_right" headers="Germany stub_1_6 year">2016</td>
+<td class="gt_row gt_left" headers="Germany stub_1_6 trim">640 I Coupe</td>
+<td class="gt_row gt_right" headers="Germany stub_1_6 msrp">77300</td>
+</tr>
+<tr class="even gt_group_heading_row">
+<td colspan="4" id="United States" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">United States</td>
+</tr>
+<tr class="odd gt_row_group_first">
+<td id="stub_1_7" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Chevrolet Corvette</td>
+<td class="gt_row gt_right" headers="United States stub_1_7 year">2016</td>
+<td class="gt_row gt_left" headers="United States stub_1_7 trim">Z06 Coupe</td>
+<td class="gt_row gt_right" headers="United States stub_1_7 msrp">88345</td>
+</tr>
+<tr class="even">
+<td id="stub_1_8" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Ford GT</td>
+<td class="gt_row gt_right" headers="United States stub_1_8 year">2017</td>
+<td class="gt_row gt_left" headers="United States stub_1_8 trim">Base Coupe</td>
+<td class="gt_row gt_right" headers="United States stub_1_8 msrp">447000</td>
+</tr>
+<tr class="odd gt_group_heading_row">
+<td colspan="4" id="Italy" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Italy</td>
+</tr>
+<tr class="even gt_row_group_first">
+<td id="stub_1_9" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Ferrari 458 Speciale</td>
+<td class="gt_row gt_right" headers="Italy stub_1_9 year">2015</td>
+<td class="gt_row gt_left" headers="Italy stub_1_9 trim">Base Coupe</td>
+<td class="gt_row gt_right" headers="Italy stub_1_9 msrp">291744</td>
+</tr>
+<tr class="odd">
+<td id="stub_1_10" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Ferrari 458 Spider</td>
+<td class="gt_row gt_right" headers="Italy stub_1_10 year">2015</td>
+<td class="gt_row gt_left" headers="Italy stub_1_10 trim">Base</td>
+<td class="gt_row gt_right" headers="Italy stub_1_10 msrp">263553</td>
+</tr>
+</tbody>
 </table>
+
+</div>
 </div>
 </div>
 </div>
@@ -2024,7 +2090,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>air_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
+<div>
 <div id="zdtganrzzq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#zdtganrzzq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -2465,94 +2531,110 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_heading">
-      <td colspan="6" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="">New York Air Quality Measurements</td>
-    </tr>
-    
-    <tr class="gt_col_headings gt_spanner_row">
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="4" scope="colgroup" id="Measurement">
-        <span class="gt_column_spanner">Measurement</span>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="Time">
-        <span class="gt_column_spanner">Time</span>
-      </th>
-    </tr>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Ozone">Ozone</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Solar.R">Solar.R</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Wind">Wind</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Temp">Temp</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Month">Month</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Day">Day</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="Ozone" class="gt_row gt_right">41</td>
-<td headers="Solar.R" class="gt_row gt_right">190</td>
-<td headers="Wind" class="gt_row gt_right">7.4</td>
-<td headers="Temp" class="gt_row gt_right">67</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">1</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">36</td>
-<td headers="Solar.R" class="gt_row gt_right">118</td>
-<td headers="Wind" class="gt_row gt_right">8.0</td>
-<td headers="Temp" class="gt_row gt_right">72</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">2</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">12</td>
-<td headers="Solar.R" class="gt_row gt_right">149</td>
-<td headers="Wind" class="gt_row gt_right">12.6</td>
-<td headers="Temp" class="gt_row gt_right">74</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">3</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">18</td>
-<td headers="Solar.R" class="gt_row gt_right">313</td>
-<td headers="Wind" class="gt_row gt_right">11.5</td>
-<td headers="Temp" class="gt_row gt_right">62</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">4</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">NA</td>
-<td headers="Solar.R" class="gt_row gt_right">NA</td>
-<td headers="Wind" class="gt_row gt_right">14.3</td>
-<td headers="Temp" class="gt_row gt_right">56</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">5</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">28</td>
-<td headers="Solar.R" class="gt_row gt_right">NA</td>
-<td headers="Wind" class="gt_row gt_right">14.9</td>
-<td headers="Temp" class="gt_row gt_right">66</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">6</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">23</td>
-<td headers="Solar.R" class="gt_row gt_right">299</td>
-<td headers="Wind" class="gt_row gt_right">8.6</td>
-<td headers="Temp" class="gt_row gt_right">65</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">7</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">19</td>
-<td headers="Solar.R" class="gt_row gt_right">99</td>
-<td headers="Wind" class="gt_row gt_right">13.8</td>
-<td headers="Temp" class="gt_row gt_right">59</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">8</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">8</td>
-<td headers="Solar.R" class="gt_row gt_right">19</td>
-<td headers="Wind" class="gt_row gt_right">20.1</td>
-<td headers="Temp" class="gt_row gt_right">61</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">9</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">NA</td>
-<td headers="Solar.R" class="gt_row gt_right">194</td>
-<td headers="Wind" class="gt_row gt_right">8.6</td>
-<td headers="Temp" class="gt_row gt_right">69</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">10</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_heading">
+<th colspan="6" class="gt_heading gt_title gt_font_normal gt_bottom_border">New York Air Quality Measurements</th>
+</tr>
+<tr class="odd gt_col_headings gt_spanner_row">
+<th colspan="4" id="Measurement" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><span class="gt_column_spanner">Measurement</span></th>
+<th colspan="2" id="Time" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><span class="gt_column_spanner">Time</span></th>
+</tr>
+<tr class="header gt_col_headings">
+<th id="Ozone" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Ozone</th>
+<th id="Solar.R" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Solar.R</th>
+<th id="Wind" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Wind</th>
+<th id="Temp" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Temp</th>
+<th id="Month" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Month</th>
+<th id="Day" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Day</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">41</td>
+<td class="gt_row gt_right" headers="Solar.R">190</td>
+<td class="gt_row gt_right" headers="Wind">7.4</td>
+<td class="gt_row gt_right" headers="Temp">67</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">1</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">36</td>
+<td class="gt_row gt_right" headers="Solar.R">118</td>
+<td class="gt_row gt_right" headers="Wind">8.0</td>
+<td class="gt_row gt_right" headers="Temp">72</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">2</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">12</td>
+<td class="gt_row gt_right" headers="Solar.R">149</td>
+<td class="gt_row gt_right" headers="Wind">12.6</td>
+<td class="gt_row gt_right" headers="Temp">74</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">18</td>
+<td class="gt_row gt_right" headers="Solar.R">313</td>
+<td class="gt_row gt_right" headers="Wind">11.5</td>
+<td class="gt_row gt_right" headers="Temp">62</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">4</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">NA</td>
+<td class="gt_row gt_right" headers="Solar.R">NA</td>
+<td class="gt_row gt_right" headers="Wind">14.3</td>
+<td class="gt_row gt_right" headers="Temp">56</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">5</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">28</td>
+<td class="gt_row gt_right" headers="Solar.R">NA</td>
+<td class="gt_row gt_right" headers="Wind">14.9</td>
+<td class="gt_row gt_right" headers="Temp">66</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">23</td>
+<td class="gt_row gt_right" headers="Solar.R">299</td>
+<td class="gt_row gt_right" headers="Wind">8.6</td>
+<td class="gt_row gt_right" headers="Temp">65</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">7</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">19</td>
+<td class="gt_row gt_right" headers="Solar.R">99</td>
+<td class="gt_row gt_right" headers="Wind">13.8</td>
+<td class="gt_row gt_right" headers="Temp">59</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">8</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">8</td>
+<td class="gt_row gt_right" headers="Solar.R">19</td>
+<td class="gt_row gt_right" headers="Wind">20.1</td>
+<td class="gt_row gt_right" headers="Temp">61</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">9</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">NA</td>
+<td class="gt_row gt_right" headers="Solar.R">194</td>
+<td class="gt_row gt_right" headers="Wind">8.6</td>
+<td class="gt_row gt_right" headers="Temp">69</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">10</td>
+</tr>
+</tbody>
 </table>
+
+</div>
 </div>
 </div>
 </div>
@@ -2573,7 +2655,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>air_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
+<div>
 <div id="mhsoltwjvd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#mhsoltwjvd table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -3014,94 +3096,122 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_heading">
-      <td colspan="6" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="">New York Air Quality Measurements</td>
-    </tr>
-    
-    <tr class="gt_col_headings gt_spanner_row">
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="Time">
-        <span class="gt_column_spanner">Time</span>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="4" scope="colgroup" id="Measurement">
-        <span class="gt_column_spanner">Measurement</span>
-      </th>
-    </tr>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Month">Month</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Day">Day</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Ozone,<br>ppbV">Ozone,<br>ppbV</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Solar R.,<br>cal/m<sup>2</sup>">Solar R.,<br>cal/m<sup>2</sup></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Wind,<br>mph">Wind,<br>mph</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Temp,<br>&amp;deg;F">Temp,<br>°F</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">1</td>
-<td headers="Ozone" class="gt_row gt_right">41</td>
-<td headers="Solar.R" class="gt_row gt_right">190</td>
-<td headers="Wind" class="gt_row gt_right">7.4</td>
-<td headers="Temp" class="gt_row gt_right">67</td></tr>
-    <tr><td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">2</td>
-<td headers="Ozone" class="gt_row gt_right">36</td>
-<td headers="Solar.R" class="gt_row gt_right">118</td>
-<td headers="Wind" class="gt_row gt_right">8.0</td>
-<td headers="Temp" class="gt_row gt_right">72</td></tr>
-    <tr><td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">3</td>
-<td headers="Ozone" class="gt_row gt_right">12</td>
-<td headers="Solar.R" class="gt_row gt_right">149</td>
-<td headers="Wind" class="gt_row gt_right">12.6</td>
-<td headers="Temp" class="gt_row gt_right">74</td></tr>
-    <tr><td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">4</td>
-<td headers="Ozone" class="gt_row gt_right">18</td>
-<td headers="Solar.R" class="gt_row gt_right">313</td>
-<td headers="Wind" class="gt_row gt_right">11.5</td>
-<td headers="Temp" class="gt_row gt_right">62</td></tr>
-    <tr><td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">5</td>
-<td headers="Ozone" class="gt_row gt_right">NA</td>
-<td headers="Solar.R" class="gt_row gt_right">NA</td>
-<td headers="Wind" class="gt_row gt_right">14.3</td>
-<td headers="Temp" class="gt_row gt_right">56</td></tr>
-    <tr><td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">6</td>
-<td headers="Ozone" class="gt_row gt_right">28</td>
-<td headers="Solar.R" class="gt_row gt_right">NA</td>
-<td headers="Wind" class="gt_row gt_right">14.9</td>
-<td headers="Temp" class="gt_row gt_right">66</td></tr>
-    <tr><td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">7</td>
-<td headers="Ozone" class="gt_row gt_right">23</td>
-<td headers="Solar.R" class="gt_row gt_right">299</td>
-<td headers="Wind" class="gt_row gt_right">8.6</td>
-<td headers="Temp" class="gt_row gt_right">65</td></tr>
-    <tr><td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">8</td>
-<td headers="Ozone" class="gt_row gt_right">19</td>
-<td headers="Solar.R" class="gt_row gt_right">99</td>
-<td headers="Wind" class="gt_row gt_right">13.8</td>
-<td headers="Temp" class="gt_row gt_right">59</td></tr>
-    <tr><td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">9</td>
-<td headers="Ozone" class="gt_row gt_right">8</td>
-<td headers="Solar.R" class="gt_row gt_right">19</td>
-<td headers="Wind" class="gt_row gt_right">20.1</td>
-<td headers="Temp" class="gt_row gt_right">61</td></tr>
-    <tr><td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">10</td>
-<td headers="Ozone" class="gt_row gt_right">NA</td>
-<td headers="Solar.R" class="gt_row gt_right">194</td>
-<td headers="Wind" class="gt_row gt_right">8.6</td>
-<td headers="Temp" class="gt_row gt_right">69</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header gt_heading">
+<th colspan="6" class="gt_heading gt_title gt_font_normal gt_bottom_border">New York Air Quality Measurements</th>
+</tr>
+<tr class="odd gt_col_headings gt_spanner_row">
+<th colspan="2" id="Time" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><span class="gt_column_spanner">Time</span></th>
+<th colspan="4" id="Measurement" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><span class="gt_column_spanner">Measurement</span></th>
+</tr>
+<tr class="header gt_col_headings">
+<th id="Month" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Month</th>
+<th id="Day" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Day</th>
+<th id="Ozone,<br>ppbV" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Ozone,<br>
+ppbV</th>
+<th id="Solar R.,<br>cal/m<sup>2</sup>" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Solar R.,<br>
+cal/m<sup>2</sup></th>
+<th id="Wind,<br>mph" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Wind,<br>
+mph</th>
+<th id="Temp,<br>&amp;deg;F" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Temp,<br>
+°F</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">1</td>
+<td class="gt_row gt_right" headers="Ozone">41</td>
+<td class="gt_row gt_right" headers="Solar.R">190</td>
+<td class="gt_row gt_right" headers="Wind">7.4</td>
+<td class="gt_row gt_right" headers="Temp">67</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">2</td>
+<td class="gt_row gt_right" headers="Ozone">36</td>
+<td class="gt_row gt_right" headers="Solar.R">118</td>
+<td class="gt_row gt_right" headers="Wind">8.0</td>
+<td class="gt_row gt_right" headers="Temp">72</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">3</td>
+<td class="gt_row gt_right" headers="Ozone">12</td>
+<td class="gt_row gt_right" headers="Solar.R">149</td>
+<td class="gt_row gt_right" headers="Wind">12.6</td>
+<td class="gt_row gt_right" headers="Temp">74</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">4</td>
+<td class="gt_row gt_right" headers="Ozone">18</td>
+<td class="gt_row gt_right" headers="Solar.R">313</td>
+<td class="gt_row gt_right" headers="Wind">11.5</td>
+<td class="gt_row gt_right" headers="Temp">62</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">5</td>
+<td class="gt_row gt_right" headers="Ozone">NA</td>
+<td class="gt_row gt_right" headers="Solar.R">NA</td>
+<td class="gt_row gt_right" headers="Wind">14.3</td>
+<td class="gt_row gt_right" headers="Temp">56</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">6</td>
+<td class="gt_row gt_right" headers="Ozone">28</td>
+<td class="gt_row gt_right" headers="Solar.R">NA</td>
+<td class="gt_row gt_right" headers="Wind">14.9</td>
+<td class="gt_row gt_right" headers="Temp">66</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">7</td>
+<td class="gt_row gt_right" headers="Ozone">23</td>
+<td class="gt_row gt_right" headers="Solar.R">299</td>
+<td class="gt_row gt_right" headers="Wind">8.6</td>
+<td class="gt_row gt_right" headers="Temp">65</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">8</td>
+<td class="gt_row gt_right" headers="Ozone">19</td>
+<td class="gt_row gt_right" headers="Solar.R">99</td>
+<td class="gt_row gt_right" headers="Wind">13.8</td>
+<td class="gt_row gt_right" headers="Temp">59</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">9</td>
+<td class="gt_row gt_right" headers="Ozone">8</td>
+<td class="gt_row gt_right" headers="Solar.R">19</td>
+<td class="gt_row gt_right" headers="Wind">20.1</td>
+<td class="gt_row gt_right" headers="Temp">61</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">10</td>
+<td class="gt_row gt_right" headers="Ozone">NA</td>
+<td class="gt_row gt_right" headers="Solar.R">194</td>
+<td class="gt_row gt_right" headers="Wind">8.6</td>
+<td class="gt_row gt_right" headers="Temp">69</td>
+</tr>
+</tbody>
 </table>
+
+</div>
 </div>
 </div>
 </div>
@@ -3115,7 +3225,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(Month, Day)</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
+<div>
 <div id="jgubejthcv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#jgubejthcv table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -3556,94 +3666,122 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_heading">
-      <td colspan="6" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="">New York Air Quality Measurements</td>
-    </tr>
-    
-    <tr class="gt_col_headings gt_spanner_row">
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="Time">
-        <span class="gt_column_spanner">Time</span>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="4" scope="colgroup" id="Measurement">
-        <span class="gt_column_spanner">Measurement</span>
-      </th>
-    </tr>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Month">Month</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Day">Day</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Ozone,<br>ppbV">Ozone,<br>ppbV</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Solar R.,<br>cal/m<sup>2</sup>">Solar R.,<br>cal/m<sup>2</sup></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Wind,<br>mph">Wind,<br>mph</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Temp,<br>&amp;deg;F">Temp,<br>°F</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="Month" class="gt_row gt_center">5</td>
-<td headers="Day" class="gt_row gt_center">1</td>
-<td headers="Ozone" class="gt_row gt_right">41</td>
-<td headers="Solar.R" class="gt_row gt_right">190</td>
-<td headers="Wind" class="gt_row gt_right">7.4</td>
-<td headers="Temp" class="gt_row gt_right">67</td></tr>
-    <tr><td headers="Month" class="gt_row gt_center">5</td>
-<td headers="Day" class="gt_row gt_center">2</td>
-<td headers="Ozone" class="gt_row gt_right">36</td>
-<td headers="Solar.R" class="gt_row gt_right">118</td>
-<td headers="Wind" class="gt_row gt_right">8.0</td>
-<td headers="Temp" class="gt_row gt_right">72</td></tr>
-    <tr><td headers="Month" class="gt_row gt_center">5</td>
-<td headers="Day" class="gt_row gt_center">3</td>
-<td headers="Ozone" class="gt_row gt_right">12</td>
-<td headers="Solar.R" class="gt_row gt_right">149</td>
-<td headers="Wind" class="gt_row gt_right">12.6</td>
-<td headers="Temp" class="gt_row gt_right">74</td></tr>
-    <tr><td headers="Month" class="gt_row gt_center">5</td>
-<td headers="Day" class="gt_row gt_center">4</td>
-<td headers="Ozone" class="gt_row gt_right">18</td>
-<td headers="Solar.R" class="gt_row gt_right">313</td>
-<td headers="Wind" class="gt_row gt_right">11.5</td>
-<td headers="Temp" class="gt_row gt_right">62</td></tr>
-    <tr><td headers="Month" class="gt_row gt_center">5</td>
-<td headers="Day" class="gt_row gt_center">5</td>
-<td headers="Ozone" class="gt_row gt_right">NA</td>
-<td headers="Solar.R" class="gt_row gt_right">NA</td>
-<td headers="Wind" class="gt_row gt_right">14.3</td>
-<td headers="Temp" class="gt_row gt_right">56</td></tr>
-    <tr><td headers="Month" class="gt_row gt_center">5</td>
-<td headers="Day" class="gt_row gt_center">6</td>
-<td headers="Ozone" class="gt_row gt_right">28</td>
-<td headers="Solar.R" class="gt_row gt_right">NA</td>
-<td headers="Wind" class="gt_row gt_right">14.9</td>
-<td headers="Temp" class="gt_row gt_right">66</td></tr>
-    <tr><td headers="Month" class="gt_row gt_center">5</td>
-<td headers="Day" class="gt_row gt_center">7</td>
-<td headers="Ozone" class="gt_row gt_right">23</td>
-<td headers="Solar.R" class="gt_row gt_right">299</td>
-<td headers="Wind" class="gt_row gt_right">8.6</td>
-<td headers="Temp" class="gt_row gt_right">65</td></tr>
-    <tr><td headers="Month" class="gt_row gt_center">5</td>
-<td headers="Day" class="gt_row gt_center">8</td>
-<td headers="Ozone" class="gt_row gt_right">19</td>
-<td headers="Solar.R" class="gt_row gt_right">99</td>
-<td headers="Wind" class="gt_row gt_right">13.8</td>
-<td headers="Temp" class="gt_row gt_right">59</td></tr>
-    <tr><td headers="Month" class="gt_row gt_center">5</td>
-<td headers="Day" class="gt_row gt_center">9</td>
-<td headers="Ozone" class="gt_row gt_right">8</td>
-<td headers="Solar.R" class="gt_row gt_right">19</td>
-<td headers="Wind" class="gt_row gt_right">20.1</td>
-<td headers="Temp" class="gt_row gt_right">61</td></tr>
-    <tr><td headers="Month" class="gt_row gt_center">5</td>
-<td headers="Day" class="gt_row gt_center">10</td>
-<td headers="Ozone" class="gt_row gt_right">NA</td>
-<td headers="Solar.R" class="gt_row gt_right">194</td>
-<td headers="Wind" class="gt_row gt_right">8.6</td>
-<td headers="Temp" class="gt_row gt_right">69</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header gt_heading">
+<th colspan="6" class="gt_heading gt_title gt_font_normal gt_bottom_border">New York Air Quality Measurements</th>
+</tr>
+<tr class="odd gt_col_headings gt_spanner_row">
+<th colspan="2" id="Time" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><span class="gt_column_spanner">Time</span></th>
+<th colspan="4" id="Measurement" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><span class="gt_column_spanner">Measurement</span></th>
+</tr>
+<tr class="header gt_col_headings">
+<th id="Month" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Month</th>
+<th id="Day" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Day</th>
+<th id="Ozone,<br>ppbV" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Ozone,<br>
+ppbV</th>
+<th id="Solar R.,<br>cal/m<sup>2</sup>" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Solar R.,<br>
+cal/m<sup>2</sup></th>
+<th id="Wind,<br>mph" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Wind,<br>
+mph</th>
+<th id="Temp,<br>&amp;deg;F" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Temp,<br>
+°F</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_center" headers="Month">5</td>
+<td class="gt_row gt_center" headers="Day">1</td>
+<td class="gt_row gt_right" headers="Ozone">41</td>
+<td class="gt_row gt_right" headers="Solar.R">190</td>
+<td class="gt_row gt_right" headers="Wind">7.4</td>
+<td class="gt_row gt_right" headers="Temp">67</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Month">5</td>
+<td class="gt_row gt_center" headers="Day">2</td>
+<td class="gt_row gt_right" headers="Ozone">36</td>
+<td class="gt_row gt_right" headers="Solar.R">118</td>
+<td class="gt_row gt_right" headers="Wind">8.0</td>
+<td class="gt_row gt_right" headers="Temp">72</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Month">5</td>
+<td class="gt_row gt_center" headers="Day">3</td>
+<td class="gt_row gt_right" headers="Ozone">12</td>
+<td class="gt_row gt_right" headers="Solar.R">149</td>
+<td class="gt_row gt_right" headers="Wind">12.6</td>
+<td class="gt_row gt_right" headers="Temp">74</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Month">5</td>
+<td class="gt_row gt_center" headers="Day">4</td>
+<td class="gt_row gt_right" headers="Ozone">18</td>
+<td class="gt_row gt_right" headers="Solar.R">313</td>
+<td class="gt_row gt_right" headers="Wind">11.5</td>
+<td class="gt_row gt_right" headers="Temp">62</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Month">5</td>
+<td class="gt_row gt_center" headers="Day">5</td>
+<td class="gt_row gt_right" headers="Ozone">NA</td>
+<td class="gt_row gt_right" headers="Solar.R">NA</td>
+<td class="gt_row gt_right" headers="Wind">14.3</td>
+<td class="gt_row gt_right" headers="Temp">56</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Month">5</td>
+<td class="gt_row gt_center" headers="Day">6</td>
+<td class="gt_row gt_right" headers="Ozone">28</td>
+<td class="gt_row gt_right" headers="Solar.R">NA</td>
+<td class="gt_row gt_right" headers="Wind">14.9</td>
+<td class="gt_row gt_right" headers="Temp">66</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Month">5</td>
+<td class="gt_row gt_center" headers="Day">7</td>
+<td class="gt_row gt_right" headers="Ozone">23</td>
+<td class="gt_row gt_right" headers="Solar.R">299</td>
+<td class="gt_row gt_right" headers="Wind">8.6</td>
+<td class="gt_row gt_right" headers="Temp">65</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Month">5</td>
+<td class="gt_row gt_center" headers="Day">8</td>
+<td class="gt_row gt_right" headers="Ozone">19</td>
+<td class="gt_row gt_right" headers="Solar.R">99</td>
+<td class="gt_row gt_right" headers="Wind">13.8</td>
+<td class="gt_row gt_right" headers="Temp">59</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Month">5</td>
+<td class="gt_row gt_center" headers="Day">9</td>
+<td class="gt_row gt_right" headers="Ozone">8</td>
+<td class="gt_row gt_right" headers="Solar.R">19</td>
+<td class="gt_row gt_right" headers="Wind">20.1</td>
+<td class="gt_row gt_right" headers="Temp">61</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Month">5</td>
+<td class="gt_row gt_center" headers="Day">10</td>
+<td class="gt_row gt_right" headers="Ozone">NA</td>
+<td class="gt_row gt_right" headers="Solar.R">194</td>
+<td class="gt_row gt_right" headers="Wind">8.6</td>
+<td class="gt_row gt_right" headers="Temp">69</td>
+</tr>
+</tbody>
 </table>
+
+</div>
 </div>
 </div>
 </div>
@@ -3668,7 +3806,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                           <span class="at">rows =</span> Wind <span class="sc">&lt;</span> <span class="dv">10</span> )</span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
+<div>
 <div id="xhnilqgyas" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xhnilqgyas table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -4109,83 +4247,103 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Ozone">Ozone</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Solar.R">Solar.R</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Wind">Wind</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Temp">Temp</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Month">Month</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Day">Day</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="Ozone" class="gt_row gt_right">41</td>
-<td headers="Solar.R" class="gt_row gt_right">190</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #0000FF; color: #FFFFFF; font-weight: bold;">7.4</td>
-<td headers="Temp" class="gt_row gt_right">67</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">1</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">36</td>
-<td headers="Solar.R" class="gt_row gt_right">118</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #0000FF; color: #FFFFFF; font-weight: bold;">8.0</td>
-<td headers="Temp" class="gt_row gt_right">72</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">2</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">12</td>
-<td headers="Solar.R" class="gt_row gt_right">149</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FF0000; color: #FFFFFF; font-weight: bold;">12.6</td>
-<td headers="Temp" class="gt_row gt_right">74</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">3</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">18</td>
-<td headers="Solar.R" class="gt_row gt_right">313</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FF0000; color: #FFFFFF; font-weight: bold;">11.5</td>
-<td headers="Temp" class="gt_row gt_right">62</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">4</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">NA</td>
-<td headers="Solar.R" class="gt_row gt_right">NA</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FF0000; color: #FFFFFF; font-weight: bold;">14.3</td>
-<td headers="Temp" class="gt_row gt_right">56</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">5</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">28</td>
-<td headers="Solar.R" class="gt_row gt_right">NA</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FF0000; color: #FFFFFF; font-weight: bold;">14.9</td>
-<td headers="Temp" class="gt_row gt_right">66</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">6</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">23</td>
-<td headers="Solar.R" class="gt_row gt_right">299</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #0000FF; color: #FFFFFF; font-weight: bold;">8.6</td>
-<td headers="Temp" class="gt_row gt_right">65</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">7</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">19</td>
-<td headers="Solar.R" class="gt_row gt_right">99</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FF0000; color: #FFFFFF; font-weight: bold;">13.8</td>
-<td headers="Temp" class="gt_row gt_right">59</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">8</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">8</td>
-<td headers="Solar.R" class="gt_row gt_right">19</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FF0000; color: #FFFFFF; font-weight: bold;">20.1</td>
-<td headers="Temp" class="gt_row gt_right">61</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">9</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">NA</td>
-<td headers="Solar.R" class="gt_row gt_right">194</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #0000FF; color: #FFFFFF; font-weight: bold;">8.6</td>
-<td headers="Temp" class="gt_row gt_right">69</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">10</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="Ozone" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Ozone</th>
+<th id="Solar.R" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Solar.R</th>
+<th id="Wind" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Wind</th>
+<th id="Temp" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Temp</th>
+<th id="Month" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Month</th>
+<th id="Day" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Day</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">41</td>
+<td class="gt_row gt_right" headers="Solar.R">190</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #0000FF; color: #FFFFFF; font-weight: bold">7.4</td>
+<td class="gt_row gt_right" headers="Temp">67</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">1</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">36</td>
+<td class="gt_row gt_right" headers="Solar.R">118</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #0000FF; color: #FFFFFF; font-weight: bold">8.0</td>
+<td class="gt_row gt_right" headers="Temp">72</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">2</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">12</td>
+<td class="gt_row gt_right" headers="Solar.R">149</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FF0000; color: #FFFFFF; font-weight: bold">12.6</td>
+<td class="gt_row gt_right" headers="Temp">74</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">18</td>
+<td class="gt_row gt_right" headers="Solar.R">313</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FF0000; color: #FFFFFF; font-weight: bold">11.5</td>
+<td class="gt_row gt_right" headers="Temp">62</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">4</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">NA</td>
+<td class="gt_row gt_right" headers="Solar.R">NA</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FF0000; color: #FFFFFF; font-weight: bold">14.3</td>
+<td class="gt_row gt_right" headers="Temp">56</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">5</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">28</td>
+<td class="gt_row gt_right" headers="Solar.R">NA</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FF0000; color: #FFFFFF; font-weight: bold">14.9</td>
+<td class="gt_row gt_right" headers="Temp">66</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">23</td>
+<td class="gt_row gt_right" headers="Solar.R">299</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #0000FF; color: #FFFFFF; font-weight: bold">8.6</td>
+<td class="gt_row gt_right" headers="Temp">65</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">7</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">19</td>
+<td class="gt_row gt_right" headers="Solar.R">99</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FF0000; color: #FFFFFF; font-weight: bold">13.8</td>
+<td class="gt_row gt_right" headers="Temp">59</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">8</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">8</td>
+<td class="gt_row gt_right" headers="Solar.R">19</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FF0000; color: #FFFFFF; font-weight: bold">20.1</td>
+<td class="gt_row gt_right" headers="Temp">61</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">9</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">NA</td>
+<td class="gt_row gt_right" headers="Solar.R">194</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #0000FF; color: #FFFFFF; font-weight: bold">8.6</td>
+<td class="gt_row gt_right" headers="Temp">69</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">10</td>
+</tr>
+</tbody>
 </table>
+
+</div>
 </div>
 </div>
 </div>
@@ -4209,7 +4367,7 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data_color</span>(Temp, <span class="at">palette =</span> <span class="st">"Oranges"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data_color</span>(Solar.R, <span class="at">palette =</span> <span class="st">"magma"</span>, <span class="at">na_color =</span> <span class="st">"steelblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
+<div>
 <div id="gtrtdpkqss" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gtrtdpkqss table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -4650,83 +4808,103 @@ gtag('config', 'G-QKQJ0CJQC4', { 'anonymize_ip': true});
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Ozone">Ozone</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Solar.R">Solar.R</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Wind">Wind</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Temp">Temp</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Month">Month</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Day">Day</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="Ozone" class="gt_row gt_right">41</td>
-<td headers="Solar.R" class="gt_row gt_right" style="background-color: #D7456C; color: #FFFFFF;">190</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FF2711; color: #FFFFFF;">7.4</td>
-<td headers="Temp" class="gt_row gt_right" style="background-color: #F26D19; color: #FFFFFF;">67</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">1</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">36</td>
-<td headers="Solar.R" class="gt_row gt_right" style="background-color: #732081; color: #FFFFFF;">118</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FF4124; color: #FFFFFF;">8.0</td>
-<td headers="Temp" class="gt_row gt_right" style="background-color: #A23403; color: #FFFFFF;">72</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">2</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">12</td>
-<td headers="Solar.R" class="gt_row gt_right" style="background-color: #9E2F7F; color: #FFFFFF;">149</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FFB69F; color: #000000;">12.6</td>
-<td headers="Temp" class="gt_row gt_right" style="background-color: #7F2704; color: #FFFFFF;">74</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">3</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">18</td>
-<td headers="Solar.R" class="gt_row gt_right" style="background-color: #FCFDBF; color: #000000;">313</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FF9E81; color: #000000;">11.5</td>
-<td headers="Temp" class="gt_row gt_right" style="background-color: #FEB97D; color: #000000;">62</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">4</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">NA</td>
-<td headers="Solar.R" class="gt_row gt_right" style="background-color: #4682B4; color: #FFFFFF;">NA</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FFDBCE; color: #000000;">14.3</td>
-<td headers="Temp" class="gt_row gt_right" style="background-color: #FFF5EB; color: #000000;">56</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">5</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">28</td>
-<td headers="Solar.R" class="gt_row gt_right" style="background-color: #4682B4; color: #FFFFFF;">NA</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FFE8DF; color: #000000;">14.9</td>
-<td headers="Temp" class="gt_row gt_right" style="background-color: #F87D2B; color: #FFFFFF;">66</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">6</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">23</td>
-<td headers="Solar.R" class="gt_row gt_right" style="background-color: #FDE7A9; color: #000000;">299</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FF5535; color: #FFFFFF;">8.6</td>
-<td headers="Temp" class="gt_row gt_right" style="background-color: #FD8D3C; color: #000000;">65</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">7</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">19</td>
-<td headers="Solar.R" class="gt_row gt_right" style="background-color: #59157E; color: #FFFFFF;">99</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FFD0C0; color: #000000;">13.8</td>
-<td headers="Temp" class="gt_row gt_right" style="background-color: #FEDFBF; color: #000000;">59</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">8</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">8</td>
-<td headers="Solar.R" class="gt_row gt_right" style="background-color: #000004; color: #FFFFFF;">19</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #BB95FF; color: #000000;">20.1</td>
-<td headers="Temp" class="gt_row gt_right" style="background-color: #FEC896; color: #000000;">61</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">9</td></tr>
-    <tr><td headers="Ozone" class="gt_row gt_right">NA</td>
-<td headers="Solar.R" class="gt_row gt_right" style="background-color: #DC4869; color: #FFFFFF;">194</td>
-<td headers="Wind" class="gt_row gt_right" style="background-color: #FF5535; color: #FFFFFF;">8.6</td>
-<td headers="Temp" class="gt_row gt_right" style="background-color: #DE5004; color: #FFFFFF;">69</td>
-<td headers="Month" class="gt_row gt_right">5</td>
-<td headers="Day" class="gt_row gt_right">10</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="Ozone" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Ozone</th>
+<th id="Solar.R" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Solar.R</th>
+<th id="Wind" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Wind</th>
+<th id="Temp" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Temp</th>
+<th id="Month" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Month</th>
+<th id="Day" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Day</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">41</td>
+<td class="gt_row gt_right" headers="Solar.R" style="background-color: #D7456C; color: #FFFFFF">190</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FF2711; color: #FFFFFF">7.4</td>
+<td class="gt_row gt_right" headers="Temp" style="background-color: #F26D19; color: #FFFFFF">67</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">1</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">36</td>
+<td class="gt_row gt_right" headers="Solar.R" style="background-color: #732081; color: #FFFFFF">118</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FF4124; color: #FFFFFF">8.0</td>
+<td class="gt_row gt_right" headers="Temp" style="background-color: #A23403; color: #FFFFFF">72</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">2</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">12</td>
+<td class="gt_row gt_right" headers="Solar.R" style="background-color: #9E2F7F; color: #FFFFFF">149</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FFB69F; color: #000000">12.6</td>
+<td class="gt_row gt_right" headers="Temp" style="background-color: #7F2704; color: #FFFFFF">74</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">18</td>
+<td class="gt_row gt_right" headers="Solar.R" style="background-color: #FCFDBF; color: #000000">313</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FF9E81; color: #000000">11.5</td>
+<td class="gt_row gt_right" headers="Temp" style="background-color: #FEB97D; color: #000000">62</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">4</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">NA</td>
+<td class="gt_row gt_right" headers="Solar.R" style="background-color: #4682B4; color: #FFFFFF">NA</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FFDBCE; color: #000000">14.3</td>
+<td class="gt_row gt_right" headers="Temp" style="background-color: #FFF5EB; color: #000000">56</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">5</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">28</td>
+<td class="gt_row gt_right" headers="Solar.R" style="background-color: #4682B4; color: #FFFFFF">NA</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FFE8DF; color: #000000">14.9</td>
+<td class="gt_row gt_right" headers="Temp" style="background-color: #F87D2B; color: #FFFFFF">66</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">23</td>
+<td class="gt_row gt_right" headers="Solar.R" style="background-color: #FDE7A9; color: #000000">299</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FF5535; color: #FFFFFF">8.6</td>
+<td class="gt_row gt_right" headers="Temp" style="background-color: #FD8D3C; color: #000000">65</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">7</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">19</td>
+<td class="gt_row gt_right" headers="Solar.R" style="background-color: #59157E; color: #FFFFFF">99</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FFD0C0; color: #000000">13.8</td>
+<td class="gt_row gt_right" headers="Temp" style="background-color: #FEDFBF; color: #000000">59</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">8</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Ozone">8</td>
+<td class="gt_row gt_right" headers="Solar.R" style="background-color: #000004; color: #FFFFFF">19</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #BB95FF; color: #000000">20.1</td>
+<td class="gt_row gt_right" headers="Temp" style="background-color: #FEC896; color: #000000">61</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">9</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Ozone">NA</td>
+<td class="gt_row gt_right" headers="Solar.R" style="background-color: #DC4869; color: #FFFFFF">194</td>
+<td class="gt_row gt_right" headers="Wind" style="background-color: #FF5535; color: #FFFFFF">8.6</td>
+<td class="gt_row gt_right" headers="Temp" style="background-color: #DE5004; color: #FFFFFF">69</td>
+<td class="gt_row gt_right" headers="Month">5</td>
+<td class="gt_row gt_right" headers="Day">10</td>
+</tr>
+</tbody>
 </table>
+
+</div>
 </div>
 </div>
 </div>
@@ -4779,6 +4957,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -4847,13 +5052,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -4932,10 +5139,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/rchemistblog\.com");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -4945,8 +5169,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -4958,7 +5191,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -5002,6 +5358,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -5027,6 +5384,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -5088,10 +5471,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <script src="https://giscus.app/client.js" data-repo="rchemist0123/giscus-blog" data-repo-id="R_kgDOJBwa8Q" data-category="General" data-category-id="DIC_kwDOJBwa8c4CUbVM" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
 </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left"><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></div>   
+    <div class="nav-footer-left">
+<p><a href="https://https://rchemistblog.com/">Rchemist</a> © 2023 by <a href="https://https://rchemist.quarto.pub/rchemistblog/about.html">YH Jang</a></p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
@@ -5113,6 +5500,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 
